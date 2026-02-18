@@ -1,0 +1,184 @@
+import { colord, extend } from 'colord';
+import a11yPlugin from 'colord/plugins/a11y';
+import harmoniesPlugin from 'colord/plugins/harmonies';
+import namesPlugin from 'colord/plugins/names';
+import Vibrant from 'node-vibrant';
+import { ColorPalette } from '../types/starship.types';
+
+// Extend colord with necessary plugins
+extend([a11yPlugin, harmoniesPlugin, namesPlugin]);
+
+export class ColorUtils {
+  /**
+   * Extracts a color palette from an image file
+   * @param imageFile - The image file to process
+   * @returns Promise resolving to a ColorPalette-like object
+   */
+  static async extractPaletteFromImage(imageFile: File): Promise<Partial<ColorPalette>> {
+    try {
+      // Create a URL for the file
+      const imageUrl = URL.createObjectURL(imageFile);
+
+      // Use Vibrant to extract colors
+      const palette = await Vibrant.from(imageUrl).getPalette();
+
+      // Clean up URL
+      URL.revokeObjectURL(imageUrl);
+
+      // Map Vibrant swatches to our palette structure
+      // Vibrant returns: Vibrant, Muted, DarkVibrant, DarkMuted, LightVibrant, LightMuted
+      return {
+        primary: palette.Vibrant?.hex || '#ffffff',
+        secondary: palette.LightVibrant?.hex || '#eeeeee',
+        accent: palette.DarkVibrant?.hex || '#aaaaaa',
+        background: palette.DarkMuted?.hex || '#000000',
+        foreground: palette.LightMuted?.hex || '#ffffff',
+        // For success/error/warning we generate from primary if not distinct
+        success: '#10B981', // Default green
+        error: '#EF4444',   // Default red
+        warning: '#F59E0B', // Default yellow
+      };
+    } catch (error) {
+      console.error('Failed to extract palette:', error);
+      throw new Error('Could not extract colors from image');
+    }
+  }
+
+  /**
+   * Generates complementary colors
+   * @param baseColor - Hex color string
+   * @returns Array of hex strings
+   */
+  static generateComplementary(baseColor: string): string[] {
+    return colord(baseColor).harmonies('complementary').map(c => c.toHex());
+  }
+
+  /**
+   * Generates analogous colors
+   * @param baseColor - Hex color string
+   * @returns Array of hex strings
+   */
+  static generateAnalogous(baseColor: string): string[] {
+    return colord(baseColor).harmonies('analogous').map(c => c.toHex());
+  }
+
+  /**
+   * Generates triadic colors
+   * @param baseColor - Hex color string
+   * @returns Array of hex strings
+   */
+  static generateTriadic(baseColor: string): string[] {
+    return colord(baseColor).harmonies('triadic').map(c => c.toHex());
+  }
+
+  /**
+   * Checks contrast ratio between two colors
+   * @param foreground - Hex color
+   * @param background - Hex color
+   * @returns Contrast info
+   */
+  static checkContrast(foreground: string, background: string) {
+    const contrast = colord(background).contrast(foreground);
+    return {
+      ratio: contrast,
+      AA: contrast >= 4.5,
+      AAA: contrast >= 7,
+    };
+  }
+
+  /**
+   * Converts a color and modifiers to Starship style string
+   * @param color - Hex color or name
+   * @param bold - Whether to use bold
+   * @param italic - Whether to use italic
+   * @param dimmed - Whether to use dimmed
+   * @param inverted - Whether to use inverted
+   * @param underline - Whether to use underline
+   * @returns Starship style string (e.g. "bold red")
+   */
+  static toAnsiStyle(
+    color: string,
+    options: {
+      bold?: boolean;
+      italic?: boolean;
+      dimmed?: boolean;
+      inverted?: boolean;
+      underline?: boolean;
+      bg?: string;
+    } = {}
+  ): string {
+    const parts: string[] = [];
+
+    if (options.bold) parts.push('bold');
+    if (options.italic) parts.push('italic');
+    if (options.dimmed) parts.push('dimmed');
+    if (options.inverted) parts.push('inverted');
+    if (options.underline) parts.push('underline');
+
+    if (options.bg) {
+      parts.push(`bg:${options.bg}`);
+    }
+
+    if (color) {
+      parts.push(color);
+    }
+
+    return parts.join(' ');
+  }
+
+  /**
+   * Preset color schemes
+   */
+  static presets: Record<string, ColorPalette> = {
+    Nord: {
+      primary: '#88C0D0',
+      secondary: '#81A1C1',
+      accent: '#5E81AC',
+      background: '#2E3440',
+      foreground: '#D8DEE9',
+      success: '#A3BE8C',
+      warning: '#EBCB8B',
+      error: '#BF616A',
+    },
+    Dracula: {
+      primary: '#BD93F9',
+      secondary: '#6272A4',
+      accent: '#FF79C6',
+      background: '#282A36',
+      foreground: '#F8F8F2',
+      success: '#50FA7B',
+      warning: '#F1FA8C',
+      error: '#FF5555',
+    },
+    Gruvbox: {
+      primary: '#d79921',
+      secondary: '#458588',
+      accent: '#b16286',
+      background: '#282828',
+      foreground: '#ebdbb2',
+      success: '#98971a',
+      warning: '#fabd2f',
+      error: '#cc241d',
+    },
+    Catppuccin: {
+      primary: '#cba6f7',
+      secondary: '#89b4fa',
+      accent: '#f5c2e7',
+      background: '#1e1e2e',
+      foreground: '#cdd6f4',
+      success: '#a6e3a1',
+      warning: '#f9e2af',
+      error: '#f38ba8',
+    },
+    TokyoNight: {
+      primary: '#7aa2f7',
+      secondary: '#7dcfff',
+      accent: '#bb9af7',
+      background: '#1a1b26',
+      foreground: '#c0caf5',
+      success: '#9ece6a',
+      warning: '#e0af68',
+      error: '#f7768e',
+    }
+  };
+}
