@@ -24,7 +24,7 @@ export const MOCK_SCENARIOS: Record<string, MockScenario> = {
       package: 'v1.0.0',
       cmd_duration: '2s',
       character: '❯',
-    }
+    },
   },
   dev: {
     name: 'Development State',
@@ -45,7 +45,7 @@ export const MOCK_SCENARIOS: Record<string, MockScenario> = {
       package: 'v0.5.2',
       cmd_duration: '500ms',
       character: '❯',
-    }
+    },
   },
   multilang: {
     name: 'Multi-Language',
@@ -66,7 +66,7 @@ export const MOCK_SCENARIOS: Record<string, MockScenario> = {
       package: 'v2.0.0-beta',
       cmd_duration: '12s',
       character: '❯',
-    }
+    },
   },
   devops: {
     name: 'DevOps Context',
@@ -90,7 +90,7 @@ export const MOCK_SCENARIOS: Record<string, MockScenario> = {
       package: '',
       cmd_duration: '',
       character: '#',
-    }
+    },
   },
   error: {
     name: 'Error State',
@@ -111,6 +111,6 @@ export const MOCK_SCENARIOS: Record<string, MockScenario> = {
       package: 'v0.0.1',
       cmd_duration: '1m 30s',
       character: '✖', // Error symbol
-    }
-  }
+    },
+  },
 };

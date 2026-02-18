@@ -1,5 +1,7 @@
 # GitHub Copilot Instructions — Starship Theme Creator
+
 # Place this file at: .github/copilot-instructions.md
+
 # Copilot reads this automatically for all chat and agent interactions in this repo.
 
 ---
@@ -64,6 +66,7 @@ When asked to implement features, Copilot should:
 ### In Copilot Chat on GitHub
 
 When reviewing PRs, Copilot should check:
+
 - [ ] TypeScript types present and accurate
 - [ ] Tailwind-only styling (no inline styles)
 - [ ] `useToast()` used for user feedback (not `alert()`)
@@ -112,13 +115,13 @@ export function useColorExtraction() {
 
 ```tsx
 // ✅ Correct
-<button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 
+<button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600
                    transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400">
   Save Theme
 </button>
 
 // ✅ Conditional classes
-<div className={`p-4 border-2 rounded-lg transition-colors 
+<div className={`p-4 border-2 rounded-lg transition-colors
                 ${enabled ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
 
 // ❌ Never this
@@ -136,8 +139,8 @@ updateConfig({
   directory: {
     style: 'bold cyan',
     truncation_length: 3,
-    truncate_to_repo: true
-  }
+    truncate_to_repo: true,
+  },
 });
 
 // ❌ Never mutate directly
@@ -155,7 +158,9 @@ try {
   await saveToGist(toml);
   toast.success('Theme saved to GitHub Gist!');
 } catch (err) {
-  toast.error(`Failed to save: ${err instanceof Error ? err.message : 'Unknown error'}`);
+  toast.error(
+    `Failed to save: ${err instanceof Error ? err.message : 'Unknown error'}`,
+  );
 }
 
 // ❌ Never use these
@@ -244,7 +249,7 @@ export const MyFeature: React.FC<MyFeatureProps> = ({
         onClick={handleAction}
         disabled={isLoading}
         aria-label={`Apply ${label ?? 'setting'}`}
-        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 
+        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600
                    disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {isLoading ? 'Working...' : 'Apply'}
@@ -268,7 +273,7 @@ Every interactive element must have:
 
 // Form inputs
 <label htmlFor="theme-name">Theme Name</label>
-<input 
+<input
   id="theme-name"
   type="text"
   aria-describedby="theme-name-hint"
@@ -283,7 +288,7 @@ Every interactive element must have:
 </div>
 
 // Keyboard navigation
-<div 
+<div
   role="button"
   tabIndex={0}
   onKeyDown={(e) => e.key === 'Enter' && handleClick()}
@@ -298,6 +303,7 @@ Every interactive element must have:
 When you use **Copilot Coding Agent** (assign issue to @copilot or use "Delegate to agent"):
 
 Copilot can autonomously:
+
 - ✅ Implement entire features from issue descriptions
 - ✅ Fix bugs by tracing root causes across files
 - ✅ Write and run tests via `npm test` in its environment
@@ -312,6 +318,7 @@ Copilot can autonomously:
 ### How to Assign Issues to Copilot
 
 **Method 1 — GitHub Issue:**
+
 ```
 1. Create a GitHub Issue describing the task
 2. Set Assignee → Copilot
@@ -322,6 +329,7 @@ Copilot can autonomously:
 ```
 
 **Method 2 — VS Code Chat:**
+
 ```
 1. Open Copilot Chat in VS Code
 2. Describe the task in detail
@@ -331,6 +339,7 @@ Copilot can autonomously:
 ```
 
 **Method 3 — @copilot mention in PR:**
+
 ```
 Leave a comment on any PR:
 "@copilot Can you add error handling for network timeouts in ExportImport.tsx?"
@@ -345,16 +354,20 @@ When assigning issues to Copilot, write issues like this:
 ## Task: [Clear title of what to build]
 
 ### Context
+
 [One paragraph explaining what this feature is and why it's needed]
 
 ### What to Build
+
 [Specific list of what to implement — the more specific the better]
 
 ### Files to Modify
+
 - `src/components/X/index.tsx` — [what to add/change]
 - `src/lib/y.ts` — [what to add/change]
 
 ### Acceptance Criteria
+
 - [ ] Feature works as described
 - [ ] TypeScript types are complete
 - [ ] Tests cover the feature
@@ -363,6 +376,7 @@ When assigning issues to Copilot, write issues like this:
 - [ ] Tailwind only (no inline styles)
 
 ### Related
+
 Checkpoint: CP-XX | References: #issue-number
 ```
 
@@ -373,12 +387,14 @@ Checkpoint: CP-XX | References: #issue-number
 When @copilot reviews a PR, check for:
 
 **TypeScript**
+
 - [ ] All props have typed interfaces
 - [ ] No implicit `any`
 - [ ] Return types on all exported functions
 - [ ] New types added to `starship.types.ts`
 
 **React Patterns**
+
 - [ ] `useCallback` on handlers passed as props
 - [ ] `useMemo` on expensive computations
 - [ ] `React.memo` on pure components
@@ -386,18 +402,21 @@ When @copilot reviews a PR, check for:
 - [ ] Correct dependency arrays in `useEffect`
 
 **User Experience**
+
 - [ ] Loading states for async operations
 - [ ] Error handling with toast notifications
 - [ ] Empty states for empty lists/galleries
 - [ ] Responsive layout (mobile + desktop)
 
 **Accessibility**
+
 - [ ] All buttons have `aria-label` if no visible text
 - [ ] Form inputs have associated `<label>` elements
 - [ ] Focus management for modals/drawers
 - [ ] Keyboard navigation works without mouse
 
 **Code Quality**
+
 - [ ] No `console.log` left in code
 - [ ] No `alert()` calls
 - [ ] Meaningful variable/function names
@@ -411,22 +430,32 @@ When @copilot reviews a PR, check for:
 ```typescript
 // Common Starship style values to suggest
 const COMMON_STYLES = [
-  'bold',           'italic',         'underline',
-  'bold red',       'bold green',     'bold blue',
-  'bold cyan',      'bold yellow',    'bold purple',
-  'italic red',     'bg:blue white',  'bg:black yellow',
-  '#ff0000',        '#00ff00',        '#0000ff',
+  'bold',
+  'italic',
+  'underline',
+  'bold red',
+  'bold green',
+  'bold blue',
+  'bold cyan',
+  'bold yellow',
+  'bold purple',
+  'italic red',
+  'bg:blue white',
+  'bg:black yellow',
+  '#ff0000',
+  '#00ff00',
+  '#0000ff',
 ];
 
 // Format string building blocks
 const FORMAT_PARTS = {
-  directory:  '$directory',
-  git:        '$git_branch$git_status',
-  languages:  '$nodejs$python$rust$golang',
-  cloud:      '$aws$gcloud',
-  system:     '$battery$time',
-  newline:    '\n',
-  character:  '$character',
+  directory: '$directory',
+  git: '$git_branch$git_status',
+  languages: '$nodejs$python$rust$golang',
+  cloud: '$aws$gcloud',
+  system: '$battery$time',
+  newline: '\n',
+  character: '$character',
 };
 
 // Default module formats
@@ -440,5 +469,5 @@ const MODULE_FORMATS = {
 
 ---
 
-*These instructions apply to all Copilot features: Chat, Agent, Code Review, and PR Summaries.*
-*For Jules-specific instructions, see `AGENTS.md` in the repository root.*
+_These instructions apply to all Copilot features: Chat, Agent, Code Review, and PR Summaries._
+_For Jules-specific instructions, see `AGENTS.md` in the repository root._

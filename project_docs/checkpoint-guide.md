@@ -47,6 +47,7 @@ Total Estimated Time: ~12-15 hours
 **🎯 Checkpoint Goal:** Working React + TypeScript project with all dependencies
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Project runs with `npm run dev`
 - [ ] All core dependencies installed
 - [ ] TypeScript types defined
@@ -61,12 +62,13 @@ Total Estimated Time: ~12-15 hours
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 I'm building a Starship prompt theme creator web app. This is a visual tool to create and customize Starship shell prompts without editing TOML files manually.
 
 Please create a React + TypeScript + Vite project setup with:
 - Tailwind CSS for styling
-- xterm.js for terminal preview  
+- xterm.js for terminal preview
 - Zustand for state management
 - @iarna/toml for TOML parsing
 - react-colorful for color picking
@@ -80,11 +82,13 @@ Also show me the folder structure I should create in the src directory.
 ```
 
 **✅ WHAT JULES WILL GIVE YOU:**
+
 - Complete package.json
 - Configuration files
 - Recommended folder structure
 
 **💻 YOUR ACTIONS:**
+
 ```bash
 # 1. Create project
 npm create vite@latest starship-theme-creator -- --template react-ts
@@ -107,6 +111,7 @@ npm run dev
 ```
 
 **🧪 COMPLETION TEST:**
+
 ```bash
 npm run dev
 # Should see Vite dev server running
@@ -115,8 +120,9 @@ npm run dev
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Project created
-- [ ] Dependencies installed  
+- [ ] Dependencies installed
 - [ ] Folders created
 - [ ] Dev server runs
 - [ ] No errors in console
@@ -128,6 +134,7 @@ npm run dev
 **⏱️ Estimated Time:** 10 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create comprehensive TypeScript types for Starship configuration in a file called starship.types.ts
 
@@ -155,17 +162,20 @@ Reference the official Starship docs at https://starship.rs/config/ for accuracy
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/types/starship.types.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 ```bash
 npm run dev
 # Should compile without TypeScript errors
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] File created at correct location
 - [ ] All major module types included
 - [ ] No TypeScript errors
@@ -178,11 +188,12 @@ npm run dev
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a comprehensive TOML parser utility class in toml-parser.ts that:
 
 1. Parses TOML strings to StarshipConfig objects
-2. Converts StarshipConfig objects back to TOML strings  
+2. Converts StarshipConfig objects back to TOML strings
 3. Provides a getDefaultConfig() method with sensible Starship defaults
 4. Validates configurations with a validate() method that checks:
    - Valid color formats (hex, rgb, named colors)
@@ -198,12 +209,14 @@ Add JSDoc comments for each method.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/toml-parser.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
 Create temporary test in `src/App.tsx`:
+
 ```typescript
 import { TomlParser } from './lib/toml-parser';
 
@@ -216,6 +229,7 @@ console.log('TOML:', toml);
 Check browser console - should see output without errors.
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] File created
 - [ ] All methods implemented
 - [ ] Test shows output
@@ -228,6 +242,7 @@ Check browser console - should see output without errors.
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a comprehensive color utility library in color-utils.ts that includes:
 
@@ -254,7 +269,7 @@ Create a comprehensive color utility library in color-utils.ts that includes:
 
 7. Static presets object with popular color schemes:
    - Nord
-   - Dracula  
+   - Dracula
    - Gruvbox Dark
    - Catppuccin Mocha
    - Tokyo Night
@@ -265,12 +280,14 @@ Export as a class called ColorUtils.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/color-utils.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
 Add to `src/App.tsx`:
+
 ```typescript
 import { ColorUtils } from './lib/color-utils';
 
@@ -280,6 +297,7 @@ console.log('Presets:', Object.keys(ColorUtils.presets));
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] File created
 - [ ] All color methods work
 - [ ] Presets defined
@@ -292,6 +310,7 @@ console.log('Presets:', Object.keys(ColorUtils.presets));
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a Zustand store in theme-store.ts with localStorage persistence that manages:
 
@@ -302,26 +321,26 @@ State:
 Actions:
 - updateConfig(config: Partial<StarshipConfig>): void
   Updates current theme config, sets updated timestamp
-  
+
 - updateMetadata(metadata: Partial<ThemeMetadata>): void
   Updates current theme metadata
-  
+
 - loadTheme(theme: Theme): void
   Loads a theme for editing
-  
+
 - saveTheme(): void
   Saves current theme to savedThemes array
   Creates new ID if not exists, updates if exists
-  
+
 - deleteTheme(id: string): void
   Removes theme from savedThemes
-  
+
 - resetTheme(): void
   Resets to default configuration
-  
+
 - exportToml(): string
   Returns TOML string of current theme
-  
+
 - importToml(tomlString: string): void
   Parses TOML and loads as current theme
 
@@ -332,12 +351,14 @@ Initialize with a default theme using TomlParser.getDefaultConfig().
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/stores/theme-store.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
 In `src/App.tsx`:
+
 ```typescript
 import { useThemeStore } from './stores/theme-store';
 
@@ -349,6 +370,7 @@ function App() {
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Store created
 - [ ] All actions implemented
 - [ ] Persistence works
@@ -359,6 +381,7 @@ function App() {
 **🎉 CHECKPOINT 1 COMPLETE!**
 
 Verify before continuing:
+
 - [ ] `npm run dev` works
 - [ ] No console errors
 - [ ] All 5 tasks checked off
@@ -371,6 +394,7 @@ Verify before continuing:
 **🎯 Checkpoint Goal:** Format parser and validation systems working
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Format strings parse to ANSI codes
 - [ ] Theme validator checks configs
 - [ ] Suggestion engine detects environment
@@ -383,6 +407,7 @@ Verify before continuing:
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a format string parser in lib/format-parser.ts that converts Starship format strings to rendered terminal text with ANSI escape codes.
 
@@ -424,23 +449,26 @@ Export all functions.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/format-parser.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 ```typescript
 import { parseFormatString } from './lib/format-parser';
 import { TomlParser } from './lib/toml-parser';
 
 const config = TomlParser.getDefaultConfig();
-const format = "[$directory](bold cyan)";
+const format = '[$directory](bold cyan)';
 const result = parseFormatString(format, config);
 console.log('Parsed:', result);
 // Should see ANSI codes in output
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Parser handles module variables
 - [ ] Style conversion works
 - [ ] ANSI codes generated
@@ -453,6 +481,7 @@ console.log('Parsed:', result);
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a theme validator in lib/theme-validator.ts that checks themes for issues.
 
@@ -509,11 +538,13 @@ Export as ThemeValidator class.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/theme-validator.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 ```typescript
 import { ThemeValidator } from './lib/theme-validator';
 
@@ -522,6 +553,7 @@ console.log('Validation:', result);
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Validator created
 - [ ] All check types implemented
 - [ ] Returns proper structure
@@ -534,6 +566,7 @@ console.log('Validation:', result);
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a suggestion engine in lib/suggestion-engine.ts that provides intelligent recommendations.
 
@@ -588,11 +621,13 @@ Export as SuggestionEngine class.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/suggestion-engine.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 ```typescript
 import { SuggestionEngine } from './lib/suggestion-engine';
 
@@ -603,6 +638,7 @@ console.log('Suggestions:', suggestions);
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Environment detection works
 - [ ] Module suggestions generated
 - [ ] Optimization suggestions work
@@ -615,6 +651,7 @@ console.log('Suggestions:', suggestions);
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a presets library in lib/presets.ts with built-in theme configurations.
 
@@ -647,11 +684,13 @@ Export as an array: export const PRESET_THEMES: Theme[]
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/presets.ts`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 ```typescript
 import { PRESET_THEMES } from './lib/presets';
 
@@ -660,6 +699,7 @@ console.log('First preset:', PRESET_THEMES[0].metadata.name);
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] All preset categories included
 - [ ] Each preset has metadata
 - [ ] Each preset has complete config
@@ -670,6 +710,7 @@ console.log('First preset:', PRESET_THEMES[0].metadata.name);
 **🎉 CHECKPOINT 2 COMPLETE!**
 
 Verify:
+
 - [ ] All parsers and validators work
 - [ ] No errors in console
 - [ ] All 4 tasks checked off
@@ -681,6 +722,7 @@ Verify:
 **🎯 Checkpoint Goal:** Working terminal with live theme preview
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Terminal renders in UI
 - [ ] Format strings display correctly
 - [ ] Colors show properly
@@ -693,6 +735,7 @@ Verify:
 **⏱️ Estimated Time:** 20 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a terminal preview component in components/TerminalPreview/index.tsx that:
 
@@ -702,7 +745,7 @@ Create a terminal preview component in components/TerminalPreview/index.tsx that
    - Header bar with red/yellow/green traffic light buttons
    - Title showing "Terminal Preview"
    - Dark terminal background
-   
+
 4. Renders a mock shell prompt showing:
    - Username and hostname
    - Current directory path
@@ -722,13 +765,15 @@ Make the terminal container responsive (fill parent).
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/TerminalPreview/index.tsx`
 2. Copy Jules' code
 3. Save file
 4. Update `src/App.tsx`:
+
    ```typescript
    import { TerminalPreview } from './components/TerminalPreview';
-   
+
    function App() {
      return (
        <div className="h-screen w-screen p-8 bg-gray-100">
@@ -739,11 +784,13 @@ Make the terminal container responsive (fill parent).
    ```
 
 **🧪 COMPLETION TEST:**
+
 - Visit localhost:5173
 - Should see terminal window
 - Should see basic prompt
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Terminal window visible
 - [ ] macOS-style chrome
 - [ ] Static prompt shows
@@ -756,6 +803,7 @@ Make the terminal container responsive (fill parent).
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Update the TerminalPreview component to use the format parser.
 
@@ -767,7 +815,7 @@ Changes needed:
    - Get the format string from currentTheme.config.format
    - Use parseFormatString to convert it to ANSI text
    - Write the result to the terminal
-   
+
 4. Show multiple example scenarios:
    - Clean git repository
    - Repository with changes (show modified, staged, ahead/behind)
@@ -782,16 +830,19 @@ Provide the complete updated TerminalPreview component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Replace contents of `src/components/TerminalPreview/index.tsx`
 2. Copy Jules' updated code
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 - Terminal should show colorful prompt
 - Should see multiple scenarios
 - Try changing a color in the store and watch update
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Prompt shows colors
 - [ ] ANSI codes rendering
 - [ ] Multiple scenarios visible
@@ -804,6 +855,7 @@ Provide the complete updated TerminalPreview component.
 **⏱️ Estimated Time:** 20 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a mock data system in lib/mock-data.ts that provides realistic values for terminal preview scenarios.
 
@@ -824,7 +876,7 @@ Create different scenarios:
    - directory: ~/dev/full-stack
    - git: ahead 2, behind 1
    - nodejs, python, rust all active
-   
+
 4. DevOps State:
    - directory: ~/infra/k8s-cluster
    - git: clean, on branch production
@@ -848,17 +900,20 @@ export interface MockScenario {
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/mock-data.ts`
 2. Copy Jules' code
 3. Update TerminalPreview to use scenarios
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Terminal should cycle through different scenarios
 - Each scenario should look realistic
 - All module types should be represented
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Mock scenarios created
 - [ ] Terminal uses scenarios
 - [ ] Scenarios look realistic
@@ -869,6 +924,7 @@ export interface MockScenario {
 **🎉 CHECKPOINT 3 COMPLETE!**
 
 Verify:
+
 - [ ] Terminal preview looks professional
 - [ ] Colors render correctly
 - [ ] Multiple scenarios show
@@ -881,6 +937,7 @@ Verify:
 **🎯 Checkpoint Goal:** Professional three-column layout
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Three-column layout working
 - [ ] Header with controls
 - [ ] Responsive design
@@ -893,6 +950,7 @@ Verify:
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create the main application layout in App.tsx with a three-column design:
 
@@ -904,15 +962,15 @@ Layout structure:
    - Style: white background, border bottom, shadow
 
 2. Main content (three columns):
-   
+
    LEFT SIDEBAR (320px, scrollable):
    - "Modules" section with placeholder
    - "Colors" section with placeholder
    - "Settings" section with placeholder
-   
+
    CENTER (flex-1):
    - TerminalPreview component (large, full height)
-   
+
    RIGHT SIDEBAR (320px, scrollable):
    - "Module Configuration" section
    - Shows settings for selected module
@@ -932,10 +990,12 @@ Make it clean, modern, and professional looking.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Replace `src/App.tsx` with Jules' code
 2. Save file
 
 **🧪 COMPLETION TEST:**
+
 - Visit localhost:5173
 - Should see three-column layout
 - Terminal in center
@@ -943,6 +1003,7 @@ Make it clean, modern, and professional looking.
 - Header at top
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Layout visible
 - [ ] Three columns work
 - [ ] Terminal in center
@@ -954,6 +1015,7 @@ Make it clean, modern, and professional looking.
 **🎉 CHECKPOINT 4 COMPLETE!**
 
 Verify:
+
 - [ ] Professional layout
 - [ ] All sections visible
 - [ ] Task checked off
@@ -965,6 +1027,7 @@ Verify:
 **🎯 Checkpoint Goal:** Drag-and-drop module builder working
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Module list displays
 - [ ] Drag to reorder works
 - [ ] Toggle modules on/off
@@ -977,6 +1040,7 @@ Verify:
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a ModuleBuilder component in components/ModuleBuilder/index.tsx that allows users to:
 
@@ -1008,27 +1072,32 @@ Export as ModuleBuilder component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/ModuleBuilder/index.tsx`
 2. Copy Jules' code
 3. Update `src/App.tsx` left sidebar:
+
    ```typescript
    import { ModuleBuilder } from './components/ModuleBuilder';
-   
+
    // In left sidebar:
    <section className="p-4">
      <h2 className="font-semibold mb-3">Modules</h2>
      <ModuleBuilder />
    </section>
    ```
+
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Module list should appear in left sidebar
 - Try dragging modules
 - Toggle checkboxes
 - Watch terminal update
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Module list visible
 - [ ] Drag and drop works
 - [ ] Toggles work
@@ -1042,6 +1111,7 @@ Export as ModuleBuilder component.
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a comprehensive module list in lib/module-definitions.ts with metadata for each Starship module.
 
@@ -1069,17 +1139,20 @@ export const MODULE_CATEGORIES: string[]
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/lib/module-definitions.ts`
 2. Copy Jules' code
 3. Update ModuleBuilder to use definitions
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Modules should show with categories
 - Icons/emojis visible
 - Descriptions appear on hover
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] All modules defined
 - [ ] Categories work
 - [ ] Metadata complete
@@ -1090,6 +1163,7 @@ export const MODULE_CATEGORIES: string[]
 **🎉 CHECKPOINT 5 COMPLETE!**
 
 Verify:
+
 - [ ] Module management fully functional
 - [ ] Drag and drop smooth
 - [ ] All 2 tasks checked off
@@ -1101,6 +1175,7 @@ Verify:
 **🎯 Checkpoint Goal:** Color picker and image palette working
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Color picker functional
 - [ ] Can select from presets
 - [ ] Image upload extracts colors
@@ -1113,6 +1188,7 @@ Verify:
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a ColorPicker component in components/ColorPicker/index.tsx that:
 
@@ -1126,7 +1202,7 @@ Create a ColorPicker component in components/ColorPicker/index.tsx that:
    - Button showing current color swatch and hex value
    - Dropdown that opens on click
    - Two tabs: "Picker" and "Palettes"
-   
+
 3. Picker Tab:
    - HexColorPicker from react-colorful
    - Shows current color
@@ -1155,17 +1231,19 @@ Export as ColorPicker component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/ColorPicker/index.tsx`
 2. Copy Jules' code
 3. Save file
 
 **🧪 COMPLETION TEST:**
 Test in App.tsx:
+
 ```typescript
 import { ColorPicker } from './components/ColorPicker';
 const [testColor, setTestColor] = useState('#3b82f6');
 
-<ColorPicker 
+<ColorPicker
   color={testColor}
   onChange={setTestColor}
   label="Test Color"
@@ -1174,6 +1252,7 @@ const [testColor, setTestColor] = useState('#3b82f6');
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Color picker works
 - [ ] Tabs switch
 - [ ] Presets show
@@ -1187,6 +1266,7 @@ const [testColor, setTestColor] = useState('#3b82f6');
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create an ImagePalette component in components/ImagePalette/index.tsx that:
 
@@ -1230,26 +1310,31 @@ Export as ImagePalette component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/ImagePalette/index.tsx`
 2. Copy Jules' code
 3. Add to App.tsx left sidebar:
+
    ```typescript
    import { ImagePalette } from './components/ImagePalette';
-   
+
    <section className="p-4">
      <h2 className="font-semibold mb-3">Color from Image</h2>
      <ImagePalette />
    </section>
    ```
+
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Upload a colorful image
 - Watch colors extract
 - Click "Apply Palette"
 - See theme colors change
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Upload works
 - [ ] Preview shows
 - [ ] Colors extract
@@ -1261,6 +1346,7 @@ Export as ImagePalette component.
 **🎉 CHECKPOINT 6 COMPLETE!**
 
 Verify:
+
 - [ ] Color systems fully functional
 - [ ] Image to palette works
 - [ ] All 2 tasks checked off
@@ -1272,6 +1358,7 @@ Verify:
 **🎯 Checkpoint Goal:** Configure individual module settings
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Config panel shows module settings
 - [ ] Symbol picker works
 - [ ] Changes update theme
@@ -1284,6 +1371,7 @@ Verify:
 **⏱️ Estimated Time:** 35 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a ModuleConfigPanel component in components/ModuleConfigPanel/index.tsx that shows configuration options for individual modules.
 
@@ -1348,18 +1436,21 @@ Export as ModuleConfigPanel component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/ModuleConfigPanel/index.tsx`
 2. Copy Jules' code
 3. Update App.tsx to show panel when module selected
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Click "Configure" on a module
 - Config panel appears in right sidebar
 - Change values
 - Watch terminal update
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Panel renders
 - [ ] Module-specific inputs show
 - [ ] Changes save
@@ -1373,6 +1464,7 @@ Export as ModuleConfigPanel component.
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create an IconBrowser component in components/IconBrowser/index.tsx that helps users find and select Nerd Font symbols.
 
@@ -1416,8 +1508,8 @@ Languages:
 -  (Node)
 
 Files/Folders:
--   
-- 
+-
+-
 
 Cloud:
 -  (AWS)
@@ -1429,7 +1521,7 @@ Containers:
 - ☸ (Kubernetes)
 
 Other:
-- ⚡ ✓ ✗ ● ○ ◆ ★ 
+- ⚡ ✓ ✗ ● ○ ◆ ★
 
 4. Search functionality:
    - Filter by symbol name
@@ -1452,18 +1544,21 @@ Export as IconBrowser component and a useIconBrowser hook to control open/close 
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/IconBrowser/index.tsx`
 2. Copy Jules' code
 3. Integrate with ModuleConfigPanel symbol inputs
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Click to open icon browser
 - Search for symbols
 - Select a symbol
 - Symbol appears in input
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Browser opens
 - [ ] Categories work
 - [ ] Search works
@@ -1475,6 +1570,7 @@ Export as IconBrowser component and a useIconBrowser hook to control open/close 
 **🎉 CHECKPOINT 7 COMPLETE!**
 
 Verify:
+
 - [ ] Module configuration fully functional
 - [ ] Symbol picker works
 - [ ] All 2 tasks checked off
@@ -1486,6 +1582,7 @@ Verify:
 **🎯 Checkpoint Goal:** Full import/export functionality
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Can export to .toml file
 - [ ] Can copy to clipboard
 - [ ] Can import .toml files
@@ -1498,6 +1595,7 @@ Verify:
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create an ExportImport component in components/ExportImport/index.tsx that provides multiple ways to export and import themes.
 
@@ -1576,18 +1674,21 @@ Export as ExportImport component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/ExportImport/index.tsx`
 2. Copy Jules' code
 3. Add to App.tsx (in a modal or sidebar section)
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Download a .toml file
 - Copy to clipboard
 - Upload file back
 - Verify theme loads correctly
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Download works
 - [ ] Copy works
 - [ ] Upload works
@@ -1599,6 +1700,7 @@ Export as ExportImport component.
 **🎉 CHECKPOINT 8 COMPLETE!**
 
 Verify:
+
 - [ ] All import/export methods work
 - [ ] Task checked off
 
@@ -1609,6 +1711,7 @@ Verify:
 **🎯 Checkpoint Goal:** Theme gallery and preset system
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Can save themes
 - [ ] Gallery shows saved themes
 - [ ] Presets available
@@ -1621,6 +1724,7 @@ Verify:
 **⏱️ Estimated Time:** 35 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a ThemeGallery component in components/ThemeGallery/index.tsx that shows saved and preset themes.
 
@@ -1678,12 +1782,14 @@ Export as ThemeGallery component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/ThemeGallery/index.tsx`
 2. Copy Jules' code
 3. Add gallery to app (button in header to open modal)
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Open gallery
 - View presets
 - Save a theme
@@ -1691,6 +1797,7 @@ Export as ThemeGallery component.
 - Delete a theme
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Gallery displays
 - [ ] Presets show
 - [ ] Can save themes
@@ -1704,6 +1811,7 @@ Export as ThemeGallery component.
 **⏱️ Estimated Time:** 15 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Update the App.tsx header to include functional theme action buttons:
 
@@ -1739,17 +1847,20 @@ Update the header section in App.tsx with these functional buttons and keyboard 
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Update `src/App.tsx`
 2. Copy Jules' code for header section
 3. Save file
 
 **🧪 COMPLETION TEST:**
+
 - Click each button
 - Test keyboard shortcuts
 - Verify modals open
 - Test save flow
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] All buttons work
 - [ ] Shortcuts work
 - [ ] Modals open
@@ -1760,6 +1871,7 @@ Update the header section in App.tsx with these functional buttons and keyboard 
 **🎉 CHECKPOINT 9 COMPLETE!**
 
 Verify:
+
 - [ ] Theme management fully functional
 - [ ] Gallery works
 - [ ] All 2 tasks checked off
@@ -1771,6 +1883,7 @@ Verify:
 **🎯 Checkpoint Goal:** Comparison, suggestions, and wizard
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Comparison view works
 - [ ] Suggestions show
 - [ ] Welcome wizard functional
@@ -1782,6 +1895,7 @@ Verify:
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a ComparisonView component in components/ComparisonView/index.tsx that shows before/after theme comparison.
 
@@ -1829,6 +1943,7 @@ Export as ComparisonView component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Install html2canvas: `npm install html2canvas`
 2. Create `src/components/ComparisonView/index.tsx`
 3. Copy Jules' code
@@ -1836,12 +1951,14 @@ Export as ComparisonView component.
 5. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Open comparison
 - Select two themes
 - View differences
 - Export screenshot
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Side-by-side view works
 - [ ] Diff shows
 - [ ] Export works
@@ -1854,6 +1971,7 @@ Export as ComparisonView component.
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a SuggestionPanel component in components/SuggestionPanel/index.tsx that displays smart suggestions.
 
@@ -1903,18 +2021,21 @@ Export as SuggestionPanel component.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/SuggestionPanel/index.tsx`
 2. Copy Jules' code
 3. Add to App.tsx left sidebar
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - View suggestions
 - Click "Apply" on a suggestion
 - Dismiss a suggestion
 - Verify theme updates
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Suggestions display
 - [ ] Priority sorting works
 - [ ] Apply works
@@ -1927,6 +2048,7 @@ Export as SuggestionPanel component.
 **⏱️ Estimated Time:** 35 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a WelcomeWizard component in components/WelcomeWizard/index.tsx that guides new users through setup.
 
@@ -1987,18 +2109,21 @@ Also create a hook: useWizardState to manage wizard progress.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create `src/components/WelcomeWizard/index.tsx`
 2. Copy Jules' code
 3. Show wizard on first visit (check localStorage)
 4. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Clear localStorage to trigger wizard
 - Go through all steps
 - Complete wizard
 - Verify theme created
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Wizard opens on first visit
 - [ ] All steps work
 - [ ] Navigation works
@@ -2010,6 +2135,7 @@ Also create a hook: useWizardState to manage wizard progress.
 **🎉 CHECKPOINT 10 COMPLETE!**
 
 Verify:
+
 - [ ] All advanced features working
 - [ ] All 3 tasks checked off
 
@@ -2020,6 +2146,7 @@ Verify:
 **🎯 Checkpoint Goal:** Professional polish and user experience
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Error handling in place
 - [ ] Keyboard shortcuts work
 - [ ] Accessibility features added
@@ -2032,6 +2159,7 @@ Verify:
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Add comprehensive error handling and toast notification system.
 
@@ -2086,6 +2214,7 @@ Provide updated versions of key components with error handling.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create error handling components
 2. Create toast system
 3. Wrap App in ErrorBoundary
@@ -2094,12 +2223,14 @@ Provide updated versions of key components with error handling.
 6. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Trigger an error (invalid TOML)
 - See error toast
 - Test loading states
 - Verify error boundary
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] ErrorBoundary works
 - [ ] Toasts display
 - [ ] Loading states show
@@ -2112,6 +2243,7 @@ Provide updated versions of key components with error handling.
 **⏱️ Estimated Time:** 25 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Add keyboard shortcut support throughout the app.
 
@@ -2160,6 +2292,7 @@ Export hooks and components.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create keyboard shortcuts hook
 2. Create CommandPalette
 3. Create KeyboardShortcutsHelp
@@ -2167,12 +2300,14 @@ Export hooks and components.
 5. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Try Cmd/Ctrl + S
 - Open command palette
 - View shortcuts help
 - Test all shortcuts
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] All shortcuts work
 - [ ] Command palette functional
 - [ ] Help modal shows
@@ -2185,6 +2320,7 @@ Export hooks and components.
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Improve accessibility throughout the app.
 
@@ -2247,6 +2383,7 @@ Provide accessibility audit checklist.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create accessibility context
 2. Update components with ARIA
 3. Add focus indicators
@@ -2254,12 +2391,14 @@ Provide accessibility audit checklist.
 5. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Navigate with keyboard only
 - Check focus indicators
 - Test with screen reader if possible
 - Verify ARIA labels
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] ARIA labels added
 - [ ] Keyboard navigation works
 - [ ] Focus indicators visible
@@ -2272,6 +2411,7 @@ Provide accessibility audit checklist.
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Add final polish and animations.
 
@@ -2336,6 +2476,7 @@ Provide a final polish checklist.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Add animations
 2. Create tooltip component
 3. Implement undo/redo
@@ -2344,12 +2485,14 @@ Provide a final polish checklist.
 6. Save files
 
 **🧪 COMPLETION TEST:**
+
 - All animations smooth
 - Tooltips appear
 - Undo/redo works
 - Autosave restores drafts
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Animations added
 - [ ] Tooltips work
 - [ ] Undo/redo functional
@@ -2361,6 +2504,7 @@ Provide a final polish checklist.
 **🎉 CHECKPOINT 11 COMPLETE!**
 
 Verify:
+
 - [ ] App feels professional
 - [ ] UX is smooth
 - [ ] All 4 tasks checked off
@@ -2372,6 +2516,7 @@ Verify:
 **🎯 Checkpoint Goal:** Tests and documentation complete
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Unit tests passing
 - [ ] Component tests passing
 - [ ] Documentation written
@@ -2384,6 +2529,7 @@ Verify:
 **⏱️ Estimated Time:** 60 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create a comprehensive test suite.
 
@@ -2426,6 +2572,7 @@ Target: >70% code coverage for critical paths.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Install test dependencies:
    ```bash
    npm install -D vitest @testing-library/react @testing-library/jest-dom @testing-library/user-event
@@ -2436,12 +2583,14 @@ Target: >70% code coverage for critical paths.
 5. Save files
 
 **🧪 COMPLETION TEST:**
+
 ```bash
 npm test
 npm run coverage
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Unit tests passing
 - [ ] Component tests passing
 - [ ] Integration tests passing
@@ -2454,6 +2603,7 @@ npm run coverage
 **⏱️ Estimated Time:** 45 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Create comprehensive documentation.
 
@@ -2505,6 +2655,7 @@ Include code examples and screenshots where helpful.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Create documentation files
 2. Add JSDoc comments
 3. Take screenshots
@@ -2512,11 +2663,13 @@ Include code examples and screenshots where helpful.
 5. Save files
 
 **🧪 COMPLETION TEST:**
+
 - Read through each doc
 - Verify accuracy
 - Test examples work
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] README complete
 - [ ] User guide written
 - [ ] Developer guide written
@@ -2528,6 +2681,7 @@ Include code examples and screenshots where helpful.
 **🎉 CHECKPOINT 12 COMPLETE!**
 
 Verify:
+
 - [ ] All tests passing
 - [ ] Documentation complete
 - [ ] All 2 tasks checked off
@@ -2539,6 +2693,7 @@ Verify:
 **🎯 Checkpoint Goal:** App deployed and live
 
 **✅ Checkpoint Complete When:**
+
 - [ ] Production build works
 - [ ] Deployed to hosting
 - [ ] Site accessible
@@ -2551,6 +2706,7 @@ Verify:
 **⏱️ Estimated Time:** 30 minutes
 
 **📝 PROMPT FOR JULES:**
+
 ```
 Prepare the app for production deployment.
 
@@ -2603,6 +2759,7 @@ Include checklist of pre-deployment tasks.
 ```
 
 **💻 YOUR ACTIONS:**
+
 1. Update vite.config.ts
 2. Add meta tags to index.html
 3. Create deployment configs
@@ -2614,6 +2771,7 @@ Include checklist of pre-deployment tasks.
 5. Save files
 
 **🧪 COMPLETION TEST:**
+
 ```bash
 npm run build
 npm run preview
@@ -2622,6 +2780,7 @@ npm run preview
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Build succeeds
 - [ ] Preview works
 - [ ] Meta tags added
@@ -2637,6 +2796,7 @@ npm run preview
 **Choose deployment platform:**
 
 **Option A: Vercel (Recommended)**
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -2649,6 +2809,7 @@ vercel
 ```
 
 **Option B: Netlify**
+
 ```bash
 # Install Netlify CLI
 npm i -g netlify-cli
@@ -2661,6 +2822,7 @@ netlify deploy --prod
 ```
 
 **Option C: GitHub Pages**
+
 ```bash
 # Add to package.json
 "homepage": "https://yourusername.github.io/starship-theme-creator",
@@ -2679,6 +2841,7 @@ npm run deploy
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
+
 - [ ] Deployed successfully
 - [ ] Site accessible
 - [ ] All features work
@@ -2758,6 +2921,7 @@ You've successfully built a complete Starship Theme Creator!
 **You did it! 🚀**
 
 Remember to refer to:
+
 - **Master Manual** for deep technical details
 - **Quick Reference** for code snippets
 - **Roadmap** for future feature ideas

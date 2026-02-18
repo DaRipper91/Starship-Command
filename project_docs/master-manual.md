@@ -36,6 +36,7 @@ Starship Theme Creator is a web-based visual editor for creating, customizing, a
 ### Key Features
 
 **Core Functionality:**
+
 - Visual terminal preview with real-time updates
 - Drag-and-drop module builder
 - Color picker with preset palettes
@@ -45,6 +46,7 @@ Starship Theme Creator is a web-based visual editor for creating, customizing, a
 - Theme validation and suggestions
 
 **Advanced Features:**
+
 - Theme gallery with presets
 - Before/after comparison view
 - Environment detection and smart suggestions
@@ -93,12 +95,14 @@ Starship Theme Creator is a web-based visual editor for creating, customizing, a
 ### Application Layers
 
 **1. Presentation Layer (Components)**
+
 - UI components
 - User interactions
 - Visual feedback
 - Responsive layouts
 
 **2. Business Logic Layer (Utilities)**
+
 - Format parsing
 - TOML conversion
 - Color manipulation
@@ -106,12 +110,14 @@ Starship Theme Creator is a web-based visual editor for creating, customizing, a
 - Suggestion engine
 
 **3. State Management Layer (Store)**
+
 - Theme state
 - User preferences
 - Saved themes
 - UI state
 
 **4. Data Layer**
+
 - Local storage persistence
 - File import/export
 - API communication (optional)
@@ -119,11 +125,12 @@ Starship Theme Creator is a web-based visual editor for creating, customizing, a
 ### Data Flow
 
 ```
-User Action → Component → Store Update → 
+User Action → Component → Store Update →
 Format Parser → Terminal Render → Visual Update
 ```
 
 Example: Changing a color
+
 1. User selects color in ColorPicker
 2. ColorPicker calls `updateConfig({ directory: { style: 'bold blue' }})`
 3. Store updates currentTheme
@@ -136,39 +143,47 @@ Example: Changing a color
 ## Technology Stack
 
 ### Frontend Framework
+
 - **React 18.2+**: UI framework
 - **TypeScript 5.2+**: Type safety
 - **Vite 5.0+**: Build tool and dev server
 
 ### UI Libraries
+
 - **Tailwind CSS 3.3+**: Utility-first styling
 - **shadcn/ui**: Component library (optional)
 - **Lucide React**: Icon library
 
 ### Terminal Emulation
+
 - **xterm.js 5.3+**: Terminal rendering
 - **xterm-addon-fit**: Auto-sizing
 
 ### State Management
+
 - **Zustand 4.4+**: Lightweight state management
 - **zustand/middleware/persist**: LocalStorage persistence
 
 ### File Handling
+
 - **@iarna/toml**: TOML parsing and stringification
 - **FileSaver.js**: File downloads
 
 ### Color Manipulation
+
 - **colord**: Color conversions and manipulation
 - **colord/plugins/a11y**: Accessibility checking
 - **node-vibrant**: Image color extraction
 - **react-colorful**: Color picker component
 
 ### Drag & Drop
+
 - **@dnd-kit/core**: Drag and drop core
 - **@dnd-kit/sortable**: Sortable lists
 - **@dnd-kit/utilities**: Helper utilities
 
 ### Development Tools
+
 - **ESLint**: Code linting
 - **Prettier**: Code formatting
 - **Vitest**: Unit testing
@@ -320,19 +335,22 @@ VITE_ENABLE_AI_SUGGESTIONS="false"
 ```typescript
 class TomlParser {
   // Parse TOML string to config object
-  static parse(tomlString: string): StarshipConfig
-  
+  static parse(tomlString: string): StarshipConfig;
+
   // Convert config object to TOML string
-  static stringify(config: StarshipConfig): string
-  
+  static stringify(config: StarshipConfig): string;
+
   // Get default Starship configuration
-  static getDefaultConfig(): StarshipConfig
-  
+  static getDefaultConfig(): StarshipConfig;
+
   // Validate configuration
-  static validate(config: StarshipConfig): ValidationResult
-  
+  static validate(config: StarshipConfig): ValidationResult;
+
   // Merge two configurations
-  static merge(base: StarshipConfig, override: Partial<StarshipConfig>): StarshipConfig
+  static merge(
+    base: StarshipConfig,
+    override: Partial<StarshipConfig>,
+  ): StarshipConfig;
 }
 ```
 
@@ -392,19 +410,13 @@ Combined: "bold red", "italic bg:blue #ffffff"
 
 ```typescript
 // Main parser
-function parseFormatString(
-  format: string,
-  config: StarshipConfig
-): string
+function parseFormatString(format: string, config: StarshipConfig): string;
 
 // Convert style to ANSI codes
-function styleToAnsi(style: string): string
+function styleToAnsi(style: string): string;
 
 // Render individual module
-function renderModule(
-  moduleName: string,
-  config: StarshipConfig
-): string
+function renderModule(moduleName: string, config: StarshipConfig): string;
 ```
 
 **Module Rendering**:
@@ -418,7 +430,7 @@ const mockValues = {
   username: 'john',
   hostname: 'macbook',
   character: '❯',
-  time: '14:30:45'
+  time: '14:30:45',
 };
 ```
 
@@ -431,7 +443,7 @@ const ANSI = {
   dim: '\x1b[2m',
   italic: '\x1b[3m',
   underline: '\x1b[4m',
-  
+
   // Foreground colors
   black: '\x1b[30m',
   red: '\x1b[31m',
@@ -441,21 +453,19 @@ const ANSI = {
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
   white: '\x1b[37m',
-  
+
   // Background colors (add 10)
   bgBlack: '\x1b[40m',
   bgRed: '\x1b[41m',
   // ...
-  
+
   // 256 colors
   fg256: (n: number) => `\x1b[38;5;${n}m`,
   bg256: (n: number) => `\x1b[48;5;${n}m`,
-  
+
   // RGB colors
-  fgRgb: (r: number, g: number, b: number) => 
-    `\x1b[38;2;${r};${g};${b}m`,
-  bgRgb: (r: number, g: number, b: number) => 
-    `\x1b[48;2;${r};${g};${b}m`
+  fgRgb: (r: number, g: number, b: number) => `\x1b[38;2;${r};${g};${b}m`,
+  bgRgb: (r: number, g: number, b: number) => `\x1b[48;2;${r};${g};${b}m`,
 };
 ```
 
@@ -470,6 +480,7 @@ const ANSI = {
 **Core Features**:
 
 1. **Image Color Extraction**
+
    ```typescript
    // Extract palette from image
    const palette = await ColorUtils.extractPaletteFromImage(file);
@@ -477,34 +488,46 @@ const ANSI = {
    ```
 
 2. **Color Harmony**
+
    ```typescript
    // Generate complementary colors
    const colors = ColorUtils.generateComplementary('#3b82f6');
-   
+
    // Generate analogous colors
    const colors = ColorUtils.generateAnalogous('#3b82f6');
-   
+
    // Generate triadic colors
    const colors = ColorUtils.generateTriadic('#3b82f6');
    ```
 
 3. **Accessibility**
+
    ```typescript
    // Check WCAG contrast ratio
    const { ratio, AA, AAA } = ColorUtils.checkContrast(
-     '#ffffff',  // foreground
-     '#000000'   // background
+     '#ffffff', // foreground
+     '#000000', // background
    );
    ```
 
 4. **Preset Palettes**
    ```typescript
    const presets = {
-     nord: { /* Nord colors */ },
-     dracula: { /* Dracula colors */ },
-     gruvbox: { /* Gruvbox colors */ },
-     catppuccin: { /* Catppuccin colors */ },
-     tokyo: { /* Tokyo Night colors */ }
+     nord: {
+       /* Nord colors */
+     },
+     dracula: {
+       /* Dracula colors */
+     },
+     gruvbox: {
+       /* Gruvbox colors */
+     },
+     catppuccin: {
+       /* Catppuccin colors */
+     },
+     tokyo: {
+       /* Tokyo Night colors */
+     },
    };
    ```
 
@@ -515,15 +538,15 @@ import { colord } from 'colord';
 
 // Convert between formats
 const color = colord('#3b82f6');
-color.toHex();     // '#3b82f6'
-color.toRgb();     // { r: 59, g: 130, b: 246 }
-color.toHsl();     // { h: 217, s: 91, l: 60 }
+color.toHex(); // '#3b82f6'
+color.toRgb(); // { r: 59, g: 130, b: 246 }
+color.toHsl(); // { h: 217, s: 91, l: 60 }
 
 // Manipulate colors
 color.lighten(0.1); // 10% lighter
-color.darken(0.1);  // 10% darker
+color.darken(0.1); // 10% darker
 color.saturate(0.2); // 20% more saturated
-color.rotate(180);  // Rotate hue 180°
+color.rotate(180); // Rotate hue 180°
 
 // Mix colors
 colord('#ff0000').mix('#0000ff', 0.5); // Purple
@@ -567,10 +590,10 @@ colord('#ff0000').mix('#0000ff', 0.5); // Purple
 ```typescript
 interface ValidationResult {
   valid: boolean;
-  errors: ValidationIssue[];      // Critical
-  warnings: ValidationIssue[];    // Non-critical
-  suggestions: string[];          // Improvements
-  estimatedRenderTime: number;    // ms
+  errors: ValidationIssue[]; // Critical
+  warnings: ValidationIssue[]; // Non-critical
+  suggestions: string[]; // Improvements
+  estimatedRenderTime: number; // ms
 }
 
 interface ValidationIssue {
@@ -590,7 +613,7 @@ import { ThemeValidator } from '@/lib/theme-validator';
 const result = ThemeValidator.validateTheme(theme);
 
 if (!result.valid) {
-  result.errors.forEach(error => {
+  result.errors.forEach((error) => {
     console.error(error.message);
     if (error.fix) {
       console.log('Suggested fix:', error.fix);
@@ -598,7 +621,7 @@ if (!result.valid) {
   });
 }
 
-result.warnings.forEach(warning => {
+result.warnings.forEach((warning) => {
   console.warn(warning.message);
 });
 ```
@@ -646,14 +669,11 @@ interface Suggestion {
   priority: 'high' | 'medium' | 'low';
   title: string;
   description: string;
-  action?: () => void;  // Auto-apply function
+  action?: () => void; // Auto-apply function
 }
 
 // Get suggestions
-const suggestions = SuggestionEngine.suggestOptimizations(
-  config,
-  env
-);
+const suggestions = SuggestionEngine.suggestOptimizations(config, env);
 ```
 
 **Color Scheme Suggestions**:
@@ -684,6 +704,7 @@ const palettes = SuggestionEngine.suggestColorScheme(env);
 **Props**: None (uses store)
 
 **Features**:
+
 - xterm.js terminal emulation
 - Real-time theme updates
 - Multiple example scenarios
@@ -737,6 +758,7 @@ export const TerminalPreview: React.FC = () => {
 ```
 
 **Scenarios to Show**:
+
 1. Clean git repository
 2. Git with changes (modified, staged, ahead/behind)
 3. Different directories
@@ -754,6 +776,7 @@ export const TerminalPreview: React.FC = () => {
 **Location**: `src/components/ModuleBuilder/index.tsx`
 
 **Features**:
+
 - List all available modules
 - Drag to reorder
 - Toggle on/off
@@ -778,7 +801,7 @@ export const ModuleBuilder: React.FC = () => {
 
   const toggleModule = (module: string) => {
     // Enable/disable module
-    updateConfig({ 
+    updateConfig({
       [module]: { disabled: !currentTheme.config[module]?.disabled }
     });
   };
@@ -801,34 +824,73 @@ export const ModuleBuilder: React.FC = () => {
 ```
 
 **Available Modules**:
+
 ```typescript
 const AVAILABLE_MODULES = [
   // Core
-  'character', 'directory', 'line_break',
-  
+  'character',
+  'directory',
+  'line_break',
+
   // Version Control
-  'git_branch', 'git_status', 'git_state', 'git_commit',
-  'git_metrics', 'hg_branch',
-  
+  'git_branch',
+  'git_status',
+  'git_state',
+  'git_commit',
+  'git_metrics',
+  'hg_branch',
+
   // Languages
-  'nodejs', 'python', 'rust', 'golang', 'java', 'php',
-  'ruby', 'swift', 'kotlin', 'julia', 'lua', 'perl',
-  'erlang', 'elixir', 'nim', 'crystal', 'dart',
-  
+  'nodejs',
+  'python',
+  'rust',
+  'golang',
+  'java',
+  'php',
+  'ruby',
+  'swift',
+  'kotlin',
+  'julia',
+  'lua',
+  'perl',
+  'erlang',
+  'elixir',
+  'nim',
+  'crystal',
+  'dart',
+
   // Tools
-  'docker_context', 'kubernetes', 'terraform',
-  'package', 'cmake', 'gradle', 'maven',
-  
+  'docker_context',
+  'kubernetes',
+  'terraform',
+  'package',
+  'cmake',
+  'gradle',
+  'maven',
+
   // Cloud
-  'aws', 'gcloud', 'azure', 'openstack',
-  
+  'aws',
+  'gcloud',
+  'azure',
+  'openstack',
+
   // System
-  'battery', 'time', 'username', 'hostname',
-  'cmd_duration', 'jobs', 'memory_usage', 'shell',
-  'shlvl', 'status', 'sudo', 'os',
-  
+  'battery',
+  'time',
+  'username',
+  'hostname',
+  'cmd_duration',
+  'jobs',
+  'memory_usage',
+  'shell',
+  'shlvl',
+  'status',
+  'sudo',
+  'os',
+
   // Other
-  'env_var', 'custom'
+  'env_var',
+  'custom',
 ];
 ```
 
@@ -841,6 +903,7 @@ const AVAILABLE_MODULES = [
 **Location**: `src/components/ColorPicker/index.tsx`
 
 **Props**:
+
 ```typescript
 interface ColorPickerProps {
   color: string;
@@ -851,6 +914,7 @@ interface ColorPickerProps {
 ```
 
 **Features**:
+
 - HexColorPicker (react-colorful)
 - Preset palettes
 - Color suggestions
@@ -858,10 +922,12 @@ interface ColorPickerProps {
 - Format support (hex, rgb, named)
 
 **Tabs**:
+
 1. **Picker**: Interactive color picker
 2. **Palettes**: Preset color schemes
 
 **Accessibility**:
+
 - Shows contrast ratio
 - Warns if poor contrast (< 4.5:1)
 - Suggests alternatives
@@ -875,12 +941,14 @@ interface ColorPickerProps {
 **Location**: `src/components/ImagePalette/index.tsx`
 
 **Features**:
+
 - Image upload
 - Color extraction (node-vibrant)
 - Palette display
 - Apply to theme
 
 **Extracted Colors**:
+
 - Primary (most vibrant)
 - Secondary (muted)
 - Accent (light vibrant)
@@ -898,7 +966,7 @@ const applyPalette = (palette: ColorPalette) => {
     git_branch: { style: palette.secondary },
     character: {
       success_symbol: `[➜](bold ${palette.success})`,
-      error_symbol: `[✗](bold ${palette.error})`
+      error_symbol: `[✗](bold ${palette.error})`,
     },
     // ... other modules
   });
@@ -914,6 +982,7 @@ const applyPalette = (palette: ColorPalette) => {
 **Location**: `src/components/ModuleConfigPanel/index.tsx`
 
 **Props**:
+
 ```typescript
 interface ModuleConfigPanelProps {
   moduleName: string;
@@ -923,6 +992,7 @@ interface ModuleConfigPanelProps {
 ```
 
 **Common Fields**:
+
 - Symbol input
 - Style (color picker)
 - Format string
@@ -931,22 +1001,26 @@ interface ModuleConfigPanelProps {
 **Module-Specific Fields**:
 
 **Directory**:
+
 - truncation_length (slider)
 - truncate_to_repo (toggle)
 - home_symbol
 - read_only
 
 **Git Branch**:
+
 - truncation_length
 - truncation_symbol
 - always_show_remote
 - only_attached
 
 **Git Status**:
+
 - Symbol for each state
 - Format customization
 
 **Character**:
+
 - success_symbol
 - error_symbol
 - Vim mode symbols
@@ -960,6 +1034,7 @@ interface ModuleConfigPanelProps {
 **Location**: `src/components/ThemeGallery/index.tsx`
 
 **Features**:
+
 - Grid/list view
 - Search and filter
 - Sort options
@@ -968,6 +1043,7 @@ interface ModuleConfigPanelProps {
 - Theme cards with actions
 
 **Theme Card**:
+
 - Name and author
 - Description
 - Preview thumbnail
@@ -976,6 +1052,7 @@ interface ModuleConfigPanelProps {
 - Actions (load, duplicate, export, delete)
 
 **Built-in Presets**:
+
 - Minimal themes (Clean, Simple, One Line)
 - Developer themes (Full Stack, DevOps)
 - Aesthetic themes (Nord, Dracula, Gruvbox, etc.)
@@ -989,6 +1066,7 @@ interface ModuleConfigPanelProps {
 **Location**: `src/components/ExportImport/index.tsx`
 
 **Export Options**:
+
 1. Download .toml file
 2. Copy to clipboard
 3. Share via URL
@@ -996,12 +1074,14 @@ interface ModuleConfigPanelProps {
 5. Preview TOML code
 
 **Import Options**:
+
 1. Upload file
 2. Paste TOML
 3. Import from URL
 4. Import from GitHub Gist
 
 **Validation**:
+
 - Check TOML syntax before import
 - Warn about overwriting current theme
 - Show helpful error messages
@@ -1015,6 +1095,7 @@ interface ModuleConfigPanelProps {
 **Location**: `src/components/WelcomeWizard/index.tsx`
 
 **Steps**:
+
 1. Welcome & Introduction
 2. Choose starting point
 3. Environment detection
@@ -1022,6 +1103,7 @@ interface ModuleConfigPanelProps {
 5. Finalize & export
 
 **Features**:
+
 - Progress indicator
 - Skip option
 - Save progress
@@ -1038,18 +1120,21 @@ interface ModuleConfigPanelProps {
 **Location**: `src/components/Toast.tsx`
 
 **Types**:
+
 - Success (green)
 - Error (red)
 - Warning (yellow)
 - Info (blue)
 
 **Features**:
+
 - Auto-dismiss (configurable)
 - Stack multiple toasts
 - Swipe to dismiss
 - Pause on hover
 
 **Usage**:
+
 ```typescript
 import { useToast } from '@/hooks/useToast';
 
@@ -1070,12 +1155,14 @@ toast.info('Tip: Press Cmd+K for command palette');
 **Location**: `src/components/ErrorBoundary.tsx`
 
 **Features**:
+
 - Catch component errors
 - Show friendly error page
 - Reset button
 - Error reporting
 
 **Usage**:
+
 ```typescript
 <ErrorBoundary>
   <App />
@@ -1091,12 +1178,13 @@ toast.info('Tip: Press Cmd+K for command palette');
 **Location**: `src/stores/theme-store.ts`
 
 **State**:
+
 ```typescript
 interface ThemeStore {
   // State
   currentTheme: Theme;
   savedThemes: Theme[];
-  
+
   // Actions
   updateConfig: (config: Partial<StarshipConfig>) => void;
   updateMetadata: (metadata: Partial<ThemeMetadata>) => void;
@@ -1110,6 +1198,7 @@ interface ThemeStore {
 ```
 
 **Persistence**:
+
 ```typescript
 import { persist } from 'zustand/middleware';
 
@@ -1122,28 +1211,29 @@ export const useThemeStore = create<ThemeStore>()(
       name: 'starship-theme-storage',
       // Optionally customize what to persist
       partialize: (state) => ({
-        savedThemes: state.savedThemes
-      })
-    }
-  )
+        savedThemes: state.savedThemes,
+      }),
+    },
+  ),
 );
 ```
 
 **Usage in Components**:
+
 ```typescript
 import { useThemeStore } from '@/stores/theme-store';
 
 function MyComponent() {
   // Select specific state
-  const currentTheme = useThemeStore(state => state.currentTheme);
-  const updateConfig = useThemeStore(state => state.updateConfig);
-  
+  const currentTheme = useThemeStore((state) => state.currentTheme);
+  const updateConfig = useThemeStore((state) => state.updateConfig);
+
   // Or destructure
   const { currentTheme, updateConfig } = useThemeStore();
-  
+
   // Update config
-  updateConfig({ 
-    directory: { style: 'bold cyan' }
+  updateConfig({
+    directory: { style: 'bold cyan' },
   });
 }
 ```
@@ -1166,20 +1256,21 @@ export default {
         // Custom colors
         primary: '#3b82f6',
         secondary: '#8b5cf6',
-        accent: '#f59e0b'
+        accent: '#f59e0b',
       },
       fontFamily: {
-        mono: ['Fira Code', 'monospace']
-      }
-    }
+        mono: ['Fira Code', 'monospace'],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
 ```
 
 ### Design System
 
 **Colors**:
+
 ```css
 /* Primary Actions */
 bg-blue-500      /* Primary buttons */
@@ -1199,6 +1290,7 @@ bg-gray-800      /* Dark backgrounds */
 ```
 
 **Typography**:
+
 ```css
 text-sm          /* 0.875rem - Small text */
 text-base        /* 1rem - Body text */
@@ -1213,6 +1305,7 @@ font-bold        /* 700 - Strong emphasis */
 ```
 
 **Spacing**:
+
 ```css
 p-2    /* 0.5rem */
 p-4    /* 1rem */
@@ -1226,20 +1319,23 @@ gap-4  /* 1rem gap */
 **Components**:
 
 Button:
+
 ```tsx
-<button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+<button className="rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600">
   Click Me
 </button>
 ```
 
 Input:
+
 ```tsx
-<input className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+<input className="rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 ```
 
 Card:
+
 ```tsx
-<div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
   Content
 </div>
 ```
@@ -1263,13 +1359,13 @@ describe('TomlParser', () => {
     const config = TomlParser.parse(toml);
     expect(config.character?.success_symbol).toBe('[➜](bold green)');
   });
-  
+
   it('should stringify config to TOML', () => {
     const config = { character: { success_symbol: '[➜](bold green)' } };
     const toml = TomlParser.stringify(config);
     expect(toml).toContain('success_symbol');
   });
-  
+
   it('should validate config', () => {
     const config = { character: { style: 'invalid-color' } };
     const { valid, errors } = TomlParser.validate(config);
@@ -1293,13 +1389,13 @@ describe('ColorPicker', () => {
     );
     expect(screen.getByText('#3b82f6')).toBeInTheDocument();
   });
-  
+
   it('should call onChange when color selected', () => {
     const onChange = vi.fn();
     render(
       <ColorPicker color="#3b82f6" onChange={onChange} />
     );
-    
+
     fireEvent.click(screen.getByRole('button'));
     // ... select new color
     expect(onChange).toHaveBeenCalled();
@@ -1348,15 +1444,15 @@ function App() {
 // Memoize expensive calculations
 const parsedFormat = useMemo(
   () => parseFormatString(format, config),
-  [format, config]
+  [format, config],
 );
 
 // Memoize callbacks
 const handleColorChange = useCallback(
   (color: string) => {
-    updateConfig({ directory: { style: `bold ${color}` }});
+    updateConfig({ directory: { style: `bold ${color}` } });
   },
-  [updateConfig]
+  [updateConfig],
 );
 
 // Memoize components
@@ -1373,11 +1469,11 @@ import { useDebounce } from '@/hooks/useDebounce';
 function ColorPicker({ onChange }) {
   const [color, setColor] = useState('#3b82f6');
   const debouncedColor = useDebounce(color, 300);
-  
+
   useEffect(() => {
     onChange(debouncedColor);
   }, [debouncedColor]);
-  
+
   return <HexColorPicker color={color} onChange={setColor} />;
 }
 ```
@@ -1410,7 +1506,7 @@ useEffect(() => {
       saveTheme();
     }
   };
-  
+
   window.addEventListener('keydown', handleKeyPress);
   return () => window.removeEventListener('keydown', handleKeyPress);
 }, []);
@@ -1483,21 +1579,25 @@ netlify deploy --prod
 ### Common Issues
 
 **Terminal not rendering**:
+
 - Check xterm.js initialization
 - Verify ANSI code generation
 - Check terminal theme
 
 **Colors not applying**:
+
 - Verify color format (hex, rgb, named)
 - Check format string syntax
 - Validate ANSI conversion
 
 **Import fails**:
+
 - Check TOML syntax
 - Verify file encoding (UTF-8)
 - Check for unsupported modules
 
 **Performance issues**:
+
 - Too many modules enabled
 - Expensive modules (git_status)
 - Large format strings

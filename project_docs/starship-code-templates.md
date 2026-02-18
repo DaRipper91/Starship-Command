@@ -1,6 +1,7 @@
 # Starship Theme Creator - Base Code Templates
 
 ## Project Structure
+
 ```
 starship-theme-creator/
 ├── public/
@@ -44,7 +45,7 @@ export interface StarshipConfig {
   add_newline?: boolean;
   palette?: Record<string, string>;
   palettes?: Record<string, Record<string, string>>;
-  
+
   // Modules
   aws?: ModuleConfig;
   battery?: BatteryModuleConfig;
@@ -57,7 +58,7 @@ export interface StarshipConfig {
   rust?: ModuleConfig;
   time?: TimeModuleConfig;
   // ... add all other modules
-  
+
   [key: string]: any;
 }
 
@@ -249,7 +250,7 @@ export class TomlParser {
     // Validate colors
     const validateColor = (style: string, path: string) => {
       if (!style) return;
-      
+
       const colorRegex = /(#[0-9a-fA-F]{6}|rgb\(\d+,\s*\d+,\s*\d+\)|[a-z]+)/;
       if (!colorRegex.test(style)) {
         errors.push(`Invalid color format at ${path}: ${style}`);
@@ -272,17 +273,23 @@ export class TomlParser {
   /**
    * Merge configs (for presets)
    */
-  static merge(base: StarshipConfig, override: Partial<StarshipConfig>): StarshipConfig {
+  static merge(
+    base: StarshipConfig,
+    override: Partial<StarshipConfig>,
+  ): StarshipConfig {
     return {
       ...base,
       ...override,
       // Deep merge module configs
-      ...(Object.keys(override).reduce((acc, key) => {
-        if (typeof override[key] === 'object' && !Array.isArray(override[key])) {
+      ...Object.keys(override).reduce((acc, key) => {
+        if (
+          typeof override[key] === 'object' &&
+          !Array.isArray(override[key])
+        ) {
           acc[key] = { ...base[key], ...override[key] };
         }
         return acc;
-      }, {} as any)),
+      }, {} as any),
     };
   }
 }
@@ -303,13 +310,15 @@ export class ColorUtils {
   /**
    * Extract color palette from image
    */
-  static async extractPaletteFromImage(imageFile: File): Promise<Record<string, string>> {
+  static async extractPaletteFromImage(
+    imageFile: File,
+  ): Promise<Record<string, string>> {
     const imageUrl = URL.createObjectURL(imageFile);
-    
+
     try {
       const vibrant = new Vibrant(imageUrl);
       const palette = await vibrant.getPalette();
-      
+
       return {
         primary: palette.Vibrant?.hex || '#000000',
         secondary: palette.Muted?.hex || '#666666',
@@ -343,11 +352,7 @@ export class ColorUtils {
    */
   static generateAnalogous(baseColor: string): string[] {
     const color = colord(baseColor);
-    return [
-      color.rotate(-30).toHex(),
-      color.toHex(),
-      color.rotate(30).toHex(),
-    ];
+    return [color.rotate(-30).toHex(), color.toHex(), color.rotate(30).toHex()];
   }
 
   /**
@@ -365,7 +370,10 @@ export class ColorUtils {
   /**
    * Check WCAG contrast ratio
    */
-  static checkContrast(foreground: string, background: string): {
+  static checkContrast(
+    foreground: string,
+    background: string,
+  ): {
     ratio: number;
     AA: boolean;
     AAA: boolean;
@@ -373,7 +381,7 @@ export class ColorUtils {
     const fg = colord(foreground);
     const bg = colord(background);
     const ratio = fg.contrast(bg);
-    
+
     return {
       ratio,
       AA: ratio >= 4.5,
@@ -386,12 +394,12 @@ export class ColorUtils {
    */
   static toAnsiStyle(color: string, bold = false, italic = false): string {
     const styles = [];
-    
+
     if (bold) styles.push('bold');
     if (italic) styles.push('italic');
-    
+
     styles.push(color);
-    
+
     return styles.join(' ');
   }
 
@@ -481,7 +489,7 @@ import { TomlParser } from '../lib/toml-parser';
 interface ThemeStore {
   currentTheme: Theme;
   savedThemes: Theme[];
-  
+
   // Actions
   updateConfig: (config: Partial<StarshipConfig>) => void;
   updateMetadata: (metadata: Partial<ThemeMetadata>) => void;
@@ -548,7 +556,7 @@ export const useThemeStore = create<ThemeStore>()(
           };
 
           const existingIndex = state.savedThemes.findIndex(
-            (t) => t.metadata.id === themeToSave.metadata.id
+            (t) => t.metadata.id === themeToSave.metadata.id,
           );
 
           const newSavedThemes = [...state.savedThemes];
@@ -595,8 +603,8 @@ export const useThemeStore = create<ThemeStore>()(
     }),
     {
       name: 'starship-theme-storage',
-    }
-  )
+    },
+  ),
 );
 ```
 
@@ -615,7 +623,7 @@ export const TerminalPreview: React.FC = () => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-  
+
   const { currentTheme } = useThemeStore();
 
   useEffect(() => {
@@ -660,14 +668,14 @@ export const TerminalPreview: React.FC = () => {
 
   const renderPrompt = (terminal: Terminal) => {
     const { config } = currentTheme;
-    
+
     // Simple prompt rendering - this should be enhanced
     // to properly parse and render the format string
     terminal.writeln('');
     terminal.write('┌─[user@hostname] - [~/projects/my-app]');
     terminal.writeln('');
     terminal.write('└─$ ');
-    
+
     // TODO: Implement proper format string parser
     // that renders the actual prompt based on config
   };
@@ -716,7 +724,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   return (
     <div className="relative">
       {label && <label className="block text-sm font-medium mb-2">{label}</label>}
-      
+
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50"
@@ -754,7 +762,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
           {activeTab === 'picker' && (
             <>
               <HexColorPicker color={color} onChange={onChange} />
-              
+
               <div className="mt-4">
                 <p className="text-xs font-medium mb-2">Suggestions</p>
                 <div className="grid grid-cols-4 gap-2">
@@ -812,7 +820,7 @@ export const ImagePalette: React.FC = () => {
   const [palette, setPalette] = useState<Record<string, string> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
-  
+
   const { updateConfig } = useThemeStore();
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -944,16 +952,16 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ id, enabled, onToggle }) => {
       >
         ☰
       </button>
-      
+
       <input
         type="checkbox"
         checked={enabled}
         onChange={onToggle}
         className="w-4 h-4"
       />
-      
+
       <span className="flex-1 font-mono text-sm">{id}</span>
-      
+
       <button className="text-sm text-blue-500 hover:text-blue-700">
         Configure
       </button>
@@ -1074,7 +1082,7 @@ export const ExportImport: React.FC = () => {
     const toml = exportToml();
     const encoded = btoa(toml);
     const url = `${window.location.origin}/theme?data=${encoded}`;
-    
+
     await navigator.clipboard.writeText(url);
     // Show toast: "Share URL copied!"
   };
@@ -1082,7 +1090,7 @@ export const ExportImport: React.FC = () => {
   return (
     <div className="space-y-4">
       <h3 className="font-medium">Export Theme</h3>
-      
+
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={handleDownload}
@@ -1090,14 +1098,14 @@ export const ExportImport: React.FC = () => {
         >
           Download .toml
         </button>
-        
+
         <button
           onClick={handleCopy}
           className="px-4 py-2 border rounded hover:bg-gray-50"
         >
           Copy to Clipboard
         </button>
-        
+
         <button
           onClick={handleShare}
           className="px-4 py-2 border rounded hover:bg-gray-50"
@@ -1107,7 +1115,7 @@ export const ExportImport: React.FC = () => {
       </div>
 
       <h3 className="font-medium pt-4">Import Theme</h3>
-      
+
       <input
         ref={fileInputRef}
         type="file"
@@ -1115,7 +1123,7 @@ export const ExportImport: React.FC = () => {
         onChange={handleImport}
         className="hidden"
       />
-      
+
       <button
         onClick={() => fileInputRef.current?.click()}
         className="w-full px-4 py-2 border rounded hover:bg-gray-50"
@@ -1255,12 +1263,14 @@ export default App;
 ### To get started:
 
 1. **Initialize the project:**
+
    ```bash
    npm create vite@latest starship-theme-creator -- --template react-ts
    cd starship-theme-creator
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -1268,6 +1278,7 @@ export default App;
 3. **Copy the code templates** from this document into the appropriate files
 
 4. **Set up Tailwind:**
+
    ```bash
    npm install -D tailwindcss postcss autoprefixer
    npx tailwindcss init -p

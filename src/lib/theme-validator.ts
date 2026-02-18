@@ -30,7 +30,7 @@ export class ThemeValidator {
         type: 'config',
         severity: 'warning',
         message: 'Theme has no name',
-        fix: 'Add a name in the theme settings'
+        fix: 'Add a name in the theme settings',
       });
     }
 
@@ -50,9 +50,15 @@ export class ThemeValidator {
       errors.push({
         type: 'config',
         severity: 'error',
-        message: 'Configuration is empty or invalid'
+        message: 'Configuration is empty or invalid',
       });
-      return { valid: false, errors, warnings, suggestions, estimatedRenderTime: 0 };
+      return {
+        valid: false,
+        errors,
+        warnings,
+        suggestions,
+        estimatedRenderTime: 0,
+      };
     }
 
     // 2. Visual Checks (Contrast)
@@ -66,7 +72,7 @@ export class ThemeValidator {
         type: 'performance',
         severity: 'warning',
         message: `Estimated render time is high (${renderTime}ms)`,
-        fix: 'Disable expensive modules like git_status or kubernetes'
+        fix: 'Disable expensive modules like git_status or kubernetes',
       });
     }
 
@@ -74,17 +80,19 @@ export class ThemeValidator {
     // Example: Check for Nerd Fonts usage if likely needed
     const usesSymbols = JSON.stringify(config).includes('symbol');
     if (usesSymbols) {
-      suggestions.push('Make sure you have a Nerd Font installed to see all symbols correctly');
+      suggestions.push(
+        'Make sure you have a Nerd Font installed to see all symbols correctly',
+      );
     }
 
     // 5. Structure Checks
     if (config.format && !config.format.includes('$character')) {
-       warnings.push({
-         type: 'config',
-         severity: 'warning',
-         message: 'Format string is missing the character module',
-         fix: 'Add $character to the end of your format string'
-       });
+      warnings.push({
+        type: 'config',
+        severity: 'warning',
+        message: 'Format string is missing the character module',
+        fix: 'Add $character to the end of your format string',
+      });
     }
 
     return {
@@ -92,7 +100,7 @@ export class ThemeValidator {
       errors,
       warnings,
       suggestions,
-      estimatedRenderTime: renderTime
+      estimatedRenderTime: renderTime,
     };
   }
 
@@ -118,15 +126,17 @@ export class ThemeValidator {
             type: 'visual',
             severity: 'warning',
             message: `Low contrast color ${fg} in ${source}`,
-            fix: 'Choose a lighter color for better readability on dark backgrounds'
+            fix: 'Choose a lighter color for better readability on dark backgrounds',
           });
         }
       }
     };
 
     // Check specific modules
-    if (config.directory?.style) checkStyle(config.directory.style, 'directory module');
-    if (config.git_branch?.style) checkStyle(config.git_branch.style, 'git_branch module');
+    if (config.directory?.style)
+      checkStyle(config.directory.style, 'directory module');
+    if (config.git_branch?.style)
+      checkStyle(config.git_branch.style, 'git_branch module');
 
     return issues;
   }

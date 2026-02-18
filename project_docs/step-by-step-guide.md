@@ -28,12 +28,13 @@ Before you start, ensure you have:
 ### Step 1: Initialize the Project
 
 **📝 Prompt for Jules:**
+
 ```
 I'm building a Starship prompt theme creator web app. This is a visual tool to create and customize Starship shell prompts without editing TOML files manually.
 
 Please create a React + TypeScript + Vite project setup with:
 - Tailwind CSS for styling
-- xterm.js for terminal preview  
+- xterm.js for terminal preview
 - Zustand for state management
 - @iarna/toml for TOML parsing
 - react-colorful for color picking
@@ -47,11 +48,13 @@ Also show me the folder structure I should create in the src directory.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete package.json with all dependencies
 - Configuration files (vite.config.ts, tailwind.config.js, postcss.config.js)
 - Recommended folder structure
 
 **💻 Your actions:**
+
 1. Open your terminal
 2. Navigate to where you want to create the project
 3. Run these commands:
@@ -80,9 +83,11 @@ Also show me the folder structure I should create in the src directory.
    ```
 
 **🧪 Test it works:**
+
 ```bash
 npm run dev
 ```
+
 You should see a basic Vite React app at http://localhost:5173
 
 **⏱️ Time:** 15 minutes
@@ -92,6 +97,7 @@ You should see a basic Vite React app at http://localhost:5173
 ### Step 2: Create TypeScript Types
 
 **📝 Prompt for Jules:**
+
 ```
 Create comprehensive TypeScript types for Starship configuration in a file called starship.types.ts
 
@@ -119,19 +125,23 @@ Reference the official Starship docs at https://starship.rs/config/ for accuracy
 ```
 
 **✅ What Jules will give you:**
+
 - Complete TypeScript type definitions
 - Proper interface hierarchy
 - Well-documented types
 
 **💻 Your actions:**
+
 1. Create file: `src/types/starship.types.ts`
 2. Copy the code Jules provides into this file
 3. Save the file
 
 **🧪 Test it works:**
+
 ```bash
 npm run dev
 ```
+
 Should compile without errors.
 
 **⏱️ Time:** 10 minutes
@@ -141,11 +151,12 @@ Should compile without errors.
 ### Step 3: Build the TOML Parser
 
 **📝 Prompt for Jules:**
+
 ```
 Create a comprehensive TOML parser utility class in toml-parser.ts that:
 
 1. Parses TOML strings to StarshipConfig objects
-2. Converts StarshipConfig objects back to TOML strings  
+2. Converts StarshipConfig objects back to TOML strings
 3. Provides a getDefaultConfig() method with sensible Starship defaults
 4. Validates configurations with a validate() method that checks:
    - Valid color formats (hex, rgb, named colors)
@@ -161,17 +172,20 @@ Add JSDoc comments for each method.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete TomlParser class with all methods
 - Error handling
 - Type-safe implementation
 
 **💻 Your actions:**
+
 1. Create file: `src/lib/toml-parser.ts`
 2. Copy the code Jules provides
 3. Save the file
 
 **🧪 Test it works:**
 Create a test file `src/test-parser.ts`:
+
 ```typescript
 import { TomlParser } from './lib/toml-parser';
 
@@ -194,6 +208,7 @@ Run: `npm run dev` and check console - no errors should appear.
 ### Step 4: Build Color Utilities
 
 **📝 Prompt for Jules:**
+
 ```
 Create a comprehensive color utility library in color-utils.ts that includes:
 
@@ -220,7 +235,7 @@ Create a comprehensive color utility library in color-utils.ts that includes:
 
 7. Static presets object with popular color schemes:
    - Nord
-   - Dracula  
+   - Dracula
    - Gruvbox Dark
    - Catppuccin Mocha
    - Tokyo Night
@@ -231,17 +246,20 @@ Export as a class called ColorUtils.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete ColorUtils class
 - All color manipulation methods
 - Preset color schemes
 
 **💻 Your actions:**
+
 1. Create file: `src/lib/color-utils.ts`
 2. Copy the code Jules provides
 3. Save the file
 
 **🧪 Test it works:**
 Add to your test file:
+
 ```typescript
 import { ColorUtils } from './lib/color-utils';
 
@@ -261,6 +279,7 @@ console.log('Presets:', Object.keys(ColorUtils.presets));
 ### Step 5: Set Up State Management
 
 **📝 Prompt for Jules:**
+
 ```
 Create a Zustand store in theme-store.ts with localStorage persistence that manages:
 
@@ -271,26 +290,26 @@ State:
 Actions:
 - updateConfig(config: Partial<StarshipConfig>): void
   Updates current theme config, sets updated timestamp
-  
+
 - updateMetadata(metadata: Partial<ThemeMetadata>): void
   Updates current theme metadata
-  
+
 - loadTheme(theme: Theme): void
   Loads a theme for editing
-  
+
 - saveTheme(): void
   Saves current theme to savedThemes array
   Creates new ID if not exists, updates if exists
-  
+
 - deleteTheme(id: string): void
   Removes theme from savedThemes
-  
+
 - resetTheme(): void
   Resets to default configuration
-  
+
 - exportToml(): string
   Returns TOML string of current theme
-  
+
 - importToml(tomlString: string): void
   Parses TOML and loads as current theme
 
@@ -301,25 +320,28 @@ Initialize with a default theme using TomlParser.getDefaultConfig().
 ```
 
 **✅ What Jules will give you:**
+
 - Complete Zustand store
 - Persistence setup
 - All CRUD operations
 
 **💻 Your actions:**
+
 1. Create file: `src/stores/theme-store.ts`
 2. Copy the code Jules provides
 3. Save the file
 
 **🧪 Test it works:**
 Add to App.tsx temporarily:
+
 ```typescript
 import { useThemeStore } from './stores/theme-store';
 
 function App() {
   const { currentTheme, updateConfig } = useThemeStore();
-  
+
   console.log('Current theme:', currentTheme);
-  
+
   return <div>Theme Creator</div>;
 }
 ```
@@ -337,6 +359,7 @@ Check console - should see the default theme.
 ### Step 6: Create Terminal Preview Component
 
 **📝 Prompt for Jules:**
+
 ```
 Create a terminal preview component in components/TerminalPreview/index.tsx that:
 
@@ -346,7 +369,7 @@ Create a terminal preview component in components/TerminalPreview/index.tsx that
    - Header bar with red/yellow/green traffic light buttons
    - Title showing "Terminal Preview"
    - Dark terminal background
-   
+
 4. Renders a mock shell prompt showing:
    - Username and hostname
    - Current directory path
@@ -366,17 +389,20 @@ Make the terminal container responsive (fill parent).
 ```
 
 **✅ What Jules will give you:**
+
 - Complete React component
 - xterm.js integration
 - Terminal window UI
 
 **💻 Your actions:**
+
 1. Create file: `src/components/TerminalPreview/index.tsx`
 2. Copy the code Jules provides
 3. Save the file
 
 **🧪 Test it works:**
 Update App.tsx:
+
 ```typescript
 import { TerminalPreview } from './components/TerminalPreview';
 
@@ -398,6 +424,7 @@ You should see a terminal window with a basic prompt!
 ### Step 7: Build Format String Parser
 
 **📝 Prompt for Jules:**
+
 ```
 Create a format string parser in lib/format-parser.ts that converts Starship format strings to rendered terminal text with ANSI escape codes.
 
@@ -439,11 +466,13 @@ Export all functions.
 ```
 
 **✅ What Jules will give you:**
+
 - Format string parser
 - ANSI code converter
 - Module renderer
 
 **💻 Your actions:**
+
 1. Create file: `src/lib/format-parser.ts`
 2. Copy the code Jules provides
 3. Save the file
@@ -455,6 +484,7 @@ Export all functions.
 ### Step 8: Integrate Parser with Terminal Preview
 
 **📝 Prompt for Jules:**
+
 ```
 Update the TerminalPreview component to use the format parser.
 
@@ -466,7 +496,7 @@ Changes needed:
    - Get the format string from currentTheme.config.format
    - Use parseFormatString to convert it to ANSI text
    - Write the result to the terminal
-   
+
 4. Show multiple example scenarios:
    - Clean git repository
    - Repository with changes (show modified, staged, ahead/behind)
@@ -481,11 +511,13 @@ Provide the complete updated TerminalPreview component.
 ```
 
 **✅ What Jules will give you:**
+
 - Updated TerminalPreview component
 - Format parsing integration
 - Dynamic prompt rendering
 
 **💻 Your actions:**
+
 1. Replace the contents of `src/components/TerminalPreview/index.tsx`
 2. Copy the updated code Jules provides
 3. Save the file
@@ -505,6 +537,7 @@ Try changing colors in the store and watch it update.
 ### Step 9: Create Main App Layout
 
 **📝 Prompt for Jules:**
+
 ```
 Create the main application layout in App.tsx with a three-column design:
 
@@ -516,15 +549,15 @@ Layout structure:
    - Style: white background, border bottom, shadow
 
 2. Main content (three columns):
-   
+
    LEFT SIDEBAR (320px, scrollable):
    - "Modules" section with module list
-   - "Colors" section  
+   - "Colors" section
    - "Settings" section
-   
+
    CENTER (flex-1):
    - TerminalPreview component (large, full height)
-   
+
    RIGHT SIDEBAR (320px, scrollable):
    - "Module Configuration" section
    - Shows settings for selected module
@@ -544,12 +577,14 @@ Make it clean, modern, and professional looking.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete app layout
 - Three-column design
 - Responsive structure
 - Header with controls
 
 **💻 Your actions:**
+
 1. Replace `src/App.tsx` with Jules' code
 2. Save the file
 
@@ -563,6 +598,7 @@ You should see a complete layout with the terminal in the center!
 ### Step 10: Build Module Builder Component
 
 **📝 Prompt for Jules:**
+
 ```
 Create a ModuleBuilder component in components/ModuleBuilder/index.tsx that allows users to:
 
@@ -594,27 +630,32 @@ Export as ModuleBuilder component.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete ModuleBuilder component
 - Drag and drop functionality
 - Module toggle system
 - Visual feedback
 
 **💻 Your actions:**
+
 1. Create file: `src/components/ModuleBuilder/index.tsx`
 2. Copy the code Jules provides
 3. Import and add to App.tsx left sidebar:
+
    ```tsx
    import { ModuleBuilder } from './components/ModuleBuilder';
-   
+
    // In left sidebar:
    <section className="p-4">
-     <h2 className="font-semibold mb-3">Modules</h2>
+     <h2 className="mb-3 font-semibold">Modules</h2>
      <ModuleBuilder />
-   </section>
+   </section>;
    ```
+
 4. Save all files
 
 **🧪 Test it works:**
+
 - Drag modules to reorder them
 - Toggle checkboxes on/off
 - Watch the terminal preview update!
@@ -626,6 +667,7 @@ Export as ModuleBuilder component.
 ### Step 11: Create Color Picker Component
 
 **📝 Prompt for Jules:**
+
 ```
 Create a ColorPicker component in components/ColorPicker/index.tsx that:
 
@@ -639,7 +681,7 @@ Create a ColorPicker component in components/ColorPicker/index.tsx that:
    - Button showing current color swatch and hex value
    - Dropdown that opens on click
    - Two tabs: "Picker" and "Palettes"
-   
+
 3. Picker Tab:
    - HexColorPicker from react-colorful
    - Shows current color
@@ -668,30 +710,35 @@ Export as ColorPicker component.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete ColorPicker component
 - Preset palettes integration
 - Color suggestions
 - Accessibility features
 
 **💻 Your actions:**
+
 1. Create file: `src/components/ColorPicker/index.tsx`
 2. Copy the code Jules provides
 3. Test by adding to App.tsx temporarily:
+
    ```tsx
    import { ColorPicker } from './components/ColorPicker';
-   
+
    const [testColor, setTestColor] = useState('#3b82f6');
-   
-   <ColorPicker 
+
+   <ColorPicker
      color={testColor}
      onChange={setTestColor}
      label="Test Color"
      showPalettes={true}
-   />
+   />;
    ```
+
 4. Save the file
 
 **🧪 Test it works:**
+
 - Click the color swatch
 - Try the color picker
 - Switch to palettes tab
@@ -704,6 +751,7 @@ Export as ColorPicker component.
 ### Step 12: Create Image to Palette Component
 
 **📝 Prompt for Jules:**
+
 ```
 Create an ImagePalette component in components/ImagePalette/index.tsx that:
 
@@ -747,26 +795,31 @@ Export as ImagePalette component.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete ImagePalette component
 - Color extraction integration
 - Smart color mapping
 - Clean UI
 
 **💻 Your actions:**
+
 1. Create file: `src/components/ImagePalette/index.tsx`
 2. Copy the code Jules provides
 3. Add to App.tsx left sidebar in Colors section:
+
    ```tsx
    import { ImagePalette } from './components/ImagePalette';
-   
+
    <section className="p-4">
-     <h2 className="font-semibold mb-3">Color from Image</h2>
+     <h2 className="mb-3 font-semibold">Color from Image</h2>
      <ImagePalette />
-   </section>
+   </section>;
    ```
+
 4. Save all files
 
 **🧪 Test it works:**
+
 - Upload an image (try a colorful photo or screenshot)
 - Watch colors being extracted
 - Click "Apply Palette"
@@ -783,6 +836,7 @@ Export as ImagePalette component.
 ### Step 13: Create Module Config Panel
 
 **📝 Prompt for Jules:**
+
 ```
 Create a ModuleConfigPanel component in components/ModuleConfigPanel/index.tsx that shows configuration options for individual modules.
 
@@ -847,12 +901,14 @@ Export as ModuleConfigPanel component.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete module configuration panel
 - Type-specific inputs
 - Live preview
 - Reset functionality
 
 **💻 Your actions:**
+
 1. Create file: `src/components/ModuleConfigPanel/index.tsx`
 2. Copy the code Jules provides
 3. Add state to App.tsx to track selected module
@@ -860,6 +916,7 @@ Export as ModuleConfigPanel component.
 5. Save files
 
 **🧪 Test it works:**
+
 - Click "Configure" on a module in the ModuleBuilder
 - Right sidebar should show config options
 - Change values and watch terminal update
@@ -871,6 +928,7 @@ Export as ModuleConfigPanel component.
 ### Step 14: Create Icon Browser
 
 **📝 Prompt for Jules:**
+
 ```
 Create an IconBrowser component in components/IconBrowser/index.tsx that helps users find and select Nerd Font symbols.
 
@@ -914,8 +972,8 @@ Languages:
 -  (Node)
 
 Files/Folders:
--   
-- 
+-
+-
 
 Cloud:
 -  (AWS)
@@ -927,7 +985,7 @@ Containers:
 - ☸ (Kubernetes)
 
 Other:
-- ⚡ ✓ ✗ ● ○ ◆ ★ 
+- ⚡ ✓ ✗ ● ○ ◆ ★
 
 4. Search functionality:
    - Filter by symbol name
@@ -950,18 +1008,21 @@ Export as IconBrowser component and a useIconBrowser hook to control open/close 
 ```
 
 **✅ What Jules will give you:**
+
 - Complete IconBrowser component
 - Symbol categories
 - Search functionality
 - Selection handler
 
 **💻 Your actions:**
+
 1. Create file: `src/components/IconBrowser/index.tsx`
 2. Copy the code Jules provides
 3. Integrate with ModuleConfigPanel for symbol inputs
 4. Save files
 
 **🧪 Test it works:**
+
 - Open icon browser from a symbol input
 - Search for symbols
 - Click to select
@@ -978,6 +1039,7 @@ Export as IconBrowser component and a useIconBrowser hook to control open/close 
 ### Step 15: Create Export/Import Component
 
 **📝 Prompt for Jules:**
+
 ```
 Create an ExportImport component in components/ExportImport/index.tsx that provides multiple ways to export and import themes.
 
@@ -1056,18 +1118,21 @@ Export as ExportImport component.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete ExportImport component
 - All export methods
 - All import methods
 - Validation
 
 **💻 Your actions:**
+
 1. Create file: `src/components/ExportImport/index.tsx`
 2. Copy the code Jules provides
 3. Add to App.tsx (perhaps in a modal or dedicated section)
 4. Save files
 
 **🧪 Test it works:**
+
 - Download a .toml file
 - Copy to clipboard
 - Upload the file back
@@ -1080,6 +1145,7 @@ Export as ExportImport component.
 ### Step 16: Create Preset Gallery
 
 **📝 Prompt for Jules:**
+
 ```
 Create a ThemeGallery component in components/ThemeGallery/index.tsx that shows saved and preset themes.
 
@@ -1118,27 +1184,27 @@ Features:
 Minimal:
 - Name: "Clean"
   Just directory, git, and character
-  
+
 - Name: "One Line"
   All on one line, compact
 
 Developer:
 - Name: "Full Stack"
   All language modules
-  
+
 - Name: "DevOps Pro"
   Cloud, Docker, K8s focus
 
 Aesthetic:
 - Name: "Nord"
   Nord color scheme
-  
+
 - Name: "Dracula"
   Dracula colors
-  
+
 - Name: "Gruvbox"
   Gruvbox theme
-  
+
 - Name: "Tokyo Night"
   Tokyo Night colors
 
@@ -1165,12 +1231,14 @@ Export as ThemeGallery component.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete ThemeGallery component
 - Built-in presets
 - Search/filter functionality
 - Card and list views
 
 **💻 Your actions:**
+
 1. Create file: `src/components/ThemeGallery/index.tsx`
 2. Create file: `src/lib/presets.ts` with preset theme definitions
 3. Copy the code Jules provides
@@ -1178,6 +1246,7 @@ Export as ThemeGallery component.
 5. Save files
 
 **🧪 Test it works:**
+
 - View preset themes
 - Search and filter
 - Load a preset theme
@@ -1190,7 +1259,8 @@ Export as ThemeGallery component.
 ### Step 17: Create Theme Validator
 
 **📝 Prompt for Jules:**
-```
+
+````
 Create a theme validator in lib/theme-validator.ts that checks themes for issues.
 
 The validator should check:
@@ -1236,15 +1306,17 @@ interface ValidationIssue {
   fix?: string; // Suggested fix
   module?: string; // Which module has the issue
 }
-```
+````
 
 Functions:
+
 - validateTheme(theme: Theme): ValidationResult
 - validateConfig(config: StarshipConfig): ValidationResult
 - checkColorContrast(config: StarshipConfig): ValidationIssue[]
 - estimateRenderTime(config: StarshipConfig): number
 
 Export as ThemeValidator class.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1277,6 +1349,7 @@ Export as ThemeValidator class.
 
 **📝 Prompt for Jules:**
 ```
+
 Create a ComparisonView component in components/ComparisonView/index.tsx that shows before/after theme comparison.
 
 Features:
@@ -1308,19 +1381,22 @@ Features:
    - Config diff as markdown
 
 Implementation:
+
 - Use two TerminalPreview instances
 - Diff library for config comparison
 - html2canvas for screenshot export
 - Tailwind for layout
 
 Layout:
+
 - Header with controls
 - Two terminals side by side
 - Diff panel below (collapsible)
 - Export buttons
 
 Export as ComparisonView component.
-```
+
+````
 
 **✅ What Jules will give you:**
 - Comparison view component
@@ -1332,12 +1408,14 @@ Export as ComparisonView component.
 2. Install additional dependencies if needed:
    ```bash
    npm install html2canvas diff
-   ```
+````
+
 3. Copy the code Jules provides
 4. Add to app (modal or dedicated route)
 5. Save files
 
 **🧪 Test it works:**
+
 - Select two themes
 - View differences
 - Export comparison image
@@ -1349,7 +1427,8 @@ Export as ComparisonView component.
 ### Step 19: Create Suggestion Engine
 
 **📝 Prompt for Jules:**
-```
+
+````
 Create a suggestion engine in lib/suggestion-engine.ts that provides intelligent recommendations.
 
 The engine should:
@@ -1363,7 +1442,7 @@ interface Environment {
   hasNerdFont: boolean;
   installedTools: string[]; // git, docker, node, etc.
 }
-```
+````
 
 2. Suggest relevant modules:
    - If git detected → enable git_branch, git_status
@@ -1388,6 +1467,7 @@ interface Environment {
    - Best practices
 
 Functions:
+
 - detectEnvironment(): Promise<Environment>
 - suggestModules(env: Environment): string[]
 - suggestOptimizations(config: StarshipConfig, env: Environment): Suggestion[]
@@ -1404,6 +1484,7 @@ interface Suggestion {
 ```
 
 Export as SuggestionEngine class.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1431,41 +1512,48 @@ Export as SuggestionEngine class.
 
 **📝 Prompt for Jules:**
 ```
+
 Create a WelcomeWizard component in components/WelcomeWizard/index.tsx that guides new users through setup.
 
 Multi-step wizard:
 
 Step 1: Welcome
+
 - Brief intro to Starship
 - "What is this tool?"
 - Quick video/GIF demo
 - "Get Started" button
 
 Step 2: Choose Starting Point
+
 - Start from scratch
 - Use a preset theme
 - Import existing config
 - Grid of preset previews
 
 Step 3: Detect Environment
+
 - Run environment detection
 - Show detected tools
 - Suggest modules to enable
 - Checkboxes to confirm
 
 Step 4: Choose Colors
+
 - Quick color scheme picker
 - Show preset palettes
 - Option to upload image
 - Live preview
 
 Step 5: Customize
+
 - "You're all set!"
 - Link to full editor
 - Tips for customization
 - Export button
 
 Features:
+
 - Progress indicator (1/5, 2/5, etc.)
 - Back/Next buttons
 - Skip wizard option
@@ -1473,12 +1561,14 @@ Features:
 - Don't show again checkbox
 
 Implementation:
+
 - Multi-step form
 - State management for wizard progress
 - Integration with store
 - Smooth transitions
 
 Styling:
+
 - Modern wizard UI
 - Large, clear steps
 - Helpful illustrations
@@ -1487,6 +1577,7 @@ Styling:
 Export as WelcomeWizard component.
 
 Also create a hook: useWizardState to manage wizard progress.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1517,6 +1608,7 @@ Also create a hook: useWizardState to manage wizard progress.
 
 **📝 Prompt for Jules:**
 ```
+
 Add comprehensive error handling and loading states throughout the app.
 
 Create these components:
@@ -1552,6 +1644,7 @@ Create these components:
    - File system errors
 
 Add loading states for:
+
 - Initial app load
 - Theme loading
 - Image processing
@@ -1559,6 +1652,7 @@ Add loading states for:
 - File downloads
 
 Use toast notifications for:
+
 - Theme saved
 - Copied to clipboard
 - Export successful
@@ -1567,6 +1661,7 @@ Use toast notifications for:
 
 Update all components to use these utilities.
 Provide updated versions of key components with error handling.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1597,11 +1692,13 @@ Provide updated versions of key components with error handling.
 
 **📝 Prompt for Jules:**
 ```
+
 Add keyboard shortcut support throughout the app.
 
 Create useKeyboardShortcuts hook (src/hooks/useKeyboardShortcuts.ts):
 
 Shortcuts to implement:
+
 - Cmd/Ctrl + S: Save theme
 - Cmd/Ctrl + E: Export TOML
 - Cmd/Ctrl + I: Import (open import modal)
@@ -1613,6 +1710,7 @@ Shortcuts to implement:
 - Escape: Close modals/dropdowns
 
 Navigation shortcuts:
+
 - Tab: Move between inputs
 - Arrow keys: Navigate module list
 - Enter: Open selected module config
@@ -1634,6 +1732,7 @@ Also create:
    - Searchable
 
 Implementation:
+
 - Listen for keyboard events
 - Handle Cmd on Mac, Ctrl on Windows/Linux
 - Prevent default browser shortcuts
@@ -1641,6 +1740,7 @@ Implementation:
 - Accessibility support
 
 Export hooks and components.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1669,6 +1769,7 @@ Export hooks and components.
 
 **📝 Prompt for Jules:**
 ```
+
 Improve accessibility throughout the app.
 
 Make these changes:
@@ -1720,6 +1821,7 @@ Create:
    - For screen reader only text
 
 Update components to be fully accessible:
+
 - ColorPicker
 - ModuleBuilder
 - TerminalPreview
@@ -1727,6 +1829,7 @@ Update components to be fully accessible:
 - Forms
 
 Provide accessibility audit checklist.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1757,6 +1860,7 @@ Provide accessibility audit checklist.
 
 **📝 Prompt for Jules:**
 ```
+
 Optimize app performance.
 
 Implement these optimizations:
@@ -1809,12 +1913,14 @@ Create:
    - Performance budgets
 
 Update critical components:
+
 - TerminalPreview (memoize rendering)
 - ColorPicker (debounce changes)
 - ModuleBuilder (virtual list if needed)
 - ThemeGallery (lazy load images)
 
 Provide before/after performance metrics.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1844,6 +1950,7 @@ Provide before/after performance metrics.
 
 **📝 Prompt for Jules:**
 ```
+
 Add final polish and nice-to-have features.
 
 1. Animations:
@@ -1895,6 +2002,7 @@ Create:
    - Clear draft on explicit save
 
 Polish these areas:
+
 - Better spacing and alignment
 - Consistent button styles
 - Improved color scheme
@@ -1902,6 +2010,7 @@ Polish these areas:
 - Smooth animations
 
 Provide a final checklist of polish items.
+
 ```
 
 **✅ What Jules will give you:**
@@ -1937,11 +2046,13 @@ Provide a final checklist of polish items.
 
 **📝 Prompt for Jules:**
 ```
+
 Create a comprehensive test suite.
 
 1. Unit tests (Vitest):
 
 Test these utilities:
+
 - TomlParser: parse, stringify, validate, merge
 - ColorUtils: all color functions
 - ThemeValidator: validation logic
@@ -1950,6 +2061,7 @@ Test these utilities:
 2. Component tests (React Testing Library):
 
 Test these components:
+
 - ColorPicker: color selection, palette switching
 - ModuleBuilder: drag/drop, toggle
 - TerminalPreview: rendering
@@ -1958,6 +2070,7 @@ Test these components:
 3. Integration tests:
 
 Test complete workflows:
+
 - Create theme → configure → export
 - Import theme → modify → save
 - Apply preset → customize → export
@@ -1965,23 +2078,27 @@ Test complete workflows:
 4. E2E tests (optional, Playwright):
 
 Test user journeys:
+
 - First time user → wizard → create theme
 - Power user → import → customize → share
 
 Set up:
+
 - Vitest configuration
 - Testing utilities
 - Mock data
 - Test helpers
 
 Generate:
+
 - Test files for each utility
 - Test files for key components
 - Integration test suite
 - Coverage report script
 
 Target: >70% code coverage for critical paths.
-```
+
+````
 
 **✅ What Jules will give you:**
 - Complete test suite
@@ -1993,7 +2110,8 @@ Target: >70% code coverage for critical paths.
 1. Install test dependencies:
    ```bash
    npm install -D vitest @testing-library/react @testing-library/jest-dom
-   ```
+````
+
 2. Create test files
 3. Run tests: `npm test`
 4. Check coverage: `npm run coverage`
@@ -2006,6 +2124,7 @@ Target: >70% code coverage for critical paths.
 ### Step 27: Create Documentation
 
 **📝 Prompt for Jules:**
+
 ```
 Create comprehensive documentation.
 
@@ -2064,12 +2183,14 @@ Include code examples and screenshots where helpful.
 ```
 
 **✅ What Jules will give you:**
+
 - Complete documentation set
 - README with badges
 - Comprehensive guides
 - Code comments
 
 **💻 Your actions:**
+
 1. Create each documentation file
 2. Add JSDoc comments to components
 3. Take screenshots for docs
@@ -2085,6 +2206,7 @@ Include code examples and screenshots where helpful.
 ### Step 28: Prepare for Production
 
 **📝 Prompt for Jules:**
+
 ```
 Prepare the app for production deployment.
 
@@ -2137,12 +2259,14 @@ Include checklist of pre-deployment tasks.
 ```
 
 **✅ What Jules will give you:**
+
 - Production configuration
 - SEO setup
 - Deployment configs
 - Deployment guide
 
 **💻 Your actions:**
+
 1. Update vite.config.ts
 2. Add meta tags
 3. Create deployment configs
@@ -2162,18 +2286,21 @@ Include checklist of pre-deployment tasks.
 **Choose your deployment platform:**
 
 **Option A: Vercel (Recommended)**
+
 1. Install Vercel CLI: `npm i -g vercel`
 2. Run: `vercel`
 3. Follow prompts
 4. Done! Your app is live.
 
 **Option B: Netlify**
+
 1. Install Netlify CLI: `npm i -g netlify-cli`
 2. Run: `netlify deploy --prod`
 3. Follow prompts
 4. Done!
 
 **Option C: GitHub Pages**
+
 1. Add to package.json:
    ```json
    "homepage": "https://yourusername.github.io/starship-theme-creator",

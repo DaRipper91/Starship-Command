@@ -25,13 +25,13 @@ export class SuggestionEngine {
   static async detectEnvironment(): Promise<Environment> {
     // Check if running in a browser environment
     if (typeof navigator === 'undefined') {
-        return {
-          os: 'unknown',
-          shell: 'unknown',
-          terminal: 'unknown',
-          hasNerdFont: true,
-          installedTools: ['git']
-        };
+      return {
+        os: 'unknown',
+        shell: 'unknown',
+        terminal: 'unknown',
+        hasNerdFont: true,
+        installedTools: ['git'],
+      };
     }
 
     const ua = navigator.userAgent.toLowerCase();
@@ -50,7 +50,7 @@ export class SuggestionEngine {
       shell: 'unknown',
       terminal: 'unknown',
       hasNerdFont: true, // Optimistic default
-      installedTools
+      installedTools,
     };
   }
 
@@ -83,15 +83,19 @@ export class SuggestionEngine {
   /**
    * Suggests optimizations for the current configuration
    */
-  static suggestOptimizations(config: StarshipConfig, env: Environment): Suggestion[] {
+  static suggestOptimizations(
+    config: StarshipConfig,
+    env: Environment,
+  ): Suggestion[] {
     const suggestions: Suggestion[] = [];
 
     // Performance suggestion
     const slowModules = ['git_status', 'kubernetes', 'aws', 'gcloud'];
     // Check if modules are enabled (exist and not disabled)
-    const activeSlowModules = slowModules.filter(m => {
-        const mod = config[m] as any;
-        return mod && !mod.disabled;
+    const activeSlowModules = slowModules.filter((m) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mod = config[m] as any;
+      return mod && !mod.disabled;
     });
 
     if (activeSlowModules.length > 2) {
@@ -99,18 +103,19 @@ export class SuggestionEngine {
         type: 'performance',
         priority: 'medium',
         title: 'Optimize Render Speed',
-        description: `You have ${activeSlowModules.length} slow modules enabled. Consider disabling some or increasing scan timeout.`
+        description: `You have ${activeSlowModules.length} slow modules enabled. Consider disabling some or increasing scan timeout.`,
       });
     }
 
     // Nerd Font check
     if (!env.hasNerdFont) {
-       suggestions.push({
-         type: 'compatibility',
-         priority: 'high',
-         title: 'Nerd Font Required',
-         description: 'Your theme uses symbols that require a Nerd Font. Install one to see icons correctly.'
-       });
+      suggestions.push({
+        type: 'compatibility',
+        priority: 'high',
+        title: 'Nerd Font Required',
+        description:
+          'Your theme uses symbols that require a Nerd Font. Install one to see icons correctly.',
+      });
     }
 
     return suggestions;
@@ -119,7 +124,8 @@ export class SuggestionEngine {
   /**
    * Suggests color schemes based on environment/preferences
    */
-  static suggestColorScheme(env: Environment) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static suggestColorScheme(_env: Environment) {
     // Return presets
     return ColorUtils.presets;
   }

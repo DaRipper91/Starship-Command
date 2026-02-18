@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { Layout } from './components/layout/Layout';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Starship Theme Creator</h1>
-        <p className="text-gray-400">Environment Setup Complete</p>
+    <Layout>
+      <div className="flex h-full flex-col items-center justify-center text-center">
+        <h2 className="mb-4 text-3xl font-bold">
+          Welcome to Starship Theme Creator
+        </h2>
+        <p className="max-w-md text-gray-400">
+          Start by exploring the modules in the sidebar or check out the colors
+          tab.
+        </p>
       </div>
-    </div>
-  )
+    </Layout>
+  );
 }
 
-export default App
+export default App;

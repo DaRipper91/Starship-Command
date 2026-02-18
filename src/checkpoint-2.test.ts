@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseFormatString, styleToAnsi } from './lib/format-parser';
+import { parseFormatString } from './lib/format-parser';
 import { TomlParser } from './lib/toml-parser';
 import { ThemeValidator } from './lib/theme-validator';
 import { SuggestionEngine } from './lib/suggestion-engine';
@@ -11,14 +11,22 @@ describe('Checkpoint 2: Core Systems', () => {
   it('FormatParser: should parse basic format', () => {
     const format = '[$directory](cyan bold) ';
     // Note: ansi codes for cyan bold are \x1b[36m\x1b[1m
-    const result = parseFormatString(format, defaultConfig, MOCK_SCENARIOS.clean);
+    const result = parseFormatString(
+      format,
+      defaultConfig,
+      MOCK_SCENARIOS.clean,
+    );
     expect(result).toContain('\x1b');
     expect(result).toContain('~/projects/starship-theme-creator');
   });
 
   it('FormatParser: should handle modules variables', () => {
     const format = '$character';
-    const result = parseFormatString(format, defaultConfig, MOCK_SCENARIOS.clean);
+    const result = parseFormatString(
+      format,
+      defaultConfig,
+      MOCK_SCENARIOS.clean,
+    );
     expect(result).toContain('❯');
   });
 
@@ -29,6 +37,7 @@ describe('Checkpoint 2: Core Systems', () => {
   });
 
   it('ThemeValidator: should detect empty config', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = ThemeValidator.validateConfig(null as any);
     expect(result.valid).toBe(false);
   });

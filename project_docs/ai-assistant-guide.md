@@ -1,4 +1,5 @@
 # AI Assistant Guide — Starship Theme Creator
+
 # Jules vs GitHub Copilot: What Each Does, How to Use Them, and How They Work Together
 
 ---
@@ -35,25 +36,26 @@ VM, runs tests, and comes back with a pull request. You don't have to watch it.
 
 ### What Jules Can Do
 
-| Capability | Details |
-|-----------|---------|
-| **Build features** | Full component implementation from a description |
-| **Fix bugs** | Root-cause analysis across multiple files |
-| **Write tests** | Unit, integration, component tests |
-| **Refactor code** | Safely restructure while keeping functionality |
-| **Update dependencies** | With verification via npm audit + build |
-| **Create pull requests** | Detailed PRs with before/after description |
-| **Run shell commands** | npm install, npm test, npm run build |
-| **Read the whole codebase** | Not just one file — entire project context |
-| **Search the web** | Can look up docs, Starship changelogs, etc. |
-| **Generate audio summaries** | MP3 changelogs of recent commits |
-| **Scheduled automation** | Runs daily/weekly via GitHub Actions |
-| **Issue automation** | Add 'jules' label → Jules implements it |
-| **CLI control** | `jules remote new`, `jules remote list` |
+| Capability                   | Details                                          |
+| ---------------------------- | ------------------------------------------------ |
+| **Build features**           | Full component implementation from a description |
+| **Fix bugs**                 | Root-cause analysis across multiple files        |
+| **Write tests**              | Unit, integration, component tests               |
+| **Refactor code**            | Safely restructure while keeping functionality   |
+| **Update dependencies**      | With verification via npm audit + build          |
+| **Create pull requests**     | Detailed PRs with before/after description       |
+| **Run shell commands**       | npm install, npm test, npm run build             |
+| **Read the whole codebase**  | Not just one file — entire project context       |
+| **Search the web**           | Can look up docs, Starship changelogs, etc.      |
+| **Generate audio summaries** | MP3 changelogs of recent commits                 |
+| **Scheduled automation**     | Runs daily/weekly via GitHub Actions             |
+| **Issue automation**         | Add 'jules' label → Jules implements it          |
+| **CLI control**              | `jules remote new`, `jules remote list`          |
 
 ### How to Send Tasks to Jules
 
 **Method 1 — Web UI (Easiest)**
+
 ```
 1. Go to https://jules.google
 2. Select your repository and branch
@@ -65,6 +67,7 @@ VM, runs tests, and comes back with a pull request. You don't have to watch it.
 ```
 
 **Method 2 — GitHub Issue with 'jules' label**
+
 ```
 1. Create a GitHub Issue
 2. Write a clear description of the task
@@ -74,6 +77,7 @@ VM, runs tests, and comes back with a pull request. You don't have to watch it.
 ```
 
 **Method 3 — Jules CLI**
+
 ```bash
 # Install Jules Tools
 npm install -g jules-tools
@@ -91,6 +95,7 @@ gh issue list --label "enhancement" --limit 1 --json title \
 ```
 
 **Method 4 — Our Custom Script**
+
 ```bash
 bash scripts/jules.sh checkpoint 6 2
 ```
@@ -144,6 +149,7 @@ These are configured in `.github/workflows/jules-*.yml`.
 ### Tips for Writing Good Jules Prompts
 
 **Be specific and measurable:**
+
 ```
 ✅ GOOD:
 "Add a ModuleConfigPanel component in src/components/ModuleConfigPanel/index.tsx
@@ -156,6 +162,7 @@ Run npm test to verify no regressions."
 ```
 
 **Include success criteria Jules can verify:**
+
 ```
 ✅ GOOD:
 "The component is complete when:
@@ -169,6 +176,7 @@ Run npm test to verify no regressions."
 ```
 
 **Reference AGENTS.md standards:**
+
 ```
 ✅ GOOD:
 "Follow the coding standards in AGENTS.md:
@@ -190,14 +198,18 @@ on GitHub.com, and as an autonomous coding agent for background tasks.
 ### The Three Ways Copilot Helps
 
 #### 1. VS Code Chat & Inline Suggestions
+
 Real-time help as you code:
+
 - Type a comment → Copilot completes the code
 - Ask a question in chat → Copilot explains
 - Select code → Ask Copilot to refactor/fix/explain it
 - Use `@workspace` → Copilot understands your whole project
 
 #### 2. VS Code Agent Mode (Interactive)
+
 For multi-step tasks while you're actively working:
+
 ```
 1. Open Copilot Chat (Ctrl+Alt+I)
 2. Switch to "Agent" mode in dropdown
@@ -209,12 +221,14 @@ For multi-step tasks while you're actively working:
 ```
 
 Best for:
+
 - Complex refactors while watching progress
 - Debugging sessions where you need to iterate fast
 - Exploring how to implement something new
 - When you want to see and guide each step
 
 #### 3. Copilot Coding Agent (Background/Autonomous)
+
 For delegated tasks that run in background without your attention:
 
 ```
@@ -242,19 +256,19 @@ Method C — @copilot mention in PR:
 
 ### What Copilot Can Do
 
-| Capability | Details |
-|-----------|---------|
-| **Inline code completion** | Context-aware suggestions as you type |
-| **Chat Q&A** | Answer questions about code, docs, architecture |
-| **Agent mode (VS Code)** | Interactive multi-file edits with terminal |
-| **Coding agent (GitHub)** | Autonomous background task → PR workflow |
-| **PR review** | Automated code review with line-by-line comments |
-| **PR summaries** | AI-generated summary of what a PR changes |
-| **Security scanning** | Checks code it writes for vulnerabilities |
-| **@copilot in PR comments** | Ask Copilot to fix specific things in a PR |
-| **MCP integration** | Connect to external tools via Model Context Protocol |
-| **Multi-model support** | GPT-4o, Claude 3.5, Gemini — switch models |
-| **Issue-to-PR workflow** | Assign issue → Copilot implements → PR ready |
+| Capability                  | Details                                              |
+| --------------------------- | ---------------------------------------------------- |
+| **Inline code completion**  | Context-aware suggestions as you type                |
+| **Chat Q&A**                | Answer questions about code, docs, architecture      |
+| **Agent mode (VS Code)**    | Interactive multi-file edits with terminal           |
+| **Coding agent (GitHub)**   | Autonomous background task → PR workflow             |
+| **PR review**               | Automated code review with line-by-line comments     |
+| **PR summaries**            | AI-generated summary of what a PR changes            |
+| **Security scanning**       | Checks code it writes for vulnerabilities            |
+| **@copilot in PR comments** | Ask Copilot to fix specific things in a PR           |
+| **MCP integration**         | Connect to external tools via Model Context Protocol |
+| **Multi-model support**     | GPT-4o, Claude 3.5, Gemini — switch models           |
+| **Issue-to-PR workflow**    | Assign issue → Copilot implements → PR ready         |
 
 ### Copilot Scheduled/Automated Capabilities
 
@@ -287,6 +301,7 @@ jobs:
 ```
 
 **Copilot Automation Triggers:**
+
 ```
 On new issue labeled 'copilot-fix'    → Auto-assign to Copilot
 On PR opened                          → Auto code review
@@ -298,6 +313,7 @@ On 'Delegate to agent' in VS Code     → Background implementation
 ### Copilot Workflow for This Project
 
 **Daily Development Pattern:**
+
 ```
 1. Open VS Code
 2. Run: bash scripts/dev.sh
@@ -308,6 +324,7 @@ On 'Delegate to agent' in VS Code     → Background implementation
 ```
 
 **Issue Management Pattern:**
+
 ```
 For SIMPLE bugs:
   → Assign to @copilot directly in GitHub issue
@@ -439,6 +456,7 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 ## 🚀 GETTING EVERYTHING SET UP
 
 ### Step 1: Connect Jules to Your Repo
+
 ```
 1. Go to https://jules.google
 2. Sign in with Google account
@@ -448,6 +466,7 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 ```
 
 ### Step 2: Add Jules API Key to GitHub
+
 ```
 1. In Jules web app → Settings → API Keys → Create new key
 2. In GitHub repo → Settings → Secrets and variables → Actions
@@ -457,6 +476,7 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 ```
 
 ### Step 3: Enable GitHub Copilot Coding Agent
+
 ```
 1. Ensure you have Copilot Pro, Pro+, Business, or Enterprise
 2. For Business/Enterprise: Admin must enable in Policies settings
@@ -465,6 +485,7 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 ```
 
 ### Step 4: Set Up Workflows
+
 ```
 1. Copy workflow files from github-workflows.md
 2. Create each as a separate file in .github/workflows/
@@ -474,6 +495,7 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 ```
 
 ### Step 5: Verify Everything Works
+
 ```
 1. In GitHub → Actions tab → manually trigger jules-daily-deps.yml
 2. Watch Jules run the task
@@ -487,27 +509,31 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 ## 💡 PRO TIPS
 
 **Write better Jules prompts:**
+
 - Always end with: "Run `npm run build && npm test` before creating the PR"
 - Include file paths explicitly: "in src/components/ColorPicker/index.tsx"
 - Give success criteria Jules can test: "The component renders without errors"
 
 **Get better Copilot suggestions:**
+
 - Keep `.github/copilot-instructions.md` updated as the project evolves
 - Use `@workspace` in chat for full codebase context
 - Reference specific files with `#file:src/lib/color-utils.ts`
 
 **Avoid conflicts between the two:**
+
 - Don't have Jules and Copilot working on the same file simultaneously
 - Jules owns scheduled automation — don't override with Copilot
 - Use branch naming to signal who's working: `checkpoint/` = Jules, `copilot/` = Copilot
 
 **Monitor what they're doing:**
+
 - Jules: Check https://jules.google dashboard
 - Copilot: Check draft PRs in your GitHub repo
 - Both: Review the Actions tab in GitHub for workflow runs
 
 ---
 
-*Jules instructions: AGENTS.md*
-*Copilot instructions: .github/copilot-instructions.md*
-*Workflow files: .github/workflows/jules-*.yml*
+_Jules instructions: AGENTS.md_
+_Copilot instructions: .github/copilot-instructions.md_
+_Workflow files: .github/workflows/jules-_.yml\*

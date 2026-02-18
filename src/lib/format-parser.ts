@@ -1,5 +1,4 @@
 import { StarshipConfig } from '../types/starship.types';
-import { ColorUtils } from './color-utils';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
 // Regex for Starship format parts
@@ -7,7 +6,8 @@ import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 // 2. Styled groups: [text](style)
 // 3. Environment variables: ${env_var}
 // 4. Everything else is literal text
-const FORMAT_REGEX = /(\$[a-zA-Z0-9_]+)|(\[.*?\]\(.*?\))|(\${.*?})|([^$\[]+)/g;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FORMAT_REGEX = /(\$[a-zA-Z0-9_]+)|(\[.*?\]\(.*?\))|(\${.*?})|([^$[]+)/g;
 
 /**
  * Parses a Starship format string and renders it with ANSI escape codes
@@ -19,15 +19,14 @@ const FORMAT_REGEX = /(\$[a-zA-Z0-9_]+)|(\[.*?\]\(.*?\))|(\${.*?})|([^$\[]+)/g;
 export function parseFormatString(
   format: string,
   config: StarshipConfig,
-  scenario: MockScenario = MOCK_SCENARIOS.clean
+  scenario: MockScenario = MOCK_SCENARIOS.clean,
 ): string {
   if (!format) return '';
 
-  let output = '';
   let processed = format;
 
   // Replace module variables ($directory)
-  processed = processed.replace(/\$([a-zA-Z0-9_]+)/g, (match, moduleName) => {
+  processed = processed.replace(/\$([a-zA-Z0-9_]+)/g, (_match, moduleName) => {
     return renderModule(moduleName, config, scenario);
   });
 
@@ -37,11 +36,14 @@ export function parseFormatString(
   let iterations = 0;
   while (processed !== prevProcessed && iterations < 5) {
     prevProcessed = processed;
-    processed = processed.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, style) => {
-      const ansi = styleToAnsi(style);
-      // ANSI reset code is \x1b[0m
-      return `${ansi}${text}\x1b[0m`;
-    });
+    processed = processed.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      (_match, text, style) => {
+        const ansi = styleToAnsi(style);
+        // ANSI reset code is \x1b[0m
+        return `${ansi}${text}\x1b[0m`;
+      },
+    );
     iterations++;
   }
 
@@ -61,7 +63,7 @@ export function parseFormatString(
 export function renderModule(
   moduleName: string,
   config: StarshipConfig,
-  scenario: MockScenario
+  scenario: MockScenario,
 ): string {
   // Get value from scenario
   const value = scenario.values[moduleName];
@@ -70,6 +72,7 @@ export function renderModule(
   if (!value) return '';
 
   // Get module config
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const moduleConfig = config[moduleName] as any;
 
   // Check if disabled
@@ -78,7 +81,6 @@ export function renderModule(
   // Special handling for common modules
   if (moduleName === 'directory') {
     const style = moduleConfig?.style || 'cyan bold';
-    const readOnly = moduleConfig?.read_only || '🔒';
     // Simplified rendering
     return `[${value}](${style}) `;
   }
@@ -101,8 +103,8 @@ export function renderModule(
 
     // Try to extract style from config format string like [x](y)
     if (symbolConfig.includes('](')) {
-        const match = symbolConfig.match(/\]\((.*?)\)/);
-        if (match) style = match[1];
+      const match = symbolConfig.match(/\]\((.*?)\)/);
+      if (match) style = match[1];
     }
 
     // Use the value from mock data (e.g. ❯) with the style
@@ -115,7 +117,7 @@ export function renderModule(
   // Note: We use a simplified default format here for the MVP
   const format = moduleConfig?.format || 'via [$symbol$version]($style) ';
 
-  let output = format
+  const output = format
     .replace('$symbol', symbol)
     .replace('$version', value)
     .replace('$style', style);
@@ -135,14 +137,13 @@ export function styleToAnsi(style: string): string {
   const parts = style.split(/\s+/);
   let ansi = '';
 
-  parts.forEach(part => {
+  parts.forEach((part) => {
     // Modifiers
     if (part === 'bold') ansi += '\x1b[1m';
     else if (part === 'dimmed') ansi += '\x1b[2m';
     else if (part === 'italic') ansi += '\x1b[3m';
     else if (part === 'underline') ansi += '\x1b[4m';
     else if (part === 'inverted') ansi += '\x1b[7m';
-
     // Background colors
     else if (part.startsWith('bg:')) {
       const color = part.substring(3);
@@ -166,7 +167,14 @@ export function styleToAnsi(style: string): string {
 function colorToAnsi(color: string, isBackground: boolean): string {
   // Named colors
   const namedColors: Record<string, number> = {
-    black: 0, red: 1, green: 2, yellow: 3, blue: 4, purple: 5, cyan: 6, white: 7
+    black: 0,
+    red: 1,
+    green: 2,
+    yellow: 3,
+    blue: 4,
+    purple: 5,
+    cyan: 6,
+    white: 7,
   };
 
   if (namedColors[color] !== undefined) {

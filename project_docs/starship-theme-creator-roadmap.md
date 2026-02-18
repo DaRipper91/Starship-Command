@@ -1,6 +1,7 @@
 # Starship Theme Creator - Complete Project Roadmap
 
 ## Project Overview
+
 A comprehensive web-based visual theme creator for Starship prompt configuration. Allows users to create, preview, customize, and share Starship themes without manually editing TOML files.
 
 ---
@@ -8,6 +9,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Technology Stack Recommendations
 
 ### Frontend
+
 - **Framework**: React 18+ with TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **State Management**: Zustand (lightweight) or Redux Toolkit
@@ -15,20 +17,22 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - **TOML Handling**: @iarna/toml or @ltd/j-toml
 
 ### Additional Libraries
-- **Color Tools**: 
+
+- **Color Tools**:
   - Vibrant.js (extract from images)
   - colord (color manipulation)
   - react-colorful (color picker)
-- **Icons**: 
+- **Icons**:
   - lucide-react (UI icons)
   - Nerd Fonts CDN or local subset
-- **File Handling**: 
+- **File Handling**:
   - FileSaver.js (downloads)
   - TOML parser/stringifier
 - **Drag & Drop**: @dnd-kit/core
 - **Code Editor**: Monaco Editor or CodeMirror
 
 ### Backend (Optional - for community features)
+
 - **API**: Node.js + Express or Next.js API routes
 - **Database**: PostgreSQL + Prisma or Supabase
 - **Storage**: AWS S3 or Cloudflare R2 (for theme images)
@@ -39,6 +43,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Phase 1: Foundation & Core Features (Weeks 1-3)
 
 ### 1.1 Project Setup
+
 - [ ] Initialize React + TypeScript + Vite project
 - [ ] Configure Tailwind CSS
 - [ ] Set up folder structure
@@ -47,6 +52,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Create base layout components
 
 ### 1.2 TOML Parser/Generator
+
 - [ ] TOML to JSON converter
 - [ ] JSON to TOML generator
 - [ ] Schema validation
@@ -54,6 +60,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Import existing .toml files
 
 ### 1.3 Live Terminal Preview
+
 - [ ] xterm.js integration
 - [ ] Mock shell environment
 - [ ] Real-time prompt rendering
@@ -62,6 +69,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Multi-line prompt support
 
 ### 1.4 Basic Configuration UI
+
 - [ ] Module toggle list
 - [ ] Color pickers for each module
 - [ ] Symbol/icon selectors
@@ -73,6 +81,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Phase 2: Advanced Configuration (Weeks 4-6)
 
 ### 2.1 Module Builder
+
 - [ ] Drag-and-drop module reordering
 - [ ] Per-module configuration panels
 - [ ] Conditional module display rules
@@ -80,6 +89,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Advanced format string builder with autocomplete
 
 ### 2.2 Color System
+
 - [ ] **Image to Palette Tool**
   - Upload image
   - Extract dominant colors
@@ -95,6 +105,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
   - Color blindness simulator
 
 ### 2.3 Symbol & Font System
+
 - [ ] Nerd Font symbol browser
 - [ ] Category-based icon search
 - [ ] Custom symbol upload
@@ -103,6 +114,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Popular symbol presets (arrows, separators, etc.)
 
 ### 2.4 Layout Designer
+
 - [ ] Prompt line configuration (single/double/triple)
 - [ ] Left/right prompt split
 - [ ] Continuation prompt
@@ -115,6 +127,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Phase 3: Smart Features & UX (Weeks 7-9)
 
 ### 3.1 Intelligent Suggestions
+
 - [ ] **Environment Detection**
   - OS detection (Linux/macOS/Windows)
   - Shell detection (bash/zsh/fish/pwsh)
@@ -131,6 +144,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
   - Module conflict detection
 
 ### 3.2 Theme Presets & Gallery
+
 - [ ] Curated preset gallery
 - [ ] Filter by style, complexity, use-case
 - [ ] Preview thumbnails
@@ -139,6 +153,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Theme rating/favorite system
 
 ### 3.3 Export Options
+
 - [ ] Download .toml file
 - [ ] Copy to clipboard
 - [ ] GitHub Gist integration
@@ -147,6 +162,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Install script generator
 
 ### 3.4 Import & Conversion
+
 - [ ] Import from .toml file
 - [ ] Parse from clipboard
 - [ ] Import from GitHub URL
@@ -157,6 +173,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Phase 4: Community Features (Weeks 10-12)
 
 ### 4.1 User Accounts (Optional)
+
 - [ ] Authentication system
 - [ ] User profiles
 - [ ] Save themes to account
@@ -164,6 +181,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Private/public themes
 
 ### 4.2 Theme Sharing
+
 - [ ] **Community Gallery**
   - Submit themes
   - Browse public themes
@@ -180,6 +198,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
   - Theme families/variants
 
 ### 4.3 Documentation Integration
+
 - [ ] Link config options to Starship docs
 - [ ] Inline help tooltips
 - [ ] Tutorial mode for beginners
@@ -191,6 +210,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Phase 5: Advanced Features (Weeks 13-15)
 
 ### 5.1 Advanced Customization
+
 - [ ] **Custom Module Creator**
   - Define custom modules
   - Custom command output parsing
@@ -204,6 +224,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
   - Timing adjustments
 
 ### 5.2 Testing & Comparison
+
 - [ ] **Before/After Comparison**
   - Side-by-side view
   - Diff highlighting
@@ -218,6 +239,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
   - Screenshot generator
 
 ### 5.3 Integration Features
+
 - [ ] **CLI Tool**
   - Install themes from CLI
   - Sync with web interface
@@ -235,12 +257,14 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Phase 6: Polish & Launch (Weeks 16-18)
 
 ### 6.1 Mobile Optimization
+
 - [ ] Responsive design
 - [ ] Touch-friendly controls
 - [ ] Mobile preview mode
 - [ ] PWA support
 
 ### 6.2 Performance & SEO
+
 - [ ] Code splitting
 - [ ] Lazy loading
 - [ ] Image optimization
@@ -249,6 +273,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Analytics integration
 
 ### 6.3 Accessibility
+
 - [ ] Keyboard navigation
 - [ ] Screen reader support
 - [ ] High contrast mode
@@ -256,6 +281,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] Focus indicators
 
 ### 6.4 Launch Preparation
+
 - [ ] Beta testing program
 - [ ] Bug fixing
 - [ ] User documentation
@@ -268,6 +294,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Additional Feature Ideas
 
 ### Power User Features
+
 - [ ] **Macro System**: Record and replay configuration sequences
 - [ ] **A/B Testing**: Compare multiple themes in real-time
 - [ ] **Theme Randomizer**: Generate random themes with constraints
@@ -276,6 +303,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] **Backup/Restore**: Cloud sync for themes
 
 ### Developer Features
+
 - [ ] **Git Integration**: Commit themes to repo
 - [ ] **Version Control**: Track theme changes
 - [ ] **Theme Diffing**: Compare theme files
@@ -283,6 +311,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] **JSON Schema Export**: For other tools
 
 ### Collaboration Features
+
 - [ ] **Real-time Collaboration**: Multiple users editing
 - [ ] **Comments on Themes**: Feedback system
 - [ ] **Theme Challenges**: Weekly design challenges
@@ -290,6 +319,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - [ ] **Theme Bounties**: Request custom themes
 
 ### Educational Features
+
 - [ ] **Interactive Tutorial**: Learn by doing
 - [ ] **Design Principles Guide**: Color theory, spacing
 - [ ] **Best Practices**: Performance tips
@@ -301,6 +331,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Success Metrics
 
 ### Usage Metrics
+
 - Monthly active users
 - Themes created
 - Themes downloaded
@@ -308,6 +339,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - Return user rate
 
 ### Quality Metrics
+
 - Theme rating averages
 - User satisfaction surveys
 - Bug reports frequency
@@ -315,6 +347,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - Accessibility audit scores
 
 ### Community Metrics
+
 - GitHub stars
 - Social media mentions
 - Community contributions
@@ -326,12 +359,14 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Marketing & Launch Strategy
 
 ### Pre-Launch
+
 - Build in public (Twitter/X, Reddit)
 - Create teaser videos
 - Beta testing with Starship community
 - Reach out to tech YouTubers
 
 ### Launch
+
 - Product Hunt launch
 - Hacker News submission
 - Reddit posts (r/commandline, r/linux, r/unixporn)
@@ -339,6 +374,7 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 - GitHub trending
 
 ### Post-Launch
+
 - Regular feature updates
 - User showcase series
 - Tutorial content
@@ -350,18 +386,21 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 ## Maintenance & Support
 
 ### Regular Updates
+
 - Sync with Starship releases
 - New module support
 - Bug fixes
 - Performance improvements
 
 ### Community Management
+
 - Discord/Slack community
 - GitHub issues
 - User support
 - Feature requests
 
 ### Long-term Vision
+
 - Expand to other prompt frameworks
 - Terminal theme creator
 - Shell configuration manager
