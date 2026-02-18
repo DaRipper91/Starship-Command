@@ -109,7 +109,7 @@ export interface StarshipConfig {
   custom?: Record<string, CustomModuleConfig>;
 
   // Allow other keys
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Base interface for all modules

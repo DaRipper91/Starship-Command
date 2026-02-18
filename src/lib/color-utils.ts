@@ -2,7 +2,7 @@ import { colord, extend } from 'colord';
 import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
-import Vibrant from 'node-vibrant';
+import Vibrant from 'node-vibrant/browser';
 import { ColorPalette } from '../types/starship.types';
 
 // Extend colord with necessary plugins
@@ -14,7 +14,9 @@ export class ColorUtils {
    * @param imageFile - The image file to process
    * @returns Promise resolving to a ColorPalette-like object
    */
-  static async extractPaletteFromImage(imageFile: File): Promise<Partial<ColorPalette>> {
+  static async extractPaletteFromImage(
+    imageFile: File,
+  ): Promise<Partial<ColorPalette>> {
     try {
       // Create a URL for the file
       const imageUrl = URL.createObjectURL(imageFile);
@@ -35,7 +37,7 @@ export class ColorUtils {
         foreground: palette.LightMuted?.hex || '#ffffff',
         // For success/error/warning we generate from primary if not distinct
         success: '#10B981', // Default green
-        error: '#EF4444',   // Default red
+        error: '#EF4444', // Default red
         warning: '#F59E0B', // Default yellow
       };
     } catch (error) {
@@ -50,7 +52,9 @@ export class ColorUtils {
    * @returns Array of hex strings
    */
   static generateComplementary(baseColor: string): string[] {
-    return colord(baseColor).harmonies('complementary').map(c => c.toHex());
+    return colord(baseColor)
+      .harmonies('complementary')
+      .map((c) => c.toHex());
   }
 
   /**
@@ -59,7 +63,9 @@ export class ColorUtils {
    * @returns Array of hex strings
    */
   static generateAnalogous(baseColor: string): string[] {
-    return colord(baseColor).harmonies('analogous').map(c => c.toHex());
+    return colord(baseColor)
+      .harmonies('analogous')
+      .map((c) => c.toHex());
   }
 
   /**
@@ -68,7 +74,9 @@ export class ColorUtils {
    * @returns Array of hex strings
    */
   static generateTriadic(baseColor: string): string[] {
-    return colord(baseColor).harmonies('triadic').map(c => c.toHex());
+    return colord(baseColor)
+      .harmonies('triadic')
+      .map((c) => c.toHex());
   }
 
   /**
@@ -105,7 +113,7 @@ export class ColorUtils {
       inverted?: boolean;
       underline?: boolean;
       bg?: string;
-    } = {}
+    } = {},
   ): string {
     const parts: string[] = [];
 
@@ -179,6 +187,6 @@ export class ColorUtils {
       success: '#9ece6a',
       warning: '#e0af68',
       error: '#f7768e',
-    }
+    },
   };
 }

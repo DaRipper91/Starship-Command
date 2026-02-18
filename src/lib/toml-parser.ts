@@ -21,7 +21,9 @@ export class TomlParser {
       return TOML.parse(tomlString) as unknown as StarshipConfig;
     } catch (error) {
       console.error('Failed to parse TOML:', error);
-      throw new Error(`Invalid TOML syntax: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Invalid TOML syntax: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 
@@ -51,11 +53,12 @@ export class TomlParser {
       // Common defaults
       add_newline: true,
       // Minimal format to start with
-      format: "$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character",
+      format:
+        '$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character',
 
       character: {
-        success_symbol: "[➜](bold green)",
-        error_symbol: "[➜](bold red)",
+        success_symbol: '[➜](bold green)',
+        error_symbol: '[➜](bold red)',
       },
 
       directory: {
@@ -64,27 +67,27 @@ export class TomlParser {
       },
 
       git_branch: {
-        symbol: "🌱 ",
+        symbol: '🌱 ',
         truncation_length: 24,
       },
 
       git_status: {
-        conflicted: "🏳",
-        ahead: "🏎💨",
-        behind: "😰",
-        diverged: "😵",
-        up_to_date: "✓",
-        untracked: "🤷",
-        stashed: "📦",
-        modified: "📝",
-        staged: "[++\(\)](green)",
-        renamed: "👅",
-        deleted: "🗑",
+        conflicted: '🏳',
+        ahead: '🏎💨',
+        behind: '😰',
+        diverged: '😵',
+        up_to_date: '✓',
+        untracked: '🤷',
+        stashed: '📦',
+        modified: '📝',
+        staged: '[++()](green)',
+        renamed: '👅',
+        deleted: '🗑',
       },
 
       nodejs: {
-        format: "via [⬢ $version](bold green) ",
-      }
+        format: 'via [⬢ $version](bold green) ',
+      },
     };
   }
 
@@ -108,7 +111,7 @@ export class TomlParser {
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -118,13 +121,16 @@ export class TomlParser {
    * @param override - Override configuration
    * @returns Merged configuration
    */
-  static merge(base: any, override: any): any {
+  static merge(
+    base: Record<string, unknown>,
+    override: Record<string, unknown>,
+  ): Record<string, unknown> {
     if (!override) return base;
     if (!base) return override;
 
     const result = { ...base };
 
-    Object.keys(override).forEach(key => {
+    Object.keys(override).forEach((key) => {
       if (
         typeof override[key] === 'object' &&
         override[key] !== null &&
