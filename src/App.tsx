@@ -1,26 +1,26 @@
-import { Layout } from './components/layout/Layout';
+import { Header } from './components/layout/Header';
+import { LeftSidebar } from './components/layout/LeftSidebar';
+import { RightSidebar } from './components/layout/RightSidebar';
 import { TerminalPreview } from './components/TerminalPreview';
 
 function App() {
   return (
-    <Layout>
-      <div className="flex h-full flex-col gap-6">
-        <div className="min-h-0 flex-1">
-          <TerminalPreview className="h-full" />
-        </div>
+    <div className="flex h-screen flex-col bg-gray-950 font-sans text-gray-100">
+      <Header />
 
-        {/* Placeholder for configuration panel */}
-        <div className="h-1/3 rounded-lg border border-gray-800 bg-gray-900/50 p-6">
-          <h3 className="mb-4 text-lg font-medium text-gray-300">
-            Configuration
-          </h3>
-          <p className="text-sm text-gray-500">
-            Select a module from the sidebar to start editing. (Configuration UI
-            coming in Checkpoint 4 & 5)
-          </p>
-        </div>
+      <div className="flex flex-1 flex-col overflow-auto md:flex-row md:overflow-hidden">
+        {/* Left Sidebar */}
+        <LeftSidebar className="h-96 w-full shrink-0 border-b border-gray-800 md:h-full md:w-80 md:border-b-0 md:border-r" />
+
+        {/* Main Content */}
+        <main className="flex min-h-[400px] flex-1 flex-col bg-gray-950 p-4 md:p-6">
+          <TerminalPreview className="h-full min-h-[300px] w-full" />
+        </main>
+
+        {/* Right Sidebar */}
+        <RightSidebar className="h-96 w-full shrink-0 border-t border-gray-800 md:h-full md:w-80 lg:border-l lg:border-t-0" />
       </div>
-    </Layout>
+    </div>
   );
 }
 
