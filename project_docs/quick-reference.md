@@ -59,8 +59,8 @@ import { useThemeStore } from '@/stores/theme-store';
 const { currentTheme, updateConfig, saveTheme } = useThemeStore();
 
 // Update config
-updateConfig({ 
-  directory: { style: 'bold cyan' }
+updateConfig({
+  directory: { style: 'bold cyan' },
 });
 
 // Save theme
@@ -117,7 +117,7 @@ import { parseFormatString } from '@/lib/format-parser';
 // Convert to ANSI
 const ansi = parseFormatString(
   '[$directory](bold cyan) on [$git_branch](purple)',
-  config
+  config,
 );
 
 // Render in terminal
@@ -144,76 +144,94 @@ toast.info('Tip: Press Cmd+K');
 ### Common Button Styles
 
 ```tsx
-{/* Primary */}
-<button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+{
+  /* Primary */
+}
+<button className="rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600">
   Primary
-</button>
+</button>;
 
-{/* Secondary */}
-<button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
+{
+  /* Secondary */
+}
+<button className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-50">
   Secondary
-</button>
+</button>;
 
-{/* Danger */}
-<button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+{
+  /* Danger */
+}
+<button className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
   Delete
-</button>
+</button>;
 
-{/* Icon Button */}
-<button className="p-2 rounded-full hover:bg-gray-100">
+{
+  /* Icon Button */
+}
+<button className="rounded-full p-2 hover:bg-gray-100">
   <Icon />
-</button>
+</button>;
 ```
 
 ### Common Input Styles
 
 ```tsx
-{/* Text Input */}
-<input 
-  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+{
+  /* Text Input */
+}
+<input
+  className="rounded border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
   type="text"
-/>
+/>;
 
-{/* Textarea */}
-<textarea 
-  className="px-3 py-2 border rounded w-full resize-none focus:ring-2 focus:ring-blue-500"
+{
+  /* Textarea */
+}
+<textarea
+  className="w-full resize-none rounded border px-3 py-2 focus:ring-2 focus:ring-blue-500"
   rows={4}
-/>
+/>;
 
-{/* Select */}
-<select className="px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+{
+  /* Select */
+}
+<select className="rounded border px-3 py-2 focus:ring-2 focus:ring-blue-500">
   <option>Option 1</option>
-</select>
+</select>;
 
-{/* Checkbox */}
-<input 
+{
+  /* Checkbox */
+}
+<input
   type="checkbox"
-  className="w-4 h-4 text-blue-500 rounded focus:ring-2"
-/>
+  className="h-4 w-4 rounded text-blue-500 focus:ring-2"
+/>;
 ```
 
 ### Card Layouts
 
 ```tsx
-{/* Simple Card */}
-<div className="p-6 bg-white border rounded-lg shadow-sm">
-  Content
-</div>
+{
+  /* Simple Card */
+}
+<div className="rounded-lg border bg-white p-6 shadow-sm">Content</div>;
 
-{/* Card with Header */}
-<div className="bg-white border rounded-lg overflow-hidden">
-  <div className="px-6 py-4 border-b bg-gray-50">
+{
+  /* Card with Header */
+}
+<div className="overflow-hidden rounded-lg border bg-white">
+  <div className="border-b bg-gray-50 px-6 py-4">
     <h3 className="font-semibold">Header</h3>
   </div>
-  <div className="p-6">
-    Content
-  </div>
-</div>
+  <div className="p-6">Content</div>
+</div>;
 
-{/* Interactive Card */}
-<div className="p-6 bg-white border rounded-lg hover:shadow-md transition cursor-pointer">
+{
+  /* Interactive Card */
+}
+<div className="cursor-pointer rounded-lg border bg-white p-6 transition hover:shadow-md">
   Content
-</div>
+</div>;
 ```
 
 ---
@@ -230,16 +248,16 @@ interface MyComponentProps {
   onSave: () => void;
 }
 
-export const MyComponent: React.FC<MyComponentProps> = ({ 
-  title, 
-  onSave 
+export const MyComponent: React.FC<MyComponentProps> = ({
+  title,
+  onSave
 }) => {
   const [value, setValue] = React.useState('');
 
   return (
     <div className="p-4">
       <h2>{title}</h2>
-      <input 
+      <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
@@ -260,17 +278,17 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  children 
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children
 }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-auto">
-        <button 
+        <button
           onClick={onClose}
           className="float-right text-gray-400 hover:text-gray-600"
         >
@@ -319,7 +337,7 @@ interface StarshipConfig {
   right_format?: string;
   scan_timeout?: number;
   add_newline?: boolean;
-  
+
   // Common module structure
   [moduleName]: {
     disabled?: boolean;
@@ -327,7 +345,7 @@ interface StarshipConfig {
     style?: string;
     symbol?: string;
     // ... module-specific fields
-  }
+  };
 }
 ```
 
@@ -367,33 +385,34 @@ character: {
 useEffect(() => {
   const handleKeyPress = (e: KeyboardEvent) => {
     const isMod = e.metaKey || e.ctrlKey;
-    
+
     if (isMod && e.key === 's') {
       e.preventDefault();
       saveTheme();
     }
-    
+
     if (isMod && e.key === 'e') {
       e.preventDefault();
       exportTheme();
     }
-    
+
     if (isMod && e.key === 'k') {
       e.preventDefault();
       openCommandPalette();
     }
-    
+
     if (e.key === 'Escape') {
       closeModals();
     }
   };
-  
+
   window.addEventListener('keydown', handleKeyPress);
   return () => window.removeEventListener('keydown', handleKeyPress);
 }, []);
 ```
 
 **Default Shortcuts:**
+
 - `Cmd/Ctrl + S` - Save theme
 - `Cmd/Ctrl + E` - Export
 - `Cmd/Ctrl + I` - Import
@@ -472,10 +491,10 @@ const useThemeStore = create<ThemeStore>()(
       (set, get) => ({
         // ... store
       }),
-      { name: 'theme-storage' }
+      { name: 'theme-storage' },
     ),
-    { name: 'ThemeStore' }
-  )
+    { name: 'ThemeStore' },
+  ),
 );
 ```
 
@@ -488,7 +507,7 @@ import { MyComponent } from './MyComponent';
 function TestPage() {
   return (
     <div className="p-8">
-      <MyComponent 
+      <MyComponent
         title="Test"
         onSave={() => console.log('saved')}
       />
@@ -504,6 +523,7 @@ function TestPage() {
 ### "Cannot find module '@/...'"
 
 **Fix:** Check `tsconfig.json` has paths configured:
+
 ```json
 {
   "compilerOptions": {
@@ -516,19 +536,21 @@ function TestPage() {
 ```
 
 And `vite.config.ts`:
+
 ```typescript
 export default defineConfig({
   resolve: {
     alias: {
-      '@': '/src'
-    }
-  }
+      '@': '/src',
+    },
+  },
 });
 ```
 
 ### "Module not found: xterm.css"
 
 **Fix:** Import CSS in component:
+
 ```typescript
 import 'xterm/css/xterm.css';
 ```
@@ -536,6 +558,7 @@ import 'xterm/css/xterm.css';
 ### "localStorage is not defined"
 
 **Fix:** Check for browser environment:
+
 ```typescript
 if (typeof window !== 'undefined') {
   localStorage.setItem('key', 'value');
@@ -545,6 +568,7 @@ if (typeof window !== 'undefined') {
 ### "React Hook useEffect has missing dependencies"
 
 **Fix:** Add to dependency array or use `useCallback`:
+
 ```typescript
 // Option 1: Add dependency
 useEffect(() => {
@@ -616,9 +640,9 @@ const palettes = {
     accent: '#B48EAD',
     success: '#A3BE8C',
     error: '#BF616A',
-    warning: '#EBCB8B'
+    warning: '#EBCB8B',
   },
-  
+
   dracula: {
     bg: '#282A36',
     fg: '#F8F8F2',
@@ -626,9 +650,9 @@ const palettes = {
     accent: '#FF79C6',
     success: '#50FA7B',
     error: '#FF5555',
-    warning: '#F1FA8C'
+    warning: '#F1FA8C',
   },
-  
+
   gruvbox: {
     bg: '#282828',
     fg: '#EBDBB2',
@@ -636,8 +660,8 @@ const palettes = {
     accent: '#D3869B',
     success: '#B8BB26',
     error: '#FB4934',
-    warning: '#FE8019'
-  }
+    warning: '#FE8019',
+  },
 };
 ```
 
@@ -646,6 +670,7 @@ const palettes = {
 ## 🔗 Useful Links
 
 **Documentation:**
+
 - Starship: https://starship.rs/config/
 - React: https://react.dev/
 - TypeScript: https://www.typescriptlang.org/docs/
@@ -653,12 +678,14 @@ const palettes = {
 - Vite: https://vitejs.dev/guide/
 
 **Libraries:**
+
 - xterm.js: https://xtermjs.org/docs/
 - Zustand: https://github.com/pmndrs/zustand
 - colord: https://github.com/omgovich/colord
 - @dnd-kit: https://docs.dndkit.com/
 
 **Tools:**
+
 - Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
 - TOML Spec: https://toml.io/en/
 
@@ -779,7 +806,7 @@ expect(mockFn).toHaveBeenCalled();
 
 ```typescript
 // Common Lucide icons
-import { 
+import {
   Save,           // Save icon
   Download,       // Download
   Upload,         // Upload

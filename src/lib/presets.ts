@@ -12,23 +12,23 @@ export const PRESET_THEMES: Theme[] = [
       tags: ['minimal', 'clean'],
       created: new Date('2024-01-01'),
       updated: new Date('2024-01-01'),
-      isPreset: true
+      isPreset: true,
     },
     config: {
       format: '$directory$git_branch$character',
       directory: {
         truncation_length: 3,
-        style: 'bold cyan'
+        style: 'bold cyan',
       },
       git_branch: {
         style: 'bold purple',
-        symbol: '🌱 '
+        symbol: '🌱 ',
       },
       character: {
         success_symbol: '[❯](bold green)',
-        error_symbol: '[❯](bold red)'
-      }
-    }
+        error_symbol: '[❯](bold red)',
+      },
+    },
   },
   {
     metadata: {
@@ -39,23 +39,23 @@ export const PRESET_THEMES: Theme[] = [
       tags: ['minimal', 'compact'],
       created: new Date('2024-01-01'),
       updated: new Date('2024-01-01'),
-      isPreset: true
+      isPreset: true,
     },
     config: {
       add_newline: false,
       format: '$username@$hostname $directory $git_branch $character',
       username: {
         style_user: 'white bold',
-        show_always: true
+        show_always: true,
       },
       hostname: {
         ssh_only: false,
-        style: 'white dimmed'
+        style: 'white dimmed',
       },
       directory: {
-        style: 'blue'
-      }
-    }
+        style: 'blue',
+      },
+    },
   },
   {
     metadata: {
@@ -66,7 +66,7 @@ export const PRESET_THEMES: Theme[] = [
       tags: ['developer', 'languages'],
       created: new Date('2024-01-01'),
       updated: new Date('2024-01-01'),
-      isPreset: true
+      isPreset: true,
     },
     config: {
       ...TomlParser.getDefaultConfig(),
@@ -76,8 +76,8 @@ export const PRESET_THEMES: Theme[] = [
       golang: { disabled: false },
       java: { disabled: false },
       php: { disabled: false },
-      docker_context: { disabled: false }
-    }
+      docker_context: { disabled: false },
+    },
   },
   {
     metadata: {
@@ -88,7 +88,7 @@ export const PRESET_THEMES: Theme[] = [
       tags: ['aesthetic', 'dark'],
       created: new Date('2024-01-01'),
       updated: new Date('2024-01-01'),
-      isPreset: true
+      isPreset: true,
     },
     config: {
       ...TomlParser.getDefaultConfig(),
@@ -96,9 +96,9 @@ export const PRESET_THEMES: Theme[] = [
       git_branch: { style: ColorUtils.presets.Nord.secondary },
       character: {
         success_symbol: `[➜](${ColorUtils.presets.Nord.success})`,
-        error_symbol: `[➜](${ColorUtils.presets.Nord.error})`
-      }
-    }
+        error_symbol: `[➜](${ColorUtils.presets.Nord.error})`,
+      },
+    },
   },
   {
     metadata: {
@@ -109,7 +109,7 @@ export const PRESET_THEMES: Theme[] = [
       tags: ['aesthetic', 'dark', 'vampire'],
       created: new Date('2024-01-01'),
       updated: new Date('2024-01-01'),
-      isPreset: true
+      isPreset: true,
     },
     config: {
       ...TomlParser.getDefaultConfig(),
@@ -117,8 +117,8 @@ export const PRESET_THEMES: Theme[] = [
       git_branch: { style: ColorUtils.presets.Dracula.secondary },
       character: {
         success_symbol: `[⚡](${ColorUtils.presets.Dracula.success})`,
-        error_symbol: `[⚡](${ColorUtils.presets.Dracula.error})`
-      }
-    }
-  }
+        error_symbol: `[⚡](${ColorUtils.presets.Dracula.error})`,
+      },
+    },
+  },
 ];

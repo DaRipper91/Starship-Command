@@ -1,5 +1,7 @@
 # AGENTS.md — Starship Theme Creator
+
 # Jules Autonomous Agent System Instructions
+
 # Place this file in the ROOT of your repository
 
 > Jules reads this file automatically before every task.
@@ -33,6 +35,7 @@ Before starting any task Jules must:
 8. **Create a PR** with a clear description following the PR template below
 
 Jules must NEVER:
+
 - Push directly to `main` or `master`
 - Skip TypeScript type definitions
 - Use inline styles instead of Tailwind classes
@@ -172,10 +175,12 @@ starship-theme-creator/
 ## 🔑 CORE CONCEPTS JULES MUST UNDERSTAND
 
 ### 1. What is Starship?
+
 Starship (https://starship.rs) is a cross-shell prompt configured by `~/.config/starship.toml`.
 Users define which "modules" appear and how they look. Our app creates this file visually.
 
 ### 2. Starship Format String Syntax
+
 ```
 $module_name              → Insert a module
 [$text](style)            → Styled text block
@@ -188,6 +193,7 @@ Example full format:
 ```
 
 ### 3. Starship Style String Syntax
+
 ```
 Colors:      red, blue, green, yellow, purple, cyan, white, black
 Hex:         #ff0000
@@ -198,6 +204,7 @@ Combined:    "bold red"  "italic bg:blue white"  "underline #00ff00"
 ```
 
 ### 4. The Core Data Flow in Our App
+
 ```
 User drags module    → format string updated → terminal re-renders
 User picks color     → module style updated  → terminal re-renders
@@ -211,38 +218,41 @@ User clicks Import   → TOML parsed           → store updated  → terminal r
 ## 📋 TYPESCRIPT CONTRACT
 
 ### The Theme Object (root of everything)
+
 ```typescript
 interface Theme {
-  metadata: ThemeMetadata;  // Who, when, what
-  config: StarshipConfig;   // The actual .toml data
+  metadata: ThemeMetadata; // Who, when, what
+  config: StarshipConfig; // The actual .toml data
 }
 
 interface ThemeMetadata {
-  id: string;           // crypto.randomUUID()
-  name: string;         // User-chosen name
+  id: string; // crypto.randomUUID()
+  name: string; // User-chosen name
   author?: string;
   description?: string;
   tags?: string[];
   created: Date;
   updated: Date;
-  thumbnail?: string;   // base64 image
+  thumbnail?: string; // base64 image
 }
 ```
 
 ### StarshipConfig (maps 1:1 to .toml sections)
+
 ```typescript
 interface StarshipConfig {
-  format?: string;                        // Module order
-  right_format?: string;                  // Right-side prompt
+  format?: string; // Module order
+  right_format?: string; // Right-side prompt
   continuation_prompt?: string;
   add_newline?: boolean;
-  palette?: string;                       // Active palette name
+  palette?: string; // Active palette name
   palettes?: Record<string, Record<string, string>>;
   [moduleName: string]: ModuleConfig | any;
 }
 ```
 
 ### The Zustand Store Contract
+
 ```typescript
 // useThemeStore from stores/theme-store.ts
 interface ThemeStore {
@@ -254,10 +264,10 @@ interface ThemeStore {
   updateMetadata: (meta: Partial<ThemeMetadata>) => void;
 
   // Theme CRUD
-  loadTheme:   (theme: Theme) => void;
-  saveTheme:   () => void;
+  loadTheme: (theme: Theme) => void;
+  saveTheme: () => void;
   deleteTheme: (id: string) => void;
-  resetTheme:  () => void;
+  resetTheme: () => void;
 
   // Import/export
   exportToml: () => string;
@@ -270,6 +280,7 @@ interface ThemeStore {
 ## 📐 CODING STANDARDS
 
 ### TypeScript Rules
+
 ```typescript
 // ✅ Always type props interfaces
 interface MyComponentProps {
@@ -298,13 +309,14 @@ const [count, setCount] = useState(0); // TypeScript infers number
 ```
 
 ### Tailwind Styling Rules
+
 ```tsx
 // ✅ Tailwind classes only
-<button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 
+<button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600
                    transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400">
 
 // ✅ Conditional with template literal
-<div className={`p-4 border rounded-lg ${isActive ? 'border-blue-500 bg-blue-50' 
+<div className={`p-4 border rounded-lg ${isActive ? 'border-blue-500 bg-blue-50'
                                                    : 'border-gray-200 bg-white'}`}>
 
 // ✅ Complex conditionals use cn() utility
@@ -318,6 +330,7 @@ import styles from './Component.module.css';
 ```
 
 ### Error Handling Rules
+
 ```typescript
 // ✅ Always use toast for user feedback
 import { useToast } from '@/hooks/useToast';
@@ -327,19 +340,26 @@ try {
   const config = TomlParser.parse(input);
   toast.success('Theme imported successfully!');
 } catch (error) {
-  toast.error(`Failed to import: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  toast.error(
+    `Failed to import: ${error instanceof Error ? error.message : 'Unknown error'}`,
+  );
 }
 
 // ✅ Loading states for async operations
 const [isLoading, setIsLoading] = useState(false);
 setIsLoading(true);
-try { await doAsyncThing(); } finally { setIsLoading(false); }
+try {
+  await doAsyncThing();
+} finally {
+  setIsLoading(false);
+}
 
 // ❌ Never use alert() or console.error() for user-facing errors
 alert('Something went wrong'); // NEVER
 ```
 
 ### Component Architecture Rules
+
 ```typescript
 // ✅ Each component in its own folder
 // src/components/ColorPicker/index.tsx
@@ -356,9 +376,16 @@ export const ModuleItem = React.memo(({ id, enabled, onToggle }: ModuleItemProps
 ```
 
 ### Import Order (always follow this sequence)
+
 ```typescript
 // 1. React
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 
 // 2. Third-party (alphabetical)
 import { DndContext } from '@dnd-kit/core';
@@ -392,6 +419,7 @@ These workflows live in `.github/workflows/` and invoke Jules via the
 `google-labs-code/jules-invoke@v1` action.
 
 ### Schedule Overview
+
 ```
 Daily   06:00 UTC  → Security vulnerability scan
 Daily   08:00 UTC  → Dependency freshness check
@@ -403,12 +431,14 @@ On Issue (label)   → Feature/bug implementation
 ```
 
 ### How to Add a New Scheduled Task
+
 1. Create `.github/workflows/jules-your-task.yml`
 2. Use the template from `scripts/new-checkpoint.sh`
 3. Write the Jules prompt with clear, measurable success criteria
 4. Test manually with `workflow_dispatch` before scheduling
 
 ### Secrets Required in GitHub Repository
+
 ```
 JULES_API_KEY   → From jules.google Settings → API Keys
 ```
@@ -421,6 +451,7 @@ This project uses a checkpoint-based development approach.
 Each checkpoint is a named milestone with specific tasks.
 
 ### Current Checkpoints
+
 ```
 CP-01: Foundation Setup       [src/types, src/lib, src/stores]
 CP-02: Core Systems           [parsers, validators, suggestions]
@@ -438,7 +469,9 @@ CP-13: Deployment             [Build optimization, Vercel/Netlify]
 ```
 
 ### When Jules Works on a Checkpoint Task
+
 Jules should:
+
 1. Create a branch named `checkpoint/CP-XX-task-name`
 2. Complete only the scope of that checkpoint — don't skip ahead
 3. Run all checks before opening the PR
@@ -452,17 +485,21 @@ Every PR Jules creates must follow this template:
 
 ```markdown
 ## 🎯 What This PR Does
+
 [Clear 1-2 sentence summary]
 
 ## 🔗 Checkpoint
+
 Checkpoint: CP-XX | Task: X.Y | [Task Name]
 
 ## 📁 Files Changed
+
 - `src/components/X/index.tsx` — [what changed and why]
 - `src/lib/y.ts` — [what changed and why]
 - `src/types/starship.types.ts` — [new types added if any]
 
 ## ✅ Verification
+
 - [x] `npm run build` passes with zero TypeScript errors
 - [x] `npm test` passes with no regressions
 - [x] New code has TypeScript types
@@ -472,11 +509,13 @@ Checkpoint: CP-XX | Task: X.Y | [Task Name]
 - [x] No console.log statements left in code
 
 ## 🧪 How to Test Manually
+
 1. Run `npm run dev`
 2. [Specific steps to verify the feature works]
 3. Expected result: [what the user should see]
 
 ## 🚨 Breaking Changes
+
 None | [Description if any]
 ```
 
@@ -542,15 +581,15 @@ jules remote new --repo . --session "task description"
 
 When working on specific areas Jules should read these files first:
 
-| Area | Read First |
-|------|-----------|
+| Area                | Read First                                                      |
+| ------------------- | --------------------------------------------------------------- |
 | Adding a new module | `src/lib/module-definitions.ts` + `src/types/starship.types.ts` |
-| Changing colors | `src/lib/color-utils.ts` + `src/components/ColorPicker/` |
-| Terminal rendering | `src/lib/format-parser.ts` + `src/lib/mock-data.ts` |
-| State changes | `src/stores/theme-store.ts` |
-| Validation logic | `src/lib/theme-validator.ts` |
-| Adding presets | `src/lib/presets.ts` |
-| UI components | `src/App.tsx` to understand layout |
+| Changing colors     | `src/lib/color-utils.ts` + `src/components/ColorPicker/`        |
+| Terminal rendering  | `src/lib/format-parser.ts` + `src/lib/mock-data.ts`             |
+| State changes       | `src/stores/theme-store.ts`                                     |
+| Validation logic    | `src/lib/theme-validator.ts`                                    |
+| Adding presets      | `src/lib/presets.ts`                                            |
+| UI components       | `src/App.tsx` to understand layout                              |
 
 ---
 
@@ -573,6 +612,7 @@ These are the modules our app supports. When adding a new one follow this patter
 ```
 
 ### All Supported Modules by Category
+
 ```
 Core:      character, directory, line_break
 VCS:       git_branch, git_status, git_state, git_commit, git_metrics
@@ -601,14 +641,20 @@ render(result);
 
 // ✅ Always show loading
 setIsLoading(true);
-try { const result = await expensiveOperation(); render(result); }
-finally { setIsLoading(false); }
+try {
+  const result = await expensiveOperation();
+  render(result);
+} finally {
+  setIsLoading(false);
+}
 
 // ❌ Hardcoded TOML sections
-if (module === 'git_branch') { /* hardcoded */ }
+if (module === 'git_branch') {
+  /* hardcoded */
+}
 
 // ✅ Use module-definitions.ts as the source of truth
-const def = MODULE_DEFINITIONS.find(m => m.id === module);
+const def = MODULE_DEFINITIONS.find((m) => m.id === module);
 
 // ❌ Not validating before export
 const toml = exportToml();
@@ -616,12 +662,14 @@ downloadFile(toml);
 
 // ✅ Validate first
 const validation = ThemeValidator.validateTheme(currentTheme);
-if (!validation.valid) { toast.warning('Theme has issues...'); }
+if (!validation.valid) {
+  toast.warning('Theme has issues...');
+}
 const toml = exportToml();
 downloadFile(toml);
 ```
 
 ---
 
-*This file is the source of truth for Jules. Keep it updated as the project grows.*
-*When in doubt, read this file again before proceeding.*
+_This file is the source of truth for Jules. Keep it updated as the project grows._
+_When in doubt, read this file again before proceeding._

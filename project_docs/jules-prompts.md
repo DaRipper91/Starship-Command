@@ -7,6 +7,7 @@ This document contains specific prompts you can give to Jules (Google AI) to bui
 ## Phase 1: Project Setup
 
 ### Prompt 1: Initialize Project
+
 ```
 I'm building a Starship prompt theme creator. Please:
 
@@ -36,6 +37,7 @@ Show me the complete package.json, vite.config.ts, and tailwind.config.js files.
 ## Phase 2: Core Utilities
 
 ### Prompt 2: TypeScript Types
+
 ```
 Create comprehensive TypeScript types for Starship configuration in src/types/starship.types.ts
 
@@ -51,6 +53,7 @@ Make the types as complete as possible with optional fields.
 ```
 
 ### Prompt 3: TOML Parser
+
 ```
 Create a TOML parser utility in src/lib/toml-parser.ts that:
 
@@ -64,6 +67,7 @@ Use @iarna/toml library. Include proper error handling and TypeScript types.
 ```
 
 ### Prompt 4: Color Utilities
+
 ```
 Create a comprehensive color utility library in src/lib/color-utils.ts that:
 
@@ -81,6 +85,7 @@ Use colord library with a11y plugin. Return colors in hex format.
 ## Phase 3: State Management
 
 ### Prompt 5: Theme Store
+
 ```
 Create a Zustand store in src/stores/theme-store.ts with persistence that manages:
 
@@ -105,6 +110,7 @@ Use zustand/middleware persist to save to localStorage.
 ## Phase 4: Terminal Preview
 
 ### Prompt 6: Terminal Preview Component
+
 ```
 Create a terminal preview component in src/components/TerminalPreview/index.tsx that:
 
@@ -126,6 +132,7 @@ Most importantly: Create a format string parser that converts Starship's format 
 ```
 
 ### Prompt 7: Format String Parser
+
 ```
 Create a smart format string parser that:
 
@@ -149,6 +156,7 @@ Return a function that takes a format string and config, and returns ANSI-format
 ## Phase 5: Configuration UI
 
 ### Prompt 8: Module Builder with Drag & Drop
+
 ```
 Create a module builder in src/components/ModuleBuilder/index.tsx that:
 
@@ -165,6 +173,7 @@ Use clean, modern UI with Tailwind CSS.
 ```
 
 ### Prompt 9: Color Picker Component
+
 ```
 Create an advanced color picker in src/components/ColorPicker/index.tsx that:
 
@@ -184,6 +193,7 @@ Include contrast ratio checker that warns if foreground/background contrast is p
 ```
 
 ### Prompt 10: Image to Palette Tool
+
 ```
 Create an image-to-palette component in src/components/ImagePalette/index.tsx that:
 
@@ -208,6 +218,7 @@ Use a clean card-based UI.
 ## Phase 6: Module Configuration
 
 ### Prompt 11: Module Config Panels
+
 ```
 Create individual configuration panels for these key modules:
 
@@ -241,6 +252,7 @@ Use form inputs, sliders, toggles, and symbol pickers.
 ```
 
 ### Prompt 12: Symbol/Icon Browser
+
 ```
 Create a Nerd Font symbol browser in src/components/IconBrowser/index.tsx that:
 
@@ -251,9 +263,9 @@ Create a Nerd Font symbol browser in src/components/IconBrowser/index.tsx that:
 5. Shows symbol preview with name
 6. Includes popular symbols like:
    - Arrows: →, ←, ↑, ↓, ➜, ⇒
-   - Git: , , , , 
-   - Languages: , , , , , 
-   - Files: , , , 
+   - Git: , , , ,
+   - Languages: , , , , ,
+   - Files: , , ,
 
 Make it a modal or sidebar that opens when clicking symbol input fields.
 Can also paste custom symbols.
@@ -264,6 +276,7 @@ Can also paste custom symbols.
 ## Phase 7: Layout & Design
 
 ### Prompt 13: Main App Layout
+
 ```
 Create the main app layout in src/App.tsx with:
 
@@ -294,6 +307,7 @@ Include keyboard shortcuts:
 ```
 
 ### Prompt 14: Export/Import UI
+
 ```
 Create an export/import component in src/components/ExportImport/index.tsx with:
 
@@ -323,6 +337,7 @@ Add validation before import - check if TOML is valid and warn about issues.
 ## Phase 8: Advanced Features
 
 ### Prompt 15: Theme Gallery
+
 ```
 Create a theme gallery in src/components/ThemeGallery/index.tsx that:
 
@@ -348,6 +363,7 @@ Create thumbnail generator that renders the prompt to canvas.
 ```
 
 ### Prompt 16: Preset Themes
+
 ```
 Create a comprehensive preset library with themes for:
 
@@ -373,6 +389,7 @@ Create a PresetBrowser component with preview and one-click apply.
 ```
 
 ### Prompt 17: Theme Validator
+
 ```
 Create a theme validator in src/lib/theme-validator.ts that checks:
 
@@ -405,6 +422,7 @@ Show in a ValidationPanel component.
 ## Phase 9: Enhancements
 
 ### Prompt 18: Smart Suggestions
+
 ```
 Create a suggestion engine that:
 
@@ -432,6 +450,7 @@ Create a WelcomeWizard component that guides new users through setup.
 ```
 
 ### Prompt 19: Comparison View
+
 ```
 Create a before/after comparison tool in src/components/Comparison/index.tsx that:
 
@@ -450,6 +469,7 @@ Useful for:
 ```
 
 ### Prompt 20: Installation Guide
+
 ```
 Create an installation guide component that:
 
@@ -474,6 +494,7 @@ Include video tutorial links.
 ## Phase 10: Polish & Testing
 
 ### Prompt 21: Error Handling & Loading States
+
 ```
 Implement comprehensive error handling:
 
@@ -502,6 +523,7 @@ Use skeletons, spinners, and progress bars appropriately.
 ```
 
 ### Prompt 22: Keyboard Shortcuts & Accessibility
+
 ```
 Implement keyboard navigation:
 
@@ -529,6 +551,7 @@ Create a CommandPalette component for quick actions.
 ```
 
 ### Prompt 23: Performance Optimization
+
 ```
 Optimize the app for performance:
 
@@ -565,6 +588,7 @@ Target: <100ms interaction latency, <3s initial load.
 ## Bonus Features
 
 ### Prompt 24: AI-Powered Theme Generator
+
 ```
 Create an AI theme generator that:
 
@@ -583,6 +607,7 @@ This could be a premium feature or powered by local rules engine.
 ```
 
 ### Prompt 25: Community Features
+
 ```
 Add community features (requires backend):
 
@@ -619,6 +644,7 @@ Create using Next.js API routes + Supabase or Firebase.
 ## Final Integration Prompts
 
 ### Prompt 26: Build Production Version
+
 ```
 Prepare the app for production:
 
@@ -656,6 +682,7 @@ Generate build scripts and deployment docs.
 ```
 
 ### Prompt 27: Testing Suite
+
 ```
 Create comprehensive tests:
 
@@ -689,6 +716,7 @@ Target: >80% code coverage, all critical paths tested.
 ## Documentation
 
 ### Prompt 28: User Documentation
+
 ```
 Create comprehensive user documentation:
 
@@ -722,6 +750,7 @@ Create as MDX files with interactive examples.
 ```
 
 ### Prompt 29: Developer Documentation
+
 ```
 Create developer documentation:
 
@@ -742,6 +771,7 @@ Use TypeDoc for API docs, Storybook for components.
 ## Marketing & Launch
 
 ### Prompt 30: Launch Materials
+
 ```
 Create launch materials:
 
@@ -786,6 +816,7 @@ Make materials engaging and show real value quickly.
 6. **Test frequently**: Ask Jules to suggest test cases for each feature
 
 Example follow-up prompts:
+
 - "The color picker isn't updating the preview correctly. Here's the current code: [paste code]. Fix the issue."
 - "Add TypeScript types to this component and ensure all props are properly typed"
 - "This component re-renders too often. Optimize it using React.memo and useCallback"

@@ -71,9 +71,11 @@ export const useThemeStore = create<ThemeStore>()(
 
       saveTheme: () => {
         const { currentTheme, savedThemes } = get();
-        const existingIndex = savedThemes.findIndex((t) => t.metadata.id === currentTheme.metadata.id);
+        const existingIndex = savedThemes.findIndex(
+          (t) => t.metadata.id === currentTheme.metadata.id,
+        );
 
-        let newSavedThemes = [...savedThemes];
+        const newSavedThemes = [...savedThemes];
         if (existingIndex >= 0) {
           // Update existing
           newSavedThemes[existingIndex] = currentTheme;
@@ -125,6 +127,6 @@ export const useThemeStore = create<ThemeStore>()(
         savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
       }),
-    }
-  )
+    },
+  ),
 );
