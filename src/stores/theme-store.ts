@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { createDebouncedStorage } from '../lib/storage-utils';
 import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
 import { TomlParser } from '../lib/toml-parser';
 
@@ -123,6 +124,7 @@ export const useThemeStore = create<ThemeStore>()(
     }),
     {
       name: 'starship-theme-storage',
+      storage: createDebouncedStorage(() => localStorage),
       partialize: (state) => ({
         savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
