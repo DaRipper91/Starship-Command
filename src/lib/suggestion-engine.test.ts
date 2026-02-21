@@ -1,16 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { SuggestionEngine, Environment } from './suggestion-engine';
+import { StarshipConfig } from '../types/starship.types';
 
 describe('SuggestionEngine', () => {
   describe('suggestModules', () => {
     // Helper to create a base environment
     const createEnv = (overrides: Partial<Environment> = {}): Environment => ({
-import { StarshipConfig } from '../types/starship.types';
-
-describe('SuggestionEngine', () => {
-  describe('suggestOptimizations', () => {
-    // Helper to create a base environment
-    const createEnv = (overrides?: Partial<Environment>): Environment => ({
       os: 'linux',
       shell: 'bash',
       terminal: 'xterm',
@@ -85,7 +80,17 @@ describe('SuggestionEngine', () => {
       const env = createEnv();
       const modules = SuggestionEngine.suggestModules(env);
       expect(modules[0]).toBe('directory');
-      installedTools: ['git'],
+    });
+  });
+
+  describe('suggestOptimizations', () => {
+    // Helper to create a base environment
+    const createEnv = (overrides?: Partial<Environment>): Environment => ({
+      os: 'linux',
+      shell: 'bash',
+      terminal: 'xterm',
+      hasNerdFont: true,
+      installedTools: [],
       ...overrides,
     });
 

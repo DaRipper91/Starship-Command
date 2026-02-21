@@ -1,150 +1,77 @@
-# Starship Theme Creator
+# Starship Theme Creator (Early Development)
 
-A visual, no-code drag-and-drop editor for creating [Starship](https://starship.rs) shell prompt themes. Build, preview, and export `starship.toml` configuration files through a browser UI — no manual TOML editing required.
+> **Current Status:** Foundation Phase. Core logic libraries are implemented, but the UI is a skeleton.
 
-## Features
+A visual, no-code drag-and-drop editor for creating [Starship](https://starship.rs) shell prompt themes.
 
-- **Live terminal preview** — See your prompt update in real time as you make changes
-- **Drag-and-drop module builder** — Reorder and toggle Starship modules visually
-- **Color picker** — Choose colors with a full color picker or apply preset palettes
-- **Image-to-palette extraction** — Upload an image to pull its colors into your theme
-- **Import / Export** — Load an existing `starship.toml` or download your new one
-- **Theme gallery** — Save multiple themes and switch between them
-- **Theme validation** — Instant warnings for misconfigured options
-- **Smart suggestions** — Environment-aware recommendations for your prompt
-- **Keyboard shortcuts & command palette** — Power-user navigation (`Cmd/Ctrl+K`)
-- **Accessibility** — High-contrast mode and reduced-motion support
+## 🚧 Project Status
 
-## Tech Stack
+This project is currently in the **Foundation Phase**. The backend logic for parsing, validating, and manipulating Starship configurations is implemented, but the interactive frontend components (Terminal Preview, Drag & Drop, Color Picker) are still being built.
 
-| Area              | Library                                     |
-| ----------------- | ------------------------------------------- |
-| Framework         | React 18 + TypeScript 5                     |
-| Build tool        | Vite 5                                      |
-| Styling           | Tailwind CSS 3                              |
-| State             | Zustand 4 (with `localStorage` persistence) |
-| Terminal emulator | xterm.js 5 + xterm-addon-fit                |
-| TOML parsing      | @iarna/toml                                 |
-| Color utilities   | colord + react-colorful + node-vibrant      |
-| Drag and drop     | @dnd-kit/core + @dnd-kit/sortable           |
-| Icons             | lucide-react                                |
-| Testing           | Vitest + React Testing Library              |
+### ✅ Implemented Features (Core Logic)
 
-## Prerequisites
+- **TOML Parser**: robust parsing/stringifying with `@iarna/toml` (`src/lib/toml-parser.ts`)
+- **Theme Validation**: checks for syntax errors, color contrast issues, and performance bottlenecks (`src/lib/theme-validator.ts`)
+- **Color Utilities**: comprehensive color manipulation (harmony generation, contrast checking) and image palette extraction (`src/lib/color-utils.ts`)
+- **Format Parser**: logic to convert Starship format strings into ANSI codes for preview (`src/lib/format-parser.ts`)
+- **State Management**: Zustand store with persistence (`src/stores/theme-store.ts`)
+- **Suggestion Engine**: environment detection logic (`src/lib/suggestion-engine.ts`)
 
-- **Node.js** `^20.19.0` or `>=22.12.0` (required by Vite 7)
-- **npm** (or pnpm — a `pnpm-lock.yaml` is also included)
+### 📅 Planned Features (Coming Soon)
 
-## Getting Started
+- **Live Terminal Preview**: Real-time rendering of the prompt using xterm.js
+- **Module Builder**: Drag-and-drop interface to reorder modules
+- **Color Picker**: Visual color selection with presets
+- **Image-to-Theme**: Upload an image to generate a matching theme automatically
+- **Theme Gallery**: Browse and share community themes
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/DaRipper91/Starship-Prompt-Theme-Creator.git
-cd Starship-Prompt-Theme-Creator
+## 🛠 Getting Started (Development)
 
-# 2. Install dependencies
-npm install
+Since the UI is minimal, these steps will get the development server running so you can inspect the logic or start building components.
 
-# 3. Start the development server
-npm run dev
-```
+### Prerequisites
 
-The app will be available at `http://localhost:5173`.
+- Node.js 18+
+- npm (or pnpm)
 
-## Available Scripts
+### Installation
 
-| Command           | Description                                    |
-| ----------------- | ---------------------------------------------- |
-| `npm run dev`     | Start the Vite dev server with hot-reload      |
-| `npm run build`   | Type-check then build for production (`dist/`) |
-| `npm run preview` | Preview the production build locally           |
-| `npm run lint`    | Run ESLint (zero warnings allowed)             |
-| `npm run format`  | Format all files with Prettier                 |
-| `npm test`        | Run the Vitest test suite in watch mode        |
+1.  **Clone the repository**
 
-## Project Structure
+    ```bash
+    git clone https://github.com/DaRipper91/Starship-Prompt-Theme-Creator.git
+    cd Starship-Prompt-Theme-Creator
+    ```
 
-```
-src/
-├── App.tsx                    # Root component — 3-column layout
-├── main.tsx                   # Entry point
-├── index.css                  # Global styles + Tailwind directives
-│
-├── components/
-│   ├── layout/                # Header, Sidebar, Footer, Layout wrapper
-│   ├── TerminalPreview/       # xterm.js live prompt preview
-│   ├── ModuleBuilder/         # Drag-and-drop module list
-│   ├── ColorPicker/           # Color selector + preset swatches
-│   ├── ImagePalette/          # Upload image → extract palette
-│   ├── ModuleConfigPanel/     # Per-module settings form
-│   ├── ExportImport/          # Download / upload .toml files
-│   ├── ThemeGallery/          # Saved + preset theme cards
-│   ├── ComparisonView/        # Side-by-side theme diff
-│   ├── SuggestionPanel/       # Smart recommendations
-│   ├── WelcomeWizard/         # First-run onboarding flow
-│   ├── CommandPalette.tsx     # Cmd+K quick-action search
-│   ├── ErrorBoundary.tsx      # React error boundary
-│   ├── Toast.tsx              # Stacked notification system
-│   ├── Tooltip.tsx            # Hover hint component
-│   └── LoadingSpinner.tsx     # Async loading indicator
-│
-├── lib/
-│   ├── toml-parser.ts         # Parse / stringify TOML ↔ config
-│   ├── format-parser.ts       # Starship format strings → ANSI codes
-│   ├── color-utils.ts         # Color manipulation + presets
-│   ├── theme-validator.ts     # Config validation + warnings
-│   ├── suggestion-engine.ts   # Environment detection + hints
-│   ├── mock-data.ts           # Terminal preview scenarios
-│   ├── presets.ts             # Built-in Nord / Dracula / etc. themes
-│   ├── module-definitions.ts  # Module metadata + categories
-│   └── utils.ts               # Shared utilities (cn(), etc.)
-│
-├── stores/
-│   └── theme-store.ts         # Zustand store — all theme state
-│
-├── hooks/
-│   ├── useToast.ts            # Toast notification system
-│   ├── useDebounce.ts         # Debounce rapidly changing values
-│   ├── useUndo.ts             # Undo / redo history stack
-│   ├── useKeyboardShortcuts.ts# App-wide keyboard bindings
-│   └── useWizardState.ts      # Multi-step wizard progress
-│
-├── types/
-│   └── starship.types.ts      # All TypeScript interfaces
-│
-└── contexts/
-    └── AccessibilityContext.tsx # High-contrast / reduced-motion
-```
+2.  **Install dependencies**
 
-## How It Works
+    ```bash
+    npm install
+    ```
 
-```
-User drags module    → format string updated → terminal re-renders
-User picks color     → module style updated  → terminal re-renders
-User uploads image   → palette extracted     → colors applied → terminal re-renders
-User clicks Export   → TOML generated        → file downloaded
-User clicks Import   → TOML parsed           → store updated  → terminal re-renders
-```
+3.  **Start the development server**
+    ```bash
+    npm run dev
+    ```
+    Open `http://localhost:5173` to see the current skeleton app.
 
-## Supported Starship Modules
+## 📚 Documentation & Roadmap
 
-| Category  | Modules                                                                                                                                                       |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Core      | `character`, `directory`, `line_break`                                                                                                                        |
-| VCS       | `git_branch`, `git_status`, `git_state`, `git_commit`, `git_metrics`                                                                                          |
-| Languages | `nodejs`, `python`, `rust`, `golang`, `java`, `php`, `ruby`, `swift`, `kotlin`, `julia`, `lua`, `perl`, `erlang`, `elixir`, `nim`, `crystal`, `dart`, `scala` |
-| Tools     | `docker_context`, `kubernetes`, `terraform`, `package`, `cmake`, `gradle`                                                                                     |
-| Cloud     | `aws`, `gcloud`, `azure`, `openstack`                                                                                                                         |
-| System    | `battery`, `time`, `username`, `hostname`, `cmd_duration`, `jobs`, `memory_usage`, `shell`, `shlvl`, `status`, `sudo`, `os`, `env_var`                        |
+For detailed architectural specs and the implementation plan, see the `project_docs/` directory:
 
-## Contributing
+- [**Master Manual**](project_docs/master-manual.md): Comprehensive specification of the intended architecture.
+- [**Roadmap**](project_docs/starship-theme-creator-roadmap.md): The phased development plan.
+- [**Checkpoint Guide**](project_docs/checkpoint-guide.md): The step-by-step task list we are following.
+- [**Current Status**](project_docs/CURRENT_STATUS.md): Detailed breakdown of what is done vs. what is left.
 
-1. Fork the repository and create a feature branch
-2. Run `npm install` to set up your environment
-3. Make your changes, following the TypeScript and Tailwind conventions in `AGENTS.md`
-4. Run `npm run build && npm test` to verify nothing is broken
-5. Open a pull request with a clear description of what changed and why
+## 🤝 Contributing
+
+We are currently following the [Step-by-Step Guide](project_docs/step-by-step-guide.md). If you'd like to contribute, please pick up from **Checkpoint 3 (Terminal Preview)** or **Checkpoint 5 (Module Management)**.
+
+1.  Check the `project_docs/checkpoint-guide.md` to see the current active task.
+2.  Implement the next component following the `master-manual.md` specs.
+3.  Submit a PR!
 
 ## License
 
-This project is open source. See the repository for license details.
+MIT

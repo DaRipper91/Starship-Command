@@ -1,3 +1,5 @@
+# 🚩 CURRENT PROGRESS: Day 1 Day 2 Logic completed. Next: Day 2 UI (Terminal Preview).
+
 # Starship Theme Creator - Step-by-Step Implementation Guide
 
 **Goal:** Build a complete Starship prompt theme creator web application
