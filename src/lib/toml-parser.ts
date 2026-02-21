@@ -68,10 +68,12 @@ export class TomlParser {
 
       git_branch: {
         symbol: '🌱 ',
+        format: '[$symbol$branch]($style) ',
         truncation_length: 24,
       },
 
       git_status: {
+        format: '([$all_status$ahead_behind]($style) )',
         conflicted: '🏳',
         ahead: '🏎💨',
         behind: '😰',
@@ -131,6 +133,10 @@ export class TomlParser {
     const result = { ...base };
 
     Object.keys(override).forEach((key) => {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        return;
+      }
+
       if (
         typeof override[key] === 'object' &&
         override[key] !== null &&

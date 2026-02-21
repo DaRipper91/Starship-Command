@@ -1,5 +1,5 @@
 import { cn } from '../../lib/utils';
-import { LayoutTemplate, Download, Check } from 'lucide-react';
+import { LayoutTemplate, Download, Check, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { useThemeStore } from '../../stores/theme-store';
 
@@ -36,16 +36,22 @@ export function Header({ className }: HeaderProps) {
         </h1>
       </div>
       <div className="flex items-center gap-4">
-        <button className="px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-white">
+        <a
+          href="https://starship.rs/config/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 rounded px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        >
           Documentation
-        </button>
+          <ExternalLink className="h-4 w-4" />
+        </a>
         <button
           onClick={handleExport}
           className={cn(
-            'flex items-center gap-2 rounded px-4 py-2 text-sm font-medium text-white transition-all',
+            'flex items-center gap-2 rounded px-4 py-2 text-sm font-medium text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900',
             isCopied
-              ? 'bg-green-600 hover:bg-green-700'
-              : 'bg-blue-600 hover:bg-blue-700',
+              ? 'bg-green-600 hover:bg-green-700 focus-visible:ring-green-500'
+              : 'bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-500',
           )}
           aria-label={
             isCopied ? 'Theme copied to clipboard' : 'Export theme to clipboard'
