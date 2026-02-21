@@ -111,36 +111,47 @@ export class ThemeValidator {
    */
   static checkColorContrast(config: StarshipConfig): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
+
+    // Check specific modules
+    if (config.directory?.style) {
+      const issue = this.checkStyle(config.directory.style, 'directory module');
+      if (issue) issues.push(issue);
+    }
+    if (config.git_branch?.style) {
+      const issue = this.checkStyle(
+        config.git_branch.style,
+        'git_branch module',
+      );
+      if (issue) issues.push(issue);
+    }
+
+    return issues;
+  }
+
+  // Helper to check a style string
+  private static checkStyle(
+    style: string,
+    source: string,
+  ): ValidationIssue | undefined {
     // This is a simplified check. A real one would parse all styles.
     // We assume a dark background for now as that's standard for terminals.
     const defaultBg = '#000000';
 
-    // Helper to check a style string
-    const checkStyle = (style: string, source: string) => {
-      if (!style) return;
-      // Extract hex colors
-      const hexMatch = style.match(HEX_COLOR_REGEX);
-      if (hexMatch) {
-        const fg = hexMatch[0];
-        const contrast = ColorUtils.checkContrast(fg, defaultBg);
-        if (!contrast.AA) {
-          issues.push({
-            type: 'visual',
-            severity: 'warning',
-            message: `Low contrast color ${fg} in ${source}`,
-            fix: 'Choose a lighter color for better readability on dark backgrounds',
-          });
-        }
+    if (!style) return;
+    // Extract hex colors
+    const hexMatch = style.match(HEX_COLOR_REGEX);
+    if (hexMatch) {
+      const fg = hexMatch[0];
+      const contrast = ColorUtils.checkContrast(fg, defaultBg);
+      if (!contrast.AA) {
+        return {
+          type: 'visual',
+          severity: 'warning',
+          message: `Low contrast color ${fg} in ${source}`,
+          fix: 'Choose a lighter color for better readability on dark backgrounds',
+        };
       }
-    };
-
-    // Check specific modules
-    if (config.directory?.style)
-      checkStyle(config.directory.style, 'directory module');
-    if (config.git_branch?.style)
-      checkStyle(config.git_branch.style, 'git_branch module');
-
-    return issues;
+    }
   }
 
   /**
