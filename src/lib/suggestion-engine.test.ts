@@ -75,12 +75,9 @@ describe('SuggestionEngine', () => {
       expect(modules).toContain('battery');
     });
 
-    it('should verify order of modules roughly (directory first, character/linebreak somewhere)', () => {
-      // This is a loose check as exact order might change, but basic structure usually matters
+    it('should have directory as the first module', () => {
       const env = createEnv();
       const modules = SuggestionEngine.suggestModules(env);
-
-      // directory usually comes early
       expect(modules[0]).toBe('directory');
     });
   });
