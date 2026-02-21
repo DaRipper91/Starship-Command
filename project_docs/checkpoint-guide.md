@@ -607,7 +607,7 @@ Functions:
 - detectEnvironment(): Promise<Environment>
 - suggestModules(env: Environment): string[]
 - suggestOptimizations(config: StarshipConfig, env: Environment): Suggestion[]
-- suggestColorScheme(env: Environment): ColorPalette[]
+- suggestColorScheme(): ColorPalette[]
 
 interface Suggestion {
   type: 'module' | 'performance' | 'visual' | 'compatibility';

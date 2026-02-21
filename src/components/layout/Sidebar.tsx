@@ -24,7 +24,7 @@ export function Sidebar({ className }: SidebarProps) {
         {navItems.map((item) => (
           <button
             key={item.label}
-            className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-gray-400 transition-all hover:bg-gray-800 hover:text-white"
+            className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-gray-400 transition-all hover:bg-gray-800 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <item.icon className="h-5 w-5" />
             <span className="font-medium">{item.label}</span>
