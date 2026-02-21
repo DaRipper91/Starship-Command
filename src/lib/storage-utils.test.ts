@@ -18,7 +18,9 @@ describe('createDebouncedStorage', () => {
 
   it('should debounce setItem calls', () => {
     vi.useFakeTimers();
-    const storage = createDebouncedStorage<string>(getStorage, { debounceTime: 100 });
+    const storage = createDebouncedStorage<string>(getStorage, {
+      debounceTime: 100,
+    });
 
     // Initial call
     storage.setItem('key', { state: 'value1', version: 0 });
@@ -41,6 +43,9 @@ describe('createDebouncedStorage', () => {
     vi.advanceTimersByTime(50); // Total 110 since second call
     expect(mockStorage.setItem).toHaveBeenCalledTimes(1);
     // createJSONStorage stringifies the value
-    expect(mockStorage.setItem).toHaveBeenCalledWith('key', JSON.stringify({ state: 'value2', version: 0 }));
+    expect(mockStorage.setItem).toHaveBeenCalledWith(
+      'key',
+      JSON.stringify({ state: 'value2', version: 0 }),
+    );
   });
 });

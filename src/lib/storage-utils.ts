@@ -1,4 +1,9 @@
-import { createJSONStorage, StateStorage, PersistStorage, StorageValue } from 'zustand/middleware';
+import {
+  createJSONStorage,
+  StateStorage,
+  PersistStorage,
+  StorageValue,
+} from 'zustand/middleware';
 
 interface DebouncedStorageOptions {
   debounceTime?: number;
@@ -8,7 +13,9 @@ export function createDebouncedStorage<S>(
   getStorage: () => StateStorage,
   options?: DebouncedStorageOptions,
 ): PersistStorage<S> | undefined {
-  const storage = createJSONStorage(getStorage) as PersistStorage<S> | undefined;
+  const storage = createJSONStorage(getStorage) as
+    | PersistStorage<S>
+    | undefined;
 
   if (!storage) {
     return undefined;
