@@ -131,6 +131,10 @@ export class TomlParser {
     const result = { ...base };
 
     Object.keys(override).forEach((key) => {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        return;
+      }
+
       if (
         typeof override[key] === 'object' &&
         override[key] !== null &&
