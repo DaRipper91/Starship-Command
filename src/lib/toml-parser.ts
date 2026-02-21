@@ -68,10 +68,12 @@ export class TomlParser {
 
       git_branch: {
         symbol: '🌱 ',
+        format: '[$symbol$branch]($style) ',
         truncation_length: 24,
       },
 
       git_status: {
+        format: '([$all_status$ahead_behind]($style) )',
         conflicted: '🏳',
         ahead: '🏎💨',
         behind: '😰',
