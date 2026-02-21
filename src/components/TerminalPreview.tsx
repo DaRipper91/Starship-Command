@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
@@ -81,7 +81,17 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     };
   }, []);
 
-  // Effect to update content when theme changes
+  // Memoize the output to avoid re-parsing on metadata changes
+  const output = useMemo(() => {
+    // Parse format
+    const format = currentTheme.config.format || '';
+
+    // Use the 'clean' scenario by default
+    // In a real app, we might want to let the user select the scenario via props or store
+    return parseFormatString(format, currentTheme.config, MOCK_SCENARIOS.clean);
+  }, [currentTheme.config]);
+
+  // Effect to update content when output changes
   useEffect(() => {
     const term = xtermRef.current;
     if (!term) return;
@@ -89,20 +99,9 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     // Clear terminal
     term.reset();
 
-    // Parse format
-    const format = currentTheme.config.format || '';
-
-    // Use the 'clean' scenario by default
-    // In a real app, we might want to let the user select the scenario via props or store
-    const output = parseFormatString(
-      format,
-      currentTheme.config,
-      MOCK_SCENARIOS.clean,
-    );
-
     // Write output
     term.write(output);
-  }, [currentTheme]);
+  }, [output]);
 
   return (
     <div
