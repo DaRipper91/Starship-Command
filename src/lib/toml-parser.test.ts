@@ -119,6 +119,8 @@ describe('TomlParser', () => {
       const override = { a: { b: 2 } };
       const result = TomlParser.merge(base, override);
       expect(result).toEqual({ a: { b: 2 } });
+    });
+
     it('should merge two objects', () => {
       const base = { a: 1, b: { c: 2 } };
       const override = { b: { d: 3 }, e: 4 };

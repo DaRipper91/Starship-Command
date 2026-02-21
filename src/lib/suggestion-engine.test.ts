@@ -1,24 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { SuggestionEngine, Environment } from './suggestion-engine';
-
-describe('SuggestionEngine', () => {
-  describe('suggestModules', () => {
-    // Helper to create a base environment
-    const createEnv = (overrides: Partial<Environment> = {}): Environment => ({
 import { StarshipConfig } from '../types/starship.types';
 
 describe('SuggestionEngine', () => {
-  describe('suggestOptimizations', () => {
-    // Helper to create a base environment
-    const createEnv = (overrides?: Partial<Environment>): Environment => ({
-      os: 'linux',
-      shell: 'bash',
-      terminal: 'xterm',
-      hasNerdFont: true,
-      installedTools: [],
-      ...overrides,
-    });
+  // Helper to create a base environment
+  const createEnv = (overrides: Partial<Environment> = {}): Environment => ({
+    os: 'linux',
+    shell: 'bash',
+    terminal: 'xterm',
+    hasNerdFont: true,
+    installedTools: [],
+    ...overrides,
+  });
 
+  describe('suggestModules', () => {
     it('should return basic modules by default', () => {
       const env = createEnv();
       const modules = SuggestionEngine.suggestModules(env);
@@ -85,10 +80,10 @@ describe('SuggestionEngine', () => {
       const env = createEnv();
       const modules = SuggestionEngine.suggestModules(env);
       expect(modules[0]).toBe('directory');
-      installedTools: ['git'],
-      ...overrides,
     });
+  });
 
+  describe('suggestOptimizations', () => {
     it('should return no suggestions for a safe config and nerd font', () => {
       const config: StarshipConfig = {
         // Only 1 slow module

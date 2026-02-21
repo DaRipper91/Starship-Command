@@ -74,6 +74,9 @@ describe('ColorUtils.toAnsiStyle', () => {
       underline: false,
     };
     expect(ColorUtils.toAnsiStyle('red', options)).toBe('italic red');
+  });
+});
+
 describe('ColorUtils', () => {
   describe('generateAnalogous', () => {
     it('should generate analogous colors', () => {
