@@ -1,6 +1,8 @@
 import { StarshipConfig, Theme } from '../types/starship.types';
 import { ColorUtils } from './color-utils';
 
+const HEX_COLOR_REGEX = /#[0-9a-fA-F]{6}/;
+
 export interface ValidationIssue {
   type: 'config' | 'visual' | 'performance' | 'compatibility';
   severity: 'error' | 'warning';
@@ -117,7 +119,7 @@ export class ThemeValidator {
     const checkStyle = (style: string, source: string) => {
       if (!style) return;
       // Extract hex colors
-      const hexMatch = style.match(/#[0-9a-fA-F]{6}/);
+      const hexMatch = style.match(HEX_COLOR_REGEX);
       if (hexMatch) {
         const fg = hexMatch[0];
         const contrast = ColorUtils.checkContrast(fg, defaultBg);

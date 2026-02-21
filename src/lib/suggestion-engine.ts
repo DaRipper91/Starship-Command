@@ -124,8 +124,7 @@ export class SuggestionEngine {
   /**
    * Suggests color schemes based on environment/preferences
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static suggestColorScheme(_env: Environment) {
+  static suggestColorScheme() {
     // Return presets
     return ColorUtils.presets;
   }

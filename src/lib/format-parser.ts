@@ -1,14 +1,6 @@
 import { StarshipConfig } from '../types/starship.types';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
-// Regex for Starship format parts
-// 1. Module variables: $module_name
-// 2. Styled groups: [text](style)
-// 3. Environment variables: ${env_var}
-// 4. Everything else is literal text
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FORMAT_REGEX = /(\$[a-zA-Z0-9_]+)|(\[.*?\]\(.*?\))|(\${.*?})|([^$[]+)/g;
-
 /**
  * Parses a Starship format string and renders it with ANSI escape codes
  * @param format - The format string (e.g. "[$directory](bold cyan)")
