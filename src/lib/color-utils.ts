@@ -2,7 +2,6 @@ import { colord, extend } from 'colord';
 import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
-import Vibrant from 'node-vibrant/browser';
 import { ColorPalette } from '../types/starship.types';
 
 // Extend colord with necessary plugins
@@ -20,6 +19,9 @@ export class ColorUtils {
     try {
       // Create a URL for the file
       const imageUrl = URL.createObjectURL(imageFile);
+
+      // Lazy load Vibrant only when needed to reduce initial bundle size
+      const { default: Vibrant } = await import('node-vibrant/browser');
 
       // Use Vibrant to extract colors
       const palette = await Vibrant.from(imageUrl).getPalette();
