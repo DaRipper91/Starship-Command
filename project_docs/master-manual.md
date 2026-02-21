@@ -679,8 +679,8 @@ const suggestions = SuggestionEngine.suggestOptimizations(config, env);
 **Color Scheme Suggestions**:
 
 ```typescript
-// Suggest color schemes based on terminal
-const palettes = SuggestionEngine.suggestColorScheme(env);
+// Suggest color schemes
+const palettes = SuggestionEngine.suggestColorScheme();
 
 // Considers:
 // - Terminal background (light/dark)
