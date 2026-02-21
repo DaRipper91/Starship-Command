@@ -17,18 +17,18 @@ A visual, no-code drag-and-drop editor for creating [Starship](https://starship.
 
 ## Tech Stack
 
-| Area | Library |
-|------|---------|
-| Framework | React 18 + TypeScript 5 |
-| Build tool | Vite 5 |
-| Styling | Tailwind CSS 3 |
-| State | Zustand 4 (with `localStorage` persistence) |
-| Terminal emulator | xterm.js 5 + xterm-addon-fit |
-| TOML parsing | @iarna/toml |
-| Color utilities | colord + react-colorful + node-vibrant |
-| Drag and drop | @dnd-kit/core + @dnd-kit/sortable |
-| Icons | lucide-react |
-| Testing | Vitest + React Testing Library |
+| Area              | Library                                     |
+| ----------------- | ------------------------------------------- |
+| Framework         | React 18 + TypeScript 5                     |
+| Build tool        | Vite 5                                      |
+| Styling           | Tailwind CSS 3                              |
+| State             | Zustand 4 (with `localStorage` persistence) |
+| Terminal emulator | xterm.js 5 + xterm-addon-fit                |
+| TOML parsing      | @iarna/toml                                 |
+| Color utilities   | colord + react-colorful + node-vibrant      |
+| Drag and drop     | @dnd-kit/core + @dnd-kit/sortable           |
+| Icons             | lucide-react                                |
+| Testing           | Vitest + React Testing Library              |
 
 ## Prerequisites
 
@@ -53,14 +53,14 @@ The app will be available at `http://localhost:5173`.
 
 ## Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start the Vite dev server with hot-reload |
-| `npm run build` | Type-check then build for production (`dist/`) |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint (zero warnings allowed) |
-| `npm run format` | Format all files with Prettier |
-| `npm test` | Run the Vitest test suite in watch mode |
+| Command           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with hot-reload      |
+| `npm run build`   | Type-check then build for production (`dist/`) |
+| `npm run preview` | Preview the production build locally           |
+| `npm run lint`    | Run ESLint (zero warnings allowed)             |
+| `npm run format`  | Format all files with Prettier                 |
+| `npm test`        | Run the Vitest test suite in watch mode        |
 
 ## Project Structure
 
@@ -128,14 +128,14 @@ User clicks Import   → TOML parsed           → store updated  → terminal r
 
 ## Supported Starship Modules
 
-| Category | Modules |
-|----------|---------|
-| Core | `character`, `directory`, `line_break` |
-| VCS | `git_branch`, `git_status`, `git_state`, `git_commit`, `git_metrics` |
+| Category  | Modules                                                                                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core      | `character`, `directory`, `line_break`                                                                                                                        |
+| VCS       | `git_branch`, `git_status`, `git_state`, `git_commit`, `git_metrics`                                                                                          |
 | Languages | `nodejs`, `python`, `rust`, `golang`, `java`, `php`, `ruby`, `swift`, `kotlin`, `julia`, `lua`, `perl`, `erlang`, `elixir`, `nim`, `crystal`, `dart`, `scala` |
-| Tools | `docker_context`, `kubernetes`, `terraform`, `package`, `cmake`, `gradle` |
-| Cloud | `aws`, `gcloud`, `azure`, `openstack` |
-| System | `battery`, `time`, `username`, `hostname`, `cmd_duration`, `jobs`, `memory_usage`, `shell`, `shlvl`, `status`, `sudo`, `os`, `env_var` |
+| Tools     | `docker_context`, `kubernetes`, `terraform`, `package`, `cmake`, `gradle`                                                                                     |
+| Cloud     | `aws`, `gcloud`, `azure`, `openstack`                                                                                                                         |
+| System    | `battery`, `time`, `username`, `hostname`, `cmd_duration`, `jobs`, `memory_usage`, `shell`, `shlvl`, `status`, `sudo`, `os`, `env_var`                        |
 
 ## Contributing
 
