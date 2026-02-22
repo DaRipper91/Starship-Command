@@ -1,16 +1,22 @@
 import { cn } from '../../lib/utils';
-import { Settings, Palette, Terminal, FileCode } from 'lucide-react';
+import { Settings, Palette, LayoutGrid } from 'lucide-react';
 
 interface SidebarProps {
   className?: string;
+  activeView?: string;
+  onNavigate?: (view: string) => void;
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({
+  className,
+  activeView = 'modules',
+  onNavigate,
+}: SidebarProps) {
   const navItems = [
-    { icon: Terminal, label: 'Preview' },
-    { icon: Palette, label: 'Colors' },
-    { icon: Settings, label: 'Modules' },
-    { icon: FileCode, label: 'Editor' },
+    { id: 'modules', icon: Settings, label: 'Modules' },
+    { id: 'gallery', icon: LayoutGrid, label: 'Gallery' },
+    { id: 'colors', icon: Palette, label: 'Colors' },
+    // { id: "preview", icon: Terminal, label: "Preview" }, // Preview is always visible
   ];
 
   return (
@@ -23,8 +29,14 @@ export function Sidebar({ className }: SidebarProps) {
       <nav className="space-y-2 p-4">
         {navItems.map((item) => (
           <button
-            key={item.label}
-            className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-gray-400 transition-all hover:bg-gray-800 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            key={item.id}
+            onClick={() => onNavigate?.(item.id)}
+            className={cn(
+              'flex w-full items-center gap-3 rounded-lg px-4 py-3 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
+              activeView === item.id
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+            )}
           >
             <item.icon className="h-5 w-5" />
             <span className="font-medium">{item.label}</span>
