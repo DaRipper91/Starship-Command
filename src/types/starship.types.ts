@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface ThemeMetadata {
   id: string;
   name: string;

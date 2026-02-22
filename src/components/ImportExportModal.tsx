@@ -25,7 +25,7 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
         setExportValue(toml);
         setImportValue(''); // Reset import
         setError(null);
-      } catch (e) {
+      } catch {
         setExportValue('Error generating TOML');
       }
     }

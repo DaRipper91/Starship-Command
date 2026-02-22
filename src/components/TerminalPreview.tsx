@@ -71,7 +71,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
       requestAnimationFrame(() => {
         try {
           fitAddon.fit();
-        } catch (e) {
+        } catch {
           // Ignore fit errors on resize
         }
       });
