@@ -1,3 +1,5 @@
+import { Layout } from "./components/Layout";
+import { ToastProvider } from "./contexts/ToastContext";
 import { Layout } from './components/layout/Layout';
 import { useUIStore } from './stores/ui-store';
 import { TerminalPreview } from './components/TerminalPreview';
@@ -43,6 +45,11 @@ function App() {
   };
 
   return (
+    <ToastProvider>
+      <Layout>
+        {/* Children passed to layout are rendered at the bottom if needed, but main views are handled by Layout state now */}
+      </Layout>
+    </ToastProvider>
     <Layout>
       <div role="tabpanel" className="h-full">
         {renderContent()}

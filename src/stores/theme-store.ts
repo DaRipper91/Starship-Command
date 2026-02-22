@@ -1,16 +1,18 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { createDebouncedStorage } from '../lib/storage-utils';
-import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
-import { TomlParser } from '../lib/toml-parser';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { createDebouncedStorage } from "../lib/storage-utils";
+import { StarshipConfig, Theme, ThemeMetadata } from "../types/starship.types";
+import { TomlParser } from "../lib/toml-parser";
 
 interface ThemeStore {
   currentTheme: Theme;
   savedThemes: Theme[];
+  selectedModule: string | null;
 
   // Actions
   updateConfig: (config: Partial<StarshipConfig>) => void;
   updateMetadata: (metadata: Partial<ThemeMetadata>) => void;
+  setSelectedModule: (module: string | null) => void;
   loadTheme: (theme: Theme) => void;
   saveTheme: () => void;
   deleteTheme: (id: string) => void;
@@ -24,7 +26,7 @@ interface ThemeStore {
 const createDefaultTheme = (): Theme => ({
   metadata: {
     id: crypto.randomUUID(),
-    name: 'Untitled Theme',
+    name: "Untitled Theme",
     created: new Date(),
     updated: new Date(),
   },
@@ -36,6 +38,7 @@ export const useThemeStore = create<ThemeStore>()(
     (set, get) => ({
       currentTheme: createDefaultTheme(),
       savedThemes: [],
+      selectedModule: null,
 
       updateConfig: (newConfig) => {
         set((state) => ({
@@ -66,8 +69,12 @@ export const useThemeStore = create<ThemeStore>()(
         }));
       },
 
+      setSelectedModule: (module) => {
+        set({ selectedModule: module });
+      },
+
       loadTheme: (theme) => {
-        set({ currentTheme: theme });
+        set({ currentTheme: theme, selectedModule: null });
       },
 
       saveTheme: () => {
@@ -95,7 +102,7 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       resetTheme: () => {
-        set({ currentTheme: createDefaultTheme() });
+        set({ currentTheme: createDefaultTheme(), selectedModule: null });
       },
 
       exportToml: () => {
@@ -115,19 +122,21 @@ export const useThemeStore = create<ThemeStore>()(
                 updated: new Date(),
               },
             },
+            selectedModule: null,
           }));
         } catch (error) {
-          console.error('Failed to import TOML:', error);
+          console.error("Failed to import TOML:", error);
           throw error;
         }
       },
     }),
     {
-      name: 'starship-theme-storage',
+      name: "starship-theme-storage",
       storage: createDebouncedStorage(() => localStorage),
       partialize: (state) => ({
         savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
+        // Don"t persist selectedModule
       }),
     },
   ),
