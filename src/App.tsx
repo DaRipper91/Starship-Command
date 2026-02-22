@@ -1,12 +1,17 @@
+import { useState } from 'react';
 import { ToastProvider } from './contexts/ToastContext';
 import { TerminalPreview } from './components/TerminalPreview';
 import { ModuleList } from './components/ModuleList';
 import { ModuleConfig } from './components/ModuleConfig';
 import { ImagePalette } from './components/ImagePalette';
+import { ExportImport } from './components/ExportImport';
 import { useThemeStore } from './stores/theme-store';
 
 function App() {
   const { currentTheme, selectedModule } = useThemeStore();
+  const [showExportImport, setShowExportImport] = useState<
+    'export' | 'import' | null
+  >(null);
 
   return (
     <ToastProvider>
@@ -31,10 +36,16 @@ function App() {
             <button className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-500">
               Save
             </button>
-            <button className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700">
+            <button
+              onClick={() => setShowExportImport('import')}
+              className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
+            >
               Import
             </button>
-            <button className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700">
+            <button
+              onClick={() => setShowExportImport('export')}
+              className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
+            >
               Export
             </button>
           </div>
@@ -86,6 +97,13 @@ function App() {
           </aside>
         </div>
       </div>
+
+      {showExportImport && (
+        <ExportImport
+          initialTab={showExportImport}
+          onClose={() => setShowExportImport(null)}
+        />
+      )}
     </ToastProvider>
   );
 }
