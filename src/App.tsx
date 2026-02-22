@@ -6,8 +6,11 @@ import { ModuleConfig } from './components/ModuleConfig';
 import { ImagePalette } from './components/ImagePalette';
 import { ExportImport } from './components/ExportImport';
 import { ThemeGallery } from './components/ThemeGallery';
+import { ComparisonView } from './components/ComparisonView';
+import { SuggestionPanel } from './components/SuggestionPanel';
+import { WelcomeWizard } from './components/WelcomeWizard';
 import { useThemeStore } from './stores/theme-store';
-import { X } from 'lucide-react';
+import { X, ArrowLeftRight } from 'lucide-react';
 
 function AppContent() {
   const {
@@ -22,6 +25,7 @@ function AppContent() {
     'export' | 'import' | null
   >(null);
   const [showGallery, setShowGallery] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
   const [themeName, setThemeName] = useState(
     currentTheme.metadata.name || 'My Awesome Theme',
   );
@@ -52,6 +56,7 @@ function AppContent() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#0d1117] font-sans text-gray-100">
+      <WelcomeWizard />
       {/* HEADER */}
       <header className="flex h-16 shrink-0 items-center justify-between border-b border-gray-800 bg-[#161b22] px-6 shadow-sm">
         <div className="flex items-center gap-3">
@@ -79,6 +84,12 @@ function AppContent() {
             className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
           >
             Gallery
+          </button>
+          <button
+            onClick={() => setShowComparison(true)}
+            className="flex items-center gap-2 rounded bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700"
+          >
+            <ArrowLeftRight size={14} /> Compare
           </button>
           <button
             onClick={handleSave}
@@ -137,6 +148,7 @@ function AppContent() {
               Select a module to configure
             </div>
           )}
+          <SuggestionPanel />
         </aside>
       </div>
 
@@ -146,6 +158,10 @@ function AppContent() {
           initialTab={showExportImport}
           onClose={() => setShowExportImport(null)}
         />
+      )}
+
+      {showComparison && (
+        <ComparisonView onClose={() => setShowComparison(false)} />
       )}
 
       {showGallery && (

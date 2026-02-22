@@ -17,6 +17,7 @@
     "@iarna/toml": "^2.2.5",
     "clsx": "^2.1.0",
     "colord": "^2.9.3",
+    "html2canvas": "^1.4.1",
     "lucide-react": "^0.344.0",
     "node-vibrant": "^4.0.4",
     "react": "^18.2.0",
