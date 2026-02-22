@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ToastProvider, useToast } from './contexts/ToastContext';
+import { AccessibilityProvider } from './contexts/AccessibilityContext';
 import { TerminalPreview } from './components/TerminalPreview';
 import { ModuleList } from './components/ModuleList';
 import { ModuleConfig } from './components/ModuleConfig';
@@ -9,8 +10,10 @@ import { ThemeGallery } from './components/ThemeGallery';
 import { ComparisonView } from './components/ComparisonView';
 import { SuggestionPanel } from './components/SuggestionPanel';
 import { WelcomeWizard } from './components/WelcomeWizard';
+import { CommandPalette } from './components/CommandPalette';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useThemeStore } from './stores/theme-store';
-import { X, ArrowLeftRight } from 'lucide-react';
+import { X, ArrowLeftRight, Keyboard } from 'lucide-react';
 
 function AppContent() {
   const {
@@ -26,6 +29,7 @@ function AppContent() {
   >(null);
   const [showGallery, setShowGallery] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [themeName, setThemeName] = useState(
     currentTheme.metadata.name || 'My Awesome Theme',
   );
@@ -54,9 +58,70 @@ function AppContent() {
     }
   };
 
+  useKeyboardShortcuts([
+    {
+      keys: 'mod+s',
+      description: 'Save current theme',
+      handler: () => handleSave(),
+    },
+    {
+      keys: 'mod+k',
+      description: 'Open Command Palette',
+      handler: () => setShowCommandPalette(true),
+    },
+    {
+      keys: 'mod+o',
+      description: 'Open Theme Gallery',
+      handler: () => setShowGallery(true),
+    },
+    {
+      keys: 'mod+e',
+      description: 'Export Theme',
+      handler: () => setShowExportImport('export'),
+    },
+    {
+      keys: 'mod+i',
+      description: 'Import Theme',
+      handler: () => setShowExportImport('import'),
+    },
+  ]);
+
+  const commandActions = [
+    { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: handleSave },
+    { id: 'new', title: 'New Theme', perform: handleNew },
+    {
+      id: 'gallery',
+      title: 'Open Theme Gallery',
+      shortcut: 'Cmd+O',
+      perform: () => setShowGallery(true),
+    },
+    {
+      id: 'export',
+      title: 'Export Config',
+      shortcut: 'Cmd+E',
+      perform: () => setShowExportImport('export'),
+    },
+    {
+      id: 'import',
+      title: 'Import Config',
+      shortcut: 'Cmd+I',
+      perform: () => setShowExportImport('import'),
+    },
+    {
+      id: 'compare',
+      title: 'Compare Themes',
+      perform: () => setShowComparison(true),
+    },
+  ];
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#0d1117] font-sans text-gray-100">
       <WelcomeWizard />
+      <CommandPalette
+        isOpen={showCommandPalette}
+        onClose={() => setShowCommandPalette(false)}
+        actions={commandActions}
+      />
       {/* HEADER */}
       <header className="flex h-16 shrink-0 items-center justify-between border-b border-gray-800 bg-[#161b22] px-6 shadow-sm">
         <div className="flex items-center gap-3">
@@ -108,6 +173,13 @@ function AppContent() {
             className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
           >
             Export
+          </button>
+          <button
+            onClick={() => setShowCommandPalette(true)}
+            className="ml-2 rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+            title="Command Palette (Cmd+K)"
+          >
+            <Keyboard size={16} />
           </button>
         </div>
       </header>
@@ -188,9 +260,11 @@ function AppContent() {
 
 function App() {
   return (
-    <ToastProvider>
-      <AppContent />
-    </ToastProvider>
+    <AccessibilityProvider>
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
+    </AccessibilityProvider>
   );
 }
 
