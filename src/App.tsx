@@ -2,6 +2,7 @@ import { ToastProvider } from './contexts/ToastContext';
 import { TerminalPreview } from './components/TerminalPreview';
 import { ModuleList } from './components/ModuleList';
 import { ModuleConfig } from './components/ModuleConfig';
+import { ImagePalette } from './components/ImagePalette';
 import { useThemeStore } from './stores/theme-store';
 
 function App() {
@@ -53,9 +54,7 @@ function App() {
               <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
                 Colors
               </h2>
-              <div className="mt-4 rounded border border-dashed border-gray-700 p-8 text-center text-sm text-gray-500">
-                Color settings placeholder
-              </div>
+              <ImagePalette />
             </div>
             <div className="p-4">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
