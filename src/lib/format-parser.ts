@@ -31,8 +31,7 @@ export function parseFormatString(
     processed = processed.replace(
       /\[([^\]]+)\]\(([^)]+)\)/g,
       (_match, text, style) => {
-        const ansi = styleToAnsi(style);
-        // ANSI reset code is \x1b[0m
+        const ansi = styleToAnsi(style, config);
         return `${ansi}${text}\x1b[0m`;
       },
     );
@@ -122,10 +121,9 @@ export function renderModule(
  * @param style - Style string (e.g. "bold red", "bg:blue")
  * @returns ANSI escape sequence
  */
-export function styleToAnsi(style: string): string {
+export function styleToAnsi(style: string, config: StarshipConfig): string {
   if (!style) return '';
 
-  // Starship styles can be complex: "bold red", "bg:blue", "#ff0000", "fg:123"
   const parts = style.split(/\s+/);
   let ansi = '';
 
@@ -139,12 +137,12 @@ export function styleToAnsi(style: string): string {
     // Background colors
     else if (part.startsWith('bg:')) {
       const color = part.substring(3);
-      ansi += colorToAnsi(color, true);
+      ansi += colorToAnsi(color, true, config);
     }
 
     // Foreground colors (default)
     else {
-      ansi += colorToAnsi(part, false);
+      ansi += colorToAnsi(part, false, config);
     }
   });
 
@@ -155,9 +153,21 @@ export function styleToAnsi(style: string): string {
  * Helper to convert a color value to ANSI
  * @param color - Color name or hex
  * @param isBackground - Boolean
+ * @param config - Starship configuration to resolve global palette colors
  */
-function colorToAnsi(color: string, isBackground: boolean): string {
-  // Named colors
+function colorToAnsi(
+  color: string,
+  isBackground: boolean,
+  config: StarshipConfig,
+): string {
+  // 1. Check global palettes first
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const globalColor = (config.palettes?.global as any)?.[color];
+  if (globalColor) {
+    return convertHexToAnsi(globalColor, isBackground);
+  }
+
+  // 2. Named colors
   const namedColors: Record<string, number> = {
     black: 0,
     red: 1,
@@ -174,13 +184,18 @@ function colorToAnsi(color: string, isBackground: boolean): string {
     return `\x1b[${code}m`;
   }
 
-  // Hex colors (TrueColor)
+  // 3. Hex colors (TrueColor)
   if (color.startsWith('#')) {
-    const r = parseInt(color.slice(1, 3), 16);
-    const g = parseInt(color.slice(3, 5), 16);
-    const b = parseInt(color.slice(5, 7), 16);
-    return `\x1b[${isBackground ? 48 : 38};2;${r};${g};${b}m`;
+    return convertHexToAnsi(color, isBackground);
   }
 
   return '';
+}
+
+// Helper to convert hex to ANSI TrueColor
+function convertHexToAnsi(hexColor: string, isBackground: boolean): string {
+  const r = parseInt(hexColor.slice(1, 3), 16);
+  const g = parseInt(hexColor.slice(3, 5), 16);
+  const b = parseInt(hexColor.slice(5, 7), 16);
+  return `\x1b[${isBackground ? 48 : 38};2;${r};${g};${b}m`;
 }

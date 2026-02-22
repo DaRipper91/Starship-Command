@@ -23,7 +23,10 @@ export interface StarshipConfig {
   command_timeout?: number;
   add_newline?: boolean;
   palette?: string;
-  palettes?: Record<string, Record<string, string>>;
+  palettes?: {
+    global?: Record<string, string>;
+    [key: string]: Record<string, string> | undefined;
+  };
 
   // Core Modules
   character?: CharacterConfig;

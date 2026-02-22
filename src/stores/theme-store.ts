@@ -46,7 +46,18 @@ export const useThemeStore = create<ThemeStore>()(
             ...state.currentTheme,
             config: {
               ...state.currentTheme.config,
-              ...newConfig,
+              // Ensure palettes.global is merged correctly
+              palettes: {
+                ...state.currentTheme.config.palettes,
+                global: {
+                  ...state.currentTheme.config.palettes?.global,
+                  ...newConfig.palettes?.global,
+                },
+              },
+              // Merge other config directly
+              ...Object.fromEntries(
+                Object.entries(newConfig).filter(([key]) => key !== 'palettes'),
+              ),
             },
             metadata: {
               ...state.currentTheme.metadata,

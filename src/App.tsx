@@ -1,9 +1,3 @@
-import { useState, useEffect } from 'react';
-import { ToastProvider, useToast } from './contexts/ToastContext';
-import { AccessibilityProvider } from './contexts/AccessibilityContext';
-import { TerminalPreview } from './components/TerminalPreview';
-import { ModuleList } from './components/ModuleList';
-import { ModuleConfig } from './components/ModuleConfig';
 import { ImagePalette } from './components/ImagePalette';
 import { ExportImport } from './components/ExportImport';
 import { ThemeGallery } from './components/ThemeGallery';
@@ -12,6 +6,7 @@ import { SuggestionPanel } from './components/SuggestionPanel';
 import { WelcomeWizard } from './components/WelcomeWizard';
 import { CommandPalette } from './components/CommandPalette';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useThemeStore } from './stores/theme-store';
 import { X, ArrowLeftRight, Keyboard } from 'lucide-react';
 
@@ -33,6 +28,9 @@ function AppContent() {
   const [themeName, setThemeName] = useState(
     currentTheme.metadata.name || 'My Awesome Theme',
   );
+
+  // Activate dynamic theme switching
+  useDynamicTheme();
 
   // Sync local theme name state with store when loaded from somewhere else
   useEffect(() => {
