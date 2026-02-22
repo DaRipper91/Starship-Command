@@ -7,7 +7,7 @@ import { FormatEditor } from './FormatEditor';
 
 export function ModuleConfig() {
   const { currentTheme, selectedModule, updateConfig } = useThemeStore();
-  const [showIconBrowser, setShowIconBrowser] = useState(false);
+  const [showIconBrowser, setShowIconBrowser] = useState<string | null>(null);
   const iconBrowserRef = useRef<HTMLDivElement>(null);
 
   // Click outside to close icon browser
@@ -15,14 +15,15 @@ export function ModuleConfig() {
     function handleClickOutside(event: MouseEvent) {
       if (
         iconBrowserRef.current &&
-        !iconBrowserRef.current.contains(event.target as Node)
+        !iconBrowserRef.current.contains(event.target as Node) &&
+        showIconBrowser
       ) {
-        setShowIconBrowser(false);
+        setShowIconBrowser(null);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [showIconBrowser]);
 
   if (!selectedModule) {
     return (
@@ -173,6 +174,64 @@ export function ModuleConfig() {
                   Truncate to Repo Root
                 </label>
               </div>
+            </div>
+          </div>
+        )}
+
+        {selectedModule === 'git_status' && (
+          <div className="col-span-2 space-y-4 border-t border-gray-700 pt-4">
+            <h3 className="text-sm font-medium text-gray-400">
+              Git Status Symbols
+            </h3>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {[
+                'conflicted',
+                'ahead',
+                'behind',
+                'diverged',
+                'untracked',
+                'stashed',
+                'modified',
+                'staged',
+                'renamed',
+                'deleted',
+              ].map((key) => (
+                <div key={key} className="relative space-y-1">
+                  <label className="block text-xs capitalize text-gray-500">
+                    {key.replace('_', ' ')} Symbol
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={moduleConfig[key] || ''}
+                      onChange={(e) => handleChange(key, e.target.value)}
+                      placeholder="e.g. ✖ "
+                      className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={() =>
+                        setShowIconBrowser(
+                          showIconBrowser === key ? null : (key as string),
+                        )
+                      }
+                      className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    >
+                      Browse
+                    </button>
+                  </div>
+                  {showIconBrowser === key && (
+                    <div className="absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]">
+                      <IconBrowser
+                        currentSymbol={moduleConfig[key] as string}
+                        onSelect={(symbol) => {
+                          handleChange(key, symbol);
+                          setShowIconBrowser(null);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         )}

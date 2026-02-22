@@ -1,9 +1,3 @@
-import { ImagePalette } from './components/ImagePalette';
-import { ExportImport } from './components/ExportImport';
-import { ThemeGallery } from './components/ThemeGallery';
-import { ComparisonView } from './components/ComparisonView';
-import { SuggestionPanel } from './components/SuggestionPanel';
-import { WelcomeWizard } from './components/WelcomeWizard';
 import { CommandPalette } from './components/CommandPalette';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
@@ -186,14 +180,16 @@ function AppContent() {
       <div className="flex flex-1 overflow-hidden">
         {/* LEFT SIDEBAR */}
         <aside className="flex w-80 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22]">
-          <div className="border-b border-gray-800 p-4">
+          <div className="flex items-center justify-between border-b border-gray-800 p-4">
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
               Modules
             </h2>
-            <ModuleList />
+            <div className="p-4">
+              <ModuleList />
+            </div>
           </div>
           <div className="border-b border-gray-800 p-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
               Colors
             </h2>
             <ImagePalette />

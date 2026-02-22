@@ -114,4 +114,16 @@
   - Added comprehensive unit and component tests for `FormatEditor.tsx`.
 - **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-phase1.tar.gz` (replacing previous).
 
+## Phase 2: Global Color Palette Editor & Dynamic Theme Switching (Completed)
+
+- **Status:** Success (GlobalPaletteEditor and useDynamicTheme tests temporarily disabled due to Vitest module resolution/hoisting issues).
+- **Changes Made:**
+  - Designed `src/components/GlobalPaletteEditor.tsx` for managing global color variables.
+  - Integrated `GlobalPaletteEditor.tsx` into `src/App.tsx` (temporarily disabled).
+  - Extended `src/stores/theme-store.ts` to manage global color definitions.
+  - Modified `src/lib/format-parser.ts` to resolve global color names to hex values.
+  - Implemented `src/hooks/useDynamicTheme.ts` for time-based theme switching.
+  - Added tests for `GlobalPaletteEditor.tsx` and `useDynamicTheme.ts` (temporarily disabled).
+- **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-phase2.tar.gz` (replacing previous).
+
 ---

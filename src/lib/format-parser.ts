@@ -1,4 +1,8 @@
-import { StarshipConfig } from '../types/starship.types';
+import {
+  StarshipConfig,
+  CustomModuleConfig,
+  GitStatusConfig,
+} from '../types/starship.types';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
 /**
@@ -69,10 +73,29 @@ export function renderModule(
   // Check if disabled
   if (moduleConfig?.disabled === true) return '';
 
+  // Handle custom modules
+  if (moduleName in (config.custom || {})) {
+    const customModule = config.custom?.[moduleName] as CustomModuleConfig;
+    if (customModule) {
+      // For now, we'll mock the output of the command.
+      // In a real app, this would involve executing the command.
+      const customOutput = scenario.values[moduleName] || '(custom output)';
+      const customSymbol = customModule.symbol || '';
+      const customStyle = customModule.style || 'white';
+      const customFormat = customModule.format || '[$symbol $output]($style) ';
+
+      const output = customFormat
+        .replace('$symbol', customSymbol)
+        .replace('$output', customOutput)
+        .replace('$style', customStyle);
+
+      return output;
+    }
+  }
+
   // Special handling for common modules
   if (moduleName === 'directory') {
     const style = moduleConfig?.style || 'cyan bold';
-    // Simplified rendering
     return `[${value}](${style}) `;
   }
 
@@ -82,14 +105,42 @@ export function renderModule(
     return `[${symbol}${value}](${style}) `;
   }
 
+  if (moduleName === 'git_status') {
+    const gitStatusConfig = moduleConfig as GitStatusConfig;
+    const statusSymbols = [
+      gitStatusConfig.conflicted || '🏳', // Conflicted
+      gitStatusConfig.ahead || '🏎💨', // Ahead
+      gitStatusConfig.behind || '😰', // Behind
+      gitStatusConfig.diverged || '😵', // Diverged
+      gitStatusConfig.untracked || '🤷', // Untracked
+      gitStatusConfig.stashed || '📦', // Stashed
+      gitStatusConfig.modified || '📝', // Modified
+      gitStatusConfig.staged || '[++()](green)', // Staged
+      gitStatusConfig.renamed || '👅', // Renamed
+      gitStatusConfig.deleted || '🗑', // Deleted
+    ];
+
+    // Combine symbols based on mock scenario status (simplified)
+    const activeStatusSymbols = statusSymbols.filter((s) => value.includes(s));
+    const displayValue = activeStatusSymbols.join(' ');
+    const style = gitStatusConfig.style || 'white';
+    const format = gitStatusConfig.format || '($displayValue) ';
+
+    const output = format
+      .replace('$displayValue', displayValue)
+      .replace('$style', style);
+
+    return output;
+  }
+
   if (moduleName === 'character') {
     // Determine style based on error state from scenario
     const isError = scenario.name.toLowerCase().includes('error');
 
     // Get style from config if possible
     let style = 'bold green';
-    const successSymbol = moduleConfig?.success_symbol || '[➜](bold green)';
-    const errorSymbol = moduleConfig?.error_symbol || '[➜](bold red)';
+    const successSymbol = moduleConfig?.success_symbol || '[❯](bold green)';
+    const errorSymbol = moduleConfig?.error_symbol || '[❯](bold red)';
     const symbolConfig = isError ? errorSymbol : successSymbol;
 
     // Try to extract style from config format string like [x](y)
@@ -114,88 +165,4 @@ export function renderModule(
     .replace('$style', style);
 
   return output;
-}
-
-/**
- * Converts a Starship style string to ANSI escape codes
- * @param style - Style string (e.g. "bold red", "bg:blue")
- * @returns ANSI escape sequence
- */
-export function styleToAnsi(style: string, config: StarshipConfig): string {
-  if (!style) return '';
-
-  const parts = style.split(/\s+/);
-  let ansi = '';
-
-  parts.forEach((part) => {
-    // Modifiers
-    if (part === 'bold') ansi += '\x1b[1m';
-    else if (part === 'dimmed') ansi += '\x1b[2m';
-    else if (part === 'italic') ansi += '\x1b[3m';
-    else if (part === 'underline') ansi += '\x1b[4m';
-    else if (part === 'inverted') ansi += '\x1b[7m';
-    // Background colors
-    else if (part.startsWith('bg:')) {
-      const color = part.substring(3);
-      ansi += colorToAnsi(color, true, config);
-    }
-
-    // Foreground colors (default)
-    else {
-      ansi += colorToAnsi(part, false, config);
-    }
-  });
-
-  return ansi;
-}
-
-/**
- * Helper to convert a color value to ANSI
- * @param color - Color name or hex
- * @param isBackground - Boolean
- * @param config - Starship configuration to resolve global palette colors
- */
-function colorToAnsi(
-  color: string,
-  isBackground: boolean,
-  config: StarshipConfig,
-): string {
-  // 1. Check global palettes first
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const globalColor = (config.palettes?.global as any)?.[color];
-  if (globalColor) {
-    return convertHexToAnsi(globalColor, isBackground);
-  }
-
-  // 2. Named colors
-  const namedColors: Record<string, number> = {
-    black: 0,
-    red: 1,
-    green: 2,
-    yellow: 3,
-    blue: 4,
-    purple: 5,
-    cyan: 6,
-    white: 7,
-  };
-
-  if (namedColors[color] !== undefined) {
-    const code = namedColors[color] + (isBackground ? 40 : 30);
-    return `\x1b[${code}m`;
-  }
-
-  // 3. Hex colors (TrueColor)
-  if (color.startsWith('#')) {
-    return convertHexToAnsi(color, isBackground);
-  }
-
-  return '';
-}
-
-// Helper to convert hex to ANSI TrueColor
-function convertHexToAnsi(hexColor: string, isBackground: boolean): string {
-  const r = parseInt(hexColor.slice(1, 3), 16);
-  const g = parseInt(hexColor.slice(3, 5), 16);
-  const b = parseInt(hexColor.slice(5, 7), 16);
-  return `\x1b[${isBackground ? 48 : 38};2;${r};${g};${b}m`;
 }
