@@ -67,6 +67,7 @@
 - **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-cp9.tar.gz` (replacing previous).
 
 ## Phase 10: Advanced Features (Completed)
+
 - **Status:** Success
 - **Changes Made:**
   - Integrated `html2canvas` library to take snapshot exports of the visual UI components.
@@ -74,5 +75,24 @@
   - Implemented the `WelcomeWizard` to onboard new users to the app with standard UI walkthrough steps.
   - Implemented the `SuggestionPanel` which sits at the bottom of the right-sidebar and analyzes active config to show optimizations, speed, or compatibility suggestions.
 - **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-cp10.tar.gz` (replacing previous).
+
+## Phase 11: Polish & UX (Completed)
+
+- **Status:** Success
+- **Changes Made:**
+  - Implemented the `AccessibilityContext` to manage reduced motion and high-contrast settings tied to `localStorage` and `prefers-reduced-motion` media queries.
+  - Implemented a robust generic `useKeyboardShortcuts` hook to allow mapping `cmd/ctrl + key` combos to specific actions without interfering with textual input forms.
+  - Developed the `CommandPalette` component triggered by `Cmd+K` which allows users to search for and trigger all app-level actions (Save, New, Export, Compare).
+  - Wired these features directly into the core `App.tsx` container for ubiquitous access.
+- **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-cp11.tar.gz` (replacing previous).
+
+## Phase 12: Testing & Documentation (Completed)
+
+- **Status:** Success
+- **Changes Made:**
+  - Expanded unit test coverage for `format-parser.ts` and set up Vitest with jsdom for React testing.
+  - Implemented component tests for `ColorPicker` and configured test suites.
+  - Authored comprehensive documentation including `README.md`, `USER_GUIDE.md`, `DEVELOPER_GUIDE.md`, `CONTRIBUTING.md`, and `CHANGELOG.md`.
+- **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-cp12.tar.gz` (replacing previous).
 
 ---
