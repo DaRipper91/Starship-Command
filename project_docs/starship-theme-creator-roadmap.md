@@ -44,26 +44,26 @@ A comprehensive web-based visual theme creator for Starship prompt configuration
 
 ### 1.1 Project Setup
 
-- [ ] Initialize React + TypeScript + Vite project
-- [ ] Configure Tailwind CSS
-- [ ] Set up folder structure
-- [ ] Install core dependencies
-- [ ] Set up ESLint + Prettier
-- [ ] Create base layout components
+- [x] Initialize React + TypeScript + Vite project
+- [x] Configure Tailwind CSS
+- [x] Set up folder structure
+- [x] Install core dependencies
+- [x] Set up ESLint + Prettier
+- [x] Create base layout components
 
 ### 1.2 TOML Parser/Generator
 
-- [ ] TOML to JSON converter
-- [ ] JSON to TOML generator
-- [ ] Schema validation
-- [ ] Default configuration loader
+- [x] TOML to JSON converter (Core Logic)
+- [x] JSON to TOML generator (Core Logic)
+- [x] Schema validation (Core Logic)
+- [x] Default configuration loader
 - [ ] Import existing .toml files
 
 ### 1.3 Live Terminal Preview
 
 - [ ] xterm.js integration
 - [ ] Mock shell environment
-- [ ] Real-time prompt rendering
+- [ ] Real-time prompt rendering (Logic implemented, UI pending)
 - [ ] Directory context simulation
 - [ ] Git status simulation
 - [ ] Multi-line prompt support

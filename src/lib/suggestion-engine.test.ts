@@ -12,6 +12,16 @@ describe('SuggestionEngine', () => {
     installedTools: [],
     ...overrides,
   });
+  describe('suggestModules', () => {
+    // Helper to create a base environment
+    const createEnv = (overrides: Partial<Environment> = {}): Environment => ({
+      os: 'linux',
+      shell: 'bash',
+      terminal: 'xterm',
+      hasNerdFont: true,
+      installedTools: [],
+      ...overrides,
+    });
 
   describe('suggestModules', () => {
     it('should return basic modules by default', () => {
@@ -80,6 +90,18 @@ describe('SuggestionEngine', () => {
       const env = createEnv();
       const modules = SuggestionEngine.suggestModules(env);
       expect(modules[0]).toBe('directory');
+    });
+  });
+
+  describe('suggestOptimizations', () => {
+    // Helper to create a base environment
+    const createEnv = (overrides?: Partial<Environment>): Environment => ({
+      os: 'linux',
+      shell: 'bash',
+      terminal: 'xterm',
+      hasNerdFont: true,
+      installedTools: [],
+      ...overrides,
     });
   });
 

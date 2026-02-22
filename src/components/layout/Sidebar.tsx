@@ -1,35 +1,86 @@
+import { cn } from "../../lib/utils";
+import { Settings, Palette, Terminal, FileCode, LayoutGrid } from "lucide-react";
 import { cn } from '../../lib/utils';
-import { Settings, Palette, Terminal, FileCode } from 'lucide-react';
+import {
+  Settings,
+  Palette,
+  Terminal,
+  FileCode,
+  type LucideIcon,
+} from 'lucide-react';
+import { useUIStore, View } from '../../stores/ui-store';
 
 interface SidebarProps {
   className?: string;
+  activeView?: string;
+  onNavigate?: (view: string) => void;
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, activeView = "modules", onNavigate }: SidebarProps) {
   const navItems = [
-    { icon: Terminal, label: 'Preview' },
-    { icon: Palette, label: 'Colors' },
-    { icon: Settings, label: 'Modules' },
-    { icon: FileCode, label: 'Editor' },
+    { id: "modules", icon: Settings, label: "Modules" },
+    { id: "gallery", icon: LayoutGrid, label: "Gallery" },
+    { id: "colors", icon: Palette, label: "Colors" },
+    // { id: "preview", icon: Terminal, label: "Preview" }, // Preview is always visible
+export function Sidebar({ className }: SidebarProps) {
+  const { activeView, setActiveView } = useUIStore();
+
+  const navItems: { icon: LucideIcon; label: string; view: View }[] = [
+    { icon: Terminal, label: 'Preview', view: 'preview' },
+    { icon: Palette, label: 'Colors', view: 'colors' },
+    { icon: Settings, label: 'Modules', view: 'modules' },
+    { icon: FileCode, label: 'Editor', view: 'editor' },
   ];
 
   return (
     <aside
       className={cn(
-        'flex w-64 flex-col border-r border-gray-800 bg-gray-900/30',
+        "flex w-64 flex-col border-r border-gray-800 bg-gray-900/30",
         className,
       )}
     >
       <nav className="space-y-2 p-4">
         {navItems.map((item) => (
           <button
-            key={item.label}
-            className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-gray-400 transition-all hover:bg-gray-800 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            key={item.id}
+            onClick={() => onNavigate?.(item.id)}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-lg px-4 py-3 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+              activeView === item.id
+                ? "bg-blue-600 text-white shadow-md"
+                : "text-gray-400 hover:bg-gray-800 hover:text-white"
+            )}
           >
             <item.icon className="h-5 w-5" />
             <span className="font-medium">{item.label}</span>
           </button>
         ))}
+      <nav
+        className="space-y-2 p-4"
+        role="tablist"
+        aria-label="Main Navigation"
+      >
+        {navItems.map((item) => {
+          const isActive = activeView === item.view;
+          return (
+            <button
+              key={item.view}
+              onClick={() => setActiveView(item.view)}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls="main-content"
+              className={cn(
+                'flex w-full items-center gap-3 rounded-lg px-4 py-3 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
+                isActive
+                  ? 'bg-gray-800 text-white shadow-sm'
+                  : 'text-gray-400 hover:bg-gray-800 hover:text-white focus-visible:text-white',
+              )}
+            >
+              <item.icon className="h-5 w-5" />
+              <span className="font-medium">{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       <div className="mt-auto border-t border-gray-800 p-4">

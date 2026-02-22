@@ -20,19 +20,27 @@ describe('ColorUtils.toAnsiStyle', () => {
   });
 
   it('should handle inverted modifier', () => {
-    expect(ColorUtils.toAnsiStyle('red', { inverted: true })).toBe('inverted red');
+    expect(ColorUtils.toAnsiStyle('red', { inverted: true })).toBe(
+      'inverted red',
+    );
   });
 
   it('should handle underline modifier', () => {
-    expect(ColorUtils.toAnsiStyle('red', { underline: true })).toBe('underline red');
+    expect(ColorUtils.toAnsiStyle('red', { underline: true })).toBe(
+      'underline red',
+    );
   });
 
   it('should handle background color', () => {
-    expect(ColorUtils.toAnsiStyle('white', { bg: 'blue' })).toBe('bg:blue white');
+    expect(ColorUtils.toAnsiStyle('white', { bg: 'blue' })).toBe(
+      'bg:blue white',
+    );
   });
 
   it('should handle multiple modifiers', () => {
-    expect(ColorUtils.toAnsiStyle('red', { bold: true, italic: true })).toBe('bold italic red');
+    expect(ColorUtils.toAnsiStyle('red', { bold: true, italic: true })).toBe(
+      'bold italic red',
+    );
   });
 
   it('should handle multiple modifiers and background color', () => {
@@ -41,7 +49,9 @@ describe('ColorUtils.toAnsiStyle', () => {
       italic: true,
       bg: 'blue',
     };
-    expect(ColorUtils.toAnsiStyle('white', options)).toBe('bold italic bg:blue white');
+    expect(ColorUtils.toAnsiStyle('white', options)).toBe(
+      'bold italic bg:blue white',
+    );
   });
 
   it('should handle all modifiers and background color', () => {
@@ -53,12 +63,16 @@ describe('ColorUtils.toAnsiStyle', () => {
       underline: true,
       bg: 'black',
     };
-    expect(ColorUtils.toAnsiStyle('white', options)).toBe('bold italic dimmed inverted underline bg:black white');
+    expect(ColorUtils.toAnsiStyle('white', options)).toBe(
+      'bold italic dimmed inverted underline bg:black white',
+    );
   });
 
   it('should return only modifiers if color is empty', () => {
     expect(ColorUtils.toAnsiStyle('', { bold: true })).toBe('bold');
-    expect(ColorUtils.toAnsiStyle('', { bold: true, italic: true })).toBe('bold italic');
+    expect(ColorUtils.toAnsiStyle('', { bold: true, italic: true })).toBe(
+      'bold italic',
+    );
     expect(ColorUtils.toAnsiStyle('', { bg: 'blue' })).toBe('bg:blue');
   });
 
@@ -90,7 +104,7 @@ describe('ColorUtils', () => {
       expect(colors.length).toBe(3);
 
       // Check that all elements are valid hex strings
-      colors.forEach(color => {
+      colors.forEach((color) => {
         expect(color).toMatch(/^#[0-9a-fA-F]{6}$/);
       });
     });
@@ -98,22 +112,28 @@ describe('ColorUtils', () => {
     it('should include colors related to the base color', () => {
       const baseColor = '#ff0000';
       const colors = ColorUtils.generateAnalogous(baseColor);
-      expect(colors.map(c => c.toLowerCase())).toContain(baseColor.toLowerCase());
+      expect(colors.map((c) => c.toLowerCase())).toContain(
+        baseColor.toLowerCase(),
+      );
     });
 
     it('should handle different base colors', () => {
-        const baseColor = '#00ff00';
-        const colors = ColorUtils.generateAnalogous(baseColor);
-        expect(colors.length).toBe(3);
-        expect(colors.map(c => c.toLowerCase())).toContain(baseColor.toLowerCase());
+      const baseColor = '#00ff00';
+      const colors = ColorUtils.generateAnalogous(baseColor);
+      expect(colors.length).toBe(3);
+      expect(colors.map((c) => c.toLowerCase())).toContain(
+        baseColor.toLowerCase(),
+      );
     });
 
     it('should handle shorthand hex codes', () => {
-        const baseColor = '#f00';
-        const fullColor = '#ff0000';
-        const colors = ColorUtils.generateAnalogous(baseColor);
-        expect(colors.length).toBe(3);
-        expect(colors.map(c => c.toLowerCase())).toContain(fullColor.toLowerCase());
+      const baseColor = '#f00';
+      const fullColor = '#ff0000';
+      const colors = ColorUtils.generateAnalogous(baseColor);
+      expect(colors.length).toBe(3);
+      expect(colors.map((c) => c.toLowerCase())).toContain(
+        fullColor.toLowerCase(),
+      );
     });
   });
 });

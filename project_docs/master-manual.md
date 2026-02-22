@@ -1,3 +1,7 @@
+# ⚠️ SPECIFICATION DOCUMENT (FUTURE STATE)
+
+> **NOTE:** This document describes the _intended_ architecture and features of the completed application. The current codebase is in the **Foundation Phase** (logic implemented, UI pending). Please refer to `README.md` and `CURRENT_STATUS.md` for the actual implementation status.
+
 # Starship Theme Creator - Master Manual
 
 **Complete Reference Guide for Building and Maintaining Your Starship Theme Creator**

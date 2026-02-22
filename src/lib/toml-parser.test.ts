@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
 import { describe, it, expect } from 'vitest';
 import { TomlParser } from './toml-parser';
 
@@ -137,19 +138,21 @@ describe('TomlParser', () => {
       // @ts-ignore
       expect(result.polluted).toBeUndefined();
       // @ts-ignore
-      expect(({}).polluted).toBeUndefined();
+      expect({}.polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via constructor', () => {
       const base = {};
-      const override = JSON.parse('{"constructor": {"prototype": {"polluted": "yes"}}}');
+      const override = JSON.parse(
+        '{"constructor": {"prototype": {"polluted": "yes"}}}',
+      );
 
       const result = TomlParser.merge(base as any, override as any);
 
       // @ts-ignore
       expect(result.polluted).toBeUndefined();
       // @ts-ignore
-      expect(({}).polluted).toBeUndefined();
+      expect({}.polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via prototype', () => {
@@ -161,7 +164,7 @@ describe('TomlParser', () => {
       // @ts-ignore
       expect(result.polluted).toBeUndefined();
       // @ts-ignore
-      expect(({}).polluted).toBeUndefined();
+      expect({}.polluted).toBeUndefined();
     });
   });
 });
