@@ -3,6 +3,7 @@ import { useThemeStore } from '../stores/theme-store';
 import { Info } from 'lucide-react';
 import { StyleEditor } from './StyleEditor';
 import { IconBrowser } from './IconBrowser';
+import { FormatEditor } from './FormatEditor';
 
 export function ModuleConfig() {
   const { currentTheme, selectedModule, updateConfig } = useThemeStore();
@@ -126,23 +127,15 @@ export function ModuleConfig() {
           <label className="block text-sm font-medium text-gray-300">
             Format String
           </label>
-          <input
-            type="text"
-            value={moduleConfig.format || ''}
-            onChange={(e) => handleChange('format', e.target.value)}
-            placeholder="e.g. [$symbol$version]($style) "
-            className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 font-mono text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          <FormatEditor
+            formatString={moduleConfig.format || ''}
+            onChange={(newFormat) => handleChange('format', newFormat)}
           />
           <div className="flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200">
             <Info className="mt-0.5 h-4 w-4 shrink-0" />
             <p>
-              Variables:{' '}
-              <code className="rounded bg-blue-900/40 px-1 py-0.5">
-                $symbol
-              </code>
-              ,{' '}
-              <code className="rounded bg-blue-900/40 px-1 py-0.5">$style</code>
-              , plus module-specific variables.
+              Visually edit your module's format string. Click on segments to
+              edit or add new ones.
             </p>
           </div>
         </div>

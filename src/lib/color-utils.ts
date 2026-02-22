@@ -2,10 +2,17 @@ import { colord, extend } from 'colord';
 import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
+import ColorThief from 'colorthief';
 import { ColorPalette } from '../types/starship.types';
 
 // Extend colord with necessary plugins
 extend([a11yPlugin, harmoniesPlugin, namesPlugin]);
+
+export interface ExtendedColorPalette extends Partial<ColorPalette> {
+  extracted16?: string[];
+  bg?: string;
+  fg?: string;
+}
 
 export class ColorUtils {
   /**
@@ -15,43 +22,79 @@ export class ColorUtils {
    */
   static async extractPaletteFromImage(
     imageFile: File,
-  ): Promise<Partial<ColorPalette>> {
-    try {
-      // Create a URL for the file
-      const imageUrl = URL.createObjectURL(imageFile);
+  ): Promise<ExtendedColorPalette> {
+    return new Promise((resolve, reject) => {
+      try {
+        const imageUrl = URL.createObjectURL(imageFile);
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.src = imageUrl;
 
-      // Lazy load Vibrant only when needed to reduce initial bundle size
-      const { default: Vibrant } = await import('node-vibrant/browser');
+        img.onload = async () => {
+          try {
+            // Get standard 6 colors from vibrant for backward compatibility
+            const { default: Vibrant } = await import('node-vibrant/browser');
+            const vibrantPalette = await Vibrant.from(imageUrl).getPalette();
 
-      // Use Vibrant to extract colors
-      const palette = await Vibrant.from(imageUrl).getPalette();
+            // Use ColorThief to get 20 colors for full terminal generation
+            const colorThief = new ColorThief();
+            // getPalette returns an array of [r, g, b] arrays
+            const rawPalette = colorThief.getPalette(img, 20) || [];
 
-      // Clean up URL
-      URL.revokeObjectURL(imageUrl);
+            // Sort by brightness (simple sum of RGB)
+            const sortedPalette = rawPalette.sort(
+              (a, b) => a[0] + a[1] + a[2] - (b[0] + b[1] + b[2]),
+            );
 
-      // Map Vibrant swatches to our palette structure
-      // Vibrant returns: Vibrant, Muted, DarkVibrant, DarkMuted, LightVibrant, LightMuted
-      return {
-        primary: palette.Vibrant?.hex || '#ffffff',
-        secondary: palette.LightVibrant?.hex || '#eeeeee',
-        accent: palette.DarkVibrant?.hex || '#aaaaaa',
-        background: palette.DarkMuted?.hex || '#000000',
-        foreground: palette.LightMuted?.hex || '#ffffff',
-        // For success/error/warning we generate from primary if not distinct
-        success: '#10B981', // Default green
-        error: '#EF4444', // Default red
-        warning: '#F59E0B', // Default yellow
-      };
-    } catch (error) {
-      console.error('Failed to extract palette:', error);
-      throw new Error('Could not extract colors from image');
-    }
+            // Convert to hex
+            const hexPalette = sortedPalette.map((c) =>
+              colord({ r: c[0], g: c[1], b: c[2] }).toHex(),
+            );
+
+            const bg = hexPalette[0] || '#000000';
+            const fg = hexPalette[hexPalette.length - 1] || '#ffffff';
+
+            // Generate 16 colors (duplicate if not enough)
+            let colors16 = hexPalette.slice(0, 16);
+            while (colors16.length < 16 && colors16.length > 0) {
+              colors16 = [...colors16, ...colors16].slice(0, 16);
+            }
+
+            URL.revokeObjectURL(imageUrl);
+
+            resolve({
+              primary: vibrantPalette.Vibrant?.hex || colors16[8] || '#ffffff',
+              secondary:
+                vibrantPalette.LightVibrant?.hex || colors16[10] || '#eeeeee',
+              accent:
+                vibrantPalette.DarkVibrant?.hex || colors16[4] || '#aaaaaa',
+              background: bg,
+              foreground: fg,
+              success: '#10B981',
+              error: '#EF4444',
+              warning: '#F59E0B',
+              extracted16: colors16,
+              bg,
+              fg,
+            });
+          } catch (e) {
+            reject(e);
+          }
+        };
+
+        img.onerror = (e) => {
+          URL.revokeObjectURL(imageUrl);
+          reject(e);
+        };
+      } catch (error) {
+        console.error('Failed to extract palette:', error);
+        reject(new Error('Could not extract colors from image'));
+      }
+    });
   }
 
   /**
    * Generates complementary colors
-   * @param baseColor - Hex color string
-   * @returns Array of hex strings
    */
   static generateComplementary(baseColor: string): string[] {
     return colord(baseColor)
@@ -61,8 +104,6 @@ export class ColorUtils {
 
   /**
    * Generates analogous colors
-   * @param baseColor - Hex color string
-   * @returns Array of hex strings
    */
   static generateAnalogous(baseColor: string): string[] {
     return colord(baseColor)
@@ -72,8 +113,6 @@ export class ColorUtils {
 
   /**
    * Generates triadic colors
-   * @param baseColor - Hex color string
-   * @returns Array of hex strings
    */
   static generateTriadic(baseColor: string): string[] {
     return colord(baseColor)
@@ -83,9 +122,6 @@ export class ColorUtils {
 
   /**
    * Checks contrast ratio between two colors
-   * @param foreground - Hex color
-   * @param background - Hex color
-   * @returns Contrast info
    */
   static checkContrast(foreground: string, background: string) {
     const contrast = colord(background).contrast(foreground);
@@ -98,13 +134,6 @@ export class ColorUtils {
 
   /**
    * Converts a color and modifiers to Starship style string
-   * @param color - Hex color or name
-   * @param bold - Whether to use bold
-   * @param italic - Whether to use italic
-   * @param dimmed - Whether to use dimmed
-   * @param inverted - Whether to use inverted
-   * @param underline - Whether to use underline
-   * @returns Starship style string (e.g. "bold red")
    */
   static toAnsiStyle(
     color: string,

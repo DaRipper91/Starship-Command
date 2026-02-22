@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useThemeStore } from '../stores/theme-store';
-import { ColorUtils } from '../lib/color-utils';
-import { ColorPalette } from '../types/starship.types';
+import { ColorUtils, ExtendedColorPalette } from '../lib/color-utils';
 import { Upload, Image as ImageIcon } from 'lucide-react';
 
 export function ImagePalette() {
-  const { updateConfig } = useThemeStore();
+  const { currentTheme, updateConfig } = useThemeStore();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [palette, setPalette] = useState<Partial<ColorPalette> | null>(null);
+  const [palette, setPalette] = useState<ExtendedColorPalette | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
 
   // Cleanup object URLs to avoid memory leaks
@@ -45,15 +44,36 @@ export function ImagePalette() {
     if (!palette) return;
 
     // Apply colors intelligently based on the spec
+    // Create the palettes.extracted object to map 16 colors globally
+    const customPaletteObj: any = {};
+    if (palette.extracted16) {
+      palette.extracted16.forEach((hex, i) => {
+        customPaletteObj[`color${i}`] = hex;
+      });
+    }
+
     updateConfig({
-      directory: { style: `bold ${palette.primary}` },
-      git_branch: { style: palette.secondary },
+      palette: 'extracted',
+      palettes: {
+        extracted: customPaletteObj,
+      },
+      directory: { style: `bold ${palette.primary || 'cyan'}` },
+      git_branch: { style: palette.secondary || 'purple' },
       character: {
-        success_symbol: `[❯](bold ${palette.success})`,
-        error_symbol: `[✖](bold ${palette.error})`,
+        success_symbol: `[❯](bold ${palette.success || 'green'})`,
+        error_symbol: `[✖](bold ${palette.error || 'red'})`,
       },
     });
   };
+
+  // Safe subset for UI display so we don't render 20 swatches
+  const displayColors = palette
+    ? Object.entries(palette).filter(([key]) =>
+        ['primary', 'secondary', 'accent', 'background', 'foreground'].includes(
+          key,
+        ),
+      )
+    : [];
 
   return (
     <div className="mt-4 flex flex-col gap-4 rounded-lg border border-gray-700 bg-gray-800/50 p-4 shadow-sm">
@@ -93,7 +113,7 @@ export function ImagePalette() {
       {palette && !isExtracting && (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-2">
-            {Object.entries(palette).map(([key, hex]) => (
+            {displayColors.map(([key, hex]) => (
               <div key={key} className="flex items-center gap-2">
                 <div
                   className="h-6 w-6 rounded border border-gray-700 shadow-sm"
@@ -110,6 +130,24 @@ export function ImagePalette() {
               </div>
             ))}
           </div>
+
+          {palette.extracted16 && (
+            <div className="mt-2 flex flex-col gap-1">
+              <span className="text-xs text-gray-500">
+                Full 16-Color Extracted Palette:
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {palette.extracted16.map((c, i) => (
+                  <div
+                    key={i}
+                    title={`color${i}`}
+                    className="h-4 w-4 rounded-full border border-gray-600"
+                    style={{ backgroundColor: c }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
           <button
             onClick={applyPalette}
