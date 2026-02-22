@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface ThemeMetadata {
   id: string;
   name: string;
@@ -145,6 +144,7 @@ export interface DirectoryConfig extends BaseModuleConfig {
   after_repo_root_style?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LineBreakConfig extends BaseModuleConfig {}
 
 export interface GitBranchConfig extends BaseModuleConfig {
@@ -198,7 +198,9 @@ export interface HgBranchConfig extends BaseModuleConfig {
   truncation_symbol?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PijulChannelConfig extends BaseModuleConfig {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface FossilBranchConfig extends BaseModuleConfig {}
 
 // Language & Tool Configs
@@ -213,6 +215,7 @@ export interface NodejsConfig extends BaseModuleConfig {
 export interface PythonConfig extends NodejsConfig {
   python_binary?: string[];
 }
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface RustConfig extends NodejsConfig {}
 export interface GolangConfig extends NodejsConfig {}
 export interface JavaConfig extends NodejsConfig {}
@@ -250,6 +253,7 @@ export interface SpackConfig extends NodejsConfig {}
 export interface VagrantConfig extends NodejsConfig {}
 export interface VlangConfig extends NodejsConfig {}
 export interface ZigConfig extends NodejsConfig {}
+/* eslint-enable @typescript-eslint/no-empty-object-type */
 
 // Cloud & Containers
 export interface DockerContextConfig extends BaseModuleConfig {
@@ -270,11 +274,13 @@ export interface AwsConfig extends BaseModuleConfig {
   force_display?: boolean;
 }
 
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface GcloudConfig extends BaseModuleConfig {}
 export interface AzureConfig extends BaseModuleConfig {}
 export interface OpenstackConfig extends BaseModuleConfig {}
 export interface ContainerConfig extends BaseModuleConfig {}
 export interface SingularityConfig extends BaseModuleConfig {}
+/* eslint-enable @typescript-eslint/no-empty-object-type */
 
 // System
 export interface BatteryConfig extends BaseModuleConfig {
@@ -323,6 +329,7 @@ export interface MemoryUsageConfig extends BaseModuleConfig {
   threshold?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ShellConfig extends BaseModuleConfig {}
 export interface ShlvlConfig extends BaseModuleConfig {
   threshold?: number;

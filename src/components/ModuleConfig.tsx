@@ -1,27 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { useThemeStore } from '../stores/theme-store';
 import { Info } from 'lucide-react';
 import { StyleEditor } from './StyleEditor';
-import { IconBrowser } from './IconBrowser';
 
 export function ModuleConfig() {
   const { currentTheme, selectedModule, updateConfig } = useThemeStore();
-  const [showIconBrowser, setShowIconBrowser] = useState(false);
-  const iconBrowserRef = useRef<HTMLDivElement>(null);
-
-  // Click outside to close icon browser
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        iconBrowserRef.current &&
-        !iconBrowserRef.current.contains(event.target as Node)
-      ) {
-        setShowIconBrowser(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   if (!selectedModule) {
     return (
@@ -85,40 +68,17 @@ export function ModuleConfig() {
         </div>
 
         {/* Symbol Configuration */}
-        <div className="relative space-y-3">
+        <div className="space-y-3">
           <label className="block text-sm font-medium text-gray-300">
             Symbol
           </label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={moduleConfig.symbol || ''}
-              onChange={(e) => handleChange('symbol', e.target.value)}
-              placeholder="e.g. ❯ "
-              className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-            <button
-              onClick={() => setShowIconBrowser(!showIconBrowser)}
-              className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              Browse
-            </button>
-          </div>
-
-          {showIconBrowser && (
-            <div
-              ref={iconBrowserRef}
-              className="absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]"
-            >
-              <IconBrowser
-                currentSymbol={moduleConfig.symbol as string}
-                onSelect={(symbol) => {
-                  handleChange('symbol', symbol);
-                  setShowIconBrowser(false);
-                }}
-              />
-            </div>
-          )}
+          <input
+            type="text"
+            value={moduleConfig.symbol || ''}
+            onChange={(e) => handleChange('symbol', e.target.value)}
+            placeholder="e.g. ❯ "
+            className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
         </div>
 
         {/* Format Configuration - Full Width */}
