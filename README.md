@@ -39,8 +39,8 @@ Since the UI is minimal, these steps will get the development server running so 
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/DaRipper91/Starship-Prompt-Theme-Creator.git
-    cd Starship-Prompt-Theme-Creator
+    git clone https://github.com/DaRipper91/Starship-Command.git
+    cd Starship-Command
     ```
 
 2.  **Install dependencies**

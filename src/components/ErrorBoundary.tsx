@@ -1,5 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
-import { AlertTriangle, RefreshCcw } from "lucide-react";
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle, RefreshCcw } from 'lucide-react';
 
 interface Props {
   children?: ReactNode;
@@ -20,19 +20,20 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center bg-gray-900 text-gray-200">
-          <div className="rounded-full bg-red-900/30 p-4 mb-4">
+        <div className="flex h-full w-full flex-col items-center justify-center bg-gray-900 p-8 text-center text-gray-200">
+          <div className="mb-4 rounded-full bg-red-900/30 p-4">
             <AlertTriangle className="h-8 w-8 text-red-500" />
           </div>
           <h2 className="mb-2 text-xl font-semibold">Something went wrong</h2>
           <p className="mb-6 max-w-md text-sm text-gray-400">
-            {this.state.error?.message || "An unexpected error occurred while rendering the interface."}
+            {this.state.error?.message ||
+              'An unexpected error occurred while rendering the interface.'}
           </p>
           <button
             onClick={() => window.location.reload()}

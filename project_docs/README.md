@@ -1,3 +1,3 @@
-# Starship-Prompt-Theme-Creator
+# Starship-Command
 
 I mean.... It does what the title says

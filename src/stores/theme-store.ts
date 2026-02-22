@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { createDebouncedStorage } from "../lib/storage-utils";
-import { StarshipConfig, Theme, ThemeMetadata } from "../types/starship.types";
-import { TomlParser } from "../lib/toml-parser";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { createDebouncedStorage } from '../lib/storage-utils';
+import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
+import { TomlParser } from '../lib/toml-parser';
 
 interface ThemeStore {
   currentTheme: Theme;
@@ -26,7 +26,7 @@ interface ThemeStore {
 const createDefaultTheme = (): Theme => ({
   metadata: {
     id: crypto.randomUUID(),
-    name: "Untitled Theme",
+    name: 'Untitled Theme',
     created: new Date(),
     updated: new Date(),
   },
@@ -125,13 +125,13 @@ export const useThemeStore = create<ThemeStore>()(
             selectedModule: null,
           }));
         } catch (error) {
-          console.error("Failed to import TOML:", error);
+          console.error('Failed to import TOML:', error);
           throw error;
         }
       },
     }),
     {
-      name: "starship-theme-storage",
+      name: 'starship-theme-storage',
       storage: createDebouncedStorage(() => localStorage),
       partialize: (state) => ({
         savedThemes: state.savedThemes,

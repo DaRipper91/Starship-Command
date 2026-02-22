@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { X, Copy, Check, Upload, Download, AlertCircle } from "lucide-react";
-import { useThemeStore } from "../stores/theme-store";
-import { cn } from "../lib/utils";
-import { TomlParser } from "../lib/toml-parser";
+import React, { useState, useEffect } from 'react';
+import { X, Copy, Check, Upload, Download, AlertCircle } from 'lucide-react';
+import { useThemeStore } from '../stores/theme-store';
+import { cn } from '../lib/utils';
+import { TomlParser } from '../lib/toml-parser';
 
 interface ImportExportModalProps {
   isOpen: boolean;
@@ -11,9 +11,9 @@ interface ImportExportModalProps {
 
 export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
   const { currentTheme, importToml } = useThemeStore();
-  const [activeTab, setActiveTab] = useState<"export" | "import">("export");
-  const [importValue, setImportValue] = useState("");
-  const [exportValue, setExportValue] = useState("");
+  const [activeTab, setActiveTab] = useState<'export' | 'import'>('export');
+  const [importValue, setImportValue] = useState('');
+  const [exportValue, setExportValue] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -23,10 +23,10 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
       try {
         const toml = TomlParser.stringify(currentTheme.config);
         setExportValue(toml);
-        setImportValue(""); // Reset import
+        setImportValue(''); // Reset import
         setError(null);
       } catch (e) {
-        setExportValue("Error generating TOML");
+        setExportValue('Error generating TOML');
       }
     }
   }, [isOpen, currentTheme]);
@@ -37,14 +37,14 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy", err);
+      console.error('Failed to copy', err);
     }
   };
 
   const handleImport = () => {
     try {
       if (!importValue.trim()) {
-        setError("Please paste a configuration first");
+        setError('Please paste a configuration first');
         return;
       }
 
@@ -52,19 +52,20 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
       importToml(importValue);
       onClose();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Invalid TOML configuration");
+      setError(e instanceof Error ? e.message : 'Invalid TOML configuration');
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
       <div className="flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 shadow-2xl">
-
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-800 px-6 py-4">
-          <h2 className="text-xl font-semibold text-white">Theme Configuration</h2>
+          <h2 className="text-xl font-semibold text-white">
+            Theme Configuration
+          </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X size={20} />
           </button>
@@ -74,12 +75,12 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
         <div className="flex border-b border-gray-800">
           <button
             className={cn(
-              "flex-1 px-6 py-3 text-sm font-medium transition-colors",
-              activeTab === "export"
-                ? "bg-gray-800 text-white border-b-2 border-blue-500"
-                : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-200"
+              'flex-1 px-6 py-3 text-sm font-medium transition-colors',
+              activeTab === 'export'
+                ? 'border-b-2 border-blue-500 bg-gray-800 text-white'
+                : 'text-gray-400 hover:bg-gray-800/50 hover:text-gray-200',
             )}
-            onClick={() => setActiveTab("export")}
+            onClick={() => setActiveTab('export')}
           >
             <div className="flex items-center justify-center gap-2">
               <Download size={16} />
@@ -88,12 +89,12 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
           </button>
           <button
             className={cn(
-              "flex-1 px-6 py-3 text-sm font-medium transition-colors",
-              activeTab === "import"
-                ? "bg-gray-800 text-white border-b-2 border-blue-500"
-                : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-200"
+              'flex-1 px-6 py-3 text-sm font-medium transition-colors',
+              activeTab === 'import'
+                ? 'border-b-2 border-blue-500 bg-gray-800 text-white'
+                : 'text-gray-400 hover:bg-gray-800/50 hover:text-gray-200',
             )}
-            onClick={() => setActiveTab("import")}
+            onClick={() => setActiveTab('import')}
           >
             <div className="flex items-center justify-center gap-2">
               <Upload size={16} />
@@ -104,7 +105,7 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
 
         {/* Content */}
         <div className="p-6">
-          {activeTab === "export" ? (
+          {activeTab === 'export' ? (
             <div className="space-y-4">
               <div className="relative">
                 <textarea
@@ -130,7 +131,8 @@ export function ImportExportModal({ isOpen, onClose }: ImportExportModalProps) {
                 </button>
               </div>
               <p className="text-sm text-gray-500">
-                Copy this configuration to your <code>~/.config/starship.toml</code> file.
+                Copy this configuration to your{' '}
+                <code>~/.config/starship.toml</code> file.
               </p>
             </div>
           ) : (

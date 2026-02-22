@@ -1,20 +1,19 @@
-import React, { ReactNode, useState } from "react";
-import { Header } from "./layout/Header";
-import { Sidebar } from "./layout/Sidebar";
-import { Footer } from "./layout/Footer";
-import { ModuleList } from "./ModuleList";
-import { ModuleConfig } from "./ModuleConfig";
-import { ThemeGallery } from "./ThemeGallery";
-import { TerminalPreview } from "./TerminalPreview";
-import { ErrorBoundary } from "./ErrorBoundary";
-import { cn } from "../lib/utils";
+import React, { ReactNode, useState } from 'react';
+import { Header } from './layout/Header';
+import { Sidebar } from './layout/Sidebar';
+import { Footer } from './layout/Footer';
+import { ModuleList } from './ModuleList';
+import { ModuleConfig } from './ModuleConfig';
+import { ThemeGallery } from './ThemeGallery';
+import { TerminalPreview } from './TerminalPreview';
+import { ErrorBoundary } from './ErrorBoundary';
 
 interface LayoutProps {
   children?: ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [activeView, setActiveView] = useState("modules");
+  const [activeView, setActiveView] = useState('modules');
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-gray-950 font-sans text-gray-100">
@@ -36,15 +35,15 @@ export function Layout({ children }: LayoutProps) {
         />
 
         {/* Column 2: Module List (Drag & Drop) - Only visible in Editor mode */}
-        {activeView === "modules" && (
-          <aside className="w-80 shrink-0 border-r border-gray-800 bg-gray-900/20 flex flex-col overflow-hidden animate-in slide-in-from-left-5 fade-in duration-300">
-            <div className="p-4 border-b border-gray-800 bg-gray-900/40 backdrop-blur sticky top-0 z-10">
+        {activeView === 'modules' && (
+          <aside className="animate-in slide-in-from-left-5 fade-in flex w-80 shrink-0 flex-col overflow-hidden border-r border-gray-800 bg-gray-900/20 duration-300">
+            <div className="sticky top-0 z-10 border-b border-gray-800 bg-gray-900/40 p-4 backdrop-blur">
               <h2 className="text-sm font-semibold text-gray-300">Modules</h2>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="mt-1 text-xs text-gray-500">
                 Drag to reorder prompt segments
               </p>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-700">
+            <div className="scrollbar-thin scrollbar-thumb-gray-700 flex-1 overflow-y-auto p-4">
               <ModuleList />
             </div>
           </aside>
@@ -54,39 +53,41 @@ export function Layout({ children }: LayoutProps) {
         <main
           id="main-content"
           tabIndex={-1}
-          className="relative flex-1 overflow-y-auto bg-gray-900/50 p-6 outline-none scrollbar-thin scrollbar-thumb-gray-700"
+          className="scrollbar-thin scrollbar-thumb-gray-700 relative flex-1 overflow-y-auto bg-gray-900/50 p-6 outline-none"
         >
           {/* Background Grid Pattern */}
           <div className="bg-grid-white/[0.02] absolute inset-0 -z-10" />
 
           <ErrorBoundary>
-            <div className="flex flex-col gap-8 max-w-5xl mx-auto h-full">
+            <div className="mx-auto flex h-full max-w-5xl flex-col gap-8">
               {/* Terminal Preview - Always visible except maybe in pure gallery mode? keeping it for now */}
-              <section className="flex flex-col gap-3 shrink-0">
+              <section className="flex shrink-0 flex-col gap-3">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-medium text-gray-200">Live Preview</h2>
+                  <h2 className="text-lg font-medium text-gray-200">
+                    Live Preview
+                  </h2>
                 </div>
                 <TerminalPreview className="w-full" />
               </section>
 
               {/* Main Workspace Area */}
-              <section className="flex-1 min-h-0 flex flex-col">
-                {activeView === "modules" && (
+              <section className="flex min-h-0 flex-1 flex-col">
+                {activeView === 'modules' && (
                   <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <ModuleConfig />
                   </div>
                 )}
 
-                {activeView === "gallery" && (
-                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full">
-                    <ThemeGallery onSelect={() => setActiveView("modules")} />
+                {activeView === 'gallery' && (
+                  <div className="animate-in fade-in slide-in-from-bottom-4 h-full duration-500">
+                    <ThemeGallery onSelect={() => setActiveView('modules')} />
                   </div>
                 )}
 
-                {activeView === "colors" && (
-                   <div className="flex items-center justify-center h-64 text-gray-500 border border-dashed border-gray-800 rounded-lg">
-                      <p>Global Palette Editor Coming Soon</p>
-                   </div>
+                {activeView === 'colors' && (
+                  <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-gray-800 text-gray-500">
+                    <p>Global Palette Editor Coming Soon</p>
+                  </div>
                 )}
 
                 {children}

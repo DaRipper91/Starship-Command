@@ -1,7 +1,7 @@
-import { cn } from "../../lib/utils";
-import { LayoutTemplate, ExternalLink, FileCode } from "lucide-react";
-import { useState } from "react";
-import { ImportExportModal } from "../ImportExportModal";
+import { cn } from '../../lib/utils';
+import { LayoutTemplate, ExternalLink, FileCode } from 'lucide-react';
+import { useState } from 'react';
+import { ImportExportModal } from '../ImportExportModal';
 
 interface HeaderProps {
   className?: string;
@@ -13,7 +13,7 @@ export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        "flex h-16 items-center justify-between border-b border-gray-800 bg-gray-900/50 px-6 backdrop-blur",
+        'flex h-16 items-center justify-between border-b border-gray-800 bg-gray-900/50 px-6 backdrop-blur',
         className,
       )}
     >
@@ -35,7 +35,7 @@ export function Header({ className }: HeaderProps) {
         </a>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 rounded px-4 py-2 text-sm font-medium text-white transition-all bg-blue-600 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+          className="flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
         >
           <FileCode className="h-4 w-4" />
           Import / Export

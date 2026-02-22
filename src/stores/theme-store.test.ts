@@ -44,18 +44,22 @@ describe('ThemeStore', () => {
 
       const updatedStore = useThemeStore.getState();
       expect(updatedStore.currentTheme.config.format).toBe('new format');
-      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBe(newTime.getTime());
-      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBeGreaterThan(initialUpdated.getTime());
+      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBe(
+        newTime.getTime(),
+      );
+      expect(
+        updatedStore.currentTheme.metadata.updated.getTime(),
+      ).toBeGreaterThan(initialUpdated.getTime());
     });
 
     it('should merge partial config updates', () => {
-        const store = useThemeStore.getState();
-        store.updateConfig({ add_newline: false });
+      const store = useThemeStore.getState();
+      store.updateConfig({ add_newline: false });
 
-        const updatedStore = useThemeStore.getState();
-        expect(updatedStore.currentTheme.config.add_newline).toBe(false);
-        // Ensure other fields are preserved (format is default)
-        expect(updatedStore.currentTheme.config.format).toBeDefined();
+      const updatedStore = useThemeStore.getState();
+      expect(updatedStore.currentTheme.config.add_newline).toBe(false);
+      // Ensure other fields are preserved (format is default)
+      expect(updatedStore.currentTheme.config.format).toBeDefined();
     });
   });
 
@@ -71,7 +75,9 @@ describe('ThemeStore', () => {
 
       const updatedStore = useThemeStore.getState();
       expect(updatedStore.currentTheme.metadata.name).toBe('New Name');
-      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBe(newTime.getTime());
+      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBe(
+        newTime.getTime(),
+      );
     });
   });
 
@@ -125,26 +131,30 @@ describe('ThemeStore', () => {
     });
 
     it('should handle multiple themes', () => {
-        const store = useThemeStore.getState();
-        store.saveTheme(); // Save default theme (id: test-id)
+      const store = useThemeStore.getState();
+      store.saveTheme(); // Save default theme (id: test-id)
 
-        // Load a different theme
-        const secondTheme: Theme = {
-            metadata: {
-                id: 'second-id',
-                name: 'Second Theme',
-                created: new Date(),
-                updated: new Date()
-            },
-            config: TomlParser.getDefaultConfig()
-        };
-        store.loadTheme(secondTheme);
-        store.saveTheme();
+      // Load a different theme
+      const secondTheme: Theme = {
+        metadata: {
+          id: 'second-id',
+          name: 'Second Theme',
+          created: new Date(),
+          updated: new Date(),
+        },
+        config: TomlParser.getDefaultConfig(),
+      };
+      store.loadTheme(secondTheme);
+      store.saveTheme();
 
-        const updatedStore = useThemeStore.getState();
-        expect(updatedStore.savedThemes).toHaveLength(2);
-        expect(updatedStore.savedThemes.find(t => t.metadata.id === 'test-id')).toBeDefined();
-        expect(updatedStore.savedThemes.find(t => t.metadata.id === 'second-id')).toBeDefined();
+      const updatedStore = useThemeStore.getState();
+      expect(updatedStore.savedThemes).toHaveLength(2);
+      expect(
+        updatedStore.savedThemes.find((t) => t.metadata.id === 'test-id'),
+      ).toBeDefined();
+      expect(
+        updatedStore.savedThemes.find((t) => t.metadata.id === 'second-id'),
+      ).toBeDefined();
     });
   });
 
@@ -161,12 +171,12 @@ describe('ThemeStore', () => {
     });
 
     it('should do nothing if id not found', () => {
-        const store = useThemeStore.getState();
-        store.saveTheme();
-        expect(useThemeStore.getState().savedThemes).toHaveLength(1);
+      const store = useThemeStore.getState();
+      store.saveTheme();
+      expect(useThemeStore.getState().savedThemes).toHaveLength(1);
 
-        store.deleteTheme('non-existent-id');
-        expect(useThemeStore.getState().savedThemes).toHaveLength(1);
+      store.deleteTheme('non-existent-id');
+      expect(useThemeStore.getState().savedThemes).toHaveLength(1);
     });
   });
 
@@ -182,7 +192,9 @@ describe('ThemeStore', () => {
 
       const updatedStore = useThemeStore.getState();
       expect(updatedStore.currentTheme.metadata.name).toBe('Untitled Theme');
-      expect(updatedStore.currentTheme.config).toEqual(TomlParser.getDefaultConfig());
+      expect(updatedStore.currentTheme.config).toEqual(
+        TomlParser.getDefaultConfig(),
+      );
       // ID should be new (random UUID generated in createDefaultTheme)
       expect(updatedStore.currentTheme.metadata.id).not.toBe('test-id');
     });
@@ -212,7 +224,9 @@ describe('ThemeStore', () => {
       const updatedStore = useThemeStore.getState();
       expect(updatedStore.currentTheme.config.format).toBe('imported format');
       expect(updatedStore.currentTheme.config.add_newline).toBe(false);
-      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBe(newTime.getTime());
+      expect(updatedStore.currentTheme.metadata.updated.getTime()).toBe(
+        newTime.getTime(),
+      );
     });
 
     it('should throw error on invalid TOML', () => {
@@ -220,7 +234,9 @@ describe('ThemeStore', () => {
       const invalidToml = 'invalid = "toml" ='; // Syntax error
 
       // Need to spy on console.error to suppress output during test
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       expect(() => store.importToml(invalidToml)).toThrow();
 

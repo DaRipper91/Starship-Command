@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
@@ -20,6 +20,17 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   const { currentTheme } = useThemeStore();
+  const [scenarioIndex, setScenarioIndex] = useState(0);
+
+  const scenarioKeys = Object.keys(MOCK_SCENARIOS);
+
+  useEffect(() => {
+    // Cycle through scenarios every 3 seconds
+    const interval = setInterval(() => {
+      setScenarioIndex((prev) => (prev + 1) % scenarioKeys.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [scenarioKeys.length]);
 
   useEffect(() => {
     if (!terminalRef.current || xtermRef.current) return;
@@ -57,13 +68,11 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
 
     // Handle resize
     const resizeObserver = new ResizeObserver(() => {
-      // We wrap fit in a requestAnimationFrame to avoid "ResizeObserver loop limit exceeded"
-      // and ensure the DOM has updated layout.
       requestAnimationFrame(() => {
         try {
           fitAddon.fit();
         } catch (e) {
-          // Ignore fit errors on resize (can happen if container is hidden)
+          // Ignore fit errors on resize
         }
       });
     });
@@ -85,11 +94,11 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
   const output = useMemo(() => {
     // Parse format
     const format = currentTheme.config.format || '';
+    const currentScenarioKey = scenarioKeys[scenarioIndex];
+    const scenario = MOCK_SCENARIOS[currentScenarioKey];
 
-    // Use the 'clean' scenario by default
-    // In a real app, we might want to let the user select the scenario via props or store
-    return parseFormatString(format, currentTheme.config, MOCK_SCENARIOS.clean);
-  }, [currentTheme.config]);
+    return parseFormatString(format, currentTheme.config, scenario);
+  }, [currentTheme.config, scenarioIndex, scenarioKeys]);
 
   // Effect to update content when output changes
   useEffect(() => {
@@ -116,7 +125,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
         <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" /> {/* Yellow */}
         <div className="h-3 w-3 rounded-full bg-[#27c93f]" /> {/* Green */}
         <div className="ml-4 select-none text-xs font-medium text-gray-400">
-          Starship Preview
+          Terminal Preview ({MOCK_SCENARIOS[scenarioKeys[scenarioIndex]].name})
         </div>
       </div>
 
