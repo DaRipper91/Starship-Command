@@ -3,6 +3,15 @@ import { SuggestionEngine, Environment } from './suggestion-engine';
 import { StarshipConfig } from '../types/starship.types';
 
 describe('SuggestionEngine', () => {
+  // Helper to create a base environment
+  const createEnv = (overrides: Partial<Environment> = {}): Environment => ({
+    os: 'linux',
+    shell: 'bash',
+    terminal: 'xterm',
+    hasNerdFont: true,
+    installedTools: [],
+    ...overrides,
+  });
   describe('suggestModules', () => {
     // Helper to create a base environment
     const createEnv = (overrides: Partial<Environment> = {}): Environment => ({
@@ -14,6 +23,7 @@ describe('SuggestionEngine', () => {
       ...overrides,
     });
 
+  describe('suggestModules', () => {
     it('should return basic modules by default', () => {
       const env = createEnv();
       const modules = SuggestionEngine.suggestModules(env);
@@ -93,7 +103,9 @@ describe('SuggestionEngine', () => {
       installedTools: [],
       ...overrides,
     });
+  });
 
+  describe('suggestOptimizations', () => {
     it('should return no suggestions for a safe config and nerd font', () => {
       const config: StarshipConfig = {
         // Only 1 slow module
