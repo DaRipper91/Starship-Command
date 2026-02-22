@@ -1,9 +1,11 @@
 import { ToastProvider } from './contexts/ToastContext';
 import { TerminalPreview } from './components/TerminalPreview';
+import { ModuleList } from './components/ModuleList';
+import { ModuleConfig } from './components/ModuleConfig';
 import { useThemeStore } from './stores/theme-store';
 
 function App() {
-  const { currentTheme } = useThemeStore();
+  const { currentTheme, selectedModule } = useThemeStore();
 
   return (
     <ToastProvider>
@@ -42,12 +44,10 @@ function App() {
           {/* LEFT SIDEBAR */}
           <aside className="flex w-80 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22]">
             <div className="border-b border-gray-800 p-4">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
                 Modules
               </h2>
-              <div className="mt-4 rounded border border-dashed border-gray-700 p-8 text-center text-sm text-gray-500">
-                Module list placeholder
-              </div>
+              <ModuleList />
             </div>
             <div className="border-b border-gray-800 p-4">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
@@ -76,13 +76,14 @@ function App() {
 
           {/* RIGHT SIDEBAR */}
           <aside className="flex w-80 shrink-0 flex-col overflow-y-auto border-l border-gray-800 bg-[#161b22] p-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
-              Module Configuration
-            </h2>
-            <div className="flex flex-1 flex-col items-center justify-center rounded border border-dashed border-gray-700 p-8 text-center text-sm text-gray-500">
-              <span className="mb-2 text-2xl">⚙️</span>
-              Select a module to configure
-            </div>
+            {selectedModule ? (
+              <ModuleConfig />
+            ) : (
+              <div className="flex flex-1 flex-col items-center justify-center rounded border border-dashed border-gray-700 p-8 text-center text-sm text-gray-500">
+                <span className="mb-2 text-2xl">⚙️</span>
+                Select a module to configure
+              </div>
+            )}
           </aside>
         </div>
       </div>
