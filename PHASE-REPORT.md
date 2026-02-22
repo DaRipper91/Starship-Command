@@ -47,4 +47,13 @@
   - Updated the form layout and structure of the configuration panels for specific Starship settings per module (like truncation logic in directory).
 - **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-cp7.tar.gz` (replacing previous).
 
+## Phase 8: Import/Export (Completed)
+
+- **Status:** Success
+- **Changes Made:**
+  - Implemented the `ExportImport` modal component allowing users to export the Starship TOML configuration by downloading it directly, copying it to clipboard, or generating a base64 shareable URL.
+  - Implemented the import functionality, allowing users to upload a `starship.toml` file, fetch raw text from a URL (e.g. GitHub Gist), or paste the configuration manually.
+  - Validated incoming TOML before saving it and connected the `ExportImport` component to the Main Header action buttons.
+- **Artifacts:** Code pushed to `main` branch. Backup created at `~/Projects/starship-theme-creator-cp8.tar.gz`.
+
 ---
