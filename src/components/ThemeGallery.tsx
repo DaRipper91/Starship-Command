@@ -28,10 +28,12 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PRESET_THEMES.map((theme) => (
-            <div
+            <button
               key={theme.metadata.id}
-              className="group relative cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-all hover:border-gray-600 hover:shadow-lg"
+              type="button"
+              className="group relative w-full cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-gray-800 text-left transition-all hover:border-gray-600 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               onClick={() => handleLoad(theme)}
+              aria-label={`Load preset theme: ${theme.metadata.name}`}
             >
               <div className="p-4">
                 <h3 className="font-medium text-gray-200 group-hover:text-blue-400">
@@ -51,7 +53,7 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
                   ))}
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -77,9 +79,11 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
                 key={theme.metadata.id}
                 className="group relative overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-all hover:border-gray-600 hover:shadow-lg"
               >
-                <div
-                  className="cursor-pointer p-4"
+                <button
+                  type="button"
+                  className="w-full cursor-pointer p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
                   onClick={() => handleLoad(theme)}
+                  aria-label={`Load saved theme: ${theme.metadata.name}`}
                 >
                   <h3 className="font-medium text-gray-200 group-hover:text-purple-400">
                     {theme.metadata.name}
@@ -88,15 +92,22 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
                     Last updated:{' '}
                     {new Date(theme.metadata.updated).toLocaleDateString()}
                   </p>
-                </div>
+                </button>
 
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    deleteTheme(theme.metadata.id);
+                    if (
+                      confirm(
+                        `Are you sure you want to delete theme "${theme.metadata.name}"?`,
+                      )
+                    ) {
+                      deleteTheme(theme.metadata.id);
+                    }
                   }}
-                  className="absolute right-2 top-2 rounded p-1.5 text-gray-500 opacity-0 transition-opacity hover:bg-red-900/20 hover:text-red-400 group-hover:opacity-100"
+                  className="absolute right-2 top-2 rounded p-1.5 text-gray-500 opacity-0 transition-opacity hover:bg-red-900/20 hover:text-red-400 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 group-hover:opacity-100"
                   title="Delete theme"
+                  aria-label={`Delete theme ${theme.metadata.name}`}
                 >
                   <Trash2 size={14} />
                 </button>

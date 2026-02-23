@@ -15,17 +15,6 @@ import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useThemeStore } from './stores/theme-store';
-import { ToastProvider, useToast } from './contexts/ToastContext';
-import { AccessibilityProvider } from './contexts/AccessibilityContext';
-import { WelcomeWizard } from './components/WelcomeWizard';
-import { ModuleList } from './components/ModuleList';
-import { ImagePalette } from './components/ImagePalette';
-import { TerminalPreview } from './components/TerminalPreview';
-import { ModuleConfig } from './components/ModuleConfig';
-import { SuggestionPanel } from './components/SuggestionPanel';
-import { ExportImport } from './components/ExportImport';
-import { ComparisonView } from './components/ComparisonView';
-import { ThemeGallery } from './components/ThemeGallery';
 import { X, ArrowLeftRight, Keyboard } from 'lucide-react';
 
 function AppContent() {
