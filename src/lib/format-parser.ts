@@ -35,7 +35,7 @@ export function parseFormatString(
     processed = processed.replace(
       /\[([^\]]+)\]\(([^)]+)\)/g,
       (_match, text, style) => {
-        const ansi = styleToAnsi(style, config);
+        const ansi = styleToAnsi(style);
         return `${ansi}${text}\x1b[0m`;
       },
     );
@@ -170,10 +170,9 @@ export function renderModule(
 /**
  * Converts a Starship style string to ANSI escape codes
  * @param style - The style string (e.g. "bold red", "bg:blue fg:white")
- * @param config - The Starship configuration (unused for now, but good for future extension)
  * @returns ANSI escape code string
  */
-function styleToAnsi(style: string, config?: StarshipConfig): string {
+function styleToAnsi(style: string): string {
   if (!style) return '';
 
   const parts = style.split(/\s+/);
