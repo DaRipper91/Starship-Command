@@ -1,18 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { cn } from '../lib/utils';
-import { ColorPicker } from './ColorPicker';
 import { IconBrowser } from './IconBrowser';
 import { useThemeStore } from '../stores/theme-store';
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
-import {
-  Text,
-  LayoutGrid,
-  Palette,
-  Type,
-  PenTool,
-  Plus,
-  X,
-} from 'lucide-react';
+import { Text, LayoutGrid, PenTool, X } from 'lucide-react';
 import { StyleEditor } from './StyleEditor'; // Reusing StyleEditor for segment styling
 
 // Define types for format segments
@@ -44,7 +35,6 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const { currentTheme } = useThemeStore();
   const [segments, setSegments] = useState<FormatSegment[]>([]);
   const [editingSegment, setEditingSegment] = useState<number | null>(null);
-  const [showColorPicker, setShowColorPicker] = useState(false);
   const [showIconBrowser, setShowIconBrowser] = useState(false);
   const [activeStyle, setActiveStyle] = useState('');
   const [activeText, setActiveText] = useState('');
@@ -54,7 +44,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   useEffect(() => {
     const parseSegments = (input: string): FormatSegment[] => {
       const newSegments: FormatSegment[] = [];
-      let remaining = input;
+      const remaining = input;
 
       // Regex to find styled text: [text](style) or modules: $module
       const regex = /(\[([^\]]+)\]\(([^)]+)\)|\$([a-zA-Z0-9_]+))/g;
@@ -130,7 +120,6 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
         ? (segments[index] as StyledTextSegment).style
         : '',
     );
-    setShowColorPicker(false);
     setShowIconBrowser(false);
   };
 

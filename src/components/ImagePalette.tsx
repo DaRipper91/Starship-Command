@@ -4,7 +4,7 @@ import { ColorUtils, ExtendedColorPalette } from '../lib/color-utils';
 import { Upload, Image as ImageIcon } from 'lucide-react';
 
 export function ImagePalette() {
-  const { currentTheme, updateConfig } = useThemeStore();
+  const { updateConfig } = useThemeStore();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [palette, setPalette] = useState<ExtendedColorPalette | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
@@ -45,7 +45,7 @@ export function ImagePalette() {
 
     // Apply colors intelligently based on the spec
     // Create the palettes.extracted object to map 16 colors globally
-    const customPaletteObj: any = {};
+    const customPaletteObj: Record<string, string> = {};
     if (palette.extracted16) {
       palette.extracted16.forEach((hex, i) => {
         customPaletteObj[`color${i}`] = hex;

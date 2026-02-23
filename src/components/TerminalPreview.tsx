@@ -67,22 +67,27 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     fitAddonRef.current = fitAddon;
 
     // Handle resize
-    const resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => {
-        try {
-          fitAddon.fit();
-        } catch (e) {
-          // Ignore fit errors on resize
-        }
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(() => {
+          try {
+            fitAddon.fit();
+          } catch (e) {
+            // Ignore fit errors on resize
+          }
+        });
       });
-    });
 
-    resizeObserver.observe(terminalRef.current);
-    resizeObserverRef.current = resizeObserver;
+      resizeObserver.observe(terminalRef.current);
+      resizeObserverRef.current = resizeObserver;
+    }
 
     // Cleanup
     return () => {
-      resizeObserver.disconnect();
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       term.dispose();
       xtermRef.current = null;
       fitAddonRef.current = null;

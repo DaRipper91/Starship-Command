@@ -22,7 +22,6 @@ import { useThemeStore } from '../stores/theme-store';
 import { cn } from '../lib/utils';
 import { GripVertical } from 'lucide-react';
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
-import { CustomModuleConfig } from '../../types/starship.types';
 
 interface ModuleItem {
   id: string;
@@ -124,9 +123,9 @@ export function ModuleList({ className }: { className?: string }) {
 
   // Combine predefined and custom modules
   const allModules = useMemo(() => {
-    const customModules: ModuleItem[] = Object.entries(
+    const customModules: ModuleItem[] = Object.keys(
       currentTheme.config.custom || {},
-    ).map(([id, config]) => ({
+    ).map((id) => ({
       id,
       name: id,
       isCustom: true,

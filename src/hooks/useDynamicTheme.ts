@@ -16,16 +16,16 @@ interface DynamicThemeSettings {
 export function useDynamicTheme() {
   const { loadTheme, savedThemes, currentTheme } = useThemeStore();
 
-  // For now, let's hardcode a simple dynamic setting for demonstration
-  const dynamicSettings: DynamicThemeSettings = {
-    enabled: true, // Assume dynamic themes are enabled
-    dayThemeId: 'preset-clean', // Use a preset as day theme
-    nightThemeId: 'preset-dracula', // Use another preset as night theme
-    dayStartTime: '07:00',
-    nightStartTime: '19:00',
-  };
-
   useEffect(() => {
+    // For now, let's hardcode a simple dynamic setting for demonstration
+    const dynamicSettings: DynamicThemeSettings = {
+      enabled: true, // Assume dynamic themes are enabled
+      dayThemeId: 'preset-clean', // Use a preset as day theme
+      nightThemeId: 'preset-dracula', // Use another preset as night theme
+      dayStartTime: '07:00',
+      nightStartTime: '19:00',
+    };
+
     if (!dynamicSettings.enabled) return;
 
     const checkAndApplyTheme = () => {
@@ -71,5 +71,5 @@ export function useDynamicTheme() {
     const intervalId = setInterval(checkAndApplyTheme, 60 * 1000); // Check every minute
 
     return () => clearInterval(intervalId);
-  }, [dynamicSettings, loadTheme, savedThemes, currentTheme.metadata.id]);
+  }, [loadTheme, savedThemes, currentTheme.metadata.id]);
 }

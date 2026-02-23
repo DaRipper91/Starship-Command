@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { CommandPalette } from './components/CommandPalette';
+import { WelcomeWizard } from './components/WelcomeWizard';
+import { ModuleList } from './components/ModuleList';
+import { ImagePalette } from './components/ImagePalette';
+import { TerminalPreview } from './components/TerminalPreview';
+import { ModuleConfig } from './components/ModuleConfig';
+import { SuggestionPanel } from './components/SuggestionPanel';
+import { ExportImport } from './components/ExportImport';
+import { ComparisonView } from './components/ComparisonView';
+import { ThemeGallery } from './components/ThemeGallery';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { AccessibilityProvider } from './contexts/AccessibilityContext';
+import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useThemeStore } from './stores/theme-store';
@@ -266,11 +278,13 @@ function AppContent() {
 
 function App() {
   return (
-    <AccessibilityProvider>
-      <ToastProvider>
-        <AppContent />
-      </ToastProvider>
-    </AccessibilityProvider>
+    <ErrorBoundary>
+      <AccessibilityProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </AccessibilityProvider>
+    </ErrorBoundary>
   );
 }
 

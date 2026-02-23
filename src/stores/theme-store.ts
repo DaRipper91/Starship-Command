@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { createDebouncedStorage } from '../lib/storage-utils';
 import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
 import { TomlParser } from '../lib/toml-parser';
+import { generateId } from '../lib/utils';
 
 interface ThemeStore {
   currentTheme: Theme;
@@ -25,7 +26,7 @@ interface ThemeStore {
 
 const createDefaultTheme = (): Theme => ({
   metadata: {
-    id: crypto.randomUUID(),
+    id: generateId(),
     name: 'Untitled Theme',
     created: new Date(),
     updated: new Date(),
