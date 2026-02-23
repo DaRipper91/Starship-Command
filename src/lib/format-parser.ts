@@ -170,9 +170,11 @@ export function renderModule(
 /**
  * Converts a Starship style string to ANSI escape codes
  * @param style - The style string (e.g. "bold red", "bg:blue fg:white")
+ * @param _config - (Optional) The Starship configuration
  * @returns ANSI escape code string
  */
-function styleToAnsi(style: string): string {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function styleToAnsi(style: string, _config?: StarshipConfig): string {
   if (!style) return '';
 
   const parts = style.split(/\s+/);
