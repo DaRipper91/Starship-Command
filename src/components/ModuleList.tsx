@@ -173,7 +173,7 @@ export function ModuleList({ className }: { className?: string }) {
       newFormat += `$${name}`;
     } else {
       // Remove from format string
-      const regex = new RegExp(`\\\\$${name}\\\\b`, 'g');
+      const regex = new RegExp(`\\$${name}\\b`, 'g');
       newFormat = newFormat.replace(regex, '');
     }
 

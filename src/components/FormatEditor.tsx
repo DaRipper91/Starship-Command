@@ -86,7 +86,8 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       return newSegments;
     };
     setSegments(parseSegments(formatString));
-  }, [formatString, currentTheme.config]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formatString]);
 
   // Convert segments back to format string
   const compileFormatString = useCallback((s: FormatSegment[]): string => {
