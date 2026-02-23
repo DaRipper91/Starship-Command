@@ -190,7 +190,6 @@ function styleToAnsi(style: string, config?: StarshipConfig): string {
     else if (part === 'inverted') codes.push(7);
     else if (part === 'hidden') codes.push(8);
     else if (part === 'strikethrough') codes.push(9);
-
     // Background color
     else if (part.startsWith('bg:')) {
       const color = part.substring(3);
@@ -199,10 +198,10 @@ function styleToAnsi(style: string, config?: StarshipConfig): string {
     }
     // Foreground color (default if not recognized as modifier or bg)
     else {
-        // Check for fg: prefix explicitly just in case, though starship usually omits it for fg
-        const color = part.startsWith('fg:') ? part.substring(3) : part;
-        const code = getColorCode(color, false);
-        if (code !== null) fgCode = code;
+      // Check for fg: prefix explicitly just in case, though starship usually omits it for fg
+      const color = part.startsWith('fg:') ? part.substring(3) : part;
+      const code = getColorCode(color, false);
+      if (code !== null) fgCode = code;
     }
   });
 
@@ -220,7 +219,16 @@ function getColorCode(color: string, isBackground: boolean): number | null {
   const base = isBackground ? 40 : 30;
   const brightBase = isBackground ? 100 : 90;
 
-  const colors = ['black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'white'];
+  const colors = [
+    'black',
+    'red',
+    'green',
+    'yellow',
+    'blue',
+    'purple',
+    'cyan',
+    'white',
+  ];
 
   // Standard colors
   const index = colors.indexOf(color);
@@ -237,39 +245,39 @@ function getColorCode(color: string, isBackground: boolean): number | null {
   // For simplicity in this environment, we'll map to closest standard color or ignore
   // In a real terminal emulator like xterm.js, we can use truecolor: \x1b[38;2;R;G;Bm
   if (color.startsWith('#')) {
-      // Parse hex
-      const r = parseInt(color.substring(1, 3), 16);
-      const g = parseInt(color.substring(3, 5), 16);
-      const b = parseInt(color.substring(5, 7), 16);
+    // Parse hex
+    const r = parseInt(color.substring(1, 3), 16);
+    const g = parseInt(color.substring(3, 5), 16);
+    const b = parseInt(color.substring(5, 7), 16);
 
-      if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
-          // simple 256 color mapping logic is complex, let's use truecolor ANSI sequence
-          // Foreground: 38;2;R;G;B
-          // Background: 48;2;R;G;B
-          // However, to keep return type simple (number), we can't easily return the full sequence.
-          // Wait, the caller expects codes array.
-          // Let's change logic slightly to return string or handle it differently?
-          // No, I'll stick to basic colors for now to avoid complexity,
-          // OR I can return a special large number and handle it, but simpler is better for "black screen" fix.
+    if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+      // simple 256 color mapping logic is complex, let's use truecolor ANSI sequence
+      // Foreground: 38;2;R;G;B
+      // Background: 48;2;R;G;B
+      // However, to keep return type simple (number), we can't easily return the full sequence.
+      // Wait, the caller expects codes array.
+      // Let's change logic slightly to return string or handle it differently?
+      // No, I'll stick to basic colors for now to avoid complexity,
+      // OR I can return a special large number and handle it, but simpler is better for "black screen" fix.
 
-          // Actually, let's just return a default color if hex is provided to avoid crash
-          // Or even better, try to find the closest ANSI color.
-          // For now, let's just return null for hex to avoid breaking the escape sequence structure
-          // if we don't support it fully.
-          // But wait, many themes use hex.
-          // Let's support it properly.
-          // But `getColorCode` returns `number | null`.
-          // I need to change `styleToAnsi` to handle more complex codes if I want hex support.
-          return null;
-      }
+      // Actually, let's just return a default color if hex is provided to avoid crash
+      // Or even better, try to find the closest ANSI color.
+      // For now, let's just return null for hex to avoid breaking the escape sequence structure
+      // if we don't support it fully.
+      // But wait, many themes use hex.
+      // Let's support it properly.
+      // But `getColorCode` returns `number | null`.
+      // I need to change `styleToAnsi` to handle more complex codes if I want hex support.
+      return null;
+    }
   }
 
   // Numerical ANSI colors
   const num = parseInt(color, 10);
   if (!isNaN(num) && num >= 0 && num <= 255) {
-      // 38;5;n for fg, 48;5;n for bg
-      // But we can't return this as a single number easily in the current structure.
-      return null;
+    // 38;5;n for fg, 48;5;n for bg
+    // But we can't return this as a single number easily in the current structure.
+    return null;
   }
 
   return null;
