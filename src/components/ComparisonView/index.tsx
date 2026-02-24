@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useThemeStore } from '../../stores/theme-store';
 import { PRESET_THEMES } from '../../lib/presets';
 import { Theme } from '../../types/starship.types';
 import html2canvas from 'html2canvas';
-import { X, ArrowLeftRight, Camera } from 'lucide-react';
+import { ArrowLeftRight, Camera, X } from 'lucide-react';
 import { TomlParser } from '../../lib/toml-parser';
 import { useToast } from '../../contexts/ToastContext';
 

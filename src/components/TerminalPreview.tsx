@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
@@ -60,7 +60,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     try {
       fitAddon.fit();
     } catch (e) {
-      console.warn('Initial fit failed:', e);
+      // Ignore initial fit error
     }
 
     xtermRef.current = term;

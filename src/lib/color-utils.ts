@@ -87,7 +87,6 @@ export class ColorUtils {
           reject(e);
         };
       } catch (error) {
-        console.error('Failed to extract palette:', error);
         reject(new Error('Could not extract colors from image'));
       }
     });
@@ -218,6 +217,36 @@ export class ColorUtils {
       success: '#9ece6a',
       warning: '#e0af68',
       error: '#f7768e',
+    },
+    OneDark: {
+      primary: '#61afef',
+      secondary: '#c678dd',
+      accent: '#56b6c2',
+      background: '#282c34',
+      foreground: '#abb2bf',
+      success: '#98c379',
+      warning: '#d19a66',
+      error: '#e06c75',
+    },
+    Solarized: {
+      primary: '#268bd2',
+      secondary: '#d33682',
+      accent: '#2aa198',
+      background: '#002b36',
+      foreground: '#839496',
+      success: '#859900',
+      warning: '#b58900',
+      error: '#dc322f',
+    },
+    Monokai: {
+      primary: '#66d9ef',
+      secondary: '#ae81ff',
+      accent: '#a1efe4',
+      background: '#272822',
+      foreground: '#f8f8f2',
+      success: '#a6e22e',
+      warning: '#fd971f',
+      error: '#f92672',
     },
   };
 }

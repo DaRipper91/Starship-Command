@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useThemeStore } from './theme-store';
 import { TomlParser } from '../lib/toml-parser';
 import { Theme } from '../types/starship.types';
@@ -22,11 +22,52 @@ describe('ThemeStore', () => {
         config: TomlParser.getDefaultConfig(),
       },
       savedThemes: [],
+      past: [],
+      future: [],
     });
   });
 
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  describe('undo/redo', () => {
+    it('should push state to past when config updates', () => {
+      const store = useThemeStore.getState();
+      const initialConfig = store.currentTheme.config;
+
+      store.updateConfig({ format: 'new' });
+
+      const updatedStore = useThemeStore.getState();
+      expect(updatedStore.past).toHaveLength(1);
+      expect(updatedStore.past[0].config).toEqual(initialConfig);
+    });
+
+    it('should undo changes', () => {
+      const store = useThemeStore.getState();
+      const initialFormat = store.currentTheme.config.format;
+
+      store.updateConfig({ format: 'new' });
+      store.undo();
+
+      const updatedStore = useThemeStore.getState();
+      expect(updatedStore.currentTheme.config.format).toEqual(initialFormat);
+      expect(updatedStore.past).toHaveLength(0);
+      expect(updatedStore.future).toHaveLength(1);
+    });
+
+    it('should redo changes', () => {
+      const store = useThemeStore.getState();
+
+      store.updateConfig({ format: 'new' });
+      store.undo();
+      store.redo();
+
+      const updatedStore = useThemeStore.getState();
+      expect(updatedStore.currentTheme.config.format).toEqual('new');
+      expect(updatedStore.past).toHaveLength(1);
+      expect(updatedStore.future).toHaveLength(0);
+    });
   });
 
   describe('updateConfig', () => {

@@ -3,7 +3,7 @@ import { useThemeStore } from '../stores/theme-store';
 import { PRESET_THEMES } from '../lib/presets';
 import { Theme } from '../types/starship.types';
 import { cn } from '../lib/utils';
-import { Play, Trash2, Clock } from 'lucide-react';
+import { Clock, Play, Trash2 } from 'lucide-react';
 
 interface ThemeGalleryProps {
   className?: string;

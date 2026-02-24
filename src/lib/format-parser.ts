@@ -1,7 +1,7 @@
 import {
-  StarshipConfig,
   CustomModuleConfig,
   GitStatusConfig,
+  StarshipConfig,
 } from '../types/starship.types';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
@@ -173,7 +173,7 @@ export function renderModule(
  * @param _config - (Optional) The Starship configuration
  * @returns ANSI escape code string
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export function styleToAnsi(style: string, _config?: StarshipConfig): string {
   if (!style) return '';
 

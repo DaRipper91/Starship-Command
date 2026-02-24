@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { SuggestionEngine, Environment } from './suggestion-engine';
+import { describe, expect, it } from 'vitest';
+import { Environment, SuggestionEngine } from './suggestion-engine';
 import { StarshipConfig } from '../types/starship.types';
 
 describe('SuggestionEngine', () => {

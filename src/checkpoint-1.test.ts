@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { TomlParser } from './lib/toml-parser';
 import { ColorUtils } from './lib/color-utils';
 import { useThemeStore } from './stores/theme-store';

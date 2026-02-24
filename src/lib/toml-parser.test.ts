@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { TomlParser } from './toml-parser';
 
 describe('TomlParser', () => {
