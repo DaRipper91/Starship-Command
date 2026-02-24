@@ -1,27 +1,29 @@
-import { useMemo, useState } from 'react';
 import {
-  DndContext,
   closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverlay,
 } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
   useSortable,
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useThemeStore } from '../stores/theme-store';
-import { cn } from '../lib/utils';
 import { GripVertical } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
+import { cn } from '../lib/utils';
+import { useThemeStore } from '../stores/theme-store';
+import { BaseModuleConfig } from '../types/starship.types';
 
 interface ModuleItem {
   id: string;
@@ -178,8 +180,8 @@ export function ModuleList({ className }: { className?: string }) {
     }
 
     // Also update module config to reflect disabled state
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const existingModuleConfig = (currentTheme.config as any)[name] || {};
+    const existingModuleConfig =
+      (currentTheme.config[name] as BaseModuleConfig) || {};
 
     updateConfig({
       format: newFormat,

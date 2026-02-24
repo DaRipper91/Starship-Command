@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { ThemeValidator } from './theme-validator';
+import { describe, expect, it } from 'vitest';
+
 import { StarshipConfig } from '../types/starship.types';
+import { ThemeValidator } from './theme-validator';
 
 describe('ThemeValidator', () => {
   describe('checkColorContrast', () => {

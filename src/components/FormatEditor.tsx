@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { cn } from '../lib/utils';
-import { IconBrowser } from './IconBrowser';
-import { useThemeStore } from '../stores/theme-store';
+import { LayoutGrid, PenTool, Text, X } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
-import { Text, LayoutGrid, PenTool, X } from 'lucide-react';
+import { cn } from '../lib/utils';
+import { useThemeStore } from '../stores/theme-store';
+import { IconBrowser } from './IconBrowser';
 import { StyleEditor } from './StyleEditor'; // Reusing StyleEditor for segment styling
 
 // Define types for format segments

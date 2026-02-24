@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+
 import { TomlParser } from './toml-parser';
 
 describe('TomlParser', () => {
@@ -83,13 +83,13 @@ describe('TomlParser', () => {
 
     it('should handle undefined override', () => {
       const base = { a: 1 };
-      const result = TomlParser.merge(base, undefined as any);
+      const result = TomlParser.merge(base, undefined);
       expect(result).toEqual(base);
     });
 
     it('should handle undefined base', () => {
       const override = { a: 1 };
-      const result = TomlParser.merge(undefined as any, override);
+      const result = TomlParser.merge(undefined, override);
       expect(result).toEqual(override);
     });
 
@@ -126,44 +126,44 @@ describe('TomlParser', () => {
       const base = { a: 1, b: { c: 2 } };
       const override = { b: { d: 3 }, e: 4 };
       const expected = { a: 1, b: { c: 2, d: 3 }, e: 4 };
-      expect(TomlParser.merge(base as any, override as any)).toEqual(expected);
+      expect(TomlParser.merge(base, override)).toEqual(expected);
     });
 
     it('should NOT allow prototype pollution via __proto__', () => {
-      const base = {};
+      const base: Record<string, unknown> = {};
       const override = JSON.parse('{"__proto__": {"polluted": "yes"}}');
 
-      const result = TomlParser.merge(base as any, override as any);
+      const result = TomlParser.merge(base, override);
 
-      // @ts-ignore
-      expect(result.polluted).toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error - Checking for pollution on unknown property
+      expect(result?.polluted).toBeUndefined();
+      // @ts-expect-error - Checking for pollution on global Object
       expect({}.polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via constructor', () => {
-      const base = {};
+      const base: Record<string, unknown> = {};
       const override = JSON.parse(
         '{"constructor": {"prototype": {"polluted": "yes"}}}',
       );
 
-      const result = TomlParser.merge(base as any, override as any);
+      const result = TomlParser.merge(base, override);
 
-      // @ts-ignore
-      expect(result.polluted).toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error - Checking for pollution on unknown property
+      expect(result?.polluted).toBeUndefined();
+      // @ts-expect-error - Checking for pollution on global Object
       expect({}.polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via prototype', () => {
-      const base = {};
+      const base: Record<string, unknown> = {};
       const override = JSON.parse('{"prototype": {"polluted": "yes"}}');
 
-      const result = TomlParser.merge(base as any, override as any);
+      const result = TomlParser.merge(base, override);
 
-      // @ts-ignore
-      expect(result.polluted).toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error - Checking for pollution on unknown property
+      expect(result?.polluted).toBeUndefined();
+      // @ts-expect-error - Checking for pollution on global Object
       expect({}.polluted).toBeUndefined();
     });
   });

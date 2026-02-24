@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import 'xterm/css/xterm.css';
+
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
-import 'xterm/css/xterm.css';
-import { useThemeStore } from '../stores/theme-store';
+
 import { parseFormatString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { cn } from '../lib/utils';
+import { useThemeStore } from '../stores/theme-store';
 
 interface TerminalPreviewProps {
   className?: string;

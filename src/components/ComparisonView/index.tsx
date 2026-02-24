@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { useThemeStore } from '../../stores/theme-store';
-import { PRESET_THEMES } from '../../lib/presets';
-import { Theme } from '../../types/starship.types';
 import html2canvas from 'html2canvas';
-import { X, ArrowLeftRight, Camera } from 'lucide-react';
-import { TomlParser } from '../../lib/toml-parser';
+import { ArrowLeftRight, Camera, X } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+
 import { useToast } from '../../contexts/ToastContext';
+import { PRESET_THEMES } from '../../lib/presets';
+import { TomlParser } from '../../lib/toml-parser';
+import { useThemeStore } from '../../stores/theme-store';
+import { Theme } from '../../types/starship.types';
 
 interface ComparisonViewProps {
   onClose: () => void;
@@ -52,12 +53,14 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
 
   // Calculate basic stats for diff
   const getModulesLength = (theme: Theme) => {
-    return Object.keys(theme.config).filter(
-      (k) =>
-        k !== 'format' &&
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (theme.config as any)[k]?.disabled !== true,
-    ).length;
+    return Object.keys(theme.config).filter((k) => {
+      if (k === 'format') return false;
+      const val = theme.config[k];
+      if (typeof val === 'object' && val !== null && 'disabled' in val) {
+        return (val as { disabled?: boolean }).disabled !== true;
+      }
+      return true;
+    }).length;
   };
 
   const modulesA = getModulesLength(themeA);

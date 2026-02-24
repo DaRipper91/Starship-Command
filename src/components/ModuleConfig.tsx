@@ -1,9 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useThemeStore } from '../stores/theme-store';
 import { Info } from 'lucide-react';
-import { StyleEditor } from './StyleEditor';
-import { IconBrowser } from './IconBrowser';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useThemeStore } from '../stores/theme-store';
+import {
+  BaseModuleConfig,
+  DirectoryConfig,
+  GitStatusConfig,
+} from '../types/starship.types';
 import { FormatEditor } from './FormatEditor';
+import { IconBrowser } from './IconBrowser';
+import { StyleEditor } from './StyleEditor';
 
 export function ModuleConfig() {
   const { currentTheme, selectedModule, updateConfig } = useThemeStore();
@@ -40,8 +46,8 @@ export function ModuleConfig() {
   }
 
   // Safe access to module config
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const moduleConfig = (currentTheme.config as any)[selectedModule] || {};
+  const moduleConfig =
+    (currentTheme.config[selectedModule] as BaseModuleConfig) || {};
 
   const handleChange = (key: string, value: string | boolean | number) => {
     updateConfig({
@@ -154,7 +160,9 @@ export function ModuleConfig() {
                 </label>
                 <input
                   type="number"
-                  value={moduleConfig.truncation_length ?? 3}
+                  value={
+                    (moduleConfig as DirectoryConfig).truncation_length ?? 3
+                  }
                   onChange={(e) =>
                     handleChange('truncation_length', parseInt(e.target.value))
                   }
@@ -165,7 +173,10 @@ export function ModuleConfig() {
                 <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-gray-300">
                   <input
                     type="checkbox"
-                    checked={moduleConfig.truncate_to_repo === true}
+                    checked={
+                      (moduleConfig as DirectoryConfig).truncate_to_repo ===
+                      true
+                    }
                     onChange={(e) =>
                       handleChange('truncate_to_repo', e.target.checked)
                     }
@@ -203,7 +214,11 @@ export function ModuleConfig() {
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      value={moduleConfig[key] || ''}
+                      value={
+                        (moduleConfig as GitStatusConfig)[
+                          key as keyof GitStatusConfig
+                        ] || ''
+                      }
                       onChange={(e) => handleChange(key, e.target.value)}
                       placeholder="e.g. ✖ "
                       className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -222,7 +237,11 @@ export function ModuleConfig() {
                   {showIconBrowser === key && (
                     <div className="absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]">
                       <IconBrowser
-                        currentSymbol={moduleConfig[key] as string}
+                        currentSymbol={
+                          (moduleConfig as GitStatusConfig)[
+                            key as keyof GitStatusConfig
+                          ] as string
+                        }
                         onSelect={(symbol) => {
                           handleChange(key, symbol);
                           setShowIconBrowser(null);

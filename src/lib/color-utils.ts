@@ -3,6 +3,7 @@ import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
 import ColorThief from 'colorthief';
+
 import { ColorPalette } from '../types/starship.types';
 
 // Extend colord with necessary plugins
@@ -218,6 +219,36 @@ export class ColorUtils {
       success: '#9ece6a',
       warning: '#e0af68',
       error: '#f7768e',
+    },
+    OneDark: {
+      primary: '#61afef',
+      secondary: '#c678dd',
+      accent: '#98c379',
+      background: '#282c34',
+      foreground: '#abb2bf',
+      success: '#98c379',
+      warning: '#e5c07b',
+      error: '#e06c75',
+    },
+    Monokai: {
+      primary: '#fd971f',
+      secondary: '#66d9ef',
+      accent: '#ae81ff',
+      background: '#272822',
+      foreground: '#f8f8f2',
+      success: '#a6e22e',
+      warning: '#f4bf75',
+      error: '#f92672',
+    },
+    Solarized: {
+      primary: '#268bd2',
+      secondary: '#2aa198',
+      accent: '#d33682',
+      background: '#002b36',
+      foreground: '#839496',
+      success: '#859900',
+      warning: '#b58900',
+      error: '#dc322f',
     },
   };
 }

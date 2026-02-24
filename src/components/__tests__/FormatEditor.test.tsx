@@ -1,9 +1,10 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { FormatEditor } from '../FormatEditor';
-import { useThemeStore } from '../../stores/theme-store';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { TomlParser } from '../../lib/toml-parser';
+import { useThemeStore } from '../../stores/theme-store';
+import { FormatEditor } from '../FormatEditor';
 
 // Mock zustand store
 vi.mock('../../stores/theme-store', () => ({

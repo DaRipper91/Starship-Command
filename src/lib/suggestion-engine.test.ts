@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { SuggestionEngine, Environment } from './suggestion-engine';
+import { describe, expect, it } from 'vitest';
+
 import { StarshipConfig } from '../types/starship.types';
+import { Environment, SuggestionEngine } from './suggestion-engine';
 
 describe('SuggestionEngine', () => {
   // Helper to create a base environment

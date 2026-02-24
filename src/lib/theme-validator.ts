@@ -42,7 +42,9 @@ export class ThemeValidator {
   /**
    * Validates a Starship configuration
    */
-  static validateConfig(config: StarshipConfig): ValidationResult {
+  static validateConfig(
+    config: StarshipConfig | null | undefined,
+  ): ValidationResult {
     const errors: ValidationIssue[] = [];
     const warnings: ValidationIssue[] = [];
     const suggestions: string[] = [];

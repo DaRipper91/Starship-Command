@@ -1,14 +1,21 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
 import { createDebouncedStorage } from '../lib/storage-utils';
-import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
 import { TomlParser } from '../lib/toml-parser';
 import { generateId } from '../lib/utils';
+import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
 
 interface ThemeStore {
   currentTheme: Theme;
   savedThemes: Theme[];
   selectedModule: string | null;
+
+  // History
+  past: Theme[];
+  future: Theme[];
+  undo: () => void;
+  redo: () => void;
 
   // Actions
   updateConfig: (config: Partial<StarshipConfig>) => void;
@@ -23,6 +30,8 @@ interface ThemeStore {
   exportToml: () => string;
   importToml: (tomlString: string) => void;
 }
+
+const HISTORY_LIMIT = 50;
 
 const createDefaultTheme = (): Theme => ({
   metadata: {
@@ -40,10 +49,38 @@ export const useThemeStore = create<ThemeStore>()(
       currentTheme: createDefaultTheme(),
       savedThemes: [],
       selectedModule: null,
+      past: [],
+      future: [],
+
+      undo: () => {
+        set((state) => {
+          if (state.past.length === 0) return {};
+          const previous = state.past[state.past.length - 1];
+          const newPast = state.past.slice(0, -1);
+          return {
+            past: newPast,
+            currentTheme: previous,
+            future: [state.currentTheme, ...state.future],
+          };
+        });
+      },
+
+      redo: () => {
+        set((state) => {
+          if (state.future.length === 0) return {};
+          const next = state.future[0];
+          const newFuture = state.future.slice(1);
+          return {
+            past: [...state.past, state.currentTheme],
+            currentTheme: next,
+            future: newFuture,
+          };
+        });
+      },
 
       updateConfig: (newConfig) => {
-        set((state) => ({
-          currentTheme: {
+        set((state) => {
+          const nextTheme = {
             ...state.currentTheme,
             config: {
               ...state.currentTheme.config,
@@ -64,21 +101,32 @@ export const useThemeStore = create<ThemeStore>()(
               ...state.currentTheme.metadata,
               updated: new Date(),
             },
-          },
-        }));
+          };
+
+          return {
+            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+            currentTheme: nextTheme,
+            future: [], // Clear redo stack on new change
+          };
+        });
       },
 
       updateMetadata: (newMetadata) => {
-        set((state) => ({
-          currentTheme: {
+        set((state) => {
+          const nextTheme = {
             ...state.currentTheme,
             metadata: {
               ...state.currentTheme.metadata,
               ...newMetadata,
               updated: new Date(),
             },
-          },
-        }));
+          };
+          return {
+            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+            currentTheme: nextTheme,
+            future: [],
+          };
+        });
       },
 
       setSelectedModule: (module) => {
@@ -86,7 +134,12 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       loadTheme: (theme) => {
-        set({ currentTheme: theme, selectedModule: null });
+        set((state) => ({
+          past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+          currentTheme: theme,
+          selectedModule: null,
+          future: [],
+        }));
       },
 
       saveTheme: () => {
@@ -114,7 +167,12 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       resetTheme: () => {
-        set({ currentTheme: createDefaultTheme(), selectedModule: null });
+        set((state) => ({
+          past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+          currentTheme: createDefaultTheme(),
+          selectedModule: null,
+          future: [],
+        }));
       },
 
       exportToml: () => {
@@ -126,6 +184,7 @@ export const useThemeStore = create<ThemeStore>()(
         try {
           const config = TomlParser.parse(tomlString);
           set((state) => ({
+            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
             currentTheme: {
               ...state.currentTheme,
               config,
@@ -135,6 +194,7 @@ export const useThemeStore = create<ThemeStore>()(
               },
             },
             selectedModule: null,
+            future: [],
           }));
         } catch (error) {
           console.error('Failed to import TOML:', error);
@@ -148,7 +208,7 @@ export const useThemeStore = create<ThemeStore>()(
       partialize: (state) => ({
         savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
-        // Don"t persist selectedModule
+        // Don't persist history or selection
       }),
     },
   ),

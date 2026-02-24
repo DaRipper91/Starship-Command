@@ -1,6 +1,7 @@
+import { Check, Search, X } from 'lucide-react';
 import React, { useState } from 'react';
+
 import { cn } from '../../lib/utils';
-import { Search, X, Check } from 'lucide-react';
 
 interface IconBrowserProps {
   onSelect: (symbol: string) => void;

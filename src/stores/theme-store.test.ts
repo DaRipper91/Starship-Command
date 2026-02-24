@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { useThemeStore } from './theme-store';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { TomlParser } from '../lib/toml-parser';
 import { Theme } from '../types/starship.types';
+import { useThemeStore } from './theme-store';
 
 describe('ThemeStore', () => {
   const mockDate = new Date('2024-01-01T00:00:00.000Z');

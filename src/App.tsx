@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import { ArrowLeftRight, Keyboard, Redo, Undo, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
 import { CommandPalette } from './components/CommandPalette';
-import { WelcomeWizard } from './components/WelcomeWizard';
-import { ModuleList } from './components/ModuleList';
-import { ImagePalette } from './components/ImagePalette';
-import { TerminalPreview } from './components/TerminalPreview';
-import { ModuleConfig } from './components/ModuleConfig';
-import { SuggestionPanel } from './components/SuggestionPanel';
-import { ExportImport } from './components/ExportImport';
 import { ComparisonView } from './components/ComparisonView';
-import { ThemeGallery } from './components/ThemeGallery';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { ExportImport } from './components/ExportImport';
+import { ImagePalette } from './components/ImagePalette';
+import { ModuleConfig } from './components/ModuleConfig';
+import { ModuleList } from './components/ModuleList';
+import { SuggestionPanel } from './components/SuggestionPanel';
+import { TerminalPreview } from './components/TerminalPreview';
+import { ThemeGallery } from './components/ThemeGallery';
+import { WelcomeWizard } from './components/WelcomeWizard';
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
-import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useThemeStore } from './stores/theme-store';
-import { X, ArrowLeftRight, Keyboard } from 'lucide-react';
 
 function AppContent() {
   const {
@@ -24,6 +25,10 @@ function AppContent() {
     updateMetadata,
     saveTheme,
     resetTheme,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
   } = useThemeStore();
   const { addToast } = useToast();
   const [showExportImport, setShowExportImport] = useState<
@@ -70,6 +75,16 @@ function AppContent() {
       handler: () => handleSave(),
     },
     {
+      keys: 'mod+z',
+      description: 'Undo',
+      handler: () => undo(),
+    },
+    {
+      keys: 'mod+shift+z',
+      description: 'Redo',
+      handler: () => redo(),
+    },
+    {
       keys: 'mod+k',
       description: 'Open Command Palette',
       handler: () => setShowCommandPalette(true),
@@ -93,6 +108,8 @@ function AppContent() {
 
   const commandActions = [
     { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: handleSave },
+    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: undo },
+    { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: redo },
     { id: 'new', title: 'New Theme', perform: handleNew },
     {
       id: 'gallery',
@@ -143,6 +160,24 @@ function AppContent() {
             placeholder="Theme Name"
             className="rounded border border-gray-700 bg-[#0d1117] px-3 py-1.5 text-sm text-gray-300 focus:border-blue-500 focus:outline-none"
           />
+          <div className="flex items-center border-r border-gray-700 pr-3">
+            <button
+              onClick={undo}
+              disabled={!canUndo()}
+              className="rounded p-2 text-gray-400 hover:bg-gray-800 hover:text-white disabled:bg-transparent disabled:opacity-30"
+              title="Undo (Cmd+Z)"
+            >
+              <Undo size={18} />
+            </button>
+            <button
+              onClick={redo}
+              disabled={!canRedo()}
+              className="rounded p-2 text-gray-400 hover:bg-gray-800 hover:text-white disabled:bg-transparent disabled:opacity-30"
+              title="Redo (Cmd+Shift+Z)"
+            >
+              <Redo size={18} />
+            </button>
+          </div>
           <button
             onClick={handleNew}
             className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
@@ -198,7 +233,9 @@ function AppContent() {
               Modules
             </h2>
             <div className="p-4">
-              <ModuleList />
+              <ErrorBoundary>
+                <ModuleList />
+              </ErrorBoundary>
             </div>
           </div>
           <div className="border-b border-gray-800 p-4">
@@ -213,7 +250,9 @@ function AppContent() {
         <main className="relative flex flex-1 flex-col overflow-y-auto p-8">
           <div className="bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10" />
           <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center">
-            <TerminalPreview className="w-full shadow-2xl" />
+            <ErrorBoundary>
+              <TerminalPreview className="w-full shadow-2xl" />
+            </ErrorBoundary>
           </div>
         </main>
 
@@ -256,7 +295,9 @@ function AppContent() {
               </button>
             </div>
             <div className="flex-1 overflow-hidden">
-              <ThemeGallery onSelect={() => setShowGallery(false)} />
+              <ErrorBoundary>
+                <ThemeGallery onSelect={() => setShowGallery(false)} />
+              </ErrorBoundary>
             </div>
           </div>
         </div>

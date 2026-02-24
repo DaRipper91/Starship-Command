@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
 import { ColorUtils } from './color-utils';
 
 // Mock node-vibrant
@@ -17,6 +18,17 @@ const mockVibrantFrom = vi.fn().mockReturnValue({
 vi.mock('node-vibrant/browser', () => ({
   default: {
     from: mockVibrantFrom,
+  },
+}));
+
+vi.mock('colorthief', () => ({
+  default: class {
+    getPalette() {
+      return [
+        [0, 0, 0],
+        [255, 255, 255],
+      ];
+    }
   },
 }));
 
@@ -39,6 +51,24 @@ describe('ColorUtils Optimization', () => {
     }
 
     (global.URL.createObjectURL as Mock).mockReturnValue('blob:test');
+
+    // Mock Image
+    const originalImage = global.Image;
+    global.Image = class {
+      onload: (() => void) | null = null;
+      onerror: ((e: Event | string) => void) | null = null;
+      src = '';
+      crossOrigin = '';
+      constructor() {
+        setTimeout(() => {
+          if (this.onload) this.onload();
+        }, 50);
+      }
+    } as unknown as typeof Image;
+
+    return () => {
+      global.Image = originalImage;
+    };
   });
 
   it('should lazy load node-vibrant and extract palette', async () => {

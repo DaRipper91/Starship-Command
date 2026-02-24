@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useDynamicTheme } from './useDynamicTheme';
-import { useThemeStore } from '../stores/theme-store';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { TomlParser } from '../lib/toml-parser';
+import { useThemeStore } from '../stores/theme-store';
+import { useDynamicTheme } from './useDynamicTheme';
 
 describe('useDynamicTheme', () => {
   const mockDate = new Date('2024-01-01T12:00:00.000Z'); // Noon
