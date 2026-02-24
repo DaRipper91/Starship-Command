@@ -1,7 +1,8 @@
 # Jules Briefing — Repo-Map & Auto-Changelog System
+
 **GitHub Profile:** DaRipper91  
 **Central Repo:** github.com/DaRipper91/repo-map  
-**Date:** 2026-02-23  
+**Date:** 2026-02-23
 
 ---
 
@@ -21,28 +22,31 @@ Read this entire file before starting. All code, file contents, decisions, and p
 ## System Overview
 
 ### Part 1 — Repo-Map
+
 A repository called `repo-map` acts as a text-only mirror of the entire DaRipper91 GitHub profile. It runs every 2 hours via GitHub Actions cron and generates structured Markdown file maps for every repo. It contains no code — only `.md` files describing what exists in each repo.
 
 ### Part 2 — Auto-Changelog
+
 Every repo in the profile gets a GitHub Actions workflow that fires on every push to `main` or `master`. It reads the git log and diff, calls Gemini AI, and writes a structured `CHANGELOG.md` entry covering: what commits were made, what files changed (grouped by type), a plain-English summary of what changed, what was fixed, and suggested next steps.
 
 ### Part 3 — Changelog Mirroring
+
 The repo-map sync (every 2 hours) also fetches each repo's `CHANGELOG.md` and mirrors it into `repo-map/repos/<name>/CHANGELOG.md`, and builds a cross-profile index at `repo-map/_meta/changelog-index.md`.
 
 ---
 
 ## Decisions Made (Do Not Change These)
 
-| Decision | Answer |
-|----------|--------|
-| Where does CHANGELOG.md live? | Both — in each repo AND mirrored in repo-map |
-| How is content generated? | Mix — commit messages for facts, Gemini AI for summary + next steps |
-| What triggers changelog update? | Pushes to main/master only + the every-2-hour repo-map sync |
-| Sync frequency | Every 2 hours (`0 */2 * * *`) |
-| AI model | Gemini 1.5 Flash (free tier) |
-| Max changelog entries kept | 50 per repo (auto-trimmed) |
-| File format | Markdown only — no binaries, no code in repo-map |
-| Cron schedule | `0 */2 * * *` — fires at midnight, 2am, 4am... 10pm UTC |
+| Decision                        | Answer                                                              |
+| ------------------------------- | ------------------------------------------------------------------- |
+| Where does CHANGELOG.md live?   | Both — in each repo AND mirrored in repo-map                        |
+| How is content generated?       | Mix — commit messages for facts, Gemini AI for summary + next steps |
+| What triggers changelog update? | Pushes to main/master only + the every-2-hour repo-map sync         |
+| Sync frequency                  | Every 2 hours (`0 */2 * * *`)                                       |
+| AI model                        | Gemini 1.5 Flash (free tier)                                        |
+| Max changelog entries kept      | 50 per repo (auto-trimmed)                                          |
+| File format                     | Markdown only — no binaries, no code in repo-map                    |
+| Cron schedule                   | `0 */2 * * *` — fires at midnight, 2am, 4am... 10pm UTC             |
 
 ---
 
@@ -93,19 +97,22 @@ your-repo/
 ## Secrets Required
 
 ### In repo-map:
-| Secret Name | Value |
-|-------------|-------|
-| `GH_TOKEN` | GitHub Personal Access Token with `repo`, `workflow`, `read:org` scopes |
+
+| Secret Name | Value                                                                   |
+| ----------- | ----------------------------------------------------------------------- |
+| `GH_TOKEN`  | GitHub Personal Access Token with `repo`, `workflow`, `read:org` scopes |
 
 ### In every repo with changelog:
-| Secret Name | Value |
-|-------------|-------|
-| `GEMINI_API_KEY` | Gemini API key from aistudio.google.com/app/apikey |
+
+| Secret Name       | Value                                                                  |
+| ----------------- | ---------------------------------------------------------------------- |
+| `GEMINI_API_KEY`  | Gemini API key from aistudio.google.com/app/apikey                     |
 | `CHANGELOG_TOKEN` | Optional — same PAT as GH_TOKEN. Falls back to GITHUB_TOKEN if not set |
 
 ---
 
 ## File 1 — sync.yml
+
 **Location in repo-map:** `.github/workflows/sync.yml`
 
 ```yaml
@@ -113,7 +120,7 @@ name: Sync Repo Map
 
 on:
   schedule:
-    - cron: '0 */2 * * *'   # Every 2 hours: midnight, 2am, 4am... 10pm UTC
+    - cron: '0 */2 * * *' # Every 2 hours: midnight, 2am, 4am... 10pm UTC
   workflow_dispatch:
   push:
     branches: [main]
@@ -183,6 +190,7 @@ jobs:
 ---
 
 ## File 2 — sync_repo_map.py
+
 **Location in repo-map:** `sync_repo_map.py` (root)
 
 ```python
@@ -462,6 +470,7 @@ sync_changelogs.run_sync(repos, USERNAME)
 ---
 
 ## File 3 — sync_changelogs.py
+
 **Location in repo-map:** `sync_changelogs.py` (root)
 
 ```python
@@ -594,6 +603,7 @@ def run_sync(repos, username=None):
 ---
 
 ## File 4 — changelog-workflow.yml
+
 **Location in each repo:** `.github/workflows/changelog-workflow.yml`
 
 ```yaml
@@ -640,11 +650,11 @@ jobs:
       - name: Generate changelog entry
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
-          REPO_NAME:      ${{ github.repository }}
-          COMMIT_SHA:     ${{ github.sha }}
-          PUSHER:         ${{ github.actor }}
-          BRANCH:         ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_NAME: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+          PUSHER: ${{ github.actor }}
+          BRANCH: ${{ github.ref_name }}
         run: python .github/scripts/update_changelog.py
 
       - name: Commit changelog
@@ -663,6 +673,7 @@ jobs:
 ---
 
 ## File 5 — update_changelog.py
+
 **Location in each repo:** `.github/scripts/update_changelog.py`
 
 ```python
@@ -795,7 +806,9 @@ Recent commits:
 
 Code diff (may be truncated):
 ```
+
 {diff[:8000]}
+
 ```
 
 Write exactly three sections. Be specific, technical, and concise.
@@ -956,10 +969,13 @@ if __name__ == "__main__":
    - `_meta/.gitkeep`
    - `repos/.gitkeep`
 4. Create a root `README.md` with this content:
+
    ```markdown
    # 🗂️ DaRipper91 — Repo Map
+
    > Initial setup. First sync will populate this file automatically.
    ```
+
 5. Commit everything with message: `🚀 initial setup: repo-map sync infrastructure`
 
 ### Task 2 — Add changelog system to each repo
@@ -971,6 +987,7 @@ For every repository in the DaRipper91 profile **except** `repo-map` itself:
 3. Commit with message: `ci: add auto-changelog workflow`
 
 **Skip these if they exist (don't overwrite):**
+
 - Any existing `CHANGELOG.md` (the script will append to it, not replace it)
 - Any existing `.github/workflows/` files other than `changelog-workflow.yml`
 
@@ -984,6 +1001,7 @@ Check whether the following secrets are set on each repo. If any are missing, le
 ### Task 4 — Trigger first sync
 
 After all files are in place:
+
 1. Trigger the sync workflow manually: `gh workflow run sync.yml --repo DaRipper91/repo-map`
 2. Wait for it to complete
 3. Verify `repos/` directory is populated with at least one repo folder
@@ -1021,14 +1039,16 @@ This is what a generated entry looks like after a push:
 - [`a3f82c1`] feat: add user avatar upload to profile page _DaRipper91_
 - [`7d14e90`] fix: resolve memory leak in image preview component _DaRipper91_
 
-### 📁 Files Changed  _6 total (2 added, 3 modified, 1 deleted)_
+### 📁 Files Changed _6 total (2 added, 3 modified, 1 deleted)_
 
 **Source Code**
+
 - `src/components/Profile/AvatarUpload.tsx` — Added
 - `src/components/Profile/ImagePreview.tsx` — Modified
 - `src/hooks/useImageUpload.ts` — Added
 
 **Config**
+
 - `package.json` — Modified
 
 ### 💡 What Changed

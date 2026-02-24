@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { CommandPalette } from './components/CommandPalette';
 import { WelcomeWizard } from './components/WelcomeWizard';
 import { ModuleList } from './components/ModuleList';
@@ -6,10 +6,29 @@ import { ImagePalette } from './components/ImagePalette';
 import { TerminalPreview } from './components/TerminalPreview';
 import { ModuleConfig } from './components/ModuleConfig';
 import { SuggestionPanel } from './components/SuggestionPanel';
-import { ExportImport } from './components/ExportImport';
-import { ComparisonView } from './components/ComparisonView';
-import { ThemeGallery } from './components/ThemeGallery';
 import { ErrorBoundary } from './components/ErrorBoundary';
+
+const ExportImport = lazy(() =>
+  import('./components/ExportImport').then((m) => ({
+    default: m.ExportImport,
+  })),
+);
+const ComparisonView = lazy(() =>
+  import('./components/ComparisonView').then((m) => ({
+    default: m.ComparisonView,
+  })),
+);
+const ThemeGallery = lazy(() =>
+  import('./components/ThemeGallery').then((m) => ({
+    default: m.ThemeGallery,
+  })),
+);
+
+const LoadingFallback = () => (
+  <div className="flex h-full w-full items-center justify-center p-8">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+  </div>
+);
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -233,14 +252,18 @@ function AppContent() {
 
       {/* MODALS */}
       {showExportImport && (
-        <ExportImport
-          initialTab={showExportImport}
-          onClose={() => setShowExportImport(null)}
-        />
+        <Suspense fallback={<LoadingFallback />}>
+          <ExportImport
+            initialTab={showExportImport}
+            onClose={() => setShowExportImport(null)}
+          />
+        </Suspense>
       )}
 
       {showComparison && (
-        <ComparisonView onClose={() => setShowComparison(false)} />
+        <Suspense fallback={<LoadingFallback />}>
+          <ComparisonView onClose={() => setShowComparison(false)} />
+        </Suspense>
       )}
 
       {showGallery && (
@@ -256,7 +279,9 @@ function AppContent() {
               </button>
             </div>
             <div className="flex-1 overflow-hidden">
-              <ThemeGallery onSelect={() => setShowGallery(false)} />
+              <Suspense fallback={<LoadingFallback />}>
+                <ThemeGallery onSelect={() => setShowGallery(false)} />
+              </Suspense>
             </div>
           </div>
         </div>
