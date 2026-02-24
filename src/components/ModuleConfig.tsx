@@ -5,8 +5,17 @@ import { StyleEditor } from './StyleEditor';
 import { IconBrowser } from './IconBrowser';
 import { FormatEditor } from './FormatEditor';
 
-export function ModuleConfig() {
-  const { currentTheme, selectedModule, updateConfig } = useThemeStore();
+export const ModuleConfig = React.memo(function ModuleConfig() {
+  const selectedModule = useThemeStore((state) => state.selectedModule);
+  const updateConfig = useThemeStore((state) => state.updateConfig);
+  // Selector to only subscribe to the configuration of the selected module
+  // This prevents re-renders when other parts of the theme change (like metadata or other modules)
+  const moduleConfig = useThemeStore((state) => {
+    if (!state.selectedModule) return {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (state.currentTheme.config as any)[state.selectedModule] || {};
+  });
+
   const [showIconBrowser, setShowIconBrowser] = useState<string | null>(null);
   const iconBrowserRef = useRef<HTMLDivElement>(null);
 
@@ -38,10 +47,6 @@ export function ModuleConfig() {
       </div>
     );
   }
-
-  // Safe access to module config
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const moduleConfig = (currentTheme.config as any)[selectedModule] || {};
 
   const handleChange = (key: string, value: string | boolean | number) => {
     updateConfig({
@@ -238,4 +243,4 @@ export function ModuleConfig() {
       </div>
     </div>
   );
-}
+});

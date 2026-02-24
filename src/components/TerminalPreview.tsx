@@ -6,6 +6,9 @@ import { useThemeStore } from '../stores/theme-store';
 import { parseFormatString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { cn } from '../lib/utils';
+import { useDebounce } from '../hooks/useDebounce';
+
+const DEBOUNCE_DELAY_MS = 200;
 
 interface TerminalPreviewProps {
   className?: string;
@@ -105,6 +108,9 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     return parseFormatString(format, currentTheme.config, scenario);
   }, [currentTheme.config, scenarioIndex, scenarioKeys]);
 
+  // Debounce the output to prevent excessive re-renders during rapid typing
+  const debouncedOutput = useDebounce(output, DEBOUNCE_DELAY_MS);
+
   // Effect to update content when output changes
   useEffect(() => {
     const term = xtermRef.current;
@@ -114,8 +120,8 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     term.reset();
 
     // Write output
-    term.write(output);
-  }, [output]);
+    term.write(debouncedOutput);
+  }, [debouncedOutput]);
 
   return (
     <div

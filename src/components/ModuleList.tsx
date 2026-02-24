@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -29,7 +29,7 @@ interface ModuleItem {
   isCustom?: boolean;
 }
 
-function SortableItem({
+const SortableItem = React.memo(function SortableItem({
   item,
   isSelected,
   onSelect,
@@ -114,22 +114,29 @@ function SortableItem({
       </div>
     </div>
   );
-}
+});
 
 export function ModuleList({ className }: { className?: string }) {
-  const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
-    useThemeStore();
+  // Selective subscription to prevent re-renders when other parts of the config change
+  const customConfig = useThemeStore(
+    (state) => state.currentTheme.config.custom,
+  );
+  const format = useThemeStore((state) => state.currentTheme.config.format);
+  const selectedModule = useThemeStore((state) => state.selectedModule);
+  const updateConfig = useThemeStore((state) => state.updateConfig);
+  const setSelectedModule = useThemeStore((state) => state.setSelectedModule);
+
   const [activeId, setActiveId] = useState<string | null>(null);
 
   // Combine predefined and custom modules
   const allModules = useMemo(() => {
-    const customModules: ModuleItem[] = Object.keys(
-      currentTheme.config.custom || {},
-    ).map((id) => ({
-      id,
-      name: id,
-      isCustom: true,
-    }));
+    const customModules: ModuleItem[] = Object.keys(customConfig || {}).map(
+      (id) => ({
+        id,
+        name: id,
+        isCustom: true,
+      }),
+    );
 
     // Ensure MODULE_DEFINITIONS are also ModuleItem compatible
     const predefinedModules: ModuleItem[] = MODULE_DEFINITIONS.map((def) => ({
@@ -138,12 +145,12 @@ export function ModuleList({ className }: { className?: string }) {
     }));
 
     return [...predefinedModules, ...customModules];
-  }, [currentTheme.config.custom]);
+  }, [customConfig]);
 
   // Parse modules from format string, including custom ones
   const activeModules = useMemo(() => {
-    const format = currentTheme.config.format || '';
-    const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
+    const fmt = format || '';
+    const matches = fmt.match(/\$([a-zA-Z0-9_]+)/g) || [];
     const existingModuleNames = new Set(allModules.map((m) => m.name));
 
     const parsedModules = matches
@@ -159,7 +166,7 @@ export function ModuleList({ className }: { className?: string }) {
       .filter((item) => existingModuleNames.has(item.name));
 
     return parsedModules;
-  }, [currentTheme.config.format, allModules]);
+  }, [format, allModules]);
 
   // Find inactive modules
   const inactiveModules = useMemo(() => {
@@ -167,8 +174,14 @@ export function ModuleList({ className }: { className?: string }) {
     return allModules.filter((def) => !activeNames.has(def.id));
   }, [activeModules, allModules]);
 
+  // Memoize active IDs for dnd-kit SortableContext
+  const activeModuleIds = useMemo(
+    () => activeModules.map((m) => m.id),
+    [activeModules],
+  );
+
   const handleToggle = (name: string, enable: boolean) => {
-    let newFormat = currentTheme.config.format || '';
+    let newFormat = format || '';
     if (enable) {
       newFormat += `$${name}`;
     } else {
@@ -177,9 +190,26 @@ export function ModuleList({ className }: { className?: string }) {
       newFormat = newFormat.replace(regex, '');
     }
 
-    // Also update module config to reflect disabled state
+    // Note: We don't have access to the full config here efficiently,
+    // but updateConfig merges. However, we need the existing module config to preserve other props?
+    // Actually updateConfig does a deep merge or partial update usually.
+    // The previous code read currentTheme.config.
+    // We can just send the disabled flag update if our store handles merging correctly.
+    // Assuming updateConfig merges at top level keys.
+    // But we need to update 'format' AND 'moduleName'.
+
+    // To avoid fetching full state here, we can use the functional update form of setState if available,
+    // but updateConfig is an action.
+    // Ideally updateConfig should handle partial updates.
+    // Let's assume we can just pass what we want to change.
+
+    // However, to be safe and match previous logic (which read existing config),
+    // we might need to access the store state directly via get().
+    // usage of useThemeStore.getState() is better for event handlers than props.
+
+    const state = useThemeStore.getState();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const existingModuleConfig = (currentTheme.config as any)[name] || {};
+    const existingModuleConfig = (state.currentTheme.config as any)[name] || {};
 
     updateConfig({
       format: newFormat,
@@ -238,7 +268,7 @@ export function ModuleList({ className }: { className?: string }) {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={activeModules.map((m) => m.id)}
+            items={activeModuleIds}
             strategy={verticalListSortingStrategy}
           >
             <div className="flex flex-col gap-2">

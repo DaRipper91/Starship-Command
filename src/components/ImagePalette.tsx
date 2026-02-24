@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useThemeStore } from '../stores/theme-store';
 import { ColorUtils, ExtendedColorPalette } from '../lib/color-utils';
-import { Upload, Image as ImageIcon } from 'lucide-react';
+import { Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 
 export function ImagePalette() {
   const { updateConfig } = useThemeStore();
@@ -105,9 +105,12 @@ export function ImagePalette() {
       </div>
 
       {isExtracting && (
-        <p className="text-center text-sm text-gray-400">
-          Extracting colors...
-        </p>
+        <div className="flex flex-col items-center justify-center py-4">
+          <Loader2 className="mb-2 h-6 w-6 animate-spin text-blue-500" />
+          <p className="text-center text-sm text-gray-400">
+            Extracting colors...
+          </p>
+        </div>
       )}
 
       {palette && !isExtracting && (
