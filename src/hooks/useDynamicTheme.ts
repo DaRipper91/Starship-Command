@@ -19,7 +19,7 @@ export function useDynamicTheme() {
   useEffect(() => {
     // For now, let's hardcode a simple dynamic setting for demonstration
     const dynamicSettings: DynamicThemeSettings = {
-      enabled: true, // Assume dynamic themes are enabled
+      enabled: false, // Default to disabled to prevent interference with editing
       dayThemeId: 'preset-clean', // Use a preset as day theme
       nightThemeId: 'preset-dracula', // Use another preset as night theme
       dayStartTime: '07:00',
