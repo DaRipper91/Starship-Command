@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColorPicker } from './ColorPicker';
 import { cn } from '../lib/utils';
 import { Bold, Italic, Underline } from 'lucide-react';

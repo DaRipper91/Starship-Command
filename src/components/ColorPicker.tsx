@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { colord, extend } from 'colord';
 import namesPlugin from 'colord/plugins/names';
 import a11yPlugin from 'colord/plugins/a11y';
-import { Pipette, Check, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Check, Pipette } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { ColorUtils } from '../lib/color-utils';
 

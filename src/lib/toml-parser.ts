@@ -20,7 +20,6 @@ export class TomlParser {
       // @iarna/toml returns a Record<string, any>, which maps to our StarshipConfig
       return TOML.parse(tomlString) as unknown as StarshipConfig;
     } catch (error) {
-      console.error('Failed to parse TOML:', error);
       throw new Error(
         `Invalid TOML syntax: ${error instanceof Error ? error.message : String(error)}`,
       );
@@ -39,7 +38,6 @@ export class TomlParser {
       const cleanConfig = JSON.parse(JSON.stringify(config));
       return TOML.stringify(cleanConfig as unknown as TOML.JsonMap);
     } catch (error) {
-      console.error('Failed to stringify config:', error);
       throw new Error('Failed to generate TOML');
     }
   }

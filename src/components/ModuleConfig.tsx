@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useThemeStore } from '../stores/theme-store';
 import { Info } from 'lucide-react';
 import { StyleEditor } from './StyleEditor';

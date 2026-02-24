@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CommandPalette } from './components/CommandPalette';
 import { WelcomeWizard } from './components/WelcomeWizard';
 import { ModuleList } from './components/ModuleList';
@@ -15,7 +15,7 @@ import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useThemeStore } from './stores/theme-store';
-import { X, ArrowLeftRight, Keyboard } from 'lucide-react';
+import { ArrowLeftRight, Keyboard, X, Undo, Redo } from 'lucide-react';
 
 function AppContent() {
   const {
@@ -24,6 +24,10 @@ function AppContent() {
     updateMetadata,
     saveTheme,
     resetTheme,
+    undo,
+    redo,
+    past,
+    future,
   } = useThemeStore();
   const { addToast } = useToast();
   const [showExportImport, setShowExportImport] = useState<
@@ -64,6 +68,16 @@ function AppContent() {
   };
 
   useKeyboardShortcuts([
+    {
+      keys: 'mod+z',
+      description: 'Undo',
+      handler: () => undo(),
+    },
+    {
+      keys: 'mod+shift+z',
+      description: 'Redo',
+      handler: () => redo(),
+    },
     {
       keys: 'mod+s',
       description: 'Save current theme',
@@ -149,6 +163,24 @@ function AppContent() {
           >
             New
           </button>
+          <div className="flex items-center gap-1 rounded bg-gray-800 p-1">
+            <button
+              onClick={undo}
+              disabled={past.length === 0}
+              className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              title="Undo (Ctrl+Z)"
+            >
+              <Undo size={16} />
+            </button>
+            <button
+              onClick={redo}
+              disabled={future.length === 0}
+              className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              title="Redo (Ctrl+Shift+Z)"
+            >
+              <Redo size={16} />
+            </button>
+          </div>
           <button
             onClick={() => setShowGallery(true)}
             className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
@@ -193,27 +225,31 @@ function AppContent() {
       <div className="flex flex-1 overflow-hidden">
         {/* LEFT SIDEBAR */}
         <aside className="flex w-80 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22]">
-          <div className="flex items-center justify-between border-b border-gray-800 p-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
-              Modules
-            </h2>
-            <div className="p-4">
-              <ModuleList />
+          <ErrorBoundary>
+            <div className="flex items-center justify-between border-b border-gray-800 p-4">
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+                Modules
+              </h2>
+              <div className="p-4">
+                <ModuleList />
+              </div>
             </div>
-          </div>
-          <div className="border-b border-gray-800 p-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
-              Colors
-            </h2>
-            <ImagePalette />
-          </div>
+            <div className="border-b border-gray-800 p-4">
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+                Colors
+              </h2>
+              <ImagePalette />
+            </div>
+          </ErrorBoundary>
         </aside>
 
         {/* CENTER - TERMINAL */}
         <main className="relative flex flex-1 flex-col overflow-y-auto p-8">
           <div className="bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10" />
           <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center">
-            <TerminalPreview className="w-full shadow-2xl" />
+            <ErrorBoundary>
+              <TerminalPreview className="w-full shadow-2xl" />
+            </ErrorBoundary>
           </div>
         </main>
 
@@ -256,7 +292,9 @@ function AppContent() {
               </button>
             </div>
             <div className="flex-1 overflow-hidden">
-              <ThemeGallery onSelect={() => setShowGallery(false)} />
+              <ErrorBoundary>
+                <ThemeGallery onSelect={() => setShowGallery(false)} />
+              </ErrorBoundary>
             </div>
           </div>
         </div>

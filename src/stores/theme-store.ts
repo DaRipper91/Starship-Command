@@ -9,6 +9,8 @@ interface ThemeStore {
   currentTheme: Theme;
   savedThemes: Theme[];
   selectedModule: string | null;
+  past: Theme[];
+  future: Theme[];
 
   // Actions
   updateConfig: (config: Partial<StarshipConfig>) => void;
@@ -18,6 +20,8 @@ interface ThemeStore {
   saveTheme: () => void;
   deleteTheme: (id: string) => void;
   resetTheme: () => void;
+  undo: () => void;
+  redo: () => void;
 
   // Import/Export
   exportToml: () => string;
@@ -40,45 +44,59 @@ export const useThemeStore = create<ThemeStore>()(
       currentTheme: createDefaultTheme(),
       savedThemes: [],
       selectedModule: null,
+      past: [],
+      future: [],
 
       updateConfig: (newConfig) => {
-        set((state) => ({
-          currentTheme: {
-            ...state.currentTheme,
-            config: {
-              ...state.currentTheme.config,
-              // Ensure palettes.global is merged correctly
-              palettes: {
-                ...state.currentTheme.config.palettes,
-                global: {
-                  ...state.currentTheme.config.palettes?.global,
-                  ...newConfig.palettes?.global,
+        set((state) => {
+          const newPast = [...state.past, state.currentTheme].slice(-50);
+          return {
+            past: newPast,
+            future: [],
+            currentTheme: {
+              ...state.currentTheme,
+              config: {
+                ...state.currentTheme.config,
+                // Ensure palettes.global is merged correctly
+                palettes: {
+                  ...state.currentTheme.config.palettes,
+                  global: {
+                    ...state.currentTheme.config.palettes?.global,
+                    ...newConfig.palettes?.global,
+                  },
                 },
+                // Merge other config directly
+                ...Object.fromEntries(
+                  Object.entries(newConfig).filter(
+                    ([key]) => key !== 'palettes',
+                  ),
+                ),
               },
-              // Merge other config directly
-              ...Object.fromEntries(
-                Object.entries(newConfig).filter(([key]) => key !== 'palettes'),
-              ),
+              metadata: {
+                ...state.currentTheme.metadata,
+                updated: new Date(),
+              },
             },
-            metadata: {
-              ...state.currentTheme.metadata,
-              updated: new Date(),
-            },
-          },
-        }));
+          };
+        });
       },
 
       updateMetadata: (newMetadata) => {
-        set((state) => ({
-          currentTheme: {
-            ...state.currentTheme,
-            metadata: {
-              ...state.currentTheme.metadata,
-              ...newMetadata,
-              updated: new Date(),
+        set((state) => {
+          const newPast = [...state.past, state.currentTheme].slice(-50);
+          return {
+            past: newPast,
+            future: [],
+            currentTheme: {
+              ...state.currentTheme,
+              metadata: {
+                ...state.currentTheme.metadata,
+                ...newMetadata,
+                updated: new Date(),
+              },
             },
-          },
-        }));
+          };
+        });
       },
 
       setSelectedModule: (module) => {
@@ -86,7 +104,12 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       loadTheme: (theme) => {
-        set({ currentTheme: theme, selectedModule: null });
+        set({
+          currentTheme: theme,
+          selectedModule: null,
+          past: [],
+          future: [],
+        });
       },
 
       saveTheme: () => {
@@ -114,7 +137,38 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       resetTheme: () => {
-        set({ currentTheme: createDefaultTheme(), selectedModule: null });
+        set({
+          currentTheme: createDefaultTheme(),
+          selectedModule: null,
+          past: [],
+          future: [],
+        });
+      },
+
+      undo: () => {
+        set((state) => {
+          if (state.past.length === 0) return {};
+          const previous = state.past[state.past.length - 1];
+          const newPast = state.past.slice(0, -1);
+          return {
+            past: newPast,
+            future: [state.currentTheme, ...state.future],
+            currentTheme: previous,
+          };
+        });
+      },
+
+      redo: () => {
+        set((state) => {
+          if (state.future.length === 0) return {};
+          const next = state.future[0];
+          const newFuture = state.future.slice(1);
+          return {
+            past: [...state.past, state.currentTheme],
+            future: newFuture,
+            currentTheme: next,
+          };
+        });
       },
 
       exportToml: () => {
@@ -123,23 +177,20 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       importToml: (tomlString) => {
-        try {
-          const config = TomlParser.parse(tomlString);
-          set((state) => ({
-            currentTheme: {
-              ...state.currentTheme,
-              config,
-              metadata: {
-                ...state.currentTheme.metadata,
-                updated: new Date(),
-              },
+        const config = TomlParser.parse(tomlString);
+        set((state) => ({
+          currentTheme: {
+            ...state.currentTheme,
+            config,
+            metadata: {
+              ...state.currentTheme.metadata,
+              updated: new Date(),
             },
-            selectedModule: null,
-          }));
-        } catch (error) {
-          console.error('Failed to import TOML:', error);
-          throw error;
-        }
+          },
+          selectedModule: null,
+          past: [],
+          future: [],
+        }));
       },
     }),
     {
@@ -148,7 +199,7 @@ export const useThemeStore = create<ThemeStore>()(
       partialize: (state) => ({
         savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
-        // Don"t persist selectedModule
+        // Don't persist undo history to save storage space
       }),
     },
   ),

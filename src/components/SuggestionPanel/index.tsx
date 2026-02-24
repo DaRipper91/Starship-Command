@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThemeStore } from '../../stores/theme-store';
 import { SuggestionEngine } from '../../lib/suggestion-engine';
-import { Lightbulb, Zap, Eye, ShieldAlert, X, Info } from 'lucide-react';
+import { Eye, Info, Lightbulb, ShieldAlert, X, Zap } from 'lucide-react';
 
 interface Suggestion {
   type: 'module' | 'performance' | 'visual' | 'compatibility';

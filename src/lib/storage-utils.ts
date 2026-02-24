@@ -1,7 +1,7 @@
 import {
   createJSONStorage,
-  StateStorage,
   PersistStorage,
+  StateStorage,
   StorageValue,
 } from 'zustand/middleware';
 

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThemeStore } from '../../stores/theme-store';
 import { PRESET_THEMES } from '../../lib/presets';
 import { Theme } from '../../types/starship.types';
 import { cn } from '../../lib/utils';
 import {
-  Terminal,
-  Settings,
   CheckCircle2,
   ChevronRight,
+  Settings,
+  Terminal,
   X,
 } from 'lucide-react';
 

@@ -121,4 +121,70 @@ export const PRESET_THEMES: Theme[] = [
       },
     },
   },
+  {
+    metadata: {
+      id: 'preset-onedark',
+      name: 'One Dark',
+      description: 'Atom One Dark inspired theme',
+      author: 'Atom Team',
+      tags: ['aesthetic', 'dark', 'atom'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: true,
+    },
+    config: {
+      ...TomlParser.getDefaultConfig(),
+      directory: { style: ColorUtils.presets.OneDark.primary },
+      git_branch: { style: ColorUtils.presets.OneDark.secondary },
+      character: {
+        success_symbol: `[➜](${ColorUtils.presets.OneDark.success})`,
+        error_symbol: `[➜](${ColorUtils.presets.OneDark.error})`,
+      },
+      nodejs: {
+        format: `via [⬢ $version](bold ${ColorUtils.presets.OneDark.success}) `,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-solarized',
+      name: 'Solarized Dark',
+      description: 'Precision colors for machines and people',
+      author: 'Ethan Schoonover',
+      tags: ['aesthetic', 'dark', 'classic'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: true,
+    },
+    config: {
+      ...TomlParser.getDefaultConfig(),
+      directory: { style: ColorUtils.presets.Solarized.primary },
+      git_branch: { style: ColorUtils.presets.Solarized.secondary },
+      character: {
+        success_symbol: `[➜](${ColorUtils.presets.Solarized.success})`,
+        error_symbol: `[➜](${ColorUtils.presets.Solarized.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-monokai',
+      name: 'Monokai',
+      description: 'The classic text editor theme',
+      author: 'Wimer Hazenberg',
+      tags: ['aesthetic', 'dark', 'vibrant'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: true,
+    },
+    config: {
+      ...TomlParser.getDefaultConfig(),
+      directory: { style: ColorUtils.presets.Monokai.primary },
+      git_branch: { style: ColorUtils.presets.Monokai.secondary },
+      character: {
+        success_symbol: `[➜](${ColorUtils.presets.Monokai.success})`,
+        error_symbol: `[➜](${ColorUtils.presets.Monokai.error})`,
+      },
+    },
+  },
 ];
