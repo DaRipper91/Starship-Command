@@ -1,4 +1,4 @@
-import { StarshipConfig } from '../types/starship.types';
+import { BaseModuleConfig, StarshipConfig } from '../types/starship.types';
 import { ColorUtils } from './color-utils';
 
 export interface Environment {
@@ -93,9 +93,8 @@ export class SuggestionEngine {
     const slowModules = ['git_status', 'kubernetes', 'aws', 'gcloud'];
     // Check if modules are enabled (exist and not disabled)
     const activeSlowModules = slowModules.filter((m) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mod = config[m] as any;
-      return mod && !mod.disabled;
+      const mod = config[m] as BaseModuleConfig | undefined;
+      return mod && mod.disabled !== true;
     });
 
     if (activeSlowModules.length > 2) {

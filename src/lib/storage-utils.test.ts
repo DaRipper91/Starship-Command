@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { createDebouncedStorage } from './storage-utils';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StateStorage } from 'zustand/middleware';
+
+import { createDebouncedStorage } from './storage-utils';
 
 describe('createDebouncedStorage', () => {
   const mockStorage: StateStorage = {

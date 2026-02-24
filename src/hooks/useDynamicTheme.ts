@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { useThemeStore } from '../stores/theme-store';
+
 import { PRESET_THEMES } from '../lib/presets';
+import { useThemeStore } from '../stores/theme-store';
 
 // Define a basic interface for dynamic theme settings
 interface DynamicThemeSettings {

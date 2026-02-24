@@ -1,7 +1,8 @@
 import {
-  StarshipConfig,
+  BaseModuleConfig,
   CustomModuleConfig,
   GitStatusConfig,
+  StarshipConfig,
 } from '../types/starship.types';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
@@ -67,8 +68,8 @@ export function renderModule(
   if (!value) return '';
 
   // Get module config
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const moduleConfig = config[moduleName] as any;
+  const moduleConfig = config[moduleName] as BaseModuleConfig &
+    Record<string, unknown>;
 
   // Check if disabled
   if (moduleConfig?.disabled === true) return '';
@@ -173,7 +174,7 @@ export function renderModule(
  * @param _config - (Optional) The Starship configuration
  * @returns ANSI escape code string
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export function styleToAnsi(style: string, _config?: StarshipConfig): string {
   if (!style) return '';
 

@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { TomlParser } from './lib/toml-parser';
+import { describe, expect, it } from 'vitest';
+
 import { ColorUtils } from './lib/color-utils';
+import { TomlParser } from './lib/toml-parser';
 import { useThemeStore } from './stores/theme-store';
 
 describe('Checkpoint 1: Foundation Setup', () => {

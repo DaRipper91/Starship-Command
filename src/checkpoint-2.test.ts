@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+
 import { parseFormatString } from './lib/format-parser';
-import { TomlParser } from './lib/toml-parser';
-import { ThemeValidator } from './lib/theme-validator';
-import { SuggestionEngine } from './lib/suggestion-engine';
 import { MOCK_SCENARIOS } from './lib/mock-data';
+import { SuggestionEngine } from './lib/suggestion-engine';
+import { ThemeValidator } from './lib/theme-validator';
+import { TomlParser } from './lib/toml-parser';
 
 describe('Checkpoint 2: Core Systems', () => {
   const defaultConfig = TomlParser.getDefaultConfig();
@@ -37,8 +38,7 @@ describe('Checkpoint 2: Core Systems', () => {
   });
 
   it('ThemeValidator: should detect empty config', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = ThemeValidator.validateConfig(null as any);
+    const result = ThemeValidator.validateConfig(null);
     expect(result.valid).toBe(false);
   });
 

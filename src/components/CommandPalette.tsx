@@ -1,5 +1,6 @@
+import { FileTerminal, Search, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { Search, X, FileTerminal } from 'lucide-react';
+
 import { cn } from '../lib/utils';
 
 interface CommandPaletteProps {

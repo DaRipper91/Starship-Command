@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useThemeStore } from '../stores/theme-store';
+import { Image as ImageIcon, Upload } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { useToast } from '../contexts/ToastContext';
 import { ColorUtils, ExtendedColorPalette } from '../lib/color-utils';
-import { Upload, Image as ImageIcon } from 'lucide-react';
+import { useThemeStore } from '../stores/theme-store';
 
 export function ImagePalette() {
   const { updateConfig } = useThemeStore();
+  const { addToast } = useToast();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [palette, setPalette] = useState<ExtendedColorPalette | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
@@ -33,8 +36,10 @@ export function ImagePalette() {
     try {
       const extracted = await ColorUtils.extractPaletteFromImage(file);
       setPalette(extracted);
+      addToast('Palette extracted!', 'success');
     } catch (error) {
       console.error(error);
+      addToast('Failed to extract colors from image.', 'error');
     } finally {
       setIsExtracting(false);
     }

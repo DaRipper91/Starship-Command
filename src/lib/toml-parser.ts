@@ -1,4 +1,5 @@
 import TOML from '@iarna/toml';
+
 import { StarshipConfig } from '../types/starship.types';
 
 export interface ValidationResult {
@@ -124,9 +125,9 @@ export class TomlParser {
    * @returns Merged configuration
    */
   static merge(
-    base: Record<string, unknown>,
-    override: Record<string, unknown>,
-  ): Record<string, unknown> {
+    base: Record<string, unknown> | undefined,
+    override: Record<string, unknown> | undefined,
+  ): Record<string, unknown> | undefined {
     if (!override) return base;
     if (!base) return override;
 

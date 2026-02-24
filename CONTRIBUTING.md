@@ -10,7 +10,16 @@ We love pull requests!
 6. Push to the branch (`git push origin feature/awesome-feature`).
 7. Open a Pull Request.
 
-## Code Style
+## Code Style & Standards
 
-- Use standard TypeScript rules.
-- Run `npm run format` and `npm run lint` before committing.
+We enforce strict code quality rules using ESLint and Prettier.
+
+- **No `any`**: TypeScript strict mode is enabled. Avoid `any` at all costs.
+- **Imports**: Imports are automatically sorted. Run `npm run lint -- --fix` to sort them.
+- **No Console Logs**: Production code should not contain `console.log`. Use `console.warn` or `console.error` sparingly.
+- **Unused Variables**: Unused variables are not allowed. Prefix with `_` if they are intentional.
+
+Before committing, please run:
+- `npm run format` (to fix formatting)
+- `npm run lint` (to check for violations)
+- `npm run build` (to ensure type safety)

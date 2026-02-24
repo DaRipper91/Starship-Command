@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ColorPicker } from './ColorPicker';
-import { cn } from '../lib/utils';
 import { Bold, Italic, Underline } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { cn } from '../lib/utils';
+import { ColorPicker } from './ColorPicker';
 
 interface StyleEditorProps {
   value: string;
