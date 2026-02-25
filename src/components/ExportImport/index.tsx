@@ -15,6 +15,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { TomlParser } from '../../lib/toml-parser';
 import { cn } from '../../lib/utils';
 import { useThemeStore } from '../../stores/theme-store';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 interface ExportImportProps {
   onClose: () => void;
@@ -32,6 +33,7 @@ export function ExportImport({
   const [importText, setImportText] = useState('');
   const [importUrl, setImportUrl] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // --- EXPORT LOGIC ---
 
@@ -150,6 +152,9 @@ export function ExportImport({
       return;
     }
 
+    setIsLoading(true);
+    setValidationError(null);
+
     try {
       // Very basic URL fetch (CORS might block this in a real app unless using a proxy)
       const res = await fetch(importUrl);
@@ -160,6 +165,8 @@ export function ExportImport({
       setValidationError(
         'Failed to fetch from URL. Make sure it points to a raw text file.',
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -309,13 +316,18 @@ export function ExportImport({
                         value={importUrl}
                         onChange={(e) => setImportUrl(e.target.value)}
                         placeholder="https://raw.githubusercontent.com/..."
-                        className="flex-1 rounded border border-gray-700 bg-gray-900 px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none"
+                        disabled={isLoading}
+                        className="flex-1 rounded border border-gray-700 bg-gray-900 px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       />
                       <button
                         onClick={handleUrlImport}
-                        className="rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-600"
+                        disabled={isLoading}
+                        className="flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        Fetch
+                        {isLoading && (
+                          <LoadingSpinner className="h-4 w-4 text-white" />
+                        )}
+                        {isLoading ? 'Loading...' : 'Fetch'}
                       </button>
                     </div>
                   </div>

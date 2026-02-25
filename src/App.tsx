@@ -166,6 +166,7 @@ function AppContent() {
               disabled={!canUndo()}
               className="rounded p-2 text-gray-400 hover:bg-gray-800 hover:text-white disabled:bg-transparent disabled:opacity-30"
               title="Undo (Cmd+Z)"
+              aria-label="Undo"
             >
               <Undo size={18} />
             </button>
@@ -174,6 +175,7 @@ function AppContent() {
               disabled={!canRedo()}
               className="rounded p-2 text-gray-400 hover:bg-gray-800 hover:text-white disabled:bg-transparent disabled:opacity-30"
               title="Redo (Cmd+Shift+Z)"
+              aria-label="Redo"
             >
               <Redo size={18} />
             </button>
@@ -218,6 +220,7 @@ function AppContent() {
             onClick={() => setShowCommandPalette(true)}
             className="ml-2 rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
             title="Command Palette (Cmd+K)"
+            aria-label="Open Command Palette"
           >
             <Keyboard size={16} />
           </button>

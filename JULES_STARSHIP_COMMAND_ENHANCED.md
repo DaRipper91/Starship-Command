@@ -1,4 +1,5 @@
 # JULES TASK: Starship Command — Full Feature Enhancement
+
 # Repository: https://github.com/DaRipper91/Starship-Command
 
 ---
@@ -14,6 +15,7 @@ Starship Command is a visual, no-code drag-and-drop editor for creating
 - **@hello-pangea/dnd** or similar for drag-and-drop
 
 The existing features include:
+
 - Live terminal preview via xterm.js
 - Drag-and-drop module builder (left prompt only)
 - Color picker with presets
@@ -55,17 +57,22 @@ export function useHistory<T>(initial: T) {
 
   const current = history[index];
 
-  const push = useCallback((newState: T) => {
-    setHistory(h => {
-      const trimmed = h.slice(0, index + 1);
-      return [...trimmed, newState];
-    });
-    setIndex(i => i + 1);
-  }, [index]);
+  const push = useCallback(
+    (newState: T) => {
+      setHistory((h) => {
+        const trimmed = h.slice(0, index + 1);
+        return [...trimmed, newState];
+      });
+      setIndex((i) => i + 1);
+    },
+    [index],
+  );
 
-  const undo = useCallback(() => setIndex(i => Math.max(0, i - 1)), []);
-  const redo = useCallback(() =>
-    setIndex(i => Math.min(history.length - 1, i + 1)), [history.length]);
+  const undo = useCallback(() => setIndex((i) => Math.max(0, i - 1)), []);
+  const redo = useCallback(
+    () => setIndex((i) => Math.min(history.length - 1, i + 1)),
+    [history.length],
+  );
 
   return {
     current,
@@ -84,11 +91,18 @@ prompt char change, etc.) must call `push(newConfig)` instead of setState
 directly.
 
 Add keyboard listeners in App.tsx:
+
 ```typescript
 useEffect(() => {
   const handler = (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); redo(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      e.preventDefault();
+      undo();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+      e.preventDefault();
+      redo();
+    }
   };
   window.addEventListener('keydown', handler);
   return () => window.removeEventListener('keydown', handler);
@@ -111,8 +125,8 @@ is rendered), add:
 
 ```typescript
 const [search, setSearch] = useState('');
-const filteredModules = ALL_MODULES.filter(m =>
-  m.id.toLowerCase().includes(search.toLowerCase())
+const filteredModules = ALL_MODULES.filter((m) =>
+  m.id.toLowerCase().includes(search.toLowerCase()),
 );
 ```
 
@@ -134,42 +148,46 @@ Create `src/data/moduleDescriptions.ts`:
 
 ```typescript
 export const MODULE_DESCRIPTIONS: Record<string, string> = {
-  username: "Shows the current user's username. Useful for multi-user or SSH environments.",
-  hostname: "Displays the machine hostname. Great for SSH or container contexts.",
-  directory: "Shows the current working directory with configurable truncation.",
-  git_branch: "Displays the active git branch name with a configurable symbol.",
-  git_status: "Shows git repo status: staged, unstaged, ahead/behind counts.",
-  git_commit: "Shows the current commit hash (short SHA).",
-  git_state: "Shows transient git states like MERGING, REBASING, CHERRY-PICKING.",
-  git_metrics: "Shows added/deleted line counts since last commit.",
-  nodejs: "Displays Node.js version when in a JS/TS project.",
-  python: "Displays Python version when in a Python project.",
-  rust: "Displays Rust toolchain version when in a Rust project.",
-  golang: "Displays Go version when in a Go project.",
-  java: "Displays Java version when in a Java project.",
-  ruby: "Displays Ruby version when in a Ruby project.",
-  php: "Displays PHP version when in a PHP project.",
-  kotlin: "Displays Kotlin version when in a Kotlin project.",
-  swift: "Displays Swift version in Swift projects.",
-  elixir: "Displays Elixir/OTP version in Elixir projects.",
-  package: "Shows the package version from package.json, Cargo.toml, etc.",
-  docker_context: "Shows the active Docker context.",
-  kubernetes: "Shows the active Kubernetes context and namespace.",
-  terraform: "Shows the active Terraform workspace.",
-  aws: "Shows the AWS profile and region from environment variables.",
-  gcloud: "Shows the active Google Cloud project and region.",
-  azure: "Shows the active Azure subscription.",
-  cmd_duration: "Shows how long the last command took to execute.",
-  time: "Displays the current local time.",
-  battery: "Shows battery charge level and charging status.",
-  memory_usage: "Shows current RAM usage percentage.",
-  env_var: "Displays the value of a specified environment variable.",
-  custom: "A fully custom module — define your own command and format.",
-  shell: "Indicates the current shell (bash, zsh, fish, etc.).",
-  shlvl: "Shows the shell nesting level ($SHLVL).",
-  status: "Shows the exit code of the last command when non-zero.",
-  jobs: "Shows the number of background jobs running.",
-  character: "The prompt character (❯ by default). Changes color on error.",
+  username:
+    "Shows the current user's username. Useful for multi-user or SSH environments.",
+  hostname:
+    'Displays the machine hostname. Great for SSH or container contexts.',
+  directory:
+    'Shows the current working directory with configurable truncation.',
+  git_branch: 'Displays the active git branch name with a configurable symbol.',
+  git_status: 'Shows git repo status: staged, unstaged, ahead/behind counts.',
+  git_commit: 'Shows the current commit hash (short SHA).',
+  git_state:
+    'Shows transient git states like MERGING, REBASING, CHERRY-PICKING.',
+  git_metrics: 'Shows added/deleted line counts since last commit.',
+  nodejs: 'Displays Node.js version when in a JS/TS project.',
+  python: 'Displays Python version when in a Python project.',
+  rust: 'Displays Rust toolchain version when in a Rust project.',
+  golang: 'Displays Go version when in a Go project.',
+  java: 'Displays Java version when in a Java project.',
+  ruby: 'Displays Ruby version when in a Ruby project.',
+  php: 'Displays PHP version when in a PHP project.',
+  kotlin: 'Displays Kotlin version when in a Kotlin project.',
+  swift: 'Displays Swift version in Swift projects.',
+  elixir: 'Displays Elixir/OTP version in Elixir projects.',
+  package: 'Shows the package version from package.json, Cargo.toml, etc.',
+  docker_context: 'Shows the active Docker context.',
+  kubernetes: 'Shows the active Kubernetes context and namespace.',
+  terraform: 'Shows the active Terraform workspace.',
+  aws: 'Shows the AWS profile and region from environment variables.',
+  gcloud: 'Shows the active Google Cloud project and region.',
+  azure: 'Shows the active Azure subscription.',
+  cmd_duration: 'Shows how long the last command took to execute.',
+  time: 'Displays the current local time.',
+  battery: 'Shows battery charge level and charging status.',
+  memory_usage: 'Shows current RAM usage percentage.',
+  env_var: 'Displays the value of a specified environment variable.',
+  custom: 'A fully custom module — define your own command and format.',
+  shell: 'Indicates the current shell (bash, zsh, fish, etc.).',
+  shlvl: 'Shows the shell nesting level ($SHLVL).',
+  status: 'Shows the exit code of the last command when non-zero.',
+  jobs: 'Shows the number of background jobs running.',
+  character: 'The prompt character (❯ by default). Changes color on error.',
 };
 ```
 
@@ -251,7 +269,9 @@ useEffect(() => {
       const decoded = JSON.parse(atob(hash.replace('#theme=', '')));
       // validate and apply decoded config
       push(decoded);
-    } catch { /* ignore malformed */ }
+    } catch {
+      /* ignore malformed */
+    }
   }
 }, []);
 ```
@@ -287,6 +307,7 @@ export function contrastRatio(hex1: string, hex2: string): number {
 ```
 
 In the color picker panel, show:
+
 - The ratio as "X.X:1"
 - Pass/fail for WCAG AA (4.5:1 for normal text, 3:1 for large text)
 - Pass/fail for WCAG AAA (7:1)
@@ -325,7 +346,7 @@ const [favorites, setFavorites] = useState<Set<string>>(() => {
 });
 
 const toggleFavorite = (themeId: string) => {
-  setFavorites(prev => {
+  setFavorites((prev) => {
     const next = new Set(prev);
     next.has(themeId) ? next.delete(themeId) : next.add(themeId);
     localStorage.setItem('starship-favorites', JSON.stringify([...next]));
@@ -374,7 +395,7 @@ const saveTheme = (name: string) => {
 };
 
 const deleteTheme = (id: string) => {
-  const updated = savedThemes.filter(t => t.id !== id);
+  const updated = savedThemes.filter((t) => t.id !== id);
   setSavedThemes(updated);
   localStorage.setItem('starship-saved-themes', JSON.stringify(updated));
 };
@@ -407,10 +428,13 @@ const RANDOM_PALETTES = [
 const RANDOM_PROMPT_CHARS = ['❯', '➜', '▶', '➤', 'λ', '»', '⚡', '→', '', ''];
 
 const generateRandom = () => {
-  const palette = RANDOM_PALETTES[Math.floor(Math.random() * RANDOM_PALETTES.length)];
-  const char = RANDOM_PROMPT_CHARS[Math.floor(Math.random() * RANDOM_PROMPT_CHARS.length)];
+  const palette =
+    RANDOM_PALETTES[Math.floor(Math.random() * RANDOM_PALETTES.length)];
+  const char =
+    RANDOM_PROMPT_CHARS[Math.floor(Math.random() * RANDOM_PROMPT_CHARS.length)];
   const separatorKeys = Object.keys(SEPARATOR_SHAPES);
-  const separator = separatorKeys[Math.floor(Math.random() * separatorKeys.length)];
+  const separator =
+    separatorKeys[Math.floor(Math.random() * separatorKeys.length)];
   push({ ...currentConfig, colors: palette, promptChar: char, separator });
 };
 ```
@@ -428,6 +452,7 @@ from that base.
 The gallery `ThemeCard` component accepts an `onFork: (theme: GalleryTheme) => void` prop.
 
 When clicked:
+
 - Map the gallery theme's color palette into the full ThemeConfig shape
 - Call `push(mergedConfig)` so it's undoable
 - Switch the active tab to "Modules" or "Style"
@@ -448,8 +473,8 @@ Update `ThemeConfig` type:
 ```typescript
 interface ThemeConfig {
   leftModules: ModuleItem[];
-  rightModules: ModuleItem[];   // NEW
-  rightPromptEnabled: boolean;  // NEW
+  rightModules: ModuleItem[]; // NEW
+  rightPromptEnabled: boolean; // NEW
   // ... rest of existing fields
 }
 ```
@@ -489,11 +514,13 @@ prompt styles.
 Add `promptStyle: 'singleline' | 'multiline'` to `ThemeConfig`.
 
 In `generateTOML()`:
+
 - Multi-line: `add_newline = true` and add `$line_break` before `$character` in
   the format string.
 - Single-line: `add_newline = false` and no `$line_break`.
 
 In the terminal preview component, visually show the difference:
+
 - Multi-line: segments row, then cursor on its own line below.
 - Single-line: segments and cursor all on the same row.
 
@@ -513,23 +540,78 @@ Create `src/data/nerdFontIcons.ts` with categorized icon maps:
 
 ```typescript
 export const NERD_FONT_CATEGORIES: Record<string, string[]> = {
-  'Git':            ['\ue702', '\uf418', '\uf7a1', '\uf7a0', '\uf7a2', '\udb80\udda2', '\udb8a\ude2c', '\udb80\udd98'],
-  'Folders':        ['\ue5ff', '\uf115', '\uf07b', '\uf07c', '\udb80\udecb', '\udb80\udccd', '\udb80\udccc', '\udb80\udcd0'],
-  'Arrows':         ['\ue0b0', '\ue0b2', '\ue0b4', '\ue0b6', '❯', '➜', '➤', '▶', '→', '⟶', '⚡'],
-  'Stars/Sparks':   ['★', '✦', '✧', '✨', '⭐', '🌟', '💫'],
-  'Shells':         ['\ue691', '\ue692', '\ue693', '\ue77d', '\udb82\udec3'],
-  'Dev/Code':       ['\ue64b', '\ue738', '\uf121', '\ue60e', '\uf1d0', '\uf017', '\udb80\udd20', '\udb80\udcf7', '\udb82\udcde'],
-  'OS':             ['\uf179', '\uf17c', '\uf17d', '\uf462', '\uf83f', '\udb80\udc36'],
-  'Powerline Solid':  ['\ue0b0', '\ue0b1', '\ue0b2', '\ue0b3', '\ue0b4', '\ue0b5'],
-  'Powerline Thin': ['\ue0b8', '\ue0b9', '\ue0ba', '\ue0bb', '\ue0bc', '\ue0bd'],
-  'Circles':        ['●', '◉', '○', '◎', '⬤', '\ue0b6', '\ue0b7'],
-  'Triangles':      ['▶', '◀', '▲', '▼', '◤', '◥', '◣', '◢'],
-  'Blocks':         ['█', '▓', '▒', '░', '▌', '▐', '▀', '▄'],
-  'Special':        ['∞', '≡', '≈', 'λ', 'Ω', 'π', 'μ', 'Σ'],
+  Git: [
+    '\ue702',
+    '\uf418',
+    '\uf7a1',
+    '\uf7a0',
+    '\uf7a2',
+    '\udb80\udda2',
+    '\udb8a\ude2c',
+    '\udb80\udd98',
+  ],
+  Folders: [
+    '\ue5ff',
+    '\uf115',
+    '\uf07b',
+    '\uf07c',
+    '\udb80\udecb',
+    '\udb80\udccd',
+    '\udb80\udccc',
+    '\udb80\udcd0',
+  ],
+  Arrows: [
+    '\ue0b0',
+    '\ue0b2',
+    '\ue0b4',
+    '\ue0b6',
+    '❯',
+    '➜',
+    '➤',
+    '▶',
+    '→',
+    '⟶',
+    '⚡',
+  ],
+  'Stars/Sparks': ['★', '✦', '✧', '✨', '⭐', '🌟', '💫'],
+  Shells: ['\ue691', '\ue692', '\ue693', '\ue77d', '\udb82\udec3'],
+  'Dev/Code': [
+    '\ue64b',
+    '\ue738',
+    '\uf121',
+    '\ue60e',
+    '\uf1d0',
+    '\uf017',
+    '\udb80\udd20',
+    '\udb80\udcf7',
+    '\udb82\udcde',
+  ],
+  OS: ['\uf179', '\uf17c', '\uf17d', '\uf462', '\uf83f', '\udb80\udc36'],
+  'Powerline Solid': [
+    '\ue0b0',
+    '\ue0b1',
+    '\ue0b2',
+    '\ue0b3',
+    '\ue0b4',
+    '\ue0b5',
+  ],
+  'Powerline Thin': [
+    '\ue0b8',
+    '\ue0b9',
+    '\ue0ba',
+    '\ue0bb',
+    '\ue0bc',
+    '\ue0bd',
+  ],
+  Circles: ['●', '◉', '○', '◎', '⬤', '\ue0b6', '\ue0b7'],
+  Triangles: ['▶', '◀', '▲', '▼', '◤', '◥', '◣', '◢'],
+  Blocks: ['█', '▓', '▒', '░', '▌', '▐', '▀', '▄'],
+  Special: ['∞', '≡', '≈', 'λ', 'Ω', 'π', 'μ', 'Σ'],
 };
 ```
 
 Create `src/components/NerdFontPicker.tsx`:
+
 - Category tabs or pills at the top to filter by category
 - A search input that searches across ALL categories
 - A grid of icon buttons — clicking one sets the prompt character AND copies
@@ -539,6 +621,7 @@ Create `src/components/NerdFontPicker.tsx`:
 
 The prompt character selected here must update `themeConfig.promptChar` which
 feeds into:
+
 1. The TOML generator (success_symbol / error_symbol in `[character]`)
 2. The live terminal preview
 
@@ -557,8 +640,8 @@ Create `src/data/separators.ts`:
 export interface SeparatorSet {
   key: string;
   label: string;
-  leftOuter: string;  // after last left segment (pointing right)
-  leftInner: string;  // between left segments
+  leftOuter: string; // after last left segment (pointing right)
+  leftInner: string; // between left segments
   rightOuter: string; // before first right segment (pointing left)
   rightInner: string; // between right segments
 }
@@ -624,6 +707,7 @@ export const SEPARATOR_PRESETS: SeparatorSet[] = [
 ```
 
 Create `src/components/SeparatorPicker.tsx`:
+
 - A visual card grid where each card previews how that separator looks using
   the current accent colors
 - The preview shows: `[segment1] SEP [segment2] SEP> ... <SEP [right1] <SEP [right2]`
@@ -632,6 +716,7 @@ Create `src/components/SeparatorPicker.tsx`:
 
 Update `generateTOML()` to include each module's format with the correct
 separator glyphs inlined, e.g.:
+
 ```toml
 [directory]
 format = "[$path]($style)[$read_only]($read_only_style)"
@@ -785,7 +870,7 @@ interface ThemeConfig {
   promptChar: string;
   promptCharError?: string;
   colors: ThemeColors;
-  separatorKey: string;      // key into SEPARATOR_PRESETS
+  separatorKey: string; // key into SEPARATOR_PRESETS
   paletteName?: string;
 }
 ```

@@ -20,6 +20,7 @@ We enforce strict code quality rules using ESLint and Prettier.
 - **Unused Variables**: Unused variables are not allowed. Prefix with `_` if they are intentional.
 
 Before committing, please run:
+
 - `npm run format` (to fix formatting)
 - `npm run lint` (to check for violations)
 - `npm run build` (to ensure type safety - uses `tsc -b`)
