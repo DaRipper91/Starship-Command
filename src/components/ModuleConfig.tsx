@@ -1,5 +1,5 @@
 import { Info } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useThemeStore } from '../stores/theme-store';
 import {
@@ -106,14 +106,18 @@ export function ModuleConfig() {
               className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
             <button
-              onClick={() => setShowIconBrowser(!showIconBrowser)}
+              onClick={() =>
+                setShowIconBrowser(
+                  showIconBrowser === 'symbol' ? null : 'symbol',
+                )
+              }
               className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               Browse
             </button>
           </div>
 
-          {showIconBrowser && (
+          {showIconBrowser === 'symbol' && (
             <div
               ref={iconBrowserRef}
               className="absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]"
@@ -122,7 +126,7 @@ export function ModuleConfig() {
                 currentSymbol={moduleConfig.symbol as string}
                 onSelect={(symbol) => {
                   handleChange('symbol', symbol);
-                  setShowIconBrowser(false);
+                  setShowIconBrowser(null);
                 }}
               />
             </div>
@@ -215,9 +219,9 @@ export function ModuleConfig() {
                     <input
                       type="text"
                       value={
-                        (moduleConfig as GitStatusConfig)[
+                        ((moduleConfig as GitStatusConfig)[
                           key as keyof GitStatusConfig
-                        ] || ''
+                        ] as string) || ''
                       }
                       onChange={(e) => handleChange(key, e.target.value)}
                       placeholder="e.g. ✖ "

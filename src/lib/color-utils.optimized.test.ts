@@ -16,7 +16,7 @@ const mockVibrantFrom = vi.fn().mockReturnValue({
 });
 
 vi.mock('node-vibrant/browser', () => ({
-  default: {
+  Vibrant: {
     from: mockVibrantFrom,
   },
 }));
@@ -80,7 +80,7 @@ describe('ColorUtils Optimization', () => {
     expect(palette.primary).toBe('#ff0000');
 
     // Verify Vibrant was used
-    const { default: Vibrant } = await import('node-vibrant/browser');
+    const { Vibrant } = await import('node-vibrant/browser');
     expect(Vibrant.from).toHaveBeenCalledWith('blob:test');
     expect(mockGetPalette).toHaveBeenCalled();
     expect(global.URL.createObjectURL).toHaveBeenCalledWith(file);

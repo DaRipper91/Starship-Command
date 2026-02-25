@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas';
 import { ArrowLeftRight, Camera, X } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useToast } from '../../contexts/ToastContext';
 import { PRESET_THEMES } from '../../lib/presets';

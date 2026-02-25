@@ -16,6 +16,8 @@ interface ThemeStore {
   future: Theme[];
   undo: () => void;
   redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
 
   // Actions
   updateConfig: (config: Partial<StarshipConfig>) => void;
@@ -78,6 +80,9 @@ export const useThemeStore = create<ThemeStore>()(
         });
       },
 
+      canUndo: () => get().past.length > 0,
+      canRedo: () => get().future.length > 0,
+
       updateConfig: (newConfig) => {
         set((state) => {
           const nextTheme = {
@@ -102,6 +107,14 @@ export const useThemeStore = create<ThemeStore>()(
               updated: new Date(),
             },
           };
+
+          // Optimization: Don't update if config hasn't changed
+          if (
+            JSON.stringify(state.currentTheme.config) ===
+            JSON.stringify(nextTheme.config)
+          ) {
+            return {};
+          }
 
           return {
             past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),

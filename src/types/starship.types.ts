@@ -111,8 +111,14 @@ export interface StarshipConfig {
   // Custom Modules
   custom?: Record<string, CustomModuleConfig>;
 
-  // Allow other keys
-  [key: string]: unknown;
+  // Allow other keys (modules or top-level settings)
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | BaseModuleConfig
+    | Record<string, unknown>
+    | undefined;
 }
 
 // Base interface for all modules
@@ -221,6 +227,7 @@ export interface JavaConfig extends NodejsConfig {}
 export interface PhpConfig extends NodejsConfig {}
 export interface RubyConfig extends NodejsConfig {}
 export interface SwiftConfig extends NodejsConfig {}
+export interface TerraformConfig extends NodejsConfig {}
 export interface KotlinConfig extends NodejsConfig {}
 export interface JuliaConfig extends NodejsConfig {}
 export interface LuaConfig extends NodejsConfig {}
@@ -300,6 +307,8 @@ export interface TimeConfig extends BaseModuleConfig {
 
 export interface UsernameConfig extends BaseModuleConfig {
   show_always?: boolean;
+  style_user?: string;
+  style_root?: string;
   aliases?: Record<string, string>;
 }
 

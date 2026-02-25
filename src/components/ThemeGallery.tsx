@@ -1,5 +1,4 @@
 import { Clock, Play, Trash2 } from 'lucide-react';
-import React from 'react';
 
 import { PRESET_THEMES } from '../lib/presets';
 import { cn } from '../lib/utils';
@@ -15,6 +14,41 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
   const { loadTheme, savedThemes, deleteTheme } = useThemeStore();
 
   const handleLoad = (theme: Theme) => {
+    const { currentTheme, savedThemes, past } = useThemeStore.getState();
+
+    // Check if unsaved
+    const saved = savedThemes.find(
+      (t) => t.metadata.id === currentTheme.metadata.id,
+    );
+    let hasUnsavedChanges = false;
+
+    if (!saved) {
+      // Not in saved themes
+      hasUnsavedChanges = true;
+    } else {
+      // In saved themes, check timestamp
+      // We compare timestamps to see if current is newer
+      if (
+        new Date(currentTheme.metadata.updated) >
+        new Date(saved.metadata.updated)
+      ) {
+        hasUnsavedChanges = true;
+      }
+    }
+
+    // Only prompt if there is history (user has done something)
+    const hasHistory = past.length > 0;
+
+    if (hasUnsavedChanges && hasHistory) {
+      if (
+        !confirm(
+          'You have unsaved changes. Are you sure you want to load a new theme?',
+        )
+      ) {
+        return;
+      }
+    }
+
     loadTheme(theme);
     if (onSelect) onSelect();
   };

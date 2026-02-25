@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { TomlParser } from '../../lib/toml-parser';
 import { useThemeStore } from '../../stores/theme-store';
@@ -18,7 +17,7 @@ describe('FormatEditor Component', () => {
   beforeEach(() => {
     // Reset mocks before each test
     vi.clearAllMocks();
-    (useThemeStore as unknown as vi.Mock).mockReturnValue({
+    (useThemeStore as unknown as Mock).mockReturnValue({
       currentTheme: { config: mockConfig },
     });
   });

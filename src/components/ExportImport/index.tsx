@@ -82,24 +82,42 @@ export function ExportImport({
       setValidationError(null);
       // Try to parse to see if it's valid
       const parsedConfig = TomlParser.parse(tomlString);
-      const { valid, errors } = TomlParser.validate(parsedConfig);
+      const { valid, errors, warnings } = TomlParser.validate(parsedConfig);
 
       if (!valid) {
         setValidationError(
-          `Invalid config: ${errors[0]?.message || 'Unknown error'}`,
+          `Invalid config: ${errors.join(', ') || 'Unknown error'}`,
         );
         return false;
       }
 
-      if (confirm('This will overwrite your current theme. Are you sure?')) {
-        importToml(tomlString);
-        addToast('Theme imported successfully!', 'success');
-        onClose();
-        return true;
+      if (warnings.length > 0) {
+        // Don't return, let user decide if they want to proceed despite warnings
+        // But we need to show warnings first.
+        // For now, simpler UX: Show warnings in the confirm dialog or as a separate step?
+        // Let's append warnings to the confirmation message.
+        const warningMsg = `\n\nWarnings:\n${warnings.slice(0, 5).map((w) => `- ${w}`).join('\n')}${warnings.length > 5 ? '\n...and more' : ''}`;
+        if (
+          !confirm(
+            `This will overwrite your current theme.${warningMsg}\n\nAre you sure?`,
+          )
+        ) {
+          return false;
+        }
+      } else {
+        if (!confirm('This will overwrite your current theme. Are you sure?')) {
+          return false;
+        }
       }
-      return false;
+
+      importToml(tomlString);
+      addToast('Theme imported successfully!', 'success');
+      onClose();
+      return true;
     } catch (err) {
-      setValidationError('Invalid TOML syntax.');
+      setValidationError(
+        `Invalid TOML syntax: ${err instanceof Error ? err.message : String(err)}`,
+      );
       return false;
     }
   };

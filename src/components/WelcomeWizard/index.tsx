@@ -5,7 +5,7 @@ import {
   Terminal,
   X,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PRESET_THEMES } from '../../lib/presets';
 import { cn } from '../../lib/utils';

@@ -1,8 +1,10 @@
+/// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
+  // @ts-expect-error - Vitest types are not automatically merged into Vite config in this setup
   test: {
     environment: 'jsdom',
     globals: true,
@@ -36,7 +38,7 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 400,
     reportCompressedSize: true,
   },
 });

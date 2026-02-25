@@ -34,7 +34,7 @@ export class ColorUtils {
         img.onload = async () => {
           try {
             // Get standard 6 colors from vibrant for backward compatibility
-            const { default: Vibrant } = await import('node-vibrant/browser');
+            const { Vibrant } = await import('node-vibrant/browser');
             const vibrantPalette = await Vibrant.from(imageUrl).getPalette();
 
             // Use ColorThief to get 20 colors for full terminal generation
