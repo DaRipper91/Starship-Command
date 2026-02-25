@@ -1,5 +1,6 @@
 import {
   BaseModuleConfig,
+  CharacterConfig,
   CustomModuleConfig,
   GitStatusConfig,
   StarshipConfig,
@@ -140,12 +141,13 @@ export function renderModule(
 
     // Get style from config if possible
     let style = 'bold green';
-    const successSymbol = moduleConfig?.success_symbol || '[❯](bold green)';
-    const errorSymbol = moduleConfig?.error_symbol || '[❯](bold red)';
+    const charConfig = moduleConfig as unknown as CharacterConfig;
+    const successSymbol = charConfig?.success_symbol || '[❯](bold green)';
+    const errorSymbol = charConfig?.error_symbol || '[❯](bold red)';
     const symbolConfig = isError ? errorSymbol : successSymbol;
 
     // Try to extract style from config format string like [x](y)
-    if (symbolConfig.includes('](')) {
+    if (symbolConfig && symbolConfig.includes('](')) {
       const match = symbolConfig.match(/\]\((.*?)\)/);
       if (match) style = match[1];
     }

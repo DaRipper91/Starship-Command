@@ -135,10 +135,8 @@ describe('TomlParser', () => {
 
       const result = TomlParser.merge(base, override);
 
-      // @ts-expect-error - Checking for pollution on unknown property
-      expect(result?.polluted).toBeUndefined();
-      // @ts-expect-error - Checking for pollution on global Object
-      expect({}.polluted).toBeUndefined();
+      expect(result?.['polluted']).toBeUndefined();
+      expect(({} as any).polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via constructor', () => {
@@ -149,10 +147,8 @@ describe('TomlParser', () => {
 
       const result = TomlParser.merge(base, override);
 
-      // @ts-expect-error - Checking for pollution on unknown property
-      expect(result?.polluted).toBeUndefined();
-      // @ts-expect-error - Checking for pollution on global Object
-      expect({}.polluted).toBeUndefined();
+      expect(result?.['polluted']).toBeUndefined();
+      expect(({} as any).polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via prototype', () => {
@@ -161,10 +157,8 @@ describe('TomlParser', () => {
 
       const result = TomlParser.merge(base, override);
 
-      // @ts-expect-error - Checking for pollution on unknown property
-      expect(result?.polluted).toBeUndefined();
-      // @ts-expect-error - Checking for pollution on global Object
-      expect({}.polluted).toBeUndefined();
+      expect(result?.['polluted']).toBeUndefined();
+      expect(({} as any).polluted).toBeUndefined();
     });
   });
 });

@@ -22,4 +22,6 @@ We enforce strict code quality rules using ESLint and Prettier.
 Before committing, please run:
 - `npm run format` (to fix formatting)
 - `npm run lint` (to check for violations)
-- `npm run build` (to ensure type safety)
+- `npm run build` (to ensure type safety - uses `tsc -b`)
+
+We use `husky` and `lint-staged` to automatically check your code on commit.

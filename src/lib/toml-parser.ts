@@ -1,10 +1,12 @@
 import TOML from '@iarna/toml';
 
 import { StarshipConfig } from '../types/starship.types';
+import { MODULE_DEFINITIONS } from './module-definitions';
 
 export interface ValidationResult {
   valid: boolean;
   errors: string[];
+  warnings: string[];
 }
 
 /**
@@ -101,20 +103,91 @@ export class TomlParser {
    */
   static validate(config: StarshipConfig): ValidationResult {
     const errors: string[] = [];
+    const warnings: string[] = [];
 
     // Check for invalid types or required fields
     if (typeof config !== 'object' || config === null) {
-      return { valid: false, errors: ['Configuration must be an object'] };
+      return {
+        valid: false,
+        errors: ['Configuration must be an object'],
+        warnings: [],
+      };
     }
 
-    // Example validation: Check if format is a string if present
+    // Known top-level string/number/boolean properties
+    const knownProps = [
+      'format',
+      'right_format',
+      'continuation_prompt',
+      'add_newline',
+      'scan_timeout',
+      'command_timeout',
+      'palette',
+      'palettes',
+      'custom',
+    ];
+
+    // Validate top-level properties types
     if (config.format !== undefined && typeof config.format !== 'string') {
       errors.push('Format must be a string');
     }
+    if (
+      config.add_newline !== undefined &&
+      typeof config.add_newline !== 'boolean'
+    ) {
+      errors.push('add_newline must be a boolean');
+    }
+    if (
+      config.scan_timeout !== undefined &&
+      typeof config.scan_timeout !== 'number'
+    ) {
+      errors.push('scan_timeout must be a number');
+    }
+    if (
+      config.command_timeout !== undefined &&
+      typeof config.command_timeout !== 'number'
+    ) {
+      errors.push('command_timeout must be a number');
+    }
+
+    // Check for unknown modules or properties
+    const knownModuleIds = new Set(MODULE_DEFINITIONS.map((m) => m.id));
+
+    Object.keys(config).forEach((key) => {
+      // Skip known top-level props
+      if (knownProps.includes(key)) return;
+
+      // Check if it's a known module
+      if (knownModuleIds.has(key)) {
+        // It's a known module, check if it's an object (or disabled boolean which is rare but technically TOML handles)
+        // Usually modules are tables.
+        const val = config[key];
+        if (typeof val !== 'object' && val !== undefined) {
+          // Some modules might be effectively disabled if set to false? No, Starship usually expects a table.
+          // But strict type check:
+          errors.push(`Module '${key}' must be a table (object)`);
+        } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+          // Check common module props
+          const modConfig = val as Record<string, unknown>;
+          if (
+            modConfig.disabled !== undefined &&
+            typeof modConfig.disabled !== 'boolean'
+          ) {
+            errors.push(`Module '${key}': 'disabled' must be a boolean`);
+          }
+        }
+      } else {
+        // Unknown key - effectively an unknown module
+        warnings.push(
+          `Unknown module or setting: '${key}'. It may be supported by Starship but not yet by this editor.`,
+        );
+      }
+    });
 
     return {
       valid: errors.length === 0,
       errors,
+      warnings,
     };
   }
 
@@ -131,7 +204,7 @@ export class TomlParser {
     if (!override) return base;
     if (!base) return override;
 
-    const result = { ...base };
+    const result: Record<string, unknown> = { ...base };
 
     Object.keys(override).forEach((key) => {
       if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
@@ -147,7 +220,10 @@ export class TomlParser {
         !Array.isArray(result[key])
       ) {
         // Recursive merge for objects
-        result[key] = TomlParser.merge(result[key], override[key]);
+        result[key] = TomlParser.merge(
+          result[key] as Record<string, unknown>,
+          override[key] as Record<string, unknown>,
+        );
       } else {
         // Direct overwrite for primitives or arrays
         result[key] = override[key];

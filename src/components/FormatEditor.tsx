@@ -1,9 +1,10 @@
 import { LayoutGrid, PenTool, Text, X } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
 import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
+import { BaseModuleConfig } from '../types/starship.types';
 import { IconBrowser } from './IconBrowser';
 import { StyleEditor } from './StyleEditor'; // Reusing StyleEditor for segment styling
 
@@ -72,7 +73,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
           newSegments.push({
             type: 'module',
             value: match[4],
-            style: currentTheme.config[match[4]]?.style, // Grab style from current theme
+            style: (currentTheme.config[match[4]] as BaseModuleConfig)?.style, // Grab style from current theme
           });
         }
         lastIndex = regex.lastIndex;
@@ -112,11 +113,11 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
 
   const handleSegmentClick = (index: number) => {
     setEditingSegment(index);
-    setActiveText(
-      segments[index].type === 'text' || segments[index].type === 'styledText'
-        ? (segments[index] as TextSegment | StyledTextSegment).value
-        : '',
-    );
+    const seg = segments[index];
+    if (seg.type === 'text') setActiveText(seg.value);
+    else if (seg.type === 'styledText') setActiveText(seg.text);
+    else setActiveText('');
+
     setActiveStyle(
       segments[index].type === 'styledText'
         ? (segments[index] as StyledTextSegment).style
@@ -131,7 +132,10 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   ) => {
     setSegments((prev) => {
       const newSegments = [...prev];
-      newSegments[index] = { ...newSegments[index], ...newProps };
+      newSegments[index] = {
+        ...newSegments[index],
+        ...newProps,
+      } as FormatSegment;
       return newSegments;
     });
   };
@@ -234,7 +238,8 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
                 <IconBrowser
                   currentSymbol={
                     segment.type === 'module'
-                      ? currentTheme.config[segment.value]?.symbol || ''
+                      ? (currentTheme.config[segment.value] as BaseModuleConfig)
+                          ?.symbol || ''
                       : (segment as StyledTextSegment).text
                   }
                   onSelect={(icon) => {

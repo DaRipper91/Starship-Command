@@ -24,7 +24,7 @@ describe('createDebouncedStorage', () => {
     });
 
     // Initial call
-    storage.setItem('key', { state: 'value1', version: 0 });
+    storage!.setItem('key', { state: 'value1', version: 0 });
 
     // Should not call underlying storage yet
     expect(mockStorage.setItem).not.toHaveBeenCalled();
@@ -34,7 +34,7 @@ describe('createDebouncedStorage', () => {
     expect(mockStorage.setItem).not.toHaveBeenCalled();
 
     // Second call before debounce finishes
-    storage.setItem('key', { state: 'value2', version: 0 });
+    storage!.setItem('key', { state: 'value2', version: 0 });
 
     // Advance time past first debounce but not second
     vi.advanceTimersByTime(60); // Total 110 from start, but reset at 50 -> 60 elapsed since second call

@@ -1,5 +1,4 @@
 import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
-import React from 'react';
 
 import { Toast } from '../../contexts/ToastContext';
 import { cn } from '../../lib/utils';

@@ -242,7 +242,9 @@ function AppContent() {
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
               Colors
             </h2>
-            <ImagePalette />
+            <ErrorBoundary>
+              <ImagePalette />
+            </ErrorBoundary>
           </div>
         </aside>
 
@@ -272,14 +274,18 @@ function AppContent() {
 
       {/* MODALS */}
       {showExportImport && (
-        <ExportImport
-          initialTab={showExportImport}
-          onClose={() => setShowExportImport(null)}
-        />
+        <ErrorBoundary>
+          <ExportImport
+            initialTab={showExportImport}
+            onClose={() => setShowExportImport(null)}
+          />
+        </ErrorBoundary>
       )}
 
       {showComparison && (
-        <ComparisonView onClose={() => setShowComparison(false)} />
+        <ErrorBoundary>
+          <ComparisonView onClose={() => setShowComparison(false)} />
+        </ErrorBoundary>
       )}
 
       {showGallery && (

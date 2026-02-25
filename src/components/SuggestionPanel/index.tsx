@@ -1,5 +1,5 @@
 import { Eye, Info, Lightbulb, ShieldAlert, X, Zap } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { SuggestionEngine } from '../../lib/suggestion-engine';
 import { useThemeStore } from '../../stores/theme-store';
