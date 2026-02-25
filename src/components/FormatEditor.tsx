@@ -107,10 +107,6 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       .join('');
   }, []);
 
-  useEffect(() => {
-    onChange(compileFormatString(segments));
-  }, [segments, compileFormatString, onChange]);
-
   const handleSegmentClick = (index: number) => {
     setEditingSegment(index);
     const seg = segments[index];
@@ -130,36 +126,36 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
     index: number,
     newProps: Partial<FormatSegment>,
   ) => {
-    setSegments((prev) => {
-      const newSegments = [...prev];
-      newSegments[index] = {
-        ...newSegments[index],
-        ...newProps,
-      } as FormatSegment;
-      return newSegments;
-    });
+    const newSegments = [...segments];
+    newSegments[index] = {
+      ...newSegments[index],
+      ...newProps,
+    } as FormatSegment;
+    setSegments(newSegments);
+    onChange(compileFormatString(newSegments));
   };
 
   const addSegment = (type: 'text' | 'module' | 'styledText') => {
-    setSegments((prev) => {
-      const newSegments = [...prev];
-      if (type === 'text')
-        newSegments.push({ type: 'text', value: 'New Text' });
-      if (type === 'module')
-        newSegments.push({ type: 'module', value: 'directory' });
-      if (type === 'styledText')
-        newSegments.push({
-          type: 'styledText',
-          text: 'Styled Text',
-          style: 'white',
-        });
-      return newSegments;
-    });
-    setEditingSegment(segments.length); // Edit the newly added segment
+    const newSegments = [...segments];
+    if (type === 'text')
+      newSegments.push({ type: 'text', value: 'New Text' });
+    if (type === 'module')
+      newSegments.push({ type: 'module', value: 'directory' });
+    if (type === 'styledText')
+      newSegments.push({
+        type: 'styledText',
+        text: 'Styled Text',
+        style: 'white',
+      });
+    setSegments(newSegments);
+    onChange(compileFormatString(newSegments));
+    setEditingSegment(newSegments.length - 1); // Edit the newly added segment
   };
 
   const removeSegment = (index: number) => {
-    setSegments((prev) => prev.filter((_, i) => i !== index));
+    const newSegments = segments.filter((_, i) => i !== index);
+    setSegments(newSegments);
+    onChange(compileFormatString(newSegments));
     setEditingSegment(null);
   };
 

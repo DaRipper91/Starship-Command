@@ -18,8 +18,18 @@ describe('FormatEditor Component', () => {
     // Reset mocks before each test
     vi.clearAllMocks();
     (useThemeStore as unknown as Mock).mockReturnValue({
-      currentTheme: { config: mockConfig },
+      currentTheme: {
+        config: {
+          directory: { style: 'blue' },
+          ...mockConfig,
+        },
+      },
     });
+  });
+
+  it('does NOT call onChange on initial render (prevents infinite loop)', () => {
+    render(<FormatEditor formatString="$directory" onChange={mockOnChange} />);
+    expect(mockOnChange).not.toHaveBeenCalled();
   });
 
   it('renders initial format string correctly', () => {
@@ -41,6 +51,7 @@ describe('FormatEditor Component', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /add text/i }));
     expect(screen.getByText('New Text')).toBeInTheDocument();
+    expect(mockOnChange).toHaveBeenCalledWith('New Text');
   });
 
   it('allows editing a text segment', () => {
@@ -54,7 +65,6 @@ describe('FormatEditor Component', () => {
     fireEvent.change(input, { target: { value: 'World' } });
 
     expect(screen.getByText('World')).toBeInTheDocument();
-    // Expect onChange to be called with the updated format string eventually
-    // This might be debounced or batched in a real app, so checking the final output is better
+    expect(mockOnChange).toHaveBeenCalledWith('World');
   });
 });
