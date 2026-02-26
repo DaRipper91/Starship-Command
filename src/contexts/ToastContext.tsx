@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import { ToastContainer } from '../components/ui/Toast';
+import { generateId } from '../lib/utils';
 
 export interface Toast {
   id: string;
@@ -30,7 +31,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const addToast = useCallback(
     (message: string, type: 'success' | 'error' | 'info' = 'info') => {
-      const id = Math.random().toString(36).substring(2, 9);
+      const id = generateId();
       setToasts((prev) => [...prev, { id, message, type }]);
 
       // Auto remove
