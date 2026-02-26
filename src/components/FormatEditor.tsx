@@ -34,13 +34,14 @@ interface FormatEditorProps {
 }
 
 export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
-  const { currentTheme } = useThemeStore();
+  const currentTheme = useThemeStore((state) => state.currentTheme);
   const [segments, setSegments] = useState<FormatSegment[]>([]);
   const [editingSegment, setEditingSegment] = useState<number | null>(null);
   const [showIconBrowser, setShowIconBrowser] = useState(false);
   const [activeStyle, setActiveStyle] = useState('');
   const [activeText, setActiveText] = useState('');
   const editorRef = useRef<HTMLDivElement>(null);
+  const lastCompiledRef = useRef<string | null>(null);
 
   // Parse format string into segments on initial load and formatString change
   useEffect(() => {
@@ -87,7 +88,10 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       }
       return newSegments;
     };
-    setSegments(parseSegments(formatString));
+    if (formatString !== lastCompiledRef.current) {
+      setSegments(parseSegments(formatString));
+      lastCompiledRef.current = formatString;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formatString]);
 
@@ -108,8 +112,12 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   }, []);
 
   useEffect(() => {
-    onChange(compileFormatString(segments));
-  }, [segments, compileFormatString, onChange]);
+    const compiled = compileFormatString(segments);
+    if (compiled !== formatString) {
+      lastCompiledRef.current = compiled;
+      onChange(compiled);
+    }
+  }, [segments, compileFormatString, onChange, formatString]);
 
   const handleSegmentClick = (index: number) => {
     setEditingSegment(index);
