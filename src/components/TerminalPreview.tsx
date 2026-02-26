@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
+import { useDebounce } from '../hooks/useDebounce';
 import { parseFormatString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { cn } from '../lib/utils';
@@ -12,6 +13,9 @@ import { useThemeStore } from '../stores/theme-store';
 interface TerminalPreviewProps {
   className?: string;
 }
+
+// Configurable debounce delay in ms
+const PREVIEW_DEBOUNCE_DELAY = 200;
 
 export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
   className,
@@ -22,6 +26,11 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   const { currentTheme } = useThemeStore();
+  // Debounce the config to prevent excessive re-renders during rapid typing
+  const debouncedConfig = useDebounce(
+    currentTheme.config,
+    PREVIEW_DEBOUNCE_DELAY,
+  );
   const [scenarioIndex, setScenarioIndex] = useState(0);
 
   const scenarioKeys = Object.keys(MOCK_SCENARIOS);
@@ -100,12 +109,12 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
   // Memoize the output to avoid re-parsing on metadata changes
   const output = useMemo(() => {
     // Parse format
-    const format = currentTheme.config.format || '';
+    const format = debouncedConfig.format || '';
     const currentScenarioKey = scenarioKeys[scenarioIndex];
     const scenario = MOCK_SCENARIOS[currentScenarioKey];
 
-    return parseFormatString(format, currentTheme.config, scenario);
-  }, [currentTheme.config, scenarioIndex, scenarioKeys]);
+    return parseFormatString(format, debouncedConfig, scenario);
+  }, [debouncedConfig, scenarioIndex, scenarioKeys]);
 
   // Effect to update content when output changes
   useEffect(() => {

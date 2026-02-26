@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
 import { cn } from '../lib/utils';
@@ -31,97 +31,108 @@ interface ModuleItem {
   isCustom?: boolean;
 }
 
-function SortableItem({
-  item,
-  isSelected,
-  onSelect,
-  onToggle,
-}: {
-  item: ModuleItem;
-  isSelected: boolean;
-  onSelect: (name: string) => void;
-  onToggle: (name: string, enabled: boolean) => void;
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item.id });
+// Memoized to prevent re-renders of list items during drag operations and text input in other components.
+// This is critical for performance as the list can grow large and re-rendering all items on every keystroke causes lag.
+const SortableItem = memo(
+  ({
+    item,
+    isSelected,
+    onSelect,
+    onToggle,
+  }: {
+    item: ModuleItem;
+    isSelected: boolean;
+    onSelect: (name: string) => void;
+    onToggle: (name: string, enabled: boolean) => void;
+  }) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id: item.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+    };
 
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      onClick={() => onSelect(item.name)}
-      className={cn(
-        'group flex cursor-pointer items-center gap-3 rounded-md border p-3 shadow-sm transition-colors',
-        isSelected
-          ? 'border-blue-500 bg-gray-800 ring-1 ring-blue-500'
-          : 'border-gray-700 bg-gray-800 hover:border-gray-600',
-        isDragging && 'z-50 bg-gray-700 opacity-50 ring-2 ring-blue-500',
-      )}
-    >
-      <button
-        {...listeners}
-        {...attributes}
-        className="cursor-grab text-gray-500 hover:text-gray-300 focus:outline-none active:cursor-grabbing"
-        aria-label="Drag handle"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <GripVertical size={18} />
-      </button>
-
-      <input
-        type="checkbox"
-        checked={true}
-        onChange={(e) => {
-          e.stopPropagation();
-          onToggle(item.name, e.target.checked);
-        }}
-        className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500"
-      />
-
-      <span
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        onClick={() => onSelect(item.name)}
         className={cn(
-          'select-none font-mono text-sm',
-          isSelected ? 'text-blue-400' : 'text-gray-200',
+          'group flex cursor-pointer items-center gap-3 rounded-md border p-3 shadow-sm transition-colors',
+          isSelected
+            ? 'border-blue-500 bg-gray-800 ring-1 ring-blue-500'
+            : 'border-gray-700 bg-gray-800 hover:border-gray-600',
+          isDragging && 'z-50 bg-gray-700 opacity-50 ring-2 ring-blue-500',
         )}
       >
-        {item.name}
-        {item.isCustom && (
-          <span className="ml-2 rounded-full bg-purple-900/30 px-2 py-0.5 text-[10px] font-semibold text-purple-300">
-            CUSTOM
-          </span>
-        )}
-      </span>
-
-      <div className="ml-auto">
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(item.name);
-          }}
-          className="text-xs text-gray-400 hover:text-blue-400"
+          {...listeners}
+          {...attributes}
+          className="cursor-grab text-gray-500 hover:text-gray-300 focus:outline-none active:cursor-grabbing"
+          aria-label="Drag handle"
+          onClick={(e) => e.stopPropagation()}
         >
-          Configure
+          <GripVertical size={18} />
         </button>
+
+        <input
+          type="checkbox"
+          checked={true}
+          onChange={(e) => {
+            e.stopPropagation();
+            onToggle(item.name, e.target.checked);
+          }}
+          className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500"
+        />
+
+        <span
+          className={cn(
+            'select-none font-mono text-sm',
+            isSelected ? 'text-blue-400' : 'text-gray-200',
+          )}
+        >
+          {item.name}
+          {item.isCustom && (
+            <span className="ml-2 rounded-full bg-purple-900/30 px-2 py-0.5 text-[10px] font-semibold text-purple-300">
+              CUSTOM
+            </span>
+          )}
+        </span>
+
+        <div className="ml-auto">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(item.name);
+            }}
+            className="text-xs text-gray-400 hover:text-blue-400"
+          >
+            Configure
+          </button>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  },
+);
+SortableItem.displayName = 'SortableItem';
 
 export function ModuleList({ className }: { className?: string }) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
     useThemeStore();
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  // Keep ref to currentTheme for stable callbacks
+  const themeRef = useRef(currentTheme);
+  useEffect(() => {
+    themeRef.current = currentTheme;
+  }, [currentTheme]);
 
   // Combine predefined and custom modules
   const allModules = useMemo(() => {
@@ -169,25 +180,31 @@ export function ModuleList({ className }: { className?: string }) {
     return allModules.filter((def) => !activeNames.has(def.id));
   }, [activeModules, allModules]);
 
-  const handleToggle = (name: string, enable: boolean) => {
-    let newFormat = currentTheme.config.format || '';
-    if (enable) {
-      newFormat += `$${name}`;
-    } else {
-      // Remove from format string
-      const regex = new RegExp(`\\$${name}\\b`, 'g');
-      newFormat = newFormat.replace(regex, '');
-    }
+  // Stable callback using ref to currentTheme config prevents re-creation on every render.
+  // This allows SortableItem memoization to work effectively even when other parts of the theme change.
+  const handleToggle = useCallback(
+    (name: string, enable: boolean) => {
+      const currentConfig = themeRef.current.config;
+      let newFormat = currentConfig.format || '';
+      if (enable) {
+        newFormat += `$${name}`;
+      } else {
+        // Remove from format string
+        const regex = new RegExp(`\\$${name}\\b`, 'g');
+        newFormat = newFormat.replace(regex, '');
+      }
 
-    // Also update module config to reflect disabled state
-    const existingModuleConfig =
-      (currentTheme.config[name] as BaseModuleConfig) || {};
+      // Also update module config to reflect disabled state
+      const existingModuleConfig =
+        (currentConfig[name] as BaseModuleConfig) || {};
 
-    updateConfig({
-      format: newFormat,
-      [name]: { ...existingModuleConfig, disabled: !enable },
-    });
-  };
+      updateConfig({
+        format: newFormat,
+        [name]: { ...existingModuleConfig, disabled: !enable },
+      });
+    },
+    [updateConfig],
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor),

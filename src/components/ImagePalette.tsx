@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useToast } from '../contexts/ToastContext';
 import { ColorUtils, ExtendedColorPalette } from '../lib/color-utils';
 import { useThemeStore } from '../stores/theme-store';
+import ColorWorker from '../workers/color-extraction.worker?worker';
 
 export function ImagePalette() {
   const { updateConfig } = useThemeStore();
@@ -34,13 +35,36 @@ export function ImagePalette() {
 
     setIsExtracting(true);
     try {
-      const extracted = await ColorUtils.extractPaletteFromImage(file);
-      setPalette(extracted);
-      addToast('Palette extracted!', 'success');
+      // Create bitmap for worker transfer
+      const bitmap = await createImageBitmap(file);
+
+      const worker = new ColorWorker();
+
+      worker.onmessage = (event: MessageEvent) => {
+        const { type, payload } = event.data;
+        if (type === 'SUCCESS') {
+          setPalette(payload);
+          addToast('Palette extracted!', 'success');
+        } else {
+          console.error(payload);
+          addToast('Failed to extract colors from image.', 'error');
+        }
+        worker.terminate();
+        setIsExtracting(false);
+      };
+
+      worker.onerror = (error) => {
+        console.error(error);
+        addToast('Worker error.', 'error');
+        worker.terminate();
+        setIsExtracting(false);
+      };
+
+      // Send bitmap to worker (transferable)
+      worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
     } catch (error) {
       console.error(error);
-      addToast('Failed to extract colors from image.', 'error');
-    } finally {
+      addToast('Failed to initialize extraction.', 'error');
       setIsExtracting(false);
     }
   };

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0] - 2026-02-23
+
+### Added
+- **Performance**: Implemented a Web Worker for image color extraction to prevent UI freezing.
+- **Performance**: Added debouncing (200ms) to the Terminal Preview to optimize rendering during rapid input.
+- **Tests**: Added an automated test suite with Vitest, including unit tests and component tests (`TerminalPreview`, `ImagePalette`, `useDebounce`).
+- **Scripts**: Added `test:coverage` script to `package.json`.
+
+### Changed
+- **Optimization**: Moved `ColorUtils` image processing logic to `src/workers/color-extraction.worker.ts`.
+- **Optimization**: Memoized `SortableItem` in `ModuleList` and optimized DnD performance with stable callbacks.
+- **Optimization**: Implemented Lazy Loading for `ThemeGallery`, `TerminalPreview`, `ImagePalette`, `ComparisonView`, and `ExportImport` using `React.lazy` and `Suspense`.
+- **Dependencies**: Removed heavy dependencies `node-vibrant` and `colorthief` in favor of a lightweight custom extraction algorithm.
+
 ## [1.1.0] - 2026-02-22
 
 ### Added
