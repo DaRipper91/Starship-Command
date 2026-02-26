@@ -21,7 +21,11 @@ export class TomlParser {
   static parse(tomlString: string): StarshipConfig {
     try {
       // @iarna/toml returns a Record<string, any>, which maps to our StarshipConfig
-      return TOML.parse(tomlString) as unknown as StarshipConfig;
+      const parsed = TOML.parse(tomlString);
+      if (typeof parsed !== 'object' || parsed === null) {
+        throw new Error('Parsed TOML result is not an object');
+      }
+      return parsed as unknown as StarshipConfig;
     } catch (error) {
       console.error('Failed to parse TOML:', error);
       throw new Error(
@@ -148,6 +152,21 @@ export class TomlParser {
       typeof config.command_timeout !== 'number'
     ) {
       errors.push('command_timeout must be a number');
+    }
+    if (config.palette !== undefined && typeof config.palette !== 'string') {
+      errors.push('palette must be a string');
+    }
+    if (
+      config.palettes !== undefined &&
+      (typeof config.palettes !== 'object' || Array.isArray(config.palettes))
+    ) {
+      errors.push('palettes must be a table');
+    }
+    if (
+      config.custom !== undefined &&
+      (typeof config.custom !== 'object' || Array.isArray(config.custom))
+    ) {
+      errors.push('custom must be a table');
     }
 
     // Check for unknown modules or properties

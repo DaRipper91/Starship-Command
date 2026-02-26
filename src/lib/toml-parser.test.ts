@@ -136,6 +136,7 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(({} as any).polluted).toBeUndefined();
     });
 
@@ -148,6 +149,7 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(({} as any).polluted).toBeUndefined();
     });
 
@@ -158,6 +160,7 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(({} as any).polluted).toBeUndefined();
     });
   });

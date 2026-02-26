@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import { MODULE_DEFINITIONS } from '../lib/module-definitions';
 import { createDebouncedStorage } from '../lib/storage-utils';
 import { TomlParser } from '../lib/toml-parser';
 import { generateId } from '../lib/utils';
@@ -45,6 +46,14 @@ const createDefaultTheme = (): Theme => ({
   config: TomlParser.getDefaultConfig(),
 });
 
+// Helper for deep cloning
+const deepClone = <T>(obj: T): T => {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(obj);
+  }
+  return JSON.parse(JSON.stringify(obj));
+};
+
 export const useThemeStore = create<ThemeStore>()(
   persist(
     (set, get) => ({
@@ -57,12 +66,12 @@ export const useThemeStore = create<ThemeStore>()(
       undo: () => {
         set((state) => {
           if (state.past.length === 0) return {};
-          const previous = state.past[state.past.length - 1];
+          const previous = deepClone(state.past[state.past.length - 1]);
           const newPast = state.past.slice(0, -1);
           return {
             past: newPast,
             currentTheme: previous,
-            future: [state.currentTheme, ...state.future],
+            future: [deepClone(state.currentTheme), ...state.future],
           };
         });
       },
@@ -70,10 +79,10 @@ export const useThemeStore = create<ThemeStore>()(
       redo: () => {
         set((state) => {
           if (state.future.length === 0) return {};
-          const next = state.future[0];
+          const next = deepClone(state.future[0]);
           const newFuture = state.future.slice(1);
           return {
-            past: [...state.past, state.currentTheme],
+            past: [...state.past, deepClone(state.currentTheme)],
             currentTheme: next,
             future: newFuture,
           };
@@ -116,9 +125,12 @@ export const useThemeStore = create<ThemeStore>()(
             return {};
           }
 
+          // Use deepClone for history to ensure immutability
           return {
-            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
-            currentTheme: nextTheme,
+            past: [...state.past, deepClone(state.currentTheme)].slice(
+              -HISTORY_LIMIT,
+            ),
+            currentTheme: nextTheme, // nextTheme is newly created, so it's safe
             future: [], // Clear redo stack on new change
           };
         });
@@ -135,7 +147,9 @@ export const useThemeStore = create<ThemeStore>()(
             },
           };
           return {
-            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+            past: [...state.past, deepClone(state.currentTheme)].slice(
+              -HISTORY_LIMIT,
+            ),
             currentTheme: nextTheme,
             future: [],
           };
@@ -148,8 +162,10 @@ export const useThemeStore = create<ThemeStore>()(
 
       loadTheme: (theme) => {
         set((state) => ({
-          past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
-          currentTheme: theme,
+          past: [...state.past, deepClone(state.currentTheme)].slice(
+            -HISTORY_LIMIT,
+          ),
+          currentTheme: deepClone(theme),
           selectedModule: null,
           future: [],
         }));
@@ -157,17 +173,19 @@ export const useThemeStore = create<ThemeStore>()(
 
       saveTheme: () => {
         const { currentTheme, savedThemes } = get();
+        // We clone currentTheme to avoid reference issues in savedThemes
+        const themeToSave = deepClone(currentTheme);
         const existingIndex = savedThemes.findIndex(
-          (t) => t.metadata.id === currentTheme.metadata.id,
+          (t) => t.metadata.id === themeToSave.metadata.id,
         );
 
         const newSavedThemes = [...savedThemes];
         if (existingIndex >= 0) {
           // Update existing
-          newSavedThemes[existingIndex] = currentTheme;
+          newSavedThemes[existingIndex] = themeToSave;
         } else {
           // Add new
-          newSavedThemes.push(currentTheme);
+          newSavedThemes.push(themeToSave);
         }
 
         set({ savedThemes: newSavedThemes });
@@ -181,7 +199,9 @@ export const useThemeStore = create<ThemeStore>()(
 
       resetTheme: () => {
         set((state) => ({
-          past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+          past: [...state.past, deepClone(state.currentTheme)].slice(
+            -HISTORY_LIMIT,
+          ),
           currentTheme: createDefaultTheme(),
           selectedModule: null,
           future: [],
@@ -197,7 +217,9 @@ export const useThemeStore = create<ThemeStore>()(
         try {
           const config = TomlParser.parse(tomlString);
           set((state) => ({
-            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+            past: [...state.past, deepClone(state.currentTheme)].slice(
+              -HISTORY_LIMIT,
+            ),
             currentTheme: {
               ...state.currentTheme,
               config,
@@ -226,3 +248,40 @@ export const useThemeStore = create<ThemeStore>()(
     },
   ),
 );
+
+// Selector for active modules
+export const selectActiveModules = (state: ThemeStore) => {
+  const customModules = Object.keys(state.currentTheme.config.custom || {}).map(
+    (id) => ({
+      id,
+      name: id,
+      isCustom: true,
+    }),
+  );
+
+  // Ensure MODULE_DEFINITIONS are also ModuleItem compatible
+  const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
+    id: def.id,
+    name: def.id,
+    isCustom: false,
+  }));
+
+  const allModules = [...predefinedModules, ...customModules];
+
+  const format = state.currentTheme.config.format || '';
+  const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
+  const existingModuleNames = new Set(allModules.map((m) => m.name));
+
+  const parsedModules = matches
+    .map((m, i) => {
+      const name = m.substring(1);
+      return {
+        id: `${name}-${i}`,
+        name: name,
+        isCustom: allModules.find((mod) => mod.name === name)?.isCustom || false,
+      };
+    })
+    .filter((item) => existingModuleNames.has(item.name));
+
+  return parsedModules;
+};
