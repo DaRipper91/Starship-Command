@@ -116,8 +116,14 @@ export const useThemeStore = create<ThemeStore>()(
             return {};
           }
 
+          // Use the history limit correctly
+          const newPast = [...state.past, state.currentTheme];
+          if (newPast.length > HISTORY_LIMIT) {
+            newPast.shift();
+          }
+
           return {
-            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+            past: newPast,
             currentTheme: nextTheme,
             future: [], // Clear redo stack on new change
           };
@@ -134,8 +140,15 @@ export const useThemeStore = create<ThemeStore>()(
               updated: new Date(),
             },
           };
+
+          // Also push metadata changes to history so user can undo name changes etc.
+          const newPast = [...state.past, state.currentTheme];
+          if (newPast.length > HISTORY_LIMIT) {
+            newPast.shift();
+          }
+
           return {
-            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
+            past: newPast,
             currentTheme: nextTheme,
             future: [],
           };
@@ -147,12 +160,18 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       loadTheme: (theme) => {
-        set((state) => ({
-          past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
-          currentTheme: theme,
-          selectedModule: null,
-          future: [],
-        }));
+        set((state) => {
+          const newPast = [...state.past, state.currentTheme];
+          if (newPast.length > HISTORY_LIMIT) {
+            newPast.shift();
+          }
+          return {
+            past: newPast,
+            currentTheme: theme,
+            selectedModule: null,
+            future: [],
+          };
+        });
       },
 
       saveTheme: () => {
@@ -180,12 +199,18 @@ export const useThemeStore = create<ThemeStore>()(
       },
 
       resetTheme: () => {
-        set((state) => ({
-          past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
-          currentTheme: createDefaultTheme(),
-          selectedModule: null,
-          future: [],
-        }));
+        set((state) => {
+          const newPast = [...state.past, state.currentTheme];
+          if (newPast.length > HISTORY_LIMIT) {
+            newPast.shift();
+          }
+          return {
+            past: newPast,
+            currentTheme: createDefaultTheme(),
+            selectedModule: null,
+            future: [],
+          };
+        });
       },
 
       exportToml: () => {
@@ -196,19 +221,25 @@ export const useThemeStore = create<ThemeStore>()(
       importToml: (tomlString) => {
         try {
           const config = TomlParser.parse(tomlString);
-          set((state) => ({
-            past: [...state.past, state.currentTheme].slice(-HISTORY_LIMIT),
-            currentTheme: {
-              ...state.currentTheme,
-              config,
-              metadata: {
-                ...state.currentTheme.metadata,
-                updated: new Date(),
+          set((state) => {
+            const newPast = [...state.past, state.currentTheme];
+            if (newPast.length > HISTORY_LIMIT) {
+              newPast.shift();
+            }
+            return {
+              past: newPast,
+              currentTheme: {
+                ...state.currentTheme,
+                config,
+                metadata: {
+                  ...state.currentTheme.metadata,
+                  updated: new Date(),
+                },
               },
-            },
-            selectedModule: null,
-            future: [],
-          }));
+              selectedModule: null,
+              future: [],
+            };
+          });
         } catch (error) {
           console.error('Failed to import TOML:', error);
           throw error;

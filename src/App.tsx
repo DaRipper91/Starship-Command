@@ -1,7 +1,10 @@
 import { ArrowLeftRight, Keyboard, Redo, Undo, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
-import { CommandPalette } from './components/CommandPalette';
+import {
+  CommandPalette,
+  CommandPaletteAction,
+} from './components/CommandPalette';
 import { ComparisonView } from './components/ComparisonView';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExportImport } from './components/ExportImport';
@@ -106,7 +109,7 @@ function AppContent() {
     },
   ]);
 
-  const commandActions = [
+  const commandActions: CommandPaletteAction[] = [
     { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: handleSave },
     { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: undo },
     { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: redo },

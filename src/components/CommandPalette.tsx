@@ -3,16 +3,18 @@ import React, { useState } from 'react';
 
 import { cn } from '../lib/utils';
 
-interface CommandPaletteProps {
+export interface CommandPaletteAction {
+  id: string;
+  title: string;
+  icon?: React.ReactNode;
+  shortcut?: string;
+  perform: () => void;
+}
+
+export interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  actions: {
-    id: string;
-    title: string;
-    icon?: React.ReactNode;
-    shortcut?: string;
-    perform: () => void;
-  }[];
+  actions: CommandPaletteAction[];
 }
 
 export function CommandPalette({
@@ -22,7 +24,9 @@ export function CommandPalette({
 }: CommandPaletteProps) {
   const [search, setSearch] = useState('');
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const filteredActions = actions.filter((action) =>
     action.title.toLowerCase().includes(search.toLowerCase()),

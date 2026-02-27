@@ -136,7 +136,7 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
-      expect(({} as any).polluted).toBeUndefined();
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via constructor', () => {
@@ -148,7 +148,7 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
-      expect(({} as any).polluted).toBeUndefined();
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via prototype', () => {
@@ -158,7 +158,7 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
-      expect(({} as any).polluted).toBeUndefined();
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined();
     });
   });
 });

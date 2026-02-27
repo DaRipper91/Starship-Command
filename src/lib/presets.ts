@@ -98,6 +98,9 @@ export const PRESET_THEMES: Theme[] = [
         success_symbol: `[➜](${ColorUtils.presets.Nord.success})`,
         error_symbol: `[➜](${ColorUtils.presets.Nord.error})`,
       },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.Nord.primary}) `,
+      },
     },
   },
   {
@@ -118,6 +121,9 @@ export const PRESET_THEMES: Theme[] = [
       character: {
         success_symbol: `[⚡](${ColorUtils.presets.Dracula.success})`,
         error_symbol: `[⚡](${ColorUtils.presets.Dracula.error})`,
+      },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.Dracula.primary}) `,
       },
     },
   },
@@ -140,6 +146,9 @@ export const PRESET_THEMES: Theme[] = [
         success_symbol: `[➜](${ColorUtils.presets.Gruvbox.success})`,
         error_symbol: `[➜](${ColorUtils.presets.Gruvbox.error})`,
       },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.Gruvbox.primary}) `,
+      },
     },
   },
   {
@@ -160,6 +169,9 @@ export const PRESET_THEMES: Theme[] = [
       character: {
         success_symbol: `[➜](${ColorUtils.presets.Catppuccin.success})`,
         error_symbol: `[➜](${ColorUtils.presets.Catppuccin.error})`,
+      },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.Catppuccin.primary}) `,
       },
     },
   },
@@ -182,6 +194,9 @@ export const PRESET_THEMES: Theme[] = [
         success_symbol: `[➜](${ColorUtils.presets.TokyoNight.success})`,
         error_symbol: `[➜](${ColorUtils.presets.TokyoNight.error})`,
       },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.TokyoNight.primary}) `,
+      },
     },
   },
   {
@@ -202,6 +217,9 @@ export const PRESET_THEMES: Theme[] = [
       character: {
         success_symbol: `[➜](${ColorUtils.presets.OneDark.success})`,
         error_symbol: `[➜](${ColorUtils.presets.OneDark.error})`,
+      },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.OneDark.primary}) `,
       },
     },
   },
@@ -224,6 +242,9 @@ export const PRESET_THEMES: Theme[] = [
         success_symbol: `[➜](${ColorUtils.presets.Monokai.success})`,
         error_symbol: `[➜](${ColorUtils.presets.Monokai.error})`,
       },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.Monokai.primary}) `,
+      },
     },
   },
   {
@@ -244,6 +265,9 @@ export const PRESET_THEMES: Theme[] = [
       character: {
         success_symbol: `[➜](${ColorUtils.presets.Solarized.success})`,
         error_symbol: `[➜](${ColorUtils.presets.Solarized.error})`,
+      },
+      nodejs: {
+        format: `via [⬢ $version](${ColorUtils.presets.Solarized.primary}) `,
       },
     },
   },

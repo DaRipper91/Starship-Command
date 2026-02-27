@@ -3,6 +3,7 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children?: ReactNode;
+  fallback?: ReactNode;
 }
 
 interface State {
@@ -25,6 +26,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+
       return (
         <div className="flex h-full w-full flex-col items-center justify-center bg-gray-900 p-8 text-center text-gray-200">
           <div className="mb-4 rounded-full bg-red-900/30 p-4">
@@ -36,11 +41,15 @@ export class ErrorBoundary extends Component<Props, State> {
               'An unexpected error occurred while rendering the interface.'}
           </p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              this.setState({ hasError: false, error: undefined });
+              // Optional: reload the page or reset specific state
+              // window.location.reload();
+            }}
             className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <RefreshCcw size={16} />
-            Reload Application
+            Retry
           </button>
         </div>
       );

@@ -50,7 +50,7 @@ export function ExportImport({
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       addToast('File downloaded successfully!', 'success');
-    } catch (err) {
+    } catch (_err) {
       addToast('Failed to generate file.', 'error');
     }
   };
@@ -60,7 +60,7 @@ export function ExportImport({
       const toml = TomlParser.stringify(currentTheme.config);
       await navigator.clipboard.writeText(toml);
       addToast('Copied to clipboard!', 'success');
-    } catch (err) {
+    } catch (_err) {
       addToast('Failed to copy text.', 'error');
     }
   };
@@ -72,7 +72,7 @@ export function ExportImport({
       const url = `${window.location.origin}${window.location.pathname}?theme=${base64}`;
       await navigator.clipboard.writeText(url);
       addToast('Share URL copied to clipboard!', 'success');
-    } catch (err) {
+    } catch (_err) {
       addToast('Failed to create share URL.', 'error');
     }
   };
@@ -98,7 +98,10 @@ export function ExportImport({
         // But we need to show warnings first.
         // For now, simpler UX: Show warnings in the confirm dialog or as a separate step?
         // Let's append warnings to the confirmation message.
-        const warningMsg = `\n\nWarnings:\n${warnings.slice(0, 5).map((w) => `- ${w}`).join('\n')}${warnings.length > 5 ? '\n...and more' : ''}`;
+        const warningMsg = `\n\nWarnings:\n${warnings
+          .slice(0, 5)
+          .map((w) => `- ${w}`)
+          .join('\n')}${warnings.length > 5 ? '\n...and more' : ''}`;
         if (
           !confirm(
             `This will overwrite your current theme.${warningMsg}\n\nAre you sure?`,
@@ -133,6 +136,9 @@ export function ExportImport({
       const content = event.target?.result as string;
       validateAndImport(content);
     };
+    reader.onerror = () => {
+      setValidationError('Failed to read file.');
+    };
     reader.readAsText(file);
     // Reset input
     e.target.value = '';
@@ -161,7 +167,7 @@ export function ExportImport({
       if (!res.ok) throw new Error('Failed to fetch from URL');
       const text = await res.text();
       validateAndImport(text);
-    } catch (err) {
+    } catch (_err) {
       setValidationError(
         'Failed to fetch from URL. Make sure it points to a raw text file.',
       );
