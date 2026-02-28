@@ -20,7 +20,7 @@ export class TomlParser {
    */
   static parse(tomlString: string): StarshipConfig {
     try {
-      // @iarna/toml returns a Record<string, any>, which maps to our StarshipConfig
+      // @iarna/toml returns a Record<string, unknown>, which maps to our StarshipConfig
       return TOML.parse(tomlString) as unknown as StarshipConfig;
     } catch (error) {
       console.error('Failed to parse TOML:', error);
