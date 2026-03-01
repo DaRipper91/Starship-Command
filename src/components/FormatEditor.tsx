@@ -41,9 +41,16 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const [activeStyle, setActiveStyle] = useState('');
   const [activeText, setActiveText] = useState('');
   const editorRef = useRef<HTMLDivElement>(null);
+  const isInternalChange = useRef(false);
 
   // Parse format string into segments on initial load and formatString change
   useEffect(() => {
+    // If the change was triggered by our own segments update, don't re-parse
+    if (isInternalChange.current) {
+        isInternalChange.current = false;
+        return;
+    }
+
     const parseSegments = (input: string): FormatSegment[] => {
       const newSegments: FormatSegment[] = [];
       const remaining = input;
@@ -87,9 +94,9 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       }
       return newSegments;
     };
+
     setSegments(parseSegments(formatString));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formatString]);
+  }, [formatString, currentTheme.config]);
 
   // Convert segments back to format string
   const compileFormatString = useCallback((s: FormatSegment[]): string => {
@@ -107,9 +114,12 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       .join('');
   }, []);
 
-  useEffect(() => {
-    onChange(compileFormatString(segments));
-  }, [segments, compileFormatString, onChange]);
+  const notifyChange = useCallback((newSegments: FormatSegment[]) => {
+      const newCompiled = compileFormatString(newSegments);
+      // Flag that the next formatString prop update is from us, so we don't re-parse and loop
+      isInternalChange.current = true;
+      onChange(newCompiled);
+  }, [compileFormatString, onChange]);
 
   const handleSegmentClick = (index: number) => {
     setEditingSegment(index);
@@ -136,6 +146,8 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
         ...newSegments[index],
         ...newProps,
       } as FormatSegment;
+
+      notifyChange(newSegments);
       return newSegments;
     });
   };
@@ -153,13 +165,19 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
           text: 'Styled Text',
           style: 'white',
         });
+
+      notifyChange(newSegments);
       return newSegments;
     });
     setEditingSegment(segments.length); // Edit the newly added segment
   };
 
   const removeSegment = (index: number) => {
-    setSegments((prev) => prev.filter((_, i) => i !== index));
+    setSegments((prev) => {
+        const newSegments = prev.filter((_, i) => i !== index);
+        notifyChange(newSegments);
+        return newSegments;
+    });
     setEditingSegment(null);
   };
 
