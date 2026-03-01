@@ -9,6 +9,14 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
+    coverage: {
+      provider: 'v8',
+      // The current baseline coverage is ~38%.
+      // To reach the 70% target, we need to add unit and component tests for:
+      // 1. App.tsx and complex UI components (ModuleList, ModuleConfig, ThemeGallery).
+      // 2. React hooks (useDebounce, useKeyboardShortcuts).
+      // 3. Worker file coverage and context providers.
+    }
   },
   build: {
     rollupOptions: {
@@ -29,8 +37,6 @@ export default defineConfig({
           ],
           'vendor-utils': [
             'colord',
-            'colorthief',
-            'node-vibrant',
             'html2canvas',
             '@iarna/toml',
           ],

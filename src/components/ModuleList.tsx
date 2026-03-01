@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
 import { cn } from '../lib/utils';
@@ -31,7 +31,10 @@ interface ModuleItem {
   isCustom?: boolean;
 }
 
-function SortableItem({
+import React from 'react';
+
+// Memoize SortableItem to prevent re-rendering all items when one is dragged or toggled
+const SortableItem = React.memo(function SortableItem({
   item,
   isSelected,
   onSelect,
@@ -116,7 +119,7 @@ function SortableItem({
       </div>
     </div>
   );
-}
+});
 
 export function ModuleList({ className }: { className?: string }) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
@@ -169,8 +172,13 @@ export function ModuleList({ className }: { className?: string }) {
     return allModules.filter((def) => !activeNames.has(def.id));
   }, [activeModules, allModules]);
 
-  const handleToggle = (name: string, enable: boolean) => {
-    let newFormat = currentTheme.config.format || '';
+  // Stabilize handleToggle to prevent re-rendering all SortableItems when used as a prop
+  const currentThemeConfigRef = useRef(currentTheme.config);
+  currentThemeConfigRef.current = currentTheme.config;
+
+  const handleToggle = useCallback((name: string, enable: boolean) => {
+    const config = currentThemeConfigRef.current;
+    let newFormat = config.format || '';
     if (enable) {
       newFormat += `$${name}`;
     } else {
@@ -181,13 +189,13 @@ export function ModuleList({ className }: { className?: string }) {
 
     // Also update module config to reflect disabled state
     const existingModuleConfig =
-      (currentTheme.config[name] as BaseModuleConfig) || {};
+      (config[name] as BaseModuleConfig) || {};
 
     updateConfig({
       format: newFormat,
       [name]: { ...existingModuleConfig, disabled: !enable },
     });
-  };
+  }, [updateConfig]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

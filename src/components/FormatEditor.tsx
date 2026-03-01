@@ -33,7 +33,10 @@ interface FormatEditorProps {
   onChange: (newFormatString: string) => void;
 }
 
-export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
+import React from 'react';
+
+// Memoize FormatEditor to prevent re-renders when parent state updates that don't affect formatString
+export const FormatEditor = React.memo(function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const { currentTheme } = useThemeStore();
   const [segments, setSegments] = useState<FormatSegment[]>([]);
   const [editingSegment, setEditingSegment] = useState<number | null>(null);
@@ -107,8 +110,13 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       .join('');
   }, []);
 
+  const lastCompiledRef = useRef(formatString);
   useEffect(() => {
-    onChange(compileFormatString(segments));
+    const compiled = compileFormatString(segments);
+    if (compiled !== lastCompiledRef.current) {
+      lastCompiledRef.current = compiled;
+      onChange(compiled);
+    }
   }, [segments, compileFormatString, onChange]);
 
   const handleSegmentClick = (index: number) => {
@@ -337,4 +345,4 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       {renderSegmentEditor()}
     </div>
   );
-}
+});

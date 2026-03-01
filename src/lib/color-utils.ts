@@ -2,9 +2,9 @@ import { colord, extend } from 'colord';
 import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
-import ColorThief from 'colorthief';
 
 import { ColorPalette } from '../types/starship.types';
+import { generateId } from './utils';
 
 // Extend colord with necessary plugins
 extend([a11yPlugin, harmoniesPlugin, namesPlugin]);
@@ -17,7 +17,7 @@ export interface ExtendedColorPalette extends Partial<ColorPalette> {
 
 export class ColorUtils {
   /**
-   * Extracts a color palette from an image file
+   * Extracts a color palette from an image file using a Web Worker
    * @param imageFile - The image file to process
    * @returns Promise resolving to a ColorPalette-like object
    */
@@ -26,67 +26,41 @@ export class ColorUtils {
   ): Promise<ExtendedColorPalette> {
     return new Promise((resolve, reject) => {
       try {
-        const imageUrl = URL.createObjectURL(imageFile);
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.src = imageUrl;
+        const worker = new Worker(
+          new URL('../workers/color-extraction.worker.ts', import.meta.url),
+          { type: 'module' },
+        );
 
-        img.onload = async () => {
-          try {
-            // Get standard 6 colors from vibrant for backward compatibility
-            const { Vibrant } = await import('node-vibrant/browser');
-            const vibrantPalette = await Vibrant.from(imageUrl).getPalette();
+        const id = generateId();
 
-            // Use ColorThief to get 20 colors for full terminal generation
-            const colorThief = new ColorThief();
-            // getPalette returns an array of [r, g, b] arrays
-            const rawPalette = colorThief.getPalette(img, 20) || [];
-
-            // Sort by brightness (simple sum of RGB)
-            const sortedPalette = rawPalette.sort(
-              (a, b) => a[0] + a[1] + a[2] - (b[0] + b[1] + b[2]),
-            );
-
-            // Convert to hex
-            const hexPalette = sortedPalette.map((c) =>
-              colord({ r: c[0], g: c[1], b: c[2] }).toHex(),
-            );
-
-            const bg = hexPalette[0] || '#000000';
-            const fg = hexPalette[hexPalette.length - 1] || '#ffffff';
-
-            // Generate 16 colors (duplicate if not enough)
-            let colors16 = hexPalette.slice(0, 16);
-            while (colors16.length < 16 && colors16.length > 0) {
-              colors16 = [...colors16, ...colors16].slice(0, 16);
+        worker.onmessage = (e: MessageEvent) => {
+          const { id: responseId, palette, error } = e.data;
+          if (responseId === id) {
+            worker.terminate();
+            if (error) {
+              reject(new Error(error));
+            } else {
+              resolve(palette as ExtendedColorPalette);
             }
+          }
+        };
 
-            URL.revokeObjectURL(imageUrl);
+        worker.onerror = (e) => {
+          worker.terminate();
+          reject(new Error(`Worker error: ${e.message}`));
+        };
 
-            resolve({
-              primary: vibrantPalette.Vibrant?.hex || colors16[8] || '#ffffff',
-              secondary:
-                vibrantPalette.LightVibrant?.hex || colors16[10] || '#eeeeee',
-              accent:
-                vibrantPalette.DarkVibrant?.hex || colors16[4] || '#aaaaaa',
-              background: bg,
-              foreground: fg,
-              success: '#10B981',
-              error: '#EF4444',
-              warning: '#F59E0B',
-              extracted16: colors16,
-              bg,
-              fg,
-            });
+        const processImage = async () => {
+          try {
+            const imageBitmap = await createImageBitmap(imageFile);
+            worker.postMessage({ id, imageBitmap }, [imageBitmap]);
           } catch (e) {
+            worker.terminate();
             reject(e);
           }
         };
 
-        img.onerror = (e) => {
-          URL.revokeObjectURL(imageUrl);
-          reject(e);
-        };
+        processImage();
       } catch (error) {
         console.error('Failed to extract palette:', error);
         reject(new Error('Could not extract colors from image'));

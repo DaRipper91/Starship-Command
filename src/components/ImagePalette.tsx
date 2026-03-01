@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useToast } from '../contexts/ToastContext';
 import { ColorUtils, ExtendedColorPalette } from '../lib/color-utils';
 import { useThemeStore } from '../stores/theme-store';
+import { LoadingSpinner } from './LoadingSpinner';
 
 export function ImagePalette() {
   const { updateConfig } = useThemeStore();
@@ -110,9 +111,12 @@ export function ImagePalette() {
       </div>
 
       {isExtracting && (
-        <p className="text-center text-sm text-gray-400">
-          Extracting colors...
-        </p>
+        <div className="flex flex-col items-center justify-center gap-2 py-4">
+          <LoadingSpinner />
+          <p className="text-center text-sm text-gray-400">
+            Extracting colors...
+          </p>
+        </div>
       )}
 
       {palette && !isExtracting && (
