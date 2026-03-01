@@ -150,6 +150,26 @@ export class TomlParser {
       errors.push('command_timeout must be a number');
     }
 
+    // Validate palettes
+    if (config.palettes !== undefined) {
+      if (typeof config.palettes !== 'object' || config.palettes === null) {
+        errors.push('palettes must be a table');
+      } else {
+        Object.entries(config.palettes).forEach(([name, palette]) => {
+          if (typeof palette !== 'object' || palette === null) {
+            errors.push(`Palette '${name}' must be a table`);
+          }
+        });
+      }
+    }
+
+    // Validate custom modules
+    if (config.custom !== undefined) {
+      if (typeof config.custom !== 'object' || config.custom === null) {
+        errors.push('custom modules must be a table');
+      }
+    }
+
     // Check for unknown modules or properties
     const knownModuleIds = new Set(MODULE_DEFINITIONS.map((m) => m.id));
 

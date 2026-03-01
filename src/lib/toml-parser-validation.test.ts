@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { TomlParser } from './toml-parser';
+
 import { StarshipConfig } from '../types/starship.types';
+import { TomlParser } from './toml-parser';
 
 describe('TomlParser Validation', () => {
   it('should validate a valid config', () => {
@@ -35,7 +36,9 @@ describe('TomlParser Validation', () => {
     const result = TomlParser.validate(config);
     expect(result.valid).toBe(true);
     expect(result.warnings.length).toBeGreaterThan(0);
-    expect(result.warnings[0]).toContain("Unknown module or setting: 'unknown_module'");
+    expect(result.warnings[0]).toContain(
+      "Unknown module or setting: 'unknown_module'",
+    );
   });
 
   it('should validate module structure', () => {
@@ -44,16 +47,18 @@ describe('TomlParser Validation', () => {
     } as unknown as StarshipConfig;
     const result = TomlParser.validate(config);
     expect(result.valid).toBe(false);
-    expect(result.errors).toContain("Module 'git_branch' must be a table (object)");
+    expect(result.errors).toContain(
+      "Module 'git_branch' must be a table (object)",
+    );
   });
 
   it('should allow custom modules in custom block', () => {
     const config: StarshipConfig = {
-        custom: {
-            my_module: {
-                command: 'echo hello'
-            }
-        }
+      custom: {
+        my_module: {
+          command: 'echo hello',
+        },
+      },
     };
     const result = TomlParser.validate(config);
     expect(result.valid).toBe(true);

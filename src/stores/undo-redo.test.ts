@@ -1,68 +1,96 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { TomlParser } from '../lib/toml-parser';
 import { useThemeStore } from './theme-store';
 
-describe('Undo/Redo Logic', () => {
+describe('Undo/Redo System', () => {
   beforeEach(() => {
     useThemeStore.setState({
-      past: [],
-      future: [],
       currentTheme: {
         metadata: {
-          id: 'test',
-          name: 'Initial',
+          id: 'test-id',
+          name: 'Test Theme',
           created: new Date(),
           updated: new Date(),
         },
-        config: { format: 'initial' },
+        config: TomlParser.getDefaultConfig(),
       },
+      savedThemes: [],
+      past: [],
+      future: [],
     });
   });
 
-  it('should push to past on updateConfig', () => {
+  it('should push state to past when config is updated', () => {
     const store = useThemeStore.getState();
-    store.updateConfig({ format: 'changed' });
+    const initialConfig = JSON.stringify(store.currentTheme.config);
 
-    const newStore = useThemeStore.getState();
-    expect(newStore.past.length).toBe(1);
-    expect(newStore.past[0].config.format).toBe('initial');
-    expect(newStore.currentTheme.config.format).toBe('changed');
+    // First update
+    store.updateConfig({ format: 'step 1' });
+
+    expect(useThemeStore.getState().past.length).toBe(1);
+    expect(JSON.stringify(useThemeStore.getState().past[0].config)).toBe(
+      initialConfig,
+    );
+    expect(useThemeStore.getState().currentTheme.config.format).toBe('step 1');
   });
 
-  it('should undo correctly', () => {
+  it('should allow undoing changes', () => {
     const store = useThemeStore.getState();
+    const initialFormat = store.currentTheme.config.format;
+
+    // Make change
     store.updateConfig({ format: 'changed' });
 
-    useThemeStore.getState().undo();
+    // Undo
+    store.undo();
 
-    const restoredStore = useThemeStore.getState();
-    expect(restoredStore.currentTheme.config.format).toBe('initial');
-    expect(restoredStore.past.length).toBe(0);
-    expect(restoredStore.future.length).toBe(1);
-    expect(restoredStore.future[0].config.format).toBe('changed');
+    expect(useThemeStore.getState().currentTheme.config.format).toBe(
+      initialFormat,
+    );
+    expect(useThemeStore.getState().past.length).toBe(0);
+    expect(useThemeStore.getState().future.length).toBe(1);
+    expect(useThemeStore.getState().future[0].config.format).toBe('changed');
   });
 
-  it('should redo correctly', () => {
+  it('should allow redoing changes', () => {
     const store = useThemeStore.getState();
+
     store.updateConfig({ format: 'changed' });
     store.undo();
     store.redo();
 
-    const redoneStore = useThemeStore.getState();
-    expect(redoneStore.currentTheme.config.format).toBe('changed');
-    expect(redoneStore.past.length).toBe(1);
-    expect(redoneStore.future.length).toBe(0);
+    expect(useThemeStore.getState().currentTheme.config.format).toBe('changed');
+    expect(useThemeStore.getState().past.length).toBe(1);
+    expect(useThemeStore.getState().future.length).toBe(0);
   });
 
-  it('should clear future on new change', () => {
+  it('should clear future stack when new change occurs', () => {
     const store = useThemeStore.getState();
-    store.updateConfig({ format: 'change1' });
-    store.undo(); // back to initial, future has change1
-    store.updateConfig({ format: 'change2' });
 
-    const newStore = useThemeStore.getState();
-    expect(newStore.currentTheme.config.format).toBe('change2');
-    expect(newStore.future.length).toBe(0); // change1 lost
-    expect(newStore.past.length).toBe(1); // initial
+    store.updateConfig({ format: 'step 1' });
+    store.undo(); // back to initial, future has 'step 1'
+
+    // New divergent change
+    store.updateConfig({ format: 'step 2' });
+
+    expect(useThemeStore.getState().currentTheme.config.format).toBe('step 2');
+    expect(useThemeStore.getState().future.length).toBe(0); // 'step 1' is lost
+    expect(useThemeStore.getState().past.length).toBe(1); // initial state
+  });
+
+  it('should maintain immutability of history items', () => {
+    const store = useThemeStore.getState();
+
+    store.updateConfig({ format: 'step 1' });
+    const pastState = useThemeStore.getState().past[0];
+
+    // Mutate current state deeply
+    if (useThemeStore.getState().currentTheme.config.directory) {
+      useThemeStore.getState().currentTheme.config.directory!.style = 'mutated';
+    }
+
+    // Check past state wasn't affected
+    expect(pastState.config.directory?.style).not.toBe('mutated');
   });
 });

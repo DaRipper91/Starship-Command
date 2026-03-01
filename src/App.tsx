@@ -8,6 +8,7 @@ import { ExportImport } from './components/ExportImport';
 import { ImagePalette } from './components/ImagePalette';
 import { ModuleConfig } from './components/ModuleConfig';
 import { ModuleList } from './components/ModuleList';
+import { PresetDropdown } from './components/PresetDropdown';
 import { SuggestionPanel } from './components/SuggestionPanel';
 import { TerminalPreview } from './components/TerminalPreview';
 import { ThemeGallery } from './components/ThemeGallery';
@@ -17,6 +18,7 @@ import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useThemeStore } from './stores/theme-store';
+import { useUIStore } from './stores/ui-store';
 
 function AppContent() {
   const {
@@ -30,13 +32,19 @@ function AppContent() {
     canUndo,
     canRedo,
   } = useThemeStore();
+
+  const {
+    showExportImport,
+    setShowExportImport,
+    showGallery,
+    setShowGallery,
+    showComparison,
+    setShowComparison,
+    showCommandPalette,
+    setShowCommandPalette,
+  } = useUIStore();
+
   const { addToast } = useToast();
-  const [showExportImport, setShowExportImport] = useState<
-    'export' | 'import' | null
-  >(null);
-  const [showGallery, setShowGallery] = useState(false);
-  const [showComparison, setShowComparison] = useState(false);
-  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [themeName, setThemeName] = useState(
     currentTheme.metadata.name || 'My Awesome Theme',
   );
@@ -186,6 +194,7 @@ function AppContent() {
           >
             New
           </button>
+          <PresetDropdown />
           <button
             onClick={() => setShowGallery(true)}
             className="rounded bg-gray-800 px-4 py-1.5 text-sm font-medium hover:bg-gray-700"

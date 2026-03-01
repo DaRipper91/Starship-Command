@@ -15,6 +15,11 @@ export interface ExtendedColorPalette extends Partial<ColorPalette> {
   fg?: string;
 }
 
+/**
+ * Note: A standalone Python utility `color_extractor.py` is available in the root
+ * for CLI-based color extraction. This JS implementation provides similar
+ * functionality within the browser using ColorThief and node-vibrant.
+ */
 export class ColorUtils {
   /**
    * Extracts a color palette from an image file

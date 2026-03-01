@@ -176,14 +176,13 @@ export function renderModule(
  * @param _config - (Optional) The Starship configuration
  * @returns ANSI escape code string
  */
-
 export function styleToAnsi(style: string, _config?: StarshipConfig): string {
   if (!style) return '';
 
   const parts = style.split(/\s+/);
-  const codes: number[] = [];
-  let fgCode: number | null = null;
-  let bgCode: number | null = null;
+  const codes: (number | string)[] = [];
+  let fgCode: number | string | null = null;
+  let bgCode: number | string | null = null;
 
   parts.forEach((part) => {
     // Modifiers
@@ -219,7 +218,10 @@ export function styleToAnsi(style: string, _config?: StarshipConfig): string {
 /**
  * Helper to get ANSI color code from color name or hex
  */
-function getColorCode(color: string, isBackground: boolean): number | null {
+function getColorCode(
+  color: string,
+  isBackground: boolean,
+): number | string | null {
   const base = isBackground ? 40 : 30;
   const brightBase = isBackground ? 100 : 90;
 
@@ -245,43 +247,22 @@ function getColorCode(color: string, isBackground: boolean): number | null {
     if (brightIndex !== -1) return brightBase + brightIndex;
   }
 
-  // Hex colors (approximate mapping or truecolor if supported)
-  // For simplicity in this environment, we'll map to closest standard color or ignore
-  // In a real terminal emulator like xterm.js, we can use truecolor: \x1b[38;2;R;G;Bm
+  // Hex colors (TrueColor)
   if (color.startsWith('#')) {
-    // Parse hex
     const r = parseInt(color.substring(1, 3), 16);
     const g = parseInt(color.substring(3, 5), 16);
     const b = parseInt(color.substring(5, 7), 16);
 
     if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
-      // simple 256 color mapping logic is complex, let's use truecolor ANSI sequence
-      // Foreground: 38;2;R;G;B
-      // Background: 48;2;R;G;B
-      // However, to keep return type simple (number), we can't easily return the full sequence.
-      // Wait, the caller expects codes array.
-      // Let's change logic slightly to return string or handle it differently?
-      // No, I'll stick to basic colors for now to avoid complexity,
-      // OR I can return a special large number and handle it, but simpler is better for "black screen" fix.
-
-      // Actually, let's just return a default color if hex is provided to avoid crash
-      // Or even better, try to find the closest ANSI color.
-      // For now, let's just return null for hex to avoid breaking the escape sequence structure
-      // if we don't support it fully.
-      // But wait, many themes use hex.
-      // Let's support it properly.
-      // But `getColorCode` returns `number | null`.
-      // I need to change `styleToAnsi` to handle more complex codes if I want hex support.
-      return null;
+      return `${isBackground ? '48' : '38'};2;${r};${g};${b}`;
     }
+    return null;
   }
 
-  // Numerical ANSI colors
+  // Numerical ANSI colors (256 colors)
   const num = parseInt(color, 10);
   if (!isNaN(num) && num >= 0 && num <= 255) {
-    // 38;5;n for fg, 48;5;n for bg
-    // But we can't return this as a single number easily in the current structure.
-    return null;
+    return `${isBackground ? '48' : '38'};5;${num}`;
   }
 
   return null;
