@@ -131,14 +131,30 @@ export function ExportImport({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      validateAndImport(content);
-    };
-    reader.readAsText(file);
-    // Reset input
-    e.target.value = '';
+    try {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const content = event.target?.result as string;
+          validateAndImport(content);
+        } catch (err) {
+          setValidationError(
+            `Failed to process file: ${err instanceof Error ? err.message : String(err)}`,
+          );
+        }
+      };
+      reader.onerror = () => {
+        setValidationError('Failed to read file.');
+      };
+      reader.readAsText(file);
+    } catch (err) {
+      setValidationError(
+        `Failed to load file: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    } finally {
+      // Reset input
+      e.target.value = '';
+    }
   };
 
   const handlePasteImport = () => {
@@ -146,7 +162,13 @@ export function ExportImport({
       setValidationError('Please paste TOML configuration first.');
       return;
     }
-    validateAndImport(importText);
+    try {
+      validateAndImport(importText);
+    } catch (err) {
+      setValidationError(
+        `Failed to import: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
   };
 
   const handleUrlImport = async () => {
