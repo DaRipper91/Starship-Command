@@ -3,30 +3,11 @@ import { useEffect } from 'react';
 import { PRESET_THEMES } from '../lib/presets';
 import { useThemeStore } from '../stores/theme-store';
 
-// Define a basic interface for dynamic theme settings
-interface DynamicThemeSettings {
-  enabled: boolean;
-  dayThemeId?: string; // ID of theme to use during day
-  nightThemeId?: string; // ID of theme to use during night
-  dayStartTime?: string; // e.g., "07:00"
-  nightStartTime?: string; // e.g., "19:00"
-}
-
-// This hook would be integrated into App.tsx or a global settings provider
-// For MVP, we'll hardcode some settings or assume they come from themeStore.settings
 export function useDynamicTheme() {
-  const { loadTheme, savedThemes, currentTheme } = useThemeStore();
+  const { loadTheme, savedThemes, currentTheme, dynamicSettings } =
+    useThemeStore();
 
   useEffect(() => {
-    // For now, let's hardcode a simple dynamic setting for demonstration
-    const dynamicSettings: DynamicThemeSettings = {
-      enabled: false, // Default to disabled to prevent interference with editing
-      dayThemeId: 'preset-clean', // Use a preset as day theme
-      nightThemeId: 'preset-dracula', // Use another preset as night theme
-      dayStartTime: '07:00',
-      nightStartTime: '19:00',
-    };
-
     if (!dynamicSettings.enabled) return;
 
     const checkAndApplyTheme = () => {
@@ -72,5 +53,14 @@ export function useDynamicTheme() {
     const intervalId = setInterval(checkAndApplyTheme, 60 * 1000); // Check every minute
 
     return () => clearInterval(intervalId);
-  }, [loadTheme, savedThemes, currentTheme.metadata.id]);
+  }, [
+    loadTheme,
+    savedThemes,
+    currentTheme.metadata.id,
+    dynamicSettings.enabled,
+    dynamicSettings.dayThemeId,
+    dynamicSettings.nightThemeId,
+    dynamicSettings.dayStartTime,
+    dynamicSettings.nightStartTime,
+  ]);
 }

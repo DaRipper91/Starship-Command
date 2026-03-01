@@ -1,7 +1,15 @@
-import { ArrowLeftRight, Keyboard, Redo, Undo, X } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  Keyboard,
+  Redo,
+  Settings,
+  Undo,
+  X,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 import { CommandPalette } from './components/CommandPalette';
+import { DynamicThemeSettingsModal } from './components/DynamicThemeSettingsModal';
 import { ComparisonView } from './components/ComparisonView';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExportImport } from './components/ExportImport';
@@ -37,6 +45,8 @@ function AppContent() {
   const [showGallery, setShowGallery] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [showDynamicThemeSettings, setShowDynamicThemeSettings] =
+    useState(false);
   const [themeName, setThemeName] = useState(
     currentTheme.metadata.name || 'My Awesome Theme',
   );
@@ -224,6 +234,14 @@ function AppContent() {
           >
             <Keyboard size={16} />
           </button>
+          <button
+            onClick={() => setShowDynamicThemeSettings(true)}
+            className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+            title="Dynamic Theme Settings"
+            aria-label="Open Dynamic Theme Settings"
+          >
+            <Settings size={16} />
+          </button>
         </div>
       </header>
 
@@ -288,6 +306,14 @@ function AppContent() {
       {showComparison && (
         <ErrorBoundary>
           <ComparisonView onClose={() => setShowComparison(false)} />
+        </ErrorBoundary>
+      )}
+
+      {showDynamicThemeSettings && (
+        <ErrorBoundary>
+          <DynamicThemeSettingsModal
+            onClose={() => setShowDynamicThemeSettings(false)}
+          />
         </ErrorBoundary>
       )}
 

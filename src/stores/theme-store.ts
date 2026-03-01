@@ -7,6 +7,14 @@ import { TomlParser } from '../lib/toml-parser';
 import { generateId } from '../lib/utils';
 import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
 
+export interface DynamicThemeSettings {
+  enabled: boolean;
+  dayThemeId: string;
+  nightThemeId: string;
+  dayStartTime: string;
+  nightStartTime: string;
+}
+
 interface ThemeStore {
   currentTheme: Theme;
   savedThemes: Theme[];
@@ -32,9 +40,21 @@ interface ThemeStore {
   // Import/Export
   exportToml: () => string;
   importToml: (tomlString: string) => void;
+
+  // Dynamic Theme
+  dynamicSettings: DynamicThemeSettings;
+  updateDynamicSettings: (settings: Partial<DynamicThemeSettings>) => void;
 }
 
 const HISTORY_LIMIT = 50;
+
+const createDefaultDynamicSettings = (): DynamicThemeSettings => ({
+  enabled: false,
+  dayThemeId: 'preset-clean',
+  nightThemeId: 'preset-dracula',
+  dayStartTime: '07:00',
+  nightStartTime: '19:00',
+});
 
 const createDefaultTheme = (): Theme => ({
   metadata: {
@@ -60,6 +80,7 @@ export const useThemeStore = create<ThemeStore>()(
       currentTheme: createDefaultTheme(),
       savedThemes: [],
       selectedModule: null,
+      dynamicSettings: createDefaultDynamicSettings(),
       past: [],
       future: [],
 
@@ -236,6 +257,15 @@ export const useThemeStore = create<ThemeStore>()(
           throw error;
         }
       },
+
+      updateDynamicSettings: (settings) => {
+        set((state) => ({
+          dynamicSettings: {
+            ...state.dynamicSettings,
+            ...settings,
+          },
+        }));
+      },
     }),
     {
       name: 'starship-theme-storage',
@@ -243,6 +273,7 @@ export const useThemeStore = create<ThemeStore>()(
       partialize: (state) => ({
         savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
+        dynamicSettings: state.dynamicSettings,
         // Don't persist history or selection
       }),
     },
