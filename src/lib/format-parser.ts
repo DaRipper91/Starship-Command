@@ -36,9 +36,10 @@ export function parseFormatString(
   while (processed !== prevProcessed && iterations < 5) {
     prevProcessed = processed;
     processed = processed.replace(
-      /\[([^\[\]]+)\]\(([^)]+)\)/g,
+      /\[([^\[\]]+)\]\(([^)]+)\)/g, // eslint-disable-line no-useless-escape
       (_match, text, style) => {
         const ansi = styleToAnsi(style).replace('[', '\u0001');
+
         return `${ansi}${text}\x1b\u00010m`;
       },
     );
@@ -46,6 +47,7 @@ export function parseFormatString(
   }
 
   // Restore the [ in ANSI codes
+  // eslint-disable-next-line no-control-regex
   processed = processed.replace(/\u0001/g, '[');
 
   // Handle newlines

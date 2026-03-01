@@ -59,14 +59,16 @@ self.onmessage = async (e: MessageEvent) => {
 
     // If we don't have enough colors, generate analogous variations
     if (colors16.length < 16) {
-        const extraColors: string[] = [];
-        for (const c of colors16) {
-            const analogous = colord(c).harmonies('analogous').map(x => x.toHex());
-            extraColors.push(...analogous);
-        }
-        colors16 = [...colors16, ...extraColors];
-        // Deduplicate
-        colors16 = [...new Set(colors16)];
+      const extraColors: string[] = [];
+      for (const c of colors16) {
+        const analogous = colord(c)
+          .harmonies('analogous')
+          .map((x) => x.toHex());
+        extraColors.push(...analogous);
+      }
+      colors16 = [...colors16, ...extraColors];
+      // Deduplicate
+      colors16 = [...new Set(colors16)];
     }
 
     // Fill the rest if still needed
@@ -75,7 +77,7 @@ self.onmessage = async (e: MessageEvent) => {
     }
     // Fallback if empty
     if (colors16.length === 0) {
-        colors16 = Array(16).fill('#888888');
+      colors16 = Array(16).fill('#888888');
     }
 
     colors16 = colors16.slice(0, 16);
@@ -96,9 +98,11 @@ self.onmessage = async (e: MessageEvent) => {
 
     self.postMessage({ result });
   } catch (error) {
-    self.postMessage({ error: error instanceof Error ? error.message : String(error) });
+    self.postMessage({
+      error: error instanceof Error ? error.message : String(error),
+    });
   } finally {
-      // Close the bitmap to release memory
-      imageBitmap.close();
+    // Close the bitmap to release memory
+    imageBitmap.close();
   }
 };

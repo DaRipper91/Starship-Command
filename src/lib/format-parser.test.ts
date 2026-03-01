@@ -1,11 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import {
-  parseFormatString,
-  renderModule,
-  styleToAnsi,
-} from './format-parser';
-import { MOCK_SCENARIOS } from './mock-data';
+
 import { StarshipConfig } from '../types/starship.types';
+import { parseFormatString, renderModule, styleToAnsi } from './format-parser';
+import { MOCK_SCENARIOS } from './mock-data';
 
 describe('styleToAnsi', () => {
   it('should return empty string for empty style', () => {
@@ -73,8 +70,8 @@ describe('renderModule', () => {
         format: '[$symbol $output]($style)',
         symbol: 'T',
         style: 'yellow',
-      }
-    }
+      },
+    },
   };
 
   it('should render directory module', () => {
@@ -105,7 +102,7 @@ describe('renderModule', () => {
   it('should render custom module', () => {
     const scenario = {
       ...MOCK_SCENARIOS.clean,
-      values: { ...MOCK_SCENARIOS.clean.values, test: 'custom value' }
+      values: { ...MOCK_SCENARIOS.clean.values, test: 'custom value' },
     };
     const result = renderModule('test', mockConfig, scenario);
     expect(result).toBe('[T custom value](yellow)');
@@ -114,9 +111,13 @@ describe('renderModule', () => {
   it('should return empty string if module is disabled', () => {
     const configWithDisabled = {
       ...mockConfig,
-      directory: { ...mockConfig.directory, disabled: true }
+      directory: { ...mockConfig.directory, disabled: true },
     };
-    const result = renderModule('directory', configWithDisabled, MOCK_SCENARIOS.clean);
+    const result = renderModule(
+      'directory',
+      configWithDisabled,
+      MOCK_SCENARIOS.clean,
+    );
     expect(result).toBe('');
   });
 
@@ -134,7 +135,7 @@ describe('parseFormatString', () => {
     },
     character: {
       success_symbol: '[❯](bold green)',
-    }
+    },
   };
 
   it('should return empty string for empty format', () => {
@@ -172,7 +173,9 @@ describe('parseFormatString', () => {
 
     // First iteration: [[inner](blue) outer](red) -> [\x1b[34minner\x1b[0m outer](red)
     // Second iteration: -> \x1b[31m\x1b[34minner\x1b[0m outer\x1b[0m
-    expect(result).toBe(`${ansiRed}${ansiBlue}inner${ansiReset} outer${ansiReset}`);
+    expect(result).toBe(
+      `${ansiRed}${ansiBlue}inner${ansiReset} outer${ansiReset}`,
+    );
   });
 
   it('should handle newlines', () => {
@@ -201,6 +204,8 @@ describe('parseFormatString', () => {
     const ansiGreenBold = '\x1b[1;32m';
     const ansiReset = '\x1b[0m';
 
-    expect(result).toContain(`${ansiBgBlue}${ansiCyanBold}${expectedPath}${ansiReset} ${ansiReset}at ${ansiGreenBold}${expectedChar}${ansiReset} `);
+    expect(result).toContain(
+      `${ansiBgBlue}${ansiCyanBold}${expectedPath}${ansiReset} ${ansiReset}at ${ansiGreenBold}${expectedChar}${ansiReset} `,
+    );
   });
 });

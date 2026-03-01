@@ -137,8 +137,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
 
   const addSegment = (type: 'text' | 'module' | 'styledText') => {
     const newSegments = [...segments];
-    if (type === 'text')
-      newSegments.push({ type: 'text', value: 'New Text' });
+    if (type === 'text') newSegments.push({ type: 'text', value: 'New Text' });
     if (type === 'module')
       newSegments.push({ type: 'module', value: 'directory' });
     if (type === 'styledText')
@@ -224,6 +223,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
               Symbol (via Icon Browser)
             </label>
             <button
+              type="button"
               onClick={() => setShowIconBrowser(!showIconBrowser)}
               className="rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700"
             >
@@ -259,6 +259,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
         )}
 
         <button
+          type="button"
           onClick={() => removeSegment(editingSegment)}
           className="mt-2 self-end rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-500"
         >
@@ -276,6 +277,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       >
         {segments.map((segment, index) => (
           <button
+            type="button"
             key={index}
             onClick={() => handleSegmentClick(index)}
             className={cn(
@@ -311,18 +313,21 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
 
       <div className="flex gap-2">
         <button
+          type="button"
           onClick={() => addSegment('text')}
           className="flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700"
         >
           <Text size={16} /> Add Text
         </button>
         <button
+          type="button"
           onClick={() => addSegment('module')}
           className="flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700"
         >
           <LayoutGrid size={16} /> Add Module
         </button>
         <button
+          type="button"
           onClick={() => addSegment('styledText')}
           className="flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700"
         >
