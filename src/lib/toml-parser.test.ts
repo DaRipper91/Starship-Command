@@ -136,8 +136,9 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect(({} as any).polluted).toBeUndefined();
+      expect(
+        (Object.prototype as { polluted?: string }).polluted,
+      ).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via constructor', () => {
@@ -149,8 +150,9 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect(({} as any).polluted).toBeUndefined();
+      expect(
+        (Object.prototype as { polluted?: string }).polluted,
+      ).toBeUndefined();
     });
 
     it('should NOT allow prototype pollution via prototype', () => {
@@ -160,8 +162,9 @@ describe('TomlParser', () => {
       const result = TomlParser.merge(base, override);
 
       expect(result?.['polluted']).toBeUndefined();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect(({} as any).polluted).toBeUndefined();
+      expect(
+        (Object.prototype as { polluted?: string }).polluted,
+      ).toBeUndefined();
     });
   });
 });

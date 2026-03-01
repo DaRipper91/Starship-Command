@@ -20,7 +20,7 @@ export class TomlParser {
    */
   static parse(tomlString: string): StarshipConfig {
     try {
-      // @iarna/toml returns a Record<string, any>, which maps to our StarshipConfig
+      // @iarna/toml returns a Record<string, unknown>, which maps to our StarshipConfig
       const parsed = TOML.parse(tomlString);
       if (typeof parsed !== 'object' || parsed === null) {
         throw new Error('Parsed TOML result is not an object');

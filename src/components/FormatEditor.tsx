@@ -137,8 +137,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
 
   const addSegment = (type: 'text' | 'module' | 'styledText') => {
     const newSegments = [...segments];
-    if (type === 'text')
-      newSegments.push({ type: 'text', value: 'New Text' });
+    if (type === 'text') newSegments.push({ type: 'text', value: 'New Text' });
     if (type === 'module')
       newSegments.push({ type: 'module', value: 'directory' });
     if (type === 'styledText')
