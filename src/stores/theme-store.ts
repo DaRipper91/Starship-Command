@@ -278,7 +278,8 @@ export const selectActiveModules = (state: ThemeStore) => {
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom: allModules.find((mod) => mod.name === name)?.isCustom || false,
+        isCustom:
+          allModules.find((mod) => mod.name === name)?.isCustom || false,
       };
     })
     .filter((item) => existingModuleNames.has(item.name));

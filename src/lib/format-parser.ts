@@ -36,6 +36,7 @@ export function parseFormatString(
   while (processed !== prevProcessed && iterations < 5) {
     prevProcessed = processed;
     processed = processed.replace(
+      // eslint-disable-next-line no-useless-escape
       /\[([^\[\]]+)\]\(([^)]+)\)/g,
       (_match, text, style) => {
         const ansi = styleToAnsi(style).replace('[', '\u0001');
@@ -46,6 +47,7 @@ export function parseFormatString(
   }
 
   // Restore the [ in ANSI codes
+  // eslint-disable-next-line no-control-regex
   processed = processed.replace(/\u0001/g, '[');
 
   // Handle newlines
