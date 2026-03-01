@@ -30,19 +30,23 @@ export function parseFormatString(
 
   // Replace styled groups ([text](style))
   // Iterate to handle nested brackets (limited depth)
+  // Use a placeholder for internal [ to avoid breaking the regex match
   let prevProcessed = '';
   let iterations = 0;
   while (processed !== prevProcessed && iterations < 5) {
     prevProcessed = processed;
     processed = processed.replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
+      /\[([^\[\]]+)\]\(([^)]+)\)/g,
       (_match, text, style) => {
-        const ansi = styleToAnsi(style);
-        return `${ansi}${text}\x1b[0m`;
+        const ansi = styleToAnsi(style).replace('[', '\u0001');
+        return `${ansi}${text}\x1b\u00010m`;
       },
     );
     iterations++;
   }
+
+  // Restore the [ in ANSI codes
+  processed = processed.replace(/\u0001/g, '[');
 
   // Handle newlines
   processed = processed.replace(/\\n/g, '\n');
