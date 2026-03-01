@@ -2,50 +2,67 @@ import { colord, extend } from 'colord';
 import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
-import { Vibrant } from 'node-vibrant/browser';
 
 // Extend colord in worker as well
 extend([a11yPlugin, harmoniesPlugin, namesPlugin]);
+
+// Helper for histogram extraction
+function extractColorsFromBitmap(bitmap: ImageBitmap): string[] {
+  // Use OffscreenCanvas available in workers
+  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!ctx) return [];
+
+  // Draw scaled down to improve performance
+  const maxDim = 200;
+  let w = bitmap.width;
+  let h = bitmap.height;
+  if (w > maxDim || h > maxDim) {
+    const ratio = Math.min(maxDim / w, maxDim / h);
+    w = Math.floor(w * ratio);
+    h = Math.floor(h * ratio);
+  }
+  canvas.width = w;
+  canvas.height = h;
+
+  ctx.drawImage(bitmap, 0, 0, w, h);
+  const imageData = ctx.getImageData(0, 0, w, h).data;
+  const colorMap = new Map<string, number>();
+
+  // Simple histogram
+  for (let i = 0; i < imageData.length; i += 4 * 10) {
+    // skip pixels for speed
+    const r = Math.round(imageData[i] / 10) * 10;
+    const g = Math.round(imageData[i + 1] / 10) * 10;
+    const b = Math.round(imageData[i + 2] / 10) * 10;
+    const a = imageData[i + 3];
+
+    if (a < 128) continue; // skip transparent
+
+    const key = `${r},${g},${b}`;
+    colorMap.set(key, (colorMap.get(key) || 0) + 1);
+  }
+
+  // Sort by frequency
+  const sortedColors = Array.from(colorMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10) // Take top 10
+    .map((entry) => {
+      const [r, g, b] = entry[0].split(',').map(Number);
+      return colord({ r, g, b }).toHex();
+    });
+
+  return sortedColors;
+}
 
 self.onmessage = async (e: MessageEvent) => {
   const { imageBitmap } = e.data;
 
   try {
-    // Use Vibrant to extract palette
-    // Vibrant.from accepts ImageBitmap
-    const builder = Vibrant.from(imageBitmap);
-    // We request more colors to try to fill the 16 slots
-    // Note: node-vibrant usually returns the standard 6 named swatches,
-    // but internally it generates a palette.
-    // We can't easily access the raw palette from the high-level API easily
-    // without using the Builder options.
-    // However, for the purpose of this task, we will try to use what we get
-    // or simulate the extra colors using harmonies if needed.
-    // Actually, let's just stick to the main swatches for primary/secondary
-    // and try to generate the 16 colors from the swatches or their variations.
-
-    const palette = await builder.getPalette();
-
-    // Map Vibrant swatches to our needed keys
-    const vibrantHex = palette.Vibrant?.hex;
-    const lightVibrantHex = palette.LightVibrant?.hex;
-    const darkVibrantHex = palette.DarkVibrant?.hex;
-    const mutedHex = palette.Muted?.hex;
-    const lightMutedHex = palette.LightMuted?.hex;
-    const darkMutedHex = palette.DarkMuted?.hex;
-
-    // Collect all unique colors found
-    const allColors = [
-      vibrantHex,
-      lightVibrantHex,
-      darkVibrantHex,
-      mutedHex,
-      lightMutedHex,
-      darkMutedHex,
-    ].filter(Boolean) as string[];
+    const extractedColors = extractColorsFromBitmap(imageBitmap);
 
     // Sort by brightness to mimic the previous behavior roughly
-    const sortedColors = allColors.sort((a, b) => {
+    const sortedColors = extractedColors.sort((a, b) => {
       const ca = colord(a);
       const cb = colord(b);
       return ca.brightness() - cb.brightness();
@@ -59,14 +76,16 @@ self.onmessage = async (e: MessageEvent) => {
 
     // If we don't have enough colors, generate analogous variations
     if (colors16.length < 16) {
-        const extraColors: string[] = [];
-        for (const c of colors16) {
-            const analogous = colord(c).harmonies('analogous').map(x => x.toHex());
-            extraColors.push(...analogous);
-        }
-        colors16 = [...colors16, ...extraColors];
-        // Deduplicate
-        colors16 = [...new Set(colors16)];
+      const extraColors: string[] = [];
+      for (const c of colors16) {
+        const analogous = colord(c)
+          .harmonies('analogous')
+          .map((x) => x.toHex());
+        extraColors.push(...analogous);
+      }
+      colors16 = [...colors16, ...extraColors];
+      // Deduplicate
+      colors16 = [...new Set(colors16)];
     }
 
     // Fill the rest if still needed
@@ -75,15 +94,15 @@ self.onmessage = async (e: MessageEvent) => {
     }
     // Fallback if empty
     if (colors16.length === 0) {
-        colors16 = Array(16).fill('#888888');
+      colors16 = Array(16).fill('#888888');
     }
 
     colors16 = colors16.slice(0, 16);
 
     const result = {
-      primary: vibrantHex || colors16[8] || '#ffffff',
-      secondary: lightVibrantHex || colors16[10] || '#eeeeee',
-      accent: darkVibrantHex || colors16[4] || '#aaaaaa',
+      primary: colors16[Math.floor(colors16.length / 2)] || '#ffffff',
+      secondary: colors16[Math.floor(colors16.length / 3)] || '#eeeeee',
+      accent: colors16[Math.floor((colors16.length / 3) * 2)] || '#aaaaaa',
       background: bg,
       foreground: fg,
       success: '#10B981',
@@ -96,9 +115,11 @@ self.onmessage = async (e: MessageEvent) => {
 
     self.postMessage({ result });
   } catch (error) {
-    self.postMessage({ error: error instanceof Error ? error.message : String(error) });
+    self.postMessage({
+      error: error instanceof Error ? error.message : String(error),
+    });
   } finally {
-      // Close the bitmap to release memory
-      imageBitmap.close();
+    // Close the bitmap to release memory
+    imageBitmap.close();
   }
 };

@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
 import { cn } from '../lib/utils';
@@ -31,7 +31,8 @@ interface ModuleItem {
   isCustom?: boolean;
 }
 
-function SortableItem({
+// Memoizing SortableItem to prevent re-renders of the entire list during drag events
+const SortableItem = memo(function SortableItem({
   item,
   isSelected,
   onSelect,
@@ -117,12 +118,16 @@ function SortableItem({
       </div>
     </div>
   );
-}
+});
 
 export function ModuleList({ className }: { className?: string }) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
     useThemeStore();
   const activeModules = useThemeStore(selectActiveModules);
+
+  const handleSelect = useCallback((name: string) => {
+    setSelectedModule(name);
+  }, [setSelectedModule]);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   // Combine predefined and custom modules for "allModules" needed for inactive calculation
@@ -149,25 +154,29 @@ export function ModuleList({ className }: { className?: string }) {
     return allModules.filter((def) => !activeNames.has(def.id));
   }, [activeModules, allModules]);
 
-  const handleToggle = (name: string, enable: boolean) => {
-    let newFormat = currentTheme.config.format || '';
-    if (enable) {
-      newFormat += `$${name}`;
-    } else {
-      // Remove from format string
-      const regex = new RegExp(`\\$${name}\\b`, 'g');
-      newFormat = newFormat.replace(regex, '');
-    }
+  // Memoizing handleToggle so it doesn't cause SortableItem re-renders
+  const handleToggle = useCallback(
+    (name: string, enable: boolean) => {
+      let newFormat = currentTheme.config.format || '';
+      if (enable) {
+        newFormat += `$${name}`;
+      } else {
+        // Remove from format string
+        const regex = new RegExp(`\\$${name}\\b`, 'g');
+        newFormat = newFormat.replace(regex, '');
+      }
 
-    // Also update module config to reflect disabled state
-    const existingModuleConfig =
-      (currentTheme.config[name] as BaseModuleConfig) || {};
+      // Also update module config to reflect disabled state
+      const existingModuleConfig =
+        (currentTheme.config[name] as BaseModuleConfig) || {};
 
-    updateConfig({
-      format: newFormat,
-      [name]: { ...existingModuleConfig, disabled: !enable },
-    });
-  };
+      updateConfig({
+        format: newFormat,
+        [name]: { ...existingModuleConfig, disabled: !enable },
+      });
+    },
+    [currentTheme.config, updateConfig]
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -229,7 +238,7 @@ export function ModuleList({ className }: { className?: string }) {
                   key={module.id}
                   item={module}
                   isSelected={selectedModule === module.name}
-                  onSelect={setSelectedModule}
+                  onSelect={handleSelect}
                   onToggle={handleToggle}
                 />
               ))}

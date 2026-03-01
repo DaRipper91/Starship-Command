@@ -36,17 +36,18 @@ export function parseFormatString(
   while (processed !== prevProcessed && iterations < 5) {
     prevProcessed = processed;
     processed = processed.replace(
-      /\[([^\[\]]+)\]\(([^)]+)\)/g,
+      /\[([^\]]+)\]\(([^)]+)\)/g,
       (_match, text, style) => {
-        const ansi = styleToAnsi(style).replace('[', '\u0001');
-        return `${ansi}${text}\x1b\u00010m`;
+        const PLACEHOLDER = '\uE000';
+        const ansi = styleToAnsi(style).replace(/\[/g, PLACEHOLDER);
+        return `${ansi}${text}\x1b${PLACEHOLDER}0m`;
       },
     );
     iterations++;
   }
 
   // Restore the [ in ANSI codes
-  processed = processed.replace(/\u0001/g, '[');
+  processed = processed.replace(/\uE000/g, '[');
 
   // Handle newlines
   processed = processed.replace(/\\n/g, '\n');

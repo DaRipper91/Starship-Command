@@ -4,10 +4,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
+import { useDebounce } from '../hooks/useDebounce';
 import { parseFormatString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
+
+const DEBOUNCE_DELAY = 200; // Throttle xterm.js writes during rapid config updates
 
 interface TerminalPreviewProps {
   className?: string;
@@ -107,6 +110,8 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     return parseFormatString(format, currentTheme.config, scenario);
   }, [currentTheme.config, scenarioIndex, scenarioKeys]);
 
+  const debouncedOutput = useDebounce(output, DEBOUNCE_DELAY);
+
   // Effect to update content when output changes
   useEffect(() => {
     const term = xtermRef.current;
@@ -116,8 +121,8 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     term.reset();
 
     // Write output
-    term.write(output);
-  }, [output]);
+    term.write(debouncedOutput);
+  }, [debouncedOutput]);
 
   return (
     <div

@@ -25,6 +25,8 @@ export class ColorUtils {
   static async extractPaletteFromImage(
     imageFile: File,
   ): Promise<ExtendedColorPalette> {
+    const bitmap = await createImageBitmap(imageFile);
+
     return new Promise((resolve, reject) => {
       const worker = new ColorWorker();
 
@@ -43,15 +45,12 @@ export class ColorUtils {
         worker.terminate();
       };
 
-      // Create bitmap to transfer to worker
-      createImageBitmap(imageFile)
-        .then((bitmap) => {
-          worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
-        })
-        .catch((err) => {
-          reject(err);
-          worker.terminate();
-        });
+      try {
+        worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
+      } catch (err) {
+        reject(err);
+        worker.terminate();
+      }
     });
   }
 

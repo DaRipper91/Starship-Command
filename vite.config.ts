@@ -29,8 +29,6 @@ export default defineConfig({
           ],
           'vendor-utils': [
             'colord',
-            'colorthief',
-            'node-vibrant',
             'html2canvas',
             '@iarna/toml',
           ],

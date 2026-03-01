@@ -1,22 +1,25 @@
 import { ArrowLeftRight, Keyboard, Redo, Undo, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 
 import { CommandPalette } from './components/CommandPalette';
-import { ComparisonView } from './components/ComparisonView';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { ExportImport } from './components/ExportImport';
-import { ImagePalette } from './components/ImagePalette';
+import { LoadingSpinner } from './components/LoadingSpinner';
 import { ModuleConfig } from './components/ModuleConfig';
 import { ModuleList } from './components/ModuleList';
 import { SuggestionPanel } from './components/SuggestionPanel';
-import { TerminalPreview } from './components/TerminalPreview';
-import { ThemeGallery } from './components/ThemeGallery';
 import { WelcomeWizard } from './components/WelcomeWizard';
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useThemeStore } from './stores/theme-store';
+
+// Lazy loaded heavy components
+const ThemeGallery = React.lazy(() => import('./components/ThemeGallery').then((m) => ({ default: m.ThemeGallery })));
+const ComparisonView = React.lazy(() => import('./components/ComparisonView').then((m) => ({ default: m.ComparisonView })));
+const ExportImport = React.lazy(() => import('./components/ExportImport').then((m) => ({ default: m.ExportImport })));
+const ImagePalette = React.lazy(() => import('./components/ImagePalette').then((m) => ({ default: m.ImagePalette })));
+const TerminalPreview = React.lazy(() => import('./components/TerminalPreview').then((m) => ({ default: m.TerminalPreview })));
 
 function AppContent() {
   const {
@@ -246,7 +249,13 @@ function AppContent() {
               Colors
             </h2>
             <ErrorBoundary>
-              <ImagePalette />
+              <Suspense fallback={
+                <div className="flex justify-center p-4">
+                  <LoadingSpinner size="sm" />
+                </div>
+              }>
+                <ImagePalette />
+              </Suspense>
             </ErrorBoundary>
           </div>
         </aside>
@@ -256,7 +265,13 @@ function AppContent() {
           <div className="bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10" />
           <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center">
             <ErrorBoundary>
-              <TerminalPreview className="w-full shadow-2xl" />
+              <Suspense fallback={
+                <div className="flex h-64 items-center justify-center rounded-lg border border-gray-700 bg-[#1e1e1e] shadow-2xl">
+                  <LoadingSpinner />
+                </div>
+              }>
+                <TerminalPreview className="w-full shadow-2xl" />
+              </Suspense>
             </ErrorBoundary>
           </div>
         </main>
@@ -278,16 +293,28 @@ function AppContent() {
       {/* MODALS */}
       {showExportImport && (
         <ErrorBoundary>
-          <ExportImport
-            initialTab={showExportImport}
-            onClose={() => setShowExportImport(null)}
-          />
+          <Suspense fallback={
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+              <LoadingSpinner />
+            </div>
+          }>
+            <ExportImport
+              initialTab={showExportImport}
+              onClose={() => setShowExportImport(null)}
+            />
+          </Suspense>
         </ErrorBoundary>
       )}
 
       {showComparison && (
         <ErrorBoundary>
-          <ComparisonView onClose={() => setShowComparison(false)} />
+          <Suspense fallback={
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+              <LoadingSpinner />
+            </div>
+          }>
+            <ComparisonView onClose={() => setShowComparison(false)} />
+          </Suspense>
         </ErrorBoundary>
       )}
 
@@ -305,7 +332,13 @@ function AppContent() {
             </div>
             <div className="flex-1 overflow-hidden">
               <ErrorBoundary>
-                <ThemeGallery onSelect={() => setShowGallery(false)} />
+                <Suspense fallback={
+                  <div className="flex h-full items-center justify-center">
+                    <LoadingSpinner />
+                  </div>
+                }>
+                  <ThemeGallery onSelect={() => setShowGallery(false)} />
+                </Suspense>
               </ErrorBoundary>
             </div>
           </div>
