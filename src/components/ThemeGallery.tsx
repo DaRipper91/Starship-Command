@@ -1,5 +1,6 @@
 import { Clock, Play, Trash2 } from 'lucide-react';
 
+import { useToast } from '../contexts/ToastContext';
 import { PRESET_THEMES } from '../lib/presets';
 import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
@@ -12,6 +13,7 @@ interface ThemeGalleryProps {
 
 export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
   const { loadTheme, savedThemes, deleteTheme } = useThemeStore();
+  const { addToast } = useToast();
 
   const handleLoad = (theme: Theme) => {
     const { currentTheme, savedThemes, past } = useThemeStore.getState();
@@ -49,8 +51,14 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
       }
     }
 
-    loadTheme(theme);
-    if (onSelect) onSelect();
+    try {
+      loadTheme(theme);
+      if (onSelect) onSelect();
+      addToast('Theme loaded successfully!', 'success');
+    } catch (error) {
+      console.error('Failed to load theme:', error);
+      addToast('Failed to load theme.', 'error');
+    }
   };
 
   return (

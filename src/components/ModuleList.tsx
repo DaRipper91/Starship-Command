@@ -22,7 +22,7 @@ import { useMemo, useState } from 'react';
 
 import { MODULE_DEFINITIONS } from '../lib/module-definitions';
 import { cn } from '../lib/utils';
-import { useThemeStore } from '../stores/theme-store';
+import { selectActiveModules, useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
 
 interface ModuleItem {
@@ -54,6 +54,7 @@ function SortableItem({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    touchAction: 'none', // Recommended for dnd-kit
   };
 
   return (
@@ -121,9 +122,10 @@ function SortableItem({
 export function ModuleList({ className }: { className?: string }) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
     useThemeStore();
+  const activeModules = useThemeStore(selectActiveModules);
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  // Combine predefined and custom modules
+  // Combine predefined and custom modules for "allModules" needed for inactive calculation
   const allModules = useMemo(() => {
     const customModules: ModuleItem[] = Object.keys(
       currentTheme.config.custom || {},
@@ -133,7 +135,6 @@ export function ModuleList({ className }: { className?: string }) {
       isCustom: true,
     }));
 
-    // Ensure MODULE_DEFINITIONS are also ModuleItem compatible
     const predefinedModules: ModuleItem[] = MODULE_DEFINITIONS.map((def) => ({
       id: def.id,
       name: def.id,
@@ -141,27 +142,6 @@ export function ModuleList({ className }: { className?: string }) {
 
     return [...predefinedModules, ...customModules];
   }, [currentTheme.config.custom]);
-
-  // Parse modules from format string, including custom ones
-  const activeModules = useMemo(() => {
-    const format = currentTheme.config.format || '';
-    const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
-    const existingModuleNames = new Set(allModules.map((m) => m.name));
-
-    const parsedModules = matches
-      .map((m, i) => {
-        const name = m.substring(1);
-        return {
-          id: `${name}-${i}`,
-          name: name,
-          isCustom:
-            allModules.find((mod) => mod.id === name)?.isCustom || false,
-        };
-      })
-      .filter((item) => existingModuleNames.has(item.name));
-
-    return parsedModules;
-  }, [currentTheme.config.format, allModules]);
 
   // Find inactive modules
   const inactiveModules = useMemo(() => {
