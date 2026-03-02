@@ -4,6 +4,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    // Polyfill global for dependencies like xterm.js without exposing window.global
+    global: 'globalThis',
+  },
   // @ts-expect-error - Vitest types are not automatically merged into Vite config in this setup
   test: {
     environment: 'jsdom',
