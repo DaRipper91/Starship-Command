@@ -4,8 +4,6 @@ import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
 
 import { ColorPalette } from '../types/starship.types';
-// Import the worker using Vite's special syntax
-import ColorWorker from '../workers/color-extraction.worker?worker';
 
 // Extend colord with necessary plugins
 extend([a11yPlugin, harmoniesPlugin, namesPlugin]);
@@ -18,41 +16,34 @@ export interface ExtendedColorPalette extends Partial<ColorPalette> {
 
 export class ColorUtils {
   /**
-   * Extracts a color palette from an image file using a Web Worker
-   * @param imageFile - The image file to process
-   * @returns Promise resolving to a ColorPalette-like object
+   * Resolves a color string which could be a palette key or a direct color value.
+   * @param colorStr - The color string (e.g., "primary", "#FF0000", "red")
+   * @param palette - The palette to look up keys in.
+   * @returns A resolved hex color string.
    */
-  static async extractPaletteFromImage(
-    imageFile: File,
-  ): Promise<ExtendedColorPalette> {
-    return new Promise((resolve, reject) => {
-      const worker = new ColorWorker();
+  static resolveColor(
+    colorStr: string,
+    palette: Record<string, string>,
+  ): string {
+    if (palette[colorStr]) {
+      return palette[colorStr];
+    }
+    // If it's a valid color, return it directly
+    if (colord(colorStr).isValid()) {
+      return colord(colorStr).toHex();
+    }
+    return '#ffffff'; // Fallback
+  }
 
-      worker.onmessage = (e) => {
-        const { result, error } = e.data;
-        if (error) {
-          reject(new Error(error));
-        } else {
-          resolve(result);
-        }
-        worker.terminate();
-      };
-
-      worker.onerror = (e) => {
-        reject(e);
-        worker.terminate();
-      };
-
-      // Create bitmap to transfer to worker
-      createImageBitmap(imageFile)
-        .then((bitmap) => {
-          worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
-        })
-        .catch((err) => {
-          reject(err);
-          worker.terminate();
-        });
-    });
+  /**
+   * Safely converts a hex string to an RGB object.
+   * @param hex - The hex color string.
+   * @returns An object with r, g, b properties, or null if invalid.
+   */
+  static hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+    const color = colord(hex);
+    if (!color.isValid()) return null;
+    return color.toRgb();
   }
 
   /**

@@ -1,6 +1,8 @@
 import { Info } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { useConfirmation } from '../contexts/ConfirmationContext';
+import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { useThemeStore } from '../stores/theme-store';
 import {
   BaseModuleConfig,
@@ -11,10 +13,37 @@ import { FormatEditor } from './FormatEditor';
 import { IconBrowser } from './IconBrowser';
 import { StyleEditor } from './StyleEditor';
 
+//...
+
 export function ModuleConfig() {
   const { currentTheme, selectedModule, updateConfig } = useThemeStore();
   const [showIconBrowser, setShowIconBrowser] = useState<string | null>(null);
   const iconBrowserRef = useRef<HTMLDivElement>(null);
+  const confirm = useConfirmation();
+
+  const handleReset = async () => {
+    if (!selectedModule) return;
+
+    const confirmed = await confirm({
+      title: `Reset ${selectedModule}?`,
+      message:
+        'Are you sure you want to reset this module to its default settings? All your customizations for this module will be lost.',
+      confirmText: 'Reset Module',
+    });
+
+    if (confirmed) {
+      const moduleDefaults = MODULE_DEFINITIONS.find(
+        (m) => m.name === selectedModule,
+      );
+      const newConfig: Record<string, unknown> = {};
+      if (moduleDefaults) {
+        moduleDefaults.properties.forEach((prop) => {
+          newConfig[prop.name] = prop.default;
+        });
+      }
+      updateConfig({ [selectedModule]: newConfig });
+    }
+  };
 
   // Click outside to close icon browser
   useEffect(() => {
@@ -68,6 +97,12 @@ export function ModuleConfig() {
           <p className="text-sm text-gray-500">Module Configuration</p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={handleReset}
+            className="rounded bg-red-900/50 px-3 py-1 text-xs font-medium text-red-300 hover:bg-red-800/50"
+          >
+            Reset to Default
+          </button>
           <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-gray-400">
             <input
               type="checkbox"

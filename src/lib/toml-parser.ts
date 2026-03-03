@@ -1,7 +1,7 @@
 import TOML from '@iarna/toml';
 
+import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { StarshipConfig } from '../types/starship.types';
-import { MODULE_DEFINITIONS } from './module-definitions';
 
 export interface ValidationResult {
   valid: boolean;
@@ -170,7 +170,7 @@ export class TomlParser {
     }
 
     // Check for unknown modules or properties
-    const knownModuleIds = new Set(MODULE_DEFINITIONS.map((m) => m.id));
+    const knownModuleIds = new Set(MODULE_DEFINITIONS.map((m) => m.name));
 
     Object.keys(config).forEach((key) => {
       // Skip known top-level props

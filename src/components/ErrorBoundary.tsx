@@ -1,51 +1,45 @@
-import { AlertTriangle, RefreshCcw } from 'lucide-react';
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle } from 'lucide-react';
+import React from 'react';
+import {
+  ErrorBoundary as ReactErrorBoundary,
+  FallbackProps,
+} from 'react-error-boundary';
 
-interface Props {
-  children?: ReactNode;
+function Fallback({ error, resetErrorBoundary }: FallbackProps) {
+  return (
+    <div
+      className="flex h-screen w-full flex-col items-center justify-center bg-gray-900 text-white"
+      role="alert"
+    >
+      <div className="flex flex-col items-center gap-4 rounded-lg border border-red-800 bg-red-900/20 p-8 text-center">
+        <AlertTriangle className="h-12 w-12 text-red-500" />
+        <h2 className="text-2xl font-bold">Something went wrong</h2>
+        <p className="max-w-md text-red-300">
+          An unexpected error occurred. You can try refreshing the application.
+        </p>
+        <pre className="mt-2 w-full max-w-md overflow-auto rounded bg-black/30 p-4 text-left text-xs text-red-200">
+          {(error as Error).message}
+        </pre>
+        <button
+          onClick={resetErrorBoundary}
+          className="mt-4 rounded bg-red-600 px-6 py-2 font-semibold text-white hover:bg-red-500"
+        >
+          Refresh Application
+        </button>
+      </div>
+    </div>
+  );
 }
 
-interface State {
-  hasError: boolean;
-  error?: Error;
-}
+const CustomErrorBoundary = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ReactErrorBoundary
+      FallbackComponent={Fallback}
+      onReset={() => window.location.reload()}
+    >
+      {children}
+    </ReactErrorBoundary>
+  );
+};
 
-export class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-  };
-
-  public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
-  }
-
-  public render() {
-    if (this.state.hasError) {
-      return (
-        <div className="flex h-full w-full flex-col items-center justify-center bg-gray-900 p-8 text-center text-gray-200">
-          <div className="mb-4 rounded-full bg-red-900/30 p-4">
-            <AlertTriangle className="h-8 w-8 text-red-500" />
-          </div>
-          <h2 className="mb-2 text-xl font-semibold">Something went wrong</h2>
-          <p className="mb-6 max-w-md text-sm text-gray-400">
-            {this.state.error?.message ||
-              'An unexpected error occurred while rendering the interface.'}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <RefreshCcw size={16} />
-            Reload Application
-          </button>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
+export { CustomErrorBoundary as ErrorBoundary };

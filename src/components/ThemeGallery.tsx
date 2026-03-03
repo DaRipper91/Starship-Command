@@ -1,5 +1,6 @@
 import { Clock, Play, Trash2 } from 'lucide-react';
 
+import { useConfirmation } from '../contexts/ConfirmationContext';
 import { useToast } from '../contexts/ToastContext';
 import { PRESET_THEMES } from '../lib/presets';
 import { cn } from '../lib/utils';
@@ -14,8 +15,9 @@ interface ThemeGalleryProps {
 export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
   const { loadTheme, savedThemes, deleteTheme } = useThemeStore();
   const { addToast } = useToast();
+  const confirm = useConfirmation();
 
-  const handleLoad = (theme: Theme) => {
+  const handleLoad = async (theme: Theme) => {
     const { currentTheme, savedThemes, past } = useThemeStore.getState();
 
     // Check if unsaved
@@ -42,13 +44,13 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
     const hasHistory = past.length > 0;
 
     if (hasUnsavedChanges && hasHistory) {
-      if (
-        !confirm(
-          'You have unsaved changes. Are you sure you want to load a new theme?',
-        )
-      ) {
-        return;
-      }
+      const confirmed = await confirm({
+        title: 'Unsaved Changes',
+        message:
+          'You have unsaved changes that will be lost. Are you sure you want to load a new theme?',
+        confirmText: 'Load Anyway',
+      });
+      if (!confirmed) return;
     }
 
     try {
@@ -58,6 +60,18 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
     } catch (error) {
       console.error('Failed to load theme:', error);
       addToast('Failed to load theme.', 'error');
+    }
+  };
+
+  const handleDelete = async (theme: Theme) => {
+    const confirmed = await confirm({
+      title: 'Delete Theme',
+      message: `Are you sure you want to permanently delete "${theme.metadata.name}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+    });
+    if (confirmed) {
+      deleteTheme(theme.metadata.id);
+      addToast(`Theme "${theme.metadata.name}" deleted.`, 'info');
     }
   };
 
@@ -74,10 +88,21 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
             <button
               key={theme.metadata.id}
               type="button"
-              className="group relative w-full cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-gray-800 text-left transition-all hover:border-gray-600 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 text-left transition-all hover:border-gray-600 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               onClick={() => handleLoad(theme)}
               aria-label={`Load preset theme: ${theme.metadata.name}`}
             >
+              <div className="flex h-32 items-center justify-center bg-gray-900">
+                {theme.metadata.previewImage ? (
+                  <img
+                    src={theme.metadata.previewImage}
+                    alt={`Preview of ${theme.metadata.name}`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs text-gray-500">No Preview</span>
+                )}
+              </div>
               <div className="p-4">
                 <h3 className="font-medium text-gray-200 group-hover:text-blue-400">
                   {theme.metadata.name}
@@ -85,16 +110,6 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
                 <p className="mt-1 line-clamp-2 text-xs text-gray-500">
                   {theme.metadata.description}
                 </p>
-                <div className="mt-3 flex flex-wrap gap-1">
-                  {theme.metadata.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center rounded-full bg-gray-700 px-2 py-0.5 text-xs font-medium text-gray-400"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
             </button>
           ))}
@@ -120,33 +135,38 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
             {savedThemes.map((theme) => (
               <div
                 key={theme.metadata.id}
-                className="group relative overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-all hover:border-gray-600 hover:shadow-lg"
+                className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-all hover:border-gray-600 hover:shadow-lg"
               >
                 <button
                   type="button"
-                  className="w-full cursor-pointer p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+                  className="w-full flex-1 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
                   onClick={() => handleLoad(theme)}
                   aria-label={`Load saved theme: ${theme.metadata.name}`}
                 >
-                  <h3 className="font-medium text-gray-200 group-hover:text-purple-400">
-                    {theme.metadata.name}
-                  </h3>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Last updated:{' '}
-                    {new Date(theme.metadata.updated).toLocaleDateString()}
-                  </p>
+                  <div className="flex h-32 items-center justify-center bg-gray-900">
+                    {theme.metadata.previewImage ? (
+                      <img
+                        src={theme.metadata.previewImage}
+                        alt={`Preview of ${theme.metadata.name}`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-xs text-gray-500">
+                        No Preview Available
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium text-gray-200 group-hover:text-purple-400">
+                      {theme.metadata.name}
+                    </h3>
+                  </div>
                 </button>
 
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (
-                      confirm(
-                        `Are you sure you want to delete theme "${theme.metadata.name}"?`,
-                      )
-                    ) {
-                      deleteTheme(theme.metadata.id);
-                    }
+                    handleDelete(theme);
                   }}
                   className="absolute right-2 top-2 rounded p-1.5 text-gray-500 opacity-0 transition-opacity hover:bg-red-900/20 hover:text-red-400 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 group-hover:opacity-100"
                   title="Delete theme"

@@ -82,6 +82,14 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 dist
+dist.old/
+
+# Python server artifacts
+server/build/
+server/dist/
+instance/
+*.db
+*.spec
 
 # Gatsby files
 .cache/

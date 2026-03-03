@@ -6,6 +6,8 @@ export interface ThemeMetadata {
   tags?: string[];
   created: Date;
   updated: Date;
+  previewImage?: string;
+  fontFamily?: string;
   thumbnail?: string;
   isPreset?: boolean;
 }

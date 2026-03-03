@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { MODULE_DEFINITIONS } from '../lib/module-definitions';
+import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { createDebouncedStorage } from '../lib/storage-utils';
 import { TomlParser } from '../lib/toml-parser';
 import { generateId } from '../lib/utils';
@@ -33,7 +33,7 @@ interface ThemeStore {
   updateMetadata: (metadata: Partial<ThemeMetadata>) => void;
   setSelectedModule: (module: string | null) => void;
   loadTheme: (theme: Theme) => void;
-  saveTheme: () => void;
+  saveTheme: (previewImage?: string) => void;
   deleteTheme: (id: string) => void;
   resetTheme: () => void;
 
@@ -192,10 +192,13 @@ export const useThemeStore = create<ThemeStore>()(
         }));
       },
 
-      saveTheme: () => {
+      saveTheme: (previewImage?: string) => {
         const { currentTheme, savedThemes } = get();
         // We clone currentTheme to avoid reference issues in savedThemes
         const themeToSave = deepClone(currentTheme);
+        if (previewImage) {
+          themeToSave.metadata.previewImage = previewImage;
+        }
         const existingIndex = savedThemes.findIndex(
           (t) => t.metadata.id === themeToSave.metadata.id,
         );
@@ -292,8 +295,8 @@ export const selectActiveModules = (state: ThemeStore) => {
 
   // Ensure MODULE_DEFINITIONS are also ModuleItem compatible
   const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
-    id: def.id,
-    name: def.id,
+    id: def.name,
+    name: def.name,
     isCustom: false,
   }));
 

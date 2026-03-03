@@ -24,6 +24,9 @@ interface UIStore {
 
   showWelcomeWizard: boolean;
   setShowWelcomeWizard: (state: boolean) => void;
+
+  showSolarSystem: boolean;
+  setShowSolarSystem: (state: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>()(
@@ -50,6 +53,9 @@ export const useUIStore = create<UIStore>()(
 
       showWelcomeWizard: false,
       setShowWelcomeWizard: (state) => set({ showWelcomeWizard: state }),
+
+      showSolarSystem: false,
+      setShowSolarSystem: (state) => set({ showSolarSystem: state }),
     }),
     {
       name: 'starship-ui-storage',

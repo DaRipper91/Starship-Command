@@ -20,7 +20,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-import { MODULE_DEFINITIONS } from '../lib/module-definitions';
+import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
 import { selectActiveModules, useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
@@ -136,8 +136,8 @@ export function ModuleList({ className }: { className?: string }) {
     }));
 
     const predefinedModules: ModuleItem[] = MODULE_DEFINITIONS.map((def) => ({
-      id: def.id,
-      name: def.id,
+      id: def.name,
+      name: def.name,
     }));
 
     return [...predefinedModules, ...customModules];

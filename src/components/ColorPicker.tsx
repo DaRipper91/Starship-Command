@@ -15,25 +15,27 @@ interface ColorPickerProps {
   onChange: (color: string) => void;
   label?: string;
   className?: string;
+  palette?: Record<string, string>;
 }
 
-const PRESET_COLORS = [
-  'black',
-  'red',
-  'green',
-  'yellow',
-  'blue',
-  'purple',
-  'cyan',
-  'white',
-  '#1e1e1e',
-  '#3b82f6',
-  '#ef4444',
-  '#10b981',
-  '#f59e0b',
-  '#8b5cf6',
-  '#06b6d4',
+const DEFAULT_SWATCHES = [
+  '#000000',
+  '#FF0000',
+  '#00FF00',
+  '#FFFF00',
+  '#0000FF',
+  '#FF00FF',
+  '#00FFFF',
+  '#FFFFFF',
+  '#808080',
+  '#C0C0C0',
 ];
+
+import { useMemo } from 'react';
+
+import { useThemeStore } from '../stores/theme-store';
+
+//...
 
 export function ColorPicker({
   color,
@@ -44,6 +46,16 @@ export function ColorPicker({
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(color);
   const popoverRef = useRef<HTMLDivElement>(null);
+
+  const { currentTheme } = useThemeStore();
+
+  const displayColors = useMemo(() => {
+    const activePalette =
+      currentTheme.config.palettes?.[currentTheme.config.palette || 'global'] ||
+      {};
+    const paletteColors = Object.values(activePalette);
+    return [...new Set([...paletteColors, ...DEFAULT_SWATCHES])];
+  }, [currentTheme.config.palette, currentTheme.config.palettes]);
 
   // Sync input with prop
   useEffect(() => {
@@ -144,7 +156,7 @@ export function ColorPicker({
           </div>
 
           <div className="grid grid-cols-5 gap-2">
-            {PRESET_COLORS.map((c) => (
+            {displayColors.map((c) => (
               <button
                 key={c}
                 className="h-6 w-6 rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:ring-offset-gray-800"

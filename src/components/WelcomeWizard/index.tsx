@@ -13,23 +13,28 @@ import { useThemeStore } from '../../stores/theme-store';
 import { useUIStore } from '../../stores/ui-store';
 import { Theme } from '../../types/starship.types';
 
+//... (imports are the same)
+
 export function WelcomeWizard() {
   const { showWelcomeWizard, setShowWelcomeWizard } = useUIStore();
   const [step, setStep] = useState(1);
   const { loadTheme } = useThemeStore();
 
+  // This logic is now handled in the store, but we can keep a check here
+  // in case the store logic is removed or changed.
   useEffect(() => {
-    // Check if it's the user's first time
     const hasSeenWizard = localStorage.getItem('starship_wizard_completed');
-    if (!hasSeenWizard) {
-      setShowWelcomeWizard(true);
+    if (showWelcomeWizard && hasSeenWizard) {
+      setShowWelcomeWizard(false);
     }
-  }, [setShowWelcomeWizard]);
+  }, [showWelcomeWizard, setShowWelcomeWizard]);
 
   const handleComplete = () => {
     localStorage.setItem('starship_wizard_completed', 'true');
     setShowWelcomeWizard(false);
   };
+
+  //... (rest of the component is the same)
 
   const handleSelectPreset = (theme: Theme) => {
     loadTheme(theme);

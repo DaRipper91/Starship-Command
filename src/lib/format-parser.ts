@@ -1,18 +1,185 @@
-import {
-  BaseModuleConfig,
-  CharacterConfig,
-  CustomModuleConfig,
-  GitStatusConfig,
-  StarshipConfig,
-} from '../types/starship.types';
+import { BaseModuleConfig, StarshipConfig } from '../types/starship.types';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
+export interface FormatSegment {
+  text: string;
+  style: string;
+}
+
+// Standard ANSI 16-color code maps
+const FG_COLORS: Record<string, number> = {
+  black: 30,
+  red: 31,
+  green: 32,
+  yellow: 33,
+  blue: 34,
+  purple: 35,
+  magenta: 35,
+  cyan: 36,
+  white: 37,
+};
+const FG_BRIGHT: Record<string, number> = {
+  black: 90,
+  red: 91,
+  green: 92,
+  yellow: 93,
+  blue: 94,
+  purple: 95,
+  magenta: 95,
+  cyan: 96,
+  white: 97,
+};
+const BG_COLORS: Record<string, number> = {
+  black: 40,
+  red: 41,
+  green: 42,
+  yellow: 43,
+  blue: 44,
+  purple: 45,
+  magenta: 45,
+  cyan: 46,
+  white: 47,
+};
+const BG_BRIGHT: Record<string, number> = {
+  black: 100,
+  red: 101,
+  green: 102,
+  yellow: 103,
+  blue: 104,
+  purple: 105,
+  magenta: 105,
+  cyan: 106,
+  white: 107,
+};
+
 /**
- * Parses a Starship format string and renders it with ANSI escape codes
- * @param format - The format string (e.g. "[$directory](bold cyan)")
- * @param config - The Starship configuration
- * @param scenario - The mock scenario to use for values (default: clean)
- * @returns Rendered string with ANSI codes
+ * Converts a Starship style string to ANSI escape codes (16-color mode).
+ * Modifiers appear first, then foreground colors, then background colors.
+ */
+export function styleToAnsi(style: string): string {
+  if (!style) return '';
+  const parts = style.split(/\s+/).filter(Boolean);
+  const modifiers: number[] = [];
+  const fgCodes: number[] = [];
+  const bgCodes: number[] = [];
+
+  for (const part of parts) {
+    if (part === 'bold') {
+      modifiers.push(1);
+      continue;
+    }
+    if (part === 'dimmed') {
+      modifiers.push(2);
+      continue;
+    }
+    if (part === 'italic') {
+      modifiers.push(3);
+      continue;
+    }
+    if (part === 'underline') {
+      modifiers.push(4);
+      continue;
+    }
+    if (part === 'blink') {
+      modifiers.push(5);
+      continue;
+    }
+    if (part === 'inverted') {
+      modifiers.push(7);
+      continue;
+    }
+
+    if (part.startsWith('bg:')) {
+      const color = part.slice(3);
+      if (color.startsWith('bright-')) {
+        const c = color.slice(7);
+        if (BG_BRIGHT[c] !== undefined) bgCodes.push(BG_BRIGHT[c]);
+      } else if (BG_COLORS[color] !== undefined) {
+        bgCodes.push(BG_COLORS[color]);
+      }
+      continue;
+    }
+
+    const fgColor = part.startsWith('fg:') ? part.slice(3) : part;
+    if (fgColor.startsWith('bright-')) {
+      const c = fgColor.slice(7);
+      if (FG_BRIGHT[c] !== undefined) fgCodes.push(FG_BRIGHT[c]);
+    } else if (FG_COLORS[fgColor] !== undefined) {
+      fgCodes.push(FG_COLORS[fgColor]);
+    }
+  }
+
+  const codes = [...modifiers, ...fgCodes, ...bgCodes];
+  if (codes.length === 0) return '';
+  return `\x1b[${codes.join(';')}m`;
+}
+
+/**
+ * Renders a single Starship module to its intermediate bracket-style string.
+ * Returns a string like "[symbol value](style) " for use by parseFormatString.
+ */
+export function renderModule(
+  moduleName: string,
+  config: StarshipConfig,
+  scenario: MockScenario,
+): string {
+  const customModules = config.custom as
+    | Record<string, BaseModuleConfig>
+    | undefined;
+  const isCustom = !!customModules?.[moduleName];
+  const moduleConfig = isCustom
+    ? customModules?.[moduleName]
+    : (config[moduleName] as BaseModuleConfig | undefined);
+
+  if (!moduleConfig || moduleConfig.disabled) return '';
+  if (!scenario.values[moduleName]) return '';
+
+  const scenarioValue = scenario.values[moduleName];
+
+  // Character module: use success_symbol or error_symbol based on scenario name
+  if (moduleName === 'character') {
+    const charConfig = moduleConfig as {
+      success_symbol?: string;
+      error_symbol?: string;
+    };
+    const isError = scenario.name.toLowerCase().includes('error');
+    const symbol = isError
+      ? (charConfig.error_symbol ?? '[❯](bold red)')
+      : (charConfig.success_symbol ?? '[❯](bold green)');
+    const styleMatch = symbol.match(/\]\(([^)]+)\)$/);
+    const extractedStyle = styleMatch
+      ? styleMatch[1]
+      : (moduleConfig.style ?? '');
+    return `[${scenarioValue}](${extractedStyle}) `;
+  }
+
+  const format = moduleConfig.format ?? '[$symbol$value]($style) ';
+  const symbol = moduleConfig.symbol ?? '';
+  const style = moduleConfig.style ?? '';
+
+  const subs: Record<string, string> = {
+    symbol,
+    value: scenarioValue,
+    style,
+    output: scenarioValue,
+  };
+  for (const [k, v] of Object.entries(scenario.values)) {
+    if (!(k in subs)) subs[k] = v;
+  }
+
+  return format.replace(
+    /\$([a-zA-Z0-9_]+)/g,
+    (_match, varName: string) => subs[varName] ?? '',
+  );
+}
+
+// Matches [text](style) where text may contain ANSI sequences (\x1b[...m) but not raw [ or ]
+// Style may be empty e.g. [value]()
+// eslint-disable-next-line no-control-regex
+const STYLED_GROUP_RE = /\[((?:[^\][]|\x1b\[[0-9;]*m)*)\]\(([^)]*)\)/g;
+
+/**
+ * Converts a Starship format string to a complete ANSI-coded string.
  */
 export function parseFormatString(
   format: string,
@@ -21,270 +188,65 @@ export function parseFormatString(
 ): string {
   if (!format) return '';
 
-  let processed = format;
+  let result = format.replace(/\\n/g, '\n');
 
-  // Replace module variables ($directory)
-  processed = processed.replace(/\$([a-zA-Z0-9_]+)/g, (_match, moduleName) => {
-    return renderModule(moduleName, config, scenario);
-  });
+  // Expand $module_name tokens
+  result = result.replace(/\$([a-zA-Z0-9_]+)/g, (_match, moduleName: string) =>
+    renderModule(moduleName, config, scenario),
+  );
 
-  // Replace styled groups ([text](style))
-  // Iterate to handle nested brackets (limited depth)
-  // Use a placeholder for internal [ to avoid breaking the regex match
-  let prevProcessed = '';
-  let iterations = 0;
-  while (processed !== prevProcessed && iterations < 5) {
-    prevProcessed = processed;
-    processed = processed.replace(
-      // eslint-disable-next-line no-useless-escape
-      /\[([^\[\]]+)\]\(([^)]+)\)/g,
-      (_match, text, style) => {
-        const ansi = styleToAnsi(style).replace('[', '\u0001');
-        return `${ansi}${text}\x1b\u00010m`;
+  // Iteratively convert [text](style) → ANSI (handles nesting)
+  let prev = '';
+  while (prev !== result) {
+    prev = result;
+    result = result.replace(
+      STYLED_GROUP_RE,
+      (_match, text: string, style: string) => {
+        const ansi = styleToAnsi(style);
+        return ansi ? `${ansi}${text}\x1b[0m` : text;
       },
     );
-    iterations++;
   }
 
-  // Restore the [ in ANSI codes
-  // eslint-disable-next-line no-control-regex
-  processed = processed.replace(/\u0001/g, '[');
-
-  // Handle newlines
-  processed = processed.replace(/\\n/g, '\n');
-
-  return processed;
+  return result;
 }
 
 /**
- * Renders a specific module based on config and mock data
- * @param moduleName - Name of the module (e.g. "directory")
- * @param config - Starship configuration
- * @param scenario - Mock data scenario
- * @returns Rendered string (plain text, styles applied by parent)
+ * Parses a format string into styled segments for TerminalPreview / xterm.js.
+ * Returns raw { text, style } pairs without converting to ANSI codes.
  */
-export function renderModule(
-  moduleName: string,
+export function parseFormattedString(
+  format: string,
   config: StarshipConfig,
-  scenario: MockScenario,
-): string {
-  // Get value from scenario
-  const value = scenario.values[moduleName];
+  scenario: MockScenario = MOCK_SCENARIOS.clean,
+): FormatSegment[] {
+  if (!format) return [];
 
-  // If no value defined or empty, return empty string (module is hidden)
-  if (!value) return '';
+  let expanded = format.replace(/\\n/g, '\n');
+  expanded = expanded.replace(
+    /\$([a-zA-Z0-9_]+)/g,
+    (_match, moduleName: string) => renderModule(moduleName, config, scenario),
+  );
 
-  // Get module config
-  const moduleConfig = config[moduleName] as BaseModuleConfig &
-    Record<string, unknown>;
+  const segments: FormatSegment[] = [];
+  // eslint-disable-next-line no-control-regex
+  const regex = /\[((?:[^\][]|\x1b\[[0-9;]*m)*)\]\(([^)]*)\)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
 
-  // Check if disabled
-  if (moduleConfig?.disabled === true) return '';
-
-  // Handle custom modules
-  if (moduleName in (config.custom || {})) {
-    const customModule = config.custom?.[moduleName] as CustomModuleConfig;
-    if (customModule) {
-      // For now, we'll mock the output of the command.
-      // In a real app, this would involve executing the command.
-      const customOutput = scenario.values[moduleName] || '(custom output)';
-      const customSymbol = customModule.symbol || '';
-      const customStyle = customModule.style || 'white';
-      const customFormat = customModule.format || '[$symbol $output]($style) ';
-
-      const output = customFormat
-        .replace('$symbol', customSymbol)
-        .replace('$output', customOutput)
-        .replace('$style', customStyle);
-
-      return output;
+  while ((match = regex.exec(expanded)) !== null) {
+    if (match.index > lastIndex) {
+      segments.push({
+        text: expanded.substring(lastIndex, match.index),
+        style: '',
+      });
     }
+    segments.push({ text: match[1], style: match[2] });
+    lastIndex = regex.lastIndex;
+  }
+  if (lastIndex < expanded.length) {
+    segments.push({ text: expanded.substring(lastIndex), style: '' });
   }
 
-  // Special handling for common modules
-  if (moduleName === 'directory') {
-    const style = moduleConfig?.style || 'cyan bold';
-    return `[${value}](${style}) `;
-  }
-
-  if (moduleName === 'git_branch') {
-    const symbol = moduleConfig?.symbol || '🌱 ';
-    const style = moduleConfig?.style || 'purple bold';
-    return `[${symbol}${value}](${style}) `;
-  }
-
-  if (moduleName === 'git_status') {
-    const gitStatusConfig = moduleConfig as GitStatusConfig;
-    const statusSymbols = [
-      gitStatusConfig.conflicted || '🏳', // Conflicted
-      gitStatusConfig.ahead || '🏎💨', // Ahead
-      gitStatusConfig.behind || '😰', // Behind
-      gitStatusConfig.diverged || '😵', // Diverged
-      gitStatusConfig.untracked || '🤷', // Untracked
-      gitStatusConfig.stashed || '📦', // Stashed
-      gitStatusConfig.modified || '📝', // Modified
-      gitStatusConfig.staged || '[++()](green)', // Staged
-      gitStatusConfig.renamed || '👅', // Renamed
-      gitStatusConfig.deleted || '🗑', // Deleted
-    ];
-
-    // Combine symbols based on mock scenario status (simplified)
-    const activeStatusSymbols = statusSymbols.filter((s) => value.includes(s));
-    const displayValue = activeStatusSymbols.join(' ');
-    const style = gitStatusConfig.style || 'white';
-    const format = gitStatusConfig.format || '($displayValue) ';
-
-    const output = format
-      .replace('$displayValue', displayValue)
-      .replace('$style', style);
-
-    return output;
-  }
-
-  if (moduleName === 'character') {
-    // Determine style based on error state from scenario
-    const isError = scenario.name.toLowerCase().includes('error');
-
-    // Get style from config if possible
-    let style = 'bold green';
-    const charConfig = moduleConfig as unknown as CharacterConfig;
-    const successSymbol = charConfig?.success_symbol || '[❯](bold green)';
-    const errorSymbol = charConfig?.error_symbol || '[❯](bold red)';
-    const symbolConfig = isError ? errorSymbol : successSymbol;
-
-    // Try to extract style from config format string like [x](y)
-    if (symbolConfig && symbolConfig.includes('](')) {
-      const match = symbolConfig.match(/\]\((.*?)\)/);
-      if (match) style = match[1];
-    }
-
-    // Use the value from mock data (e.g. ❯) with the style
-    return `[${value}](${style}) `;
-  }
-
-  // Generic fallback for other modules
-  const style = moduleConfig?.style || 'white';
-  const symbol = moduleConfig?.symbol || '';
-  // Note: We use a simplified default format here for the MVP
-  const format = moduleConfig?.format || 'via [$symbol$version]($style) ';
-
-  const output = format
-    .replace('$symbol', symbol)
-    .replace('$version', value)
-    .replace('$style', style);
-
-  return output;
-}
-
-/**
- * Converts a Starship style string to ANSI escape codes
- * @param style - The style string (e.g. "bold red", "bg:blue fg:white")
- * @param _config - (Optional) The Starship configuration
- * @returns ANSI escape code string
- */
-
-export function styleToAnsi(style: string, _config?: StarshipConfig): string {
-  if (!style) return '';
-
-  const parts = style.split(/\s+/);
-  const codes: number[] = [];
-  let fgCode: number | null = null;
-  let bgCode: number | null = null;
-
-  parts.forEach((part) => {
-    // Modifiers
-    if (part === 'bold') codes.push(1);
-    else if (part === 'dimmed') codes.push(2);
-    else if (part === 'italic') codes.push(3);
-    else if (part === 'underline') codes.push(4);
-    else if (part === 'inverted') codes.push(7);
-    else if (part === 'hidden') codes.push(8);
-    else if (part === 'strikethrough') codes.push(9);
-    // Background color
-    else if (part.startsWith('bg:')) {
-      const color = part.substring(3);
-      const code = getColorCode(color, true);
-      if (code !== null) bgCode = code;
-    }
-    // Foreground color (default if not recognized as modifier or bg)
-    else {
-      // Check for fg: prefix explicitly just in case, though starship usually omits it for fg
-      const color = part.startsWith('fg:') ? part.substring(3) : part;
-      const code = getColorCode(color, false);
-      if (code !== null) fgCode = code;
-    }
-  });
-
-  if (fgCode !== null) codes.push(fgCode);
-  if (bgCode !== null) codes.push(bgCode);
-
-  if (codes.length === 0) return '';
-  return `\x1b[${codes.join(';')}m`;
-}
-
-/**
- * Helper to get ANSI color code from color name or hex
- */
-function getColorCode(color: string, isBackground: boolean): number | null {
-  const base = isBackground ? 40 : 30;
-  const brightBase = isBackground ? 100 : 90;
-
-  const colors = [
-    'black',
-    'red',
-    'green',
-    'yellow',
-    'blue',
-    'purple',
-    'cyan',
-    'white',
-  ];
-
-  // Standard colors
-  const index = colors.indexOf(color);
-  if (index !== -1) return base + index;
-
-  // Bright colors
-  if (color.startsWith('bright-')) {
-    const brightColor = color.substring(7);
-    const brightIndex = colors.indexOf(brightColor);
-    if (brightIndex !== -1) return brightBase + brightIndex;
-  }
-
-  // Hex colors (approximate mapping or truecolor if supported)
-  // For simplicity in this environment, we'll map to closest standard color or ignore
-  // In a real terminal emulator like xterm.js, we can use truecolor: \x1b[38;2;R;G;Bm
-  if (color.startsWith('#')) {
-    // Parse hex
-    const r = parseInt(color.substring(1, 3), 16);
-    const g = parseInt(color.substring(3, 5), 16);
-    const b = parseInt(color.substring(5, 7), 16);
-
-    if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
-      // simple 256 color mapping logic is complex, let's use truecolor ANSI sequence
-      // Foreground: 38;2;R;G;B
-      // Background: 48;2;R;G;B
-      // However, to keep return type simple (number), we can't easily return the full sequence.
-      // Wait, the caller expects codes array.
-      // Let's change logic slightly to return string or handle it differently?
-      // No, I'll stick to basic colors for now to avoid complexity,
-      // OR I can return a special large number and handle it, but simpler is better for "black screen" fix.
-
-      // Actually, let's just return a default color if hex is provided to avoid crash
-      // Or even better, try to find the closest ANSI color.
-      // For now, let's just return null for hex to avoid breaking the escape sequence structure
-      // if we don't support it fully.
-      return null;
-    }
-  }
-
-  // Numerical ANSI colors
-  const num = parseInt(color, 10);
-  if (!isNaN(num) && num >= 0 && num <= 255) {
-    // 38;5;n for fg, 48;5;n for bg
-    // But we can't return this as a single number easily in the current structure.
-    return null;
-  }
-
-  return null;
+  return segments;
 }

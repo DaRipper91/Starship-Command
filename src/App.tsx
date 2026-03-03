@@ -1,5 +1,7 @@
+import html2canvas from 'html2canvas';
 import {
   ArrowLeftRight,
+  Globe,
   Keyboard,
   Redo,
   Settings,
@@ -8,19 +10,25 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
+import { AuthModal } from './components/AuthModal';
 import { CommandPalette } from './components/CommandPalette';
 import { ComparisonView } from './components/ComparisonView';
 import { DynamicThemeSettingsModal } from './components/DynamicThemeSettingsModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExportImport } from './components/ExportImport';
+import { FontSelector } from './components/FontSelector';
+import { GlobalFormatControls } from './components/GlobalFormatControls';
 import { ImagePalette } from './components/ImagePalette';
 import { ModuleConfig } from './components/ModuleConfig';
 import { ModuleList } from './components/ModuleList';
+import { SolarSystem } from './components/SolarSystem';
 import { SuggestionPanel } from './components/SuggestionPanel';
 import { TerminalPreview } from './components/TerminalPreview';
 import { ThemeGallery } from './components/ThemeGallery';
+import { ThemeUploadModal } from './components/ThemeUploadModal';
 import { WelcomeWizard } from './components/WelcomeWizard';
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
+import { ConfirmationProvider } from './contexts/ConfirmationContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useDynamicTheme } from './hooks/useDynamicTheme';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -34,11 +42,12 @@ function AppContent() {
     updateMetadata,
     saveTheme,
     resetTheme,
-    undo,
-    redo,
-    canUndo,
-    canRedo,
   } = useThemeStore();
+
+  const { undo, redo, canUndo, canRedo } = useThemeStore();
+
+  const isUndoPossible = canUndo();
+  const isRedoPossible = canRedo();
 
   const {
     showExportImport,
@@ -51,12 +60,21 @@ function AppContent() {
     setShowCommandPalette,
     showDynamicThemeSettings,
     setShowDynamicThemeSettings,
+    showSolarSystem,
+    setShowSolarSystem,
   } = useUIStore();
 
   const { addToast } = useToast();
   const [themeName, setThemeName] = useState(
     currentTheme.metadata.name || 'My Awesome Theme',
   );
+
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{
+    id: number;
+    username: string;
+  } | null>(null);
 
   // Activate dynamic theme switching
   useDynamicTheme();
@@ -72,9 +90,30 @@ function AppContent() {
     updateMetadata({ name: newName });
   };
 
-  const handleSave = () => {
-    saveTheme();
-    addToast('Theme saved successfully!', 'success');
+  const handleSave = async () => {
+    try {
+      const element = document.getElementById(
+        'terminal-preview-capture-source',
+      );
+      if (element) {
+        const canvas = await html2canvas(element, {
+          scale: 0.8, // Lower scale for smaller image size
+          logging: false, // Disable logging
+          useCORS: true,
+        });
+        const previewImage = canvas.toDataURL('image/jpeg', 0.5); // Low quality JPEG
+        saveTheme(previewImage);
+        addToast('Theme saved successfully!', 'success');
+      } else {
+        // Save without preview if element not found
+        saveTheme();
+        addToast('Theme saved (no preview).', 'info');
+      }
+    } catch (error) {
+      console.error('Failed to capture theme preview:', error);
+      saveTheme();
+      addToast('Theme saved, but failed to generate preview.', 'info');
+    }
   };
 
   const handleNew = () => {
@@ -180,7 +219,7 @@ function AppContent() {
           <div className="flex items-center border-r border-gray-700 pr-3">
             <button
               onClick={undo}
-              disabled={!canUndo()}
+              disabled={!isUndoPossible}
               className="rounded p-2 text-gray-400 hover:bg-gray-800 hover:text-white disabled:bg-transparent disabled:opacity-30"
               title="Undo (Cmd+Z)"
               aria-label="Undo"
@@ -189,7 +228,7 @@ function AppContent() {
             </button>
             <button
               onClick={redo}
-              disabled={!canRedo()}
+              disabled={!isRedoPossible}
               className="rounded p-2 text-gray-400 hover:bg-gray-800 hover:text-white disabled:bg-transparent disabled:opacity-30"
               title="Redo (Cmd+Shift+Z)"
               aria-label="Redo"
@@ -210,6 +249,12 @@ function AppContent() {
             Gallery
           </button>
           <button
+            onClick={() => setShowSolarSystem(true)}
+            className="flex items-center gap-2 rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+          >
+            <Globe size={14} /> Community
+          </button>
+          <button
             onClick={() => setShowComparison(true)}
             className="flex items-center gap-2 rounded bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700"
           >
@@ -220,6 +265,19 @@ function AppContent() {
             className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-500"
           >
             Save
+          </button>
+          <button
+            onClick={() => {
+              if (currentUser) {
+                setShowUploadModal(true);
+              } else {
+                addToast('Please log in or register to share themes', 'info');
+                setShowAuthModal(true);
+              }
+            }}
+            className="rounded bg-indigo-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+          >
+            Share
           </button>
           <button
             onClick={() => setShowExportImport('import')}
@@ -274,6 +332,17 @@ function AppContent() {
               <ImagePalette />
             </ErrorBoundary>
           </div>
+          <div className="border-b border-gray-800 p-4">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+              Font
+            </h2>
+            <ErrorBoundary>
+              <FontSelector
+                currentFont={currentTheme.metadata.fontFamily || 'FiraCode NF'}
+                onSelectFont={(font) => updateMetadata({ fontFamily: font })}
+              />
+            </ErrorBoundary>
+          </div>
         </aside>
 
         {/* CENTER - TERMINAL */}
@@ -281,7 +350,11 @@ function AppContent() {
           <div className="bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10" />
           <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center">
             <ErrorBoundary>
-              <TerminalPreview className="w-full shadow-2xl" />
+              <TerminalPreview
+                id="terminal-preview-capture-source"
+                className="w-full shadow-2xl"
+                fontFamily={currentTheme.metadata.fontFamily}
+              />
             </ErrorBoundary>
           </div>
         </main>
@@ -297,6 +370,10 @@ function AppContent() {
             </div>
           )}
           <SuggestionPanel />
+
+          <div className="mt-8 border-t border-gray-800 pt-4">
+            <GlobalFormatControls />
+          </div>
         </aside>
       </div>
 
@@ -322,6 +399,39 @@ function AppContent() {
             onClose={() => setShowDynamicThemeSettings(false)}
           />
         </ErrorBoundary>
+      )}
+
+      {showSolarSystem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <ErrorBoundary>
+            <SolarSystem onClose={() => setShowSolarSystem(false)} />
+          </ErrorBoundary>
+        </div>
+      )}
+
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <ErrorBoundary>
+            <AuthModal
+              onClose={() => setShowAuthModal(false)}
+              onLoginSuccess={(id, username) => {
+                setCurrentUser({ id, username });
+                setShowAuthModal(false);
+              }}
+            />
+          </ErrorBoundary>
+        </div>
+      )}
+
+      {showUploadModal && currentUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <ErrorBoundary>
+            <ThemeUploadModal
+              onClose={() => setShowUploadModal(false)}
+              userId={currentUser.id}
+            />
+          </ErrorBoundary>
+        </div>
       )}
 
       {showGallery && (
@@ -353,7 +463,9 @@ function App() {
     <ErrorBoundary>
       <AccessibilityProvider>
         <ToastProvider>
-          <AppContent />
+          <ConfirmationProvider>
+            <AppContent />
+          </ConfirmationProvider>
         </ToastProvider>
       </AccessibilityProvider>
     </ErrorBoundary>

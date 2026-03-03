@@ -1,7 +1,7 @@
 import { LayoutGrid, PenTool, Text, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { MODULE_DEFINITIONS } from '../lib/module-definitions';
+import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
@@ -158,7 +158,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
     setEditingSegment(null);
   };
 
-  const availableModules = MODULE_DEFINITIONS.map((m) => m.id);
+  const availableModules = MODULE_DEFINITIONS.map((m) => m.name);
 
   const renderSegmentEditor = () => {
     if (editingSegment === null) return null;

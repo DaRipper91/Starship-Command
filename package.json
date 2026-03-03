@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "sync:schema": "node scripts/fetch-schema.mjs",
+    "start:prod": "npm run build && flask --app server/server.py run --port 5001",
     "test": "vitest",
     "format": "prettier --write .",
     "prepare": "husky",
@@ -24,6 +26,7 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@iarna/toml": "^2.2.5",
+    "@types/html2canvas": "^0.5.35",
     "@vitest/coverage-v8": "^4.0.18",
     "clsx": "^2.1.0",
     "colord": "^2.9.3",
@@ -34,9 +37,11 @@
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^6.1.1",
     "tailwind-merge": "^2.2.1",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0",
+    "zundo": "^2.3.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
