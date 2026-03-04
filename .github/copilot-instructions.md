@@ -5,16 +5,18 @@ A React 18 + TypeScript + Vite SPA for visually editing [Starship](https://stars
 ## Commands
 
 ```sh
-npm run dev          # Dev server at localhost:5173 (proxies /api → localhost:5001)
-npm run build        # tsc -b then vite build (must pass before committing)
-npm run lint         # ESLint — zero warnings allowed
-npm run lint -- --fix  # Auto-fix + sort imports
-npm run format       # Prettier
-npm test             # Vitest watch mode
-npm run test:run     # Vitest single run (CI)
+npm run dev               # Dev server at localhost:5173 (proxies /api → localhost:5001)
+npm run build             # tsc -b then vite build (must pass before committing)
+npm run preview           # Preview production build locally
+npm run lint              # ESLint — zero warnings allowed
+npm run lint -- --fix     # Auto-fix + sort imports
+npm run format            # Prettier
+npm test                  # Vitest watch mode
+npm run test:run          # Vitest single run (CI)
+npm run test:coverage     # Coverage report (v8)
 npx vitest run src/lib/format-parser.test.ts  # Run a single test file
-npm run sync:schema  # Fetch latest Starship schema → src/generated/module-definitions.json
-npm run start:prod   # Build + start Flask backend (port 5001)
+npm run sync:schema       # Fetch latest Starship schema → src/generated/module-definitions.json
+npm run start:prod        # Build + start Flask backend (port 5001)
 ```
 
 Pre-commit hooks (Husky + lint-staged) run ESLint + Prettier on `src/**/*.{ts,tsx}`.
@@ -49,6 +51,10 @@ Modals (Gallery, Export/Import, Comparison, CommandPalette, SolarSystem, Auth, U
 ### Terminal rendering pipeline
 
 `TerminalPreview` → `parseFormattedString` (from `src/lib/format-parser.ts`) → converts format strings + mock scenario data into ANSI sequences → written to an xterm.js instance. The `translateThemeToXterm` function maps palette colors to xterm's `ITheme`. Mock scenarios (clean, dev, multilang, devops) live in `src/lib/mock-data.ts`.
+
+### Color extraction
+
+`ImagePalette` offloads `node-vibrant` palette extraction to `src/workers/color-extraction.worker.ts` (a Web Worker) to avoid blocking the UI thread. The worker returns hex values for `primary`, `secondary`, `accent`, `background`, and `text` palette keys.
 
 ### Backend (optional, for community features)
 
@@ -100,3 +106,11 @@ Wrap all major sections and modal content in `<ErrorBoundary>` (see `App.tsx` fo
 ### Undo/redo
 
 Both `updateConfig` and `updateMetadata` push to history automatically (50-entry limit). Use `undo()`/`redo()` from `useThemeStore` directly; do not manage history manually.
+
+### Accessibility
+
+`AccessibilityProvider` (from `src/contexts/AccessibilityContext.tsx`) exposes `highContrast` and `reducedMotion` booleans. Components that render animations or low-contrast styles should consume `useAccessibility()` and honor these flags.
+
+### Tests
+
+Component tests live in `src/components/__tests__/`. Integration checkpoint tests are at `src/checkpoint-1.test.ts` and `src/checkpoint-2.test.ts`. Vitest is configured with `jsdom` environment and globals; test setup is in `src/setupTests.ts`.

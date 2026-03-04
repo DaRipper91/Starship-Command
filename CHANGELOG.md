@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.0] - 2026-03-04
+
+### Improved
+
+- **Format Parser Performance**: Replaced the regex `while`-loop in `parseFormatString` with an O(N) single-pass stack-based parser. Eliminates polynomial re-scanning for deeply nested `[text](style)` groups and correctly handles embedded ANSI escape sequences.
+
 ## [1.4.0] - 2026-03-03
 
 ### Audited and Verified
