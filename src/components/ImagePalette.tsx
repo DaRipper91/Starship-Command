@@ -40,7 +40,6 @@ export function ImagePalette() {
 
       addToast('Palette extracted and applied!', 'success');
     } catch (error) {
-      console.error('Extraction error:', error);
       addToast(
         error instanceof Error ? error.message : 'An unknown error occurred.',
         'error',
