@@ -173,11 +173,6 @@ export function renderModule(
   );
 }
 
-// Matches [text](style) where text may contain ANSI sequences (\x1b[...m) but not raw [ or ]
-// Style may be empty e.g. [value]()
-// eslint-disable-next-line no-control-regex
-const STYLED_GROUP_RE = /\[((?:[^\][]|\x1b\[[0-9;]*m)*)\]\(([^)]*)\)/g;
-
 /**
  * Converts a Starship format string to a complete ANSI-coded string.
  */
@@ -188,27 +183,94 @@ export function parseFormatString(
 ): string {
   if (!format) return '';
 
-  let result = format.replace(/\\n/g, '\n');
+  let expanded = format.replace(/\\n/g, '\n');
 
   // Expand $module_name tokens
-  result = result.replace(/\$([a-zA-Z0-9_]+)/g, (_match, moduleName: string) =>
-    renderModule(moduleName, config, scenario),
+  expanded = expanded.replace(
+    /\$([a-zA-Z0-9_]+)/g,
+    (_match, moduleName: string) => renderModule(moduleName, config, scenario),
   );
 
-  // Iteratively convert [text](style) → ANSI (handles nesting)
-  let prev = '';
-  while (prev !== result) {
-    prev = result;
-    result = result.replace(
-      STYLED_GROUP_RE,
-      (_match, text: string, style: string) => {
-        const ansi = styleToAnsi(style);
-        return ansi ? `${ansi}${text}\x1b[0m` : text;
-      },
-    );
+  // Single-pass stack-based parsing for nested [text](style)
+  // Handles ANSI escape sequences [...m to prevent breaking the parse tree.
+  const length = expanded.length;
+  const stack: { text: string }[] = [];
+  let currentText = '';
+
+  for (let i = 0; i < length; i++) {
+    const char = expanded[i];
+
+    if (char === '\x1b') {
+      let ansiStr = char;
+      i++;
+      if (i < length && expanded[i] === '[') {
+        ansiStr += '[';
+        i++;
+        while (i < length && /^[0-9;]$/.test(expanded[i])) {
+          ansiStr += expanded[i];
+          i++;
+        }
+        if (i < length && expanded[i] === 'm') {
+          ansiStr += 'm';
+        } else {
+          i--; // fallback if malformed
+        }
+      } else {
+        i--;
+      }
+      currentText += ansiStr;
+      continue;
+    }
+
+    if (char === '[') {
+      stack.push({ text: currentText });
+      currentText = '';
+    } else if (char === ']') {
+      if (i + 1 < length && expanded[i + 1] === '(') {
+        const closingParen = expanded.indexOf(')', i + 2);
+        if (closingParen !== -1) {
+          const style = expanded.substring(i + 2, closingParen);
+          const ansi = styleToAnsi(style);
+          const formatted = ansi ? `${ansi}${currentText}\x1b[0m` : currentText;
+
+          if (stack.length > 0) {
+            const parent = stack.pop()!;
+            currentText = parent.text + formatted;
+          } else {
+            // Unmatched ']' with a valid style. E.g. "a ](b)". Treat as literal.
+            currentText += `](${style})`;
+          }
+          i = closingParen; // skip the style part
+        } else {
+          // No closing ')', treat as literal
+          if (stack.length > 0) {
+            const parent = stack.pop()!;
+            currentText = parent.text + '[' + currentText + ']';
+          } else {
+            currentText += ']';
+          }
+        }
+      } else {
+        // No '(' after ']', treat as literal
+        if (stack.length > 0) {
+          const parent = stack.pop()!;
+          currentText = parent.text + '[' + currentText + ']';
+        } else {
+          currentText += ']';
+        }
+      }
+    } else {
+      currentText += char;
+    }
   }
 
-  return result;
+  // Clean up any unclosed '['
+  while (stack.length > 0) {
+    const parent = stack.pop()!;
+    currentText = parent.text + '[' + currentText;
+  }
+
+  return currentText;
 }
 
 /**
@@ -229,23 +291,90 @@ export function parseFormattedString(
   );
 
   const segments: FormatSegment[] = [];
-  // eslint-disable-next-line no-control-regex
-  const regex = /\[((?:[^\][]|\x1b\[[0-9;]*m)*)\]\(([^)]*)\)/g;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
+  const length = expanded.length;
+  const stack: { text: string }[] = [];
+  let currentText = '';
 
-  while ((match = regex.exec(expanded)) !== null) {
-    if (match.index > lastIndex) {
-      segments.push({
-        text: expanded.substring(lastIndex, match.index),
-        style: '',
-      });
+  for (let i = 0; i < length; i++) {
+    const char = expanded[i];
+
+    if (char === '\x1b') {
+      let ansiStr = char;
+      i++;
+      if (i < length && expanded[i] === '[') {
+        ansiStr += '[';
+        i++;
+        while (i < length && /^[0-9;]$/.test(expanded[i])) {
+          ansiStr += expanded[i];
+          i++;
+        }
+        if (i < length && expanded[i] === 'm') {
+          ansiStr += 'm';
+        } else {
+          i--;
+        }
+      } else {
+        i--;
+      }
+      currentText += ansiStr;
+      continue;
     }
-    segments.push({ text: match[1], style: match[2] });
-    lastIndex = regex.lastIndex;
+
+    if (char === '[') {
+      stack.push({ text: currentText });
+      currentText = '';
+    } else if (char === ']') {
+      if (i + 1 < length && expanded[i + 1] === '(') {
+        const closingParen = expanded.indexOf(')', i + 2);
+        if (closingParen !== -1) {
+          const style = expanded.substring(i + 2, closingParen);
+
+          if (stack.length > 0) {
+            const parent = stack.pop()!;
+
+            // For nested elements, we simplify segment generation by treating inner styled blocks as plain text in the segment array for outer styles, OR we flatten it.
+            // The original parseFormattedString DID NOT support nesting properly because it just matched regex strings on one level.
+            // To emulate its behavior (and be safer for TerminalPreview), we output the currentText with its current style.
+
+            // Since this is meant to be a flat array for the terminal component, we'll push what we have.
+            // Wait, the parent text might be unstyled. We should push the parent text if it exists.
+            if (parent.text) {
+              segments.push({ text: parent.text, style: '' });
+            }
+            segments.push({ text: currentText, style: style });
+            currentText = ''; // Consume the text, parent is gone, we're back to base level
+          } else {
+            currentText += `](${style})`;
+          }
+          i = closingParen;
+        } else {
+          if (stack.length > 0) {
+            const parent = stack.pop()!;
+            currentText = parent.text + '[' + currentText + ']';
+          } else {
+            currentText += ']';
+          }
+        }
+      } else {
+        if (stack.length > 0) {
+          const parent = stack.pop()!;
+          currentText = parent.text + '[' + currentText + ']';
+        } else {
+          currentText += ']';
+        }
+      }
+    } else {
+      currentText += char;
+    }
   }
-  if (lastIndex < expanded.length) {
-    segments.push({ text: expanded.substring(lastIndex), style: '' });
+
+  while (stack.length > 0) {
+    const parent = stack.pop()!;
+    currentText = parent.text + '[' + currentText;
+  }
+
+  if (currentText) {
+    segments.push({ text: currentText, style: '' });
   }
 
   return segments;
