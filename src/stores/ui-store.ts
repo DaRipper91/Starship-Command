@@ -58,7 +58,8 @@ export const useUIStore = create<UIStore>()(
       setShowDynamicThemeSettings: (state) =>
         set({ showDynamicThemeSettings: state }),
 
-      showWelcomeWizard: false,
+      showWelcomeWizard:
+        localStorage.getItem('starship_wizard_completed') !== 'true',
       setShowWelcomeWizard: (state) => set({ showWelcomeWizard: state }),
 
       showSolarSystem: false,
