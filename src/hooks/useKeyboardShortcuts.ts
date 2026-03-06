@@ -23,17 +23,16 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
         ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
         target.isContentEditable;
 
-      const keys = e.key.toLowerCase();
+      const pressedKey = e.key.toLowerCase();
       const isUndoRedo =
-        (e.metaKey || e.ctrlKey) && (keys === 'z' || keys === 'y');
+        (e.metaKey || e.ctrlKey) && (pressedKey === 'z' || pressedKey === 'y');
 
-      // If we are in an editable element, let the browser handle basic text editing keys
-      // and undo/redo natively.
+      // Let the browser handle undo/redo natively inside editable elements
       if (isEditable && isUndoRedo) {
         return;
       }
 
-      // Existing general guard
+      // Suppress non-modifier shortcuts inside editable elements (allow Cmd/Ctrl combos like Cmd+S, Cmd+K)
       if (isEditable && !e.metaKey && !e.ctrlKey) {
         return;
       }

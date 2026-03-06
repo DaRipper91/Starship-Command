@@ -1,12 +1,18 @@
 import 'xterm/css/xterm.css';
 
 import html2canvas from 'html2canvas';
-import { Download } from 'lucide-react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronUp, Copy, Download, Type } from 'lucide-react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
-import { useDebounce } from '../hooks/useDebounce';
+import { useToast } from '../contexts/ToastContext';
 import { ColorUtils } from '../lib/color-utils';
 import { parseFormattedString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
@@ -15,8 +21,8 @@ import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
 import { StarshipConfig } from '../types/starship.types';
 
-// This is a simplified version of a style-to-ANSI converter.
-// A more complete implementation would require a full color parsing library.
+const FONT_STORAGE_KEY = 'starship-font-settings';
+
 function styleToAnsi(style: string, config: StarshipConfig): string {
   if (!style) return '';
 
@@ -45,6 +51,11 @@ function styleToAnsi(style: string, config: StarshipConfig): string {
   return `\x1b[${codes.join(';')}m`;
 }
 
+interface StoredFontSettings {
+  url: string;
+  family: string;
+}
+
 interface TerminalPreviewProps {
   className?: string;
   fontFamily?: string;
@@ -63,33 +74,60 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   const { currentTheme } = useThemeStore();
+  const { addToast } = useToast();
   const [scenarioIndex, setScenarioIndex] = useState(0);
+
+  // Font loader state
+  const [showFontLoader, setShowFontLoader] = useState(false);
+  const [fontUrl, setFontUrl] = useState('');
+  const [fontFamilyInput, setFontFamilyInput] = useState('');
+  const [isLoadingFont, setIsLoadingFont] = useState(false);
+  const [customFontFamily, setCustomFontFamily] = useState<string>(() => {
+    try {
+      const stored = localStorage.getItem(FONT_STORAGE_KEY);
+      if (stored) {
+        const parsed: StoredFontSettings = JSON.parse(stored);
+        return parsed.family || '';
+      }
+    } catch {
+      /* ignore */
+    }
+    return '';
+  });
+
+  // Pre-load stored font on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(FONT_STORAGE_KEY);
+      if (stored) {
+        const { url, family }: StoredFontSettings = JSON.parse(stored);
+        if (url && family) {
+          setFontUrl(url);
+          setFontFamilyInput(family);
+          const face = new FontFace(family, `url(${url})`);
+          face
+            .load()
+            .then((loaded) => {
+              document.fonts.add(loaded);
+            })
+            .catch(() => {
+              /* silent — old stored font may be gone */
+            });
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const effectiveFontFamily =
+    customFontFamily ||
+    fontFamily ||
+    '"FiraCode NF", Menlo, Monaco, "Courier New", monospace';
 
   const scenarioKeys = Object.keys(MOCK_SCENARIOS);
 
-  const handleDownload = async () => {
-    if (!containerRef.current) return;
-
-    try {
-      const canvas = await html2canvas(containerRef.current, {
-        backgroundColor: terminalBg,
-        scale: 2, // High resolution
-        useCORS: true,
-        logging: false,
-      });
-
-      const dataUrl = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.download = `starship-theme-${currentTheme.metadata.name.toLowerCase().replace(/\s+/g, '-')}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error('Failed to capture terminal:', error);
-    }
-  };
-
   useEffect(() => {
-    // Cycle through scenarios every 5 seconds
     const interval = setInterval(() => {
       setScenarioIndex((prev) => (prev + 1) % scenarioKeys.length);
     }, 5000);
@@ -100,8 +138,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     if (!terminalRef.current || xtermRef.current) return;
 
     const term = new Terminal({
-      fontFamily:
-        fontFamily || '"FiraCode NF", Menlo, Monaco, "Courier New", monospace',
+      fontFamily: effectiveFontFamily,
       fontSize: 14,
       lineHeight: 1.2,
       cursorBlink: true,
@@ -125,7 +162,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     const resizeObserver = new ResizeObserver(() => {
       try {
         fitAddon.fit();
-      } catch (e) {
+      } catch {
         /* ignore */
       }
     });
@@ -137,105 +174,207 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
       term.dispose();
       xtermRef.current = null;
     };
-  }, [fontFamily]); // Re-run effect if fontFamily changes
-
-  // Effect to update font-family if it changes after initial render
-  useEffect(() => {
-    const term = xtermRef.current;
-    if (term && fontFamily) {
-      term.options.fontFamily = fontFamily;
-    }
-  }, [fontFamily]);
-
-  const debouncedConfig = useDebounce(currentTheme.config, 200);
+  }, [effectiveFontFamily]); // Re-create terminal when font changes
 
   const segments = useMemo(() => {
-    const format = debouncedConfig.format || '';
+    const format = currentTheme.config.format || '';
     const currentScenarioKey = scenarioKeys[scenarioIndex];
     const scenario = MOCK_SCENARIOS[currentScenarioKey];
-    return parseFormattedString(format, debouncedConfig, scenario);
-  }, [debouncedConfig, scenarioIndex, scenarioKeys]);
+    return parseFormattedString(format, currentTheme.config, scenario);
+  }, [currentTheme.config, scenarioIndex, scenarioKeys]);
 
-  // Effect to update theme and content
   useEffect(() => {
     const term = xtermRef.current;
     if (!term) return;
 
-    // Apply the theme
-    const xtermTheme = translateThemeToXterm(debouncedConfig);
+    const xtermTheme = translateThemeToXterm(currentTheme.config);
     term.options.theme = xtermTheme;
 
-    // Write content
     term.reset();
-
-    // Write left prompt segments
     segments.forEach((segment) => {
-      const ansi = styleToAnsi(segment.style, debouncedConfig);
+      const ansi = styleToAnsi(segment.style, currentTheme.config);
       term.write(ansi + segment.text + (ansi ? '\x1b[0m' : ''));
     });
-
-    // Handle right_format
-    if (debouncedConfig.right_format) {
-      const currentScenarioKey = scenarioKeys[scenarioIndex];
-      const scenario = MOCK_SCENARIOS[currentScenarioKey];
-      const rightSegments = parseFormattedString(
-        debouncedConfig.right_format,
-        debouncedConfig,
-        scenario,
-      );
-
-      // Convert right segments to ANSI string to calculate visible length
-      let rightAnsi = '';
-      let rightVisibleText = '';
-      rightSegments.forEach((seg) => {
-        const ansi = styleToAnsi(seg.style, debouncedConfig);
-        rightAnsi += ansi + seg.text + (ansi ? '\x1b[0m' : '');
-        rightVisibleText += seg.text;
-      });
-
-      const rightLength = rightVisibleText.length;
-      const termWidth = term.cols;
-
-      if (rightLength > 0 && termWidth > rightLength) {
-        // Move cursor to the right position: termWidth - rightLength + 1
-        // \x1b[G moves to absolute column 1. \x1b[<n>G moves to absolute column n.
-        term.write(`\x1b[${termWidth - rightLength + 1}G${rightAnsi}`);
-      }
-    }
-  }, [segments, debouncedConfig, scenarioIndex, scenarioKeys]);
+  }, [segments, currentTheme.config]);
 
   const terminalBg = useMemo(() => {
-    return translateThemeToXterm(debouncedConfig).background || '#1e1e1e';
-  }, [debouncedConfig]);
+    return translateThemeToXterm(currentTheme.config).background || '#1e1e1e';
+  }, [currentTheme.config]);
+
+  // Screenshot helpers
+  const captureCanvas = useCallback(async () => {
+    if (!containerRef.current) return null;
+    return html2canvas(containerRef.current, {
+      backgroundColor: terminalBg,
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    });
+  }, [terminalBg]);
+
+  const handleDownload = useCallback(async () => {
+    try {
+      const canvas = await captureCanvas();
+      if (!canvas) return;
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = `${currentTheme.metadata.name || 'theme'}-preview.png`;
+      a.click();
+      addToast('Screenshot downloaded!', 'success');
+    } catch {
+      addToast('Failed to capture screenshot', 'error');
+    }
+  }, [captureCanvas, currentTheme.metadata.name, addToast]);
+
+  const handleCopyToClipboard = useCallback(async () => {
+    try {
+      const canvas = await captureCanvas();
+      if (!canvas) return;
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob }),
+          ]);
+          addToast('Screenshot copied to clipboard!', 'success');
+        } catch {
+          addToast('Clipboard write failed — try Download instead', 'error');
+        }
+      });
+    } catch {
+      addToast('Failed to capture screenshot', 'error');
+    }
+  }, [captureCanvas, addToast]);
+
+  const handleApplyFont = useCallback(async () => {
+    if (!fontUrl.trim() || !fontFamilyInput.trim()) {
+      addToast('Please enter both a font URL and family name', 'error');
+      return;
+    }
+    setIsLoadingFont(true);
+    try {
+      const face = new FontFace(
+        fontFamilyInput.trim(),
+        `url(${fontUrl.trim()})`,
+      );
+      const loaded = await face.load();
+      document.fonts.add(loaded);
+      const newFamily = fontFamilyInput.trim();
+      setCustomFontFamily(newFamily);
+      localStorage.setItem(
+        FONT_STORAGE_KEY,
+        JSON.stringify({ url: fontUrl.trim(), family: newFamily }),
+      );
+      addToast(`Font "${newFamily}" applied!`, 'success');
+      setShowFontLoader(false);
+    } catch {
+      addToast('Failed to load font. Check the URL and try again.', 'error');
+    } finally {
+      setIsLoadingFont(false);
+    }
+  }, [fontUrl, fontFamilyInput, addToast]);
+
+  const handleResetFont = useCallback(() => {
+    setCustomFontFamily('');
+    localStorage.removeItem(FONT_STORAGE_KEY);
+    setFontUrl('');
+    setFontFamilyInput('');
+    addToast('Font reset to default', 'info');
+  }, [addToast]);
 
   return (
     <div
-      ref={containerRef}
       id={id}
+      ref={containerRef}
       className={cn(
         'flex flex-col overflow-hidden rounded-lg border border-gray-700 shadow-2xl',
         className,
       )}
       style={{ backgroundColor: terminalBg }}
     >
+      {/* macOS-style header bar */}
       <div className="flex shrink-0 items-center gap-2 border-b border-gray-700 bg-gray-800/50 px-4 py-2">
-        <div className="flex gap-2">
-          <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
-          <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-          <div className="h-3 w-3 rounded-full bg-[#27c93f]" />
-        </div>
+        <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
+        <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
+        <div className="h-3 w-3 rounded-full bg-[#27c93f]" />
         <div className="ml-4 flex-1 select-none text-xs font-medium text-gray-400">
           Terminal Preview ({MOCK_SCENARIOS[scenarioKeys[scenarioIndex]].name})
         </div>
-        <button
-          onClick={handleDownload}
-          title="Download as PNG"
-          className="rounded p-1 text-gray-400 transition-colors hover:bg-gray-700 hover:text-white"
-        >
-          <Download size={16} />
-        </button>
+
+        {/* Action buttons */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowFontLoader((p) => !p)}
+            title="Font settings"
+            className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
+          >
+            {showFontLoader ? <ChevronUp size={14} /> : <Type size={14} />}
+          </button>
+          <button
+            onClick={handleCopyToClipboard}
+            title="Copy screenshot to clipboard"
+            className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
+          >
+            <Copy size={14} />
+          </button>
+          <button
+            onClick={handleDownload}
+            title="Download PNG"
+            className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
+          >
+            <Download size={14} />
+          </button>
+        </div>
       </div>
 
+      {/* Font Loader Panel */}
+      {showFontLoader && (
+        <div className="shrink-0 border-b border-gray-700 bg-gray-900/80 px-4 py-3">
+          <p className="mb-2 text-xs font-medium text-gray-400">
+            Custom Nerd Font
+          </p>
+          <div className="flex flex-col gap-2">
+            <input
+              type="url"
+              value={fontUrl}
+              onChange={(e) => setFontUrl(e.target.value)}
+              placeholder="Font URL (.woff2 or .ttf)…"
+              className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+            <input
+              type="text"
+              value={fontFamilyInput}
+              onChange={(e) => setFontFamilyInput(e.target.value)}
+              placeholder="Font family name (e.g. JetBrainsMono Nerd Font)…"
+              className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={handleApplyFont}
+                disabled={isLoadingFont}
+                className="rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50"
+              >
+                {isLoadingFont ? 'Loading…' : 'Apply Font'}
+              </button>
+              {customFontFamily && (
+                <button
+                  onClick={handleResetFont}
+                  className="rounded bg-gray-700 px-3 py-1.5 text-xs text-gray-300 hover:bg-gray-600"
+                >
+                  Reset to Default
+                </button>
+              )}
+            </div>
+            {customFontFamily && (
+              <p className="text-xs text-green-400">
+                Active: <span className="font-mono">{customFontFamily}</span>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* xterm.js container */}
       <div className="relative min-h-[200px] flex-1 p-1">
         <div ref={terminalRef} className="absolute inset-0" />
       </div>
