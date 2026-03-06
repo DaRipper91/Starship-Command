@@ -36,9 +36,15 @@ class MockResizeObserver {
   globalThis as unknown as { ResizeObserver: typeof MockResizeObserver }
 ).ResizeObserver = MockResizeObserver;
 
+import { ToastProvider } from '../../contexts/ToastContext';
+
 describe('TerminalPreview', () => {
   it('renders correctly', () => {
-    const { container } = render(<TerminalPreview />);
+    const { container } = render(
+      <ToastProvider>
+        <TerminalPreview />
+      </ToastProvider>
+    );
     expect(container.firstChild).toBeInTheDocument();
   });
 });

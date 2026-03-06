@@ -31,6 +31,15 @@ interface UIStore {
 
   showSolarSystem: boolean;
   setShowSolarSystem: (state: boolean) => void;
+
+  showAuthModal: boolean;
+  setShowAuthModal: (state: boolean) => void;
+
+  showUploadModal: boolean;
+  setShowUploadModal: (state: boolean) => void;
+
+  currentUser: { id: number; username: string } | null;
+  setCurrentUser: (user: { id: number; username: string } | null) => void;
 }
 
 export const useUIStore = create<UIStore>()(
@@ -63,6 +72,15 @@ export const useUIStore = create<UIStore>()(
 
       showSolarSystem: false,
       setShowSolarSystem: (state) => set({ showSolarSystem: state }),
+
+      showAuthModal: false,
+      setShowAuthModal: (state) => set({ showAuthModal: state }),
+
+      showUploadModal: false,
+      setShowUploadModal: (state) => set({ showUploadModal: state }),
+
+      currentUser: null,
+      setCurrentUser: (user) => set({ currentUser: user }),
     }),
     {
       name: 'starship-ui-storage',

@@ -121,7 +121,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
         loadTheme(downloadedTheme);
         addToast(`Theme "${theme.name}" applied!`, 'success');
         onClose();
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error applying theme:', err);
         addToast('Failed to apply theme.', 'error');
       }

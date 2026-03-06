@@ -25,6 +25,7 @@ import { GlobalFormatControls } from './components/GlobalFormatControls';
 import { ImagePalette } from './components/ImagePalette';
 import { ModuleConfig } from './components/ModuleConfig';
 import { ModuleList } from './components/ModuleList';
+import { PresetSelector } from './components/PresetSelector';
 import { SolarSystem } from './components/SolarSystem';
 import { SuggestionPanel } from './components/SuggestionPanel';
 import { TerminalPreview } from './components/TerminalPreview';
@@ -69,6 +70,12 @@ function AppContent() {
     setShowDynamicThemeSettings,
     showSolarSystem,
     setShowSolarSystem,
+    showAuthModal,
+    setShowAuthModal,
+    showUploadModal,
+    setShowUploadModal,
+    currentUser,
+    setCurrentUser,
     layoutMode,
     setLayoutMode,
   } = useUIStore();
@@ -101,13 +108,6 @@ function AppContent() {
       setRightSidebarOpen(false);
     }
   }, [layoutMode]);
-
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{
-    id: number;
-    username: string;
-  } | null>(null);
 
   useDynamicTheme();
 
@@ -323,6 +323,7 @@ function AppContent() {
             </button>
           </div>
 
+          <PresetSelector />
           <button
             onClick={handleSave}
             className="flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500"
