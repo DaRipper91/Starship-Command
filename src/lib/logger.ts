@@ -4,8 +4,7 @@ class Logger {
   private level: LogLevel =
     import.meta.env.MODE === 'production' ? 'error' : 'debug';
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private log(level: LogLevel, message: string, ...args: any[]) {
+  private log(level: LogLevel, message: string, ...args: unknown[]) {
     // Basic level check
     const levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
     if (levels.indexOf(level) < levels.indexOf(this.level)) {
@@ -34,23 +33,19 @@ class Logger {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  debug(message: string, ...args: any[]) {
+  debug(message: string, ...args: unknown[]) {
     this.log('debug', message, ...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  info(message: string, ...args: any[]) {
+  info(message: string, ...args: unknown[]) {
     this.log('info', message, ...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  warn(message: string, ...args: any[]) {
+  warn(message: string, ...args: unknown[]) {
     this.log('warn', message, ...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error(message: string, ...args: any[]) {
+  error(message: string, ...args: unknown[]) {
     this.log('error', message, ...args);
   }
 }
