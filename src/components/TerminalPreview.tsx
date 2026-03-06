@@ -3,6 +3,7 @@ import 'xterm/css/xterm.css';
 import html2canvas from 'html2canvas';
 import { ChevronUp, Copy, Download, Type } from 'lucide-react';
 import React, {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -13,6 +14,7 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
 import { useToast } from '../contexts/ToastContext';
+import { useDebounce } from '../hooks/useDebounce';
 import { ColorUtils } from '../lib/color-utils';
 import { parseFormattedString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
@@ -62,7 +64,8 @@ interface TerminalPreviewProps {
   id?: string;
 }
 
-export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
+// Memoized TerminalPreview to prevent unnecessary re-renders on outer state changes
+export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(({
   className,
   fontFamily,
   id,
@@ -105,14 +108,14 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
           setFontUrl(url);
           setFontFamilyInput(family);
           const face = new FontFace(family, `url(${url})`);
-          face
-            .load()
-            .then((loaded) => {
+          (async () => {
+            try {
+              const loaded = await face.load();
               document.fonts.add(loaded);
-            })
-            .catch(() => {
+            } catch {
               /* silent — old stored font may be gone */
-            });
+            }
+          })();
         }
       }
     } catch {
@@ -183,6 +186,8 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     return parseFormattedString(format, currentTheme.config, scenario);
   }, [currentTheme.config, scenarioIndex, scenarioKeys]);
 
+  const debouncedSegments = useDebounce(segments, 200);
+
   useEffect(() => {
     const term = xtermRef.current;
     if (!term) return;
@@ -191,11 +196,11 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
     term.options.theme = xtermTheme;
 
     term.reset();
-    segments.forEach((segment) => {
+    debouncedSegments.forEach((segment) => {
       const ansi = styleToAnsi(segment.style, currentTheme.config);
       term.write(ansi + segment.text + (ansi ? '\x1b[0m' : ''));
     });
-  }, [segments, currentTheme.config]);
+  }, [debouncedSegments, currentTheme.config]);
 
   const terminalBg = useMemo(() => {
     return translateThemeToXterm(currentTheme.config).background || '#1e1e1e';
@@ -380,4 +385,4 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = ({
       </div>
     </div>
   );
-};
+});

@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Search, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
@@ -31,7 +31,8 @@ interface ModuleItem {
   isCustom?: boolean;
 }
 
-function SortableItem({
+// Memoized SortableItem to prevent re-renders on drag
+const SortableItem = memo(function SortableItem({
   item,
   isSelected,
   onSelect,
@@ -117,9 +118,10 @@ function SortableItem({
       </div>
     </div>
   );
-}
+});
 
-export function ModuleList({ className }: { className?: string }) {
+// Memoized ModuleList to optimize list rendering
+export const ModuleList = memo(function ModuleList({ className }: { className?: string }) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
     useThemeStore();
   const activeModulesStore = useThemeStore(selectActiveModules);
@@ -171,27 +173,34 @@ export function ModuleList({ className }: { className?: string }) {
     });
   }, [activeModulesStore, allModules, searchTerm]);
 
-  const handleToggle = (name: string, enable: boolean) => {
-    setSearchTerm('');
-    let newFormat = currentTheme.config.format || '';
-    if (enable) {
-      newFormat += `$${name}`;
-    } else {
-      const regex = new RegExp(`\\$${name}\\b`, 'g');
-      newFormat = newFormat.replace(regex, '');
-    }
+  const handleToggle = useCallback(
+    (name: string, enable: boolean) => {
+      setSearchTerm('');
+      let newFormat = currentTheme.config.format || '';
+      if (enable) {
+        newFormat += `$${name}`;
+      } else {
+        const regex = new RegExp(`\\$${name}\\b`, 'g');
+        newFormat = newFormat.replace(regex, '');
+      }
 
-    const existingModuleConfig =
-      (currentTheme.config[name] as BaseModuleConfig) || {};
+      const existingModuleConfig =
+        (currentTheme.config[name] as BaseModuleConfig) || {};
 
-    updateConfig({
-      format: newFormat,
-      [name]: { ...existingModuleConfig, disabled: !enable },
-    });
-  };
+      updateConfig({
+        format: newFormat,
+        [name]: { ...existingModuleConfig, disabled: !enable },
+      });
+    },
+    [currentTheme.config, updateConfig]
+  );
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -374,4 +383,4 @@ export function ModuleList({ className }: { className?: string }) {
         )}
     </div>
   );
-}
+});

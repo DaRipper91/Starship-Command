@@ -32,7 +32,7 @@ class MockWorker {
             data: { type: 'success', payload: { primary: '#fff' } },
           } as MockMessageEvent);
         }
-      }, 10);
+      }, 100);
     }
   }
 
