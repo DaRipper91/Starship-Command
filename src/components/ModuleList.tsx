@@ -121,7 +121,11 @@ const SortableItem = memo(function SortableItem({
 });
 
 // Memoized ModuleList to optimize list rendering
-export const ModuleList = memo(function ModuleList({ className }: { className?: string }) {
+export const ModuleList = memo(function ModuleList({
+  className,
+}: {
+  className?: string;
+}) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
     useThemeStore();
   const activeModulesStore = useThemeStore(selectActiveModules);
@@ -192,7 +196,7 @@ export const ModuleList = memo(function ModuleList({ className }: { className?: 
         [name]: { ...existingModuleConfig, disabled: !enable },
       });
     },
-    [currentTheme.config, updateConfig]
+    [currentTheme.config, updateConfig],
   );
 
   const sensors = useSensors(
