@@ -138,3 +138,40 @@ describe('ColorUtils', () => {
     });
   });
 });
+
+describe('extractColorsFromImage', () => {
+  it('should reject and terminate worker if createImageBitmap fails', async () => {
+    // Setup mock file
+    const file = new File([''], 'test.png', { type: 'image/png' });
+
+    // Mock createImageBitmap to reject
+    const error = new Error('Failed to create bitmap');
+    const mockCreateImageBitmap = vi.fn().mockRejectedValue(error);
+    vi.stubGlobal('createImageBitmap', mockCreateImageBitmap);
+
+    // Create a spy for terminate to ensure it's called
+    const terminateSpy = vi.fn();
+
+    // We need to capture the MockWorker instantiation to spy on it
+    const originalWorker = globalThis.Worker;
+    class TestWorker extends originalWorker {
+      constructor(stringUrl: string | URL) {
+        super(stringUrl);
+        this.terminate = terminateSpy;
+      }
+    }
+    vi.stubGlobal('Worker', TestWorker);
+
+    try {
+      await expect(ColorUtils.extractColorsFromImage(file)).rejects.toThrow(
+        error,
+      );
+
+      // Verify that terminate was called after the rejection
+      expect(terminateSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      // Restore globals
+      vi.unstubAllGlobals();
+    }
+  });
+});

@@ -203,4 +203,38 @@ export class ColorUtils {
       error: '#dc322f',
     },
   };
+
+  /**
+   * Extracts a color palette from an image file using a Web Worker and createImageBitmap.
+   */
+  static async extractColorsFromImage(
+    imageFile: File | Blob,
+  ): Promise<ExtendedColorPalette> {
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(
+        new URL('../workers/color-extraction.worker.ts', import.meta.url),
+        { type: 'module' },
+      );
+
+      worker.onmessage = (e) => {
+        resolve(e.data);
+        worker.terminate();
+      };
+
+      worker.onerror = (e) => {
+        reject(e);
+        worker.terminate();
+      };
+
+      // Create bitmap to transfer to worker
+      createImageBitmap(imageFile)
+        .then((bitmap) => {
+          worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
+        })
+        .catch((err) => {
+          reject(err);
+          worker.terminate();
+        });
+    });
+  }
 }

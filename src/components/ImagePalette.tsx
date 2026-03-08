@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { useToast } from '../contexts/ToastContext';
 import { useThemeStore } from '../stores/theme-store';
+import { LoadingSpinner } from './LoadingSpinner';
 
 export function ImagePalette() {
   const { updateConfig } = useThemeStore();
@@ -81,9 +82,16 @@ export function ImagePalette() {
       <button
         onClick={handleExtract}
         disabled={isExtracting}
-        className="w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-gray-600"
+        className="flex w-full items-center justify-center gap-2 rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-gray-600"
       >
-        {isExtracting ? 'Extracting...' : 'Extract & Apply Palette'}
+        {isExtracting ? (
+          <>
+            <LoadingSpinner size={16} className="text-white" />
+            Extracting...
+          </>
+        ) : (
+          'Extract & Apply Palette'
+        )}
       </button>
     </div>
   );

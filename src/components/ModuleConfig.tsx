@@ -1,5 +1,5 @@
-import { Info, Play } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Info } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useConfirmation } from '../contexts/ConfirmationContext';
 import MODULE_DEFINITIONS from '../generated/module-definitions.json';
@@ -9,6 +9,7 @@ import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { useThemeStore } from '../stores/theme-store';
 import {
   BaseModuleConfig,
+  CustomModuleConfig,
   DirectoryConfig,
   GitStatusConfig,
   StarshipConfig,
@@ -17,44 +18,129 @@ import { FormatEditor } from './FormatEditor';
 import { IconBrowser } from './IconBrowser';
 import { StyleEditor } from './StyleEditor';
 
-// Helper to convert Starship style to React CSS
-function styleToCss(
+function segmentStyle(
   style: string,
   config: StarshipConfig,
 ): React.CSSProperties {
   if (!style) return {};
-
-  const paletteName = config.palette || 'global';
-  const customPalette = config.palettes?.[paletteName] || {};
-  const parts = style.split(/\s+/);
   const css: React.CSSProperties = {};
+  const paletteName = config.palette || 'global';
+  const palette = config.palettes?.[paletteName] || {};
+  const parts = style.split(/\s+/);
 
   parts.forEach((part) => {
-    if (part === 'bold') css.fontWeight = 'bold';
-    else if (part === 'italic') css.fontStyle = 'italic';
-    else if (part === 'underline') css.textDecoration = 'underline';
-    else if (part === 'dimmed') css.opacity = 0.6;
-    else if (part.startsWith('bg:')) {
-      css.backgroundColor = ColorUtils.resolveColor(
-        part.substring(3),
-        customPalette,
-      );
-    } else {
-      css.color = ColorUtils.resolveColor(part, customPalette);
+    if (!part) return;
+    if (part === 'bold') {
+      css.fontWeight = 'bold';
+      return;
     }
+    if (part === 'italic') {
+      css.fontStyle = 'italic';
+      return;
+    }
+    if (part === 'underline') {
+      css.textDecoration = 'underline';
+      return;
+    }
+    if (part === 'dimmed') {
+      css.opacity = 0.5;
+      return;
+    }
+    if (part === 'strikethrough') {
+      css.textDecoration = 'line-through';
+      return;
+    }
+    if (part === 'hidden') {
+      css.visibility = 'hidden';
+      return;
+    }
+    if (part === 'inverted') return;
+    if (part.startsWith('bg:')) {
+      css.backgroundColor = ColorUtils.resolveColor(part.substring(3), palette);
+      return;
+    }
+    css.color = ColorUtils.resolveColor(part, palette);
   });
 
   return css;
 }
 
+function ModulePreview({
+  moduleName,
+  config,
+}: {
+  moduleName: string;
+  config: StarshipConfig;
+}) {
+  const segments = useMemo(
+    () => parseFormattedString(`$${moduleName}`, config, MOCK_SCENARIOS.dev),
+    [moduleName, config],
+  );
+
+  const hasContent = segments.some((s) => s.text.trim());
+  if (!hasContent) return null;
+
+  return (
+    <div className="rounded-md border border-gray-700 bg-[#0d1117] px-4 py-2">
+      <p className="mb-1 text-[10px] font-medium uppercase tracking-wider text-gray-500">
+        Preview
+      </p>
+      <pre className="font-mono text-sm leading-relaxed">
+        {segments.map((seg, i) => (
+          <span key={i} style={segmentStyle(seg.style, config)}>
+            {seg.text}
+          </span>
+        ))}
+      </pre>
+    </div>
+  );
+}
+
+function CommaSeparatedInput({
+  label,
+  values,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  values: string[];
+  onChange: (v: string[]) => void;
+  placeholder?: string;
+}) {
+  const [raw, setRaw] = useState(values.join(', '));
+
+  useEffect(() => {
+    setRaw(values.join(', '));
+  }, [values]);
+
+  const handleBlur = () => {
+    const parsed = raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    onChange(parsed);
+  };
+
+  return (
+    <div className="space-y-1">
+      <label className="block text-xs text-gray-500">{label}</label>
+      <input
+        type="text"
+        value={raw}
+        onChange={(e) => setRaw(e.target.value)}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      />
+    </div>
+  );
+}
+
 export function ModuleConfig() {
   const { currentTheme, selectedModule, updateConfig } = useThemeStore();
   const [showIconBrowser, setShowIconBrowser] = useState<string | null>(null);
-  const [scenarioIndex, setScenarioIndex] = useState(0);
   const iconBrowserRef = useRef<HTMLDivElement>(null);
   const confirm = useConfirmation();
-
-  const scenarioKeys = Object.keys(MOCK_SCENARIOS);
 
   const handleReset = async () => {
     if (!selectedModule) return;
@@ -80,7 +166,6 @@ export function ModuleConfig() {
     }
   };
 
-  // Click outside to close icon browser
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -94,70 +179,6 @@ export function ModuleConfig() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showIconBrowser]);
-
-  // Safe access to module config
-  const moduleConfig = useMemo(() => {
-    return selectedModule
-      ? (currentTheme.config[selectedModule] as BaseModuleConfig) || {}
-      : {};
-  }, [currentTheme.config, selectedModule]);
-
-  const isCustomModule = useMemo(() => {
-    if (!selectedModule) return false;
-    return !!currentTheme.config.custom?.[selectedModule];
-  }, [currentTheme.config.custom, selectedModule]);
-
-  // Per-module preview rendering
-  const previewSegments = useMemo(() => {
-    if (!selectedModule) return [];
-    const format = `$${selectedModule}`;
-    const scenario = MOCK_SCENARIOS[scenarioKeys[scenarioIndex]];
-    return parseFormattedString(format, currentTheme.config, scenario);
-  }, [selectedModule, currentTheme.config, scenarioIndex, scenarioKeys]);
-
-  const handleChange = useCallback(
-    (key: string, value: string | boolean | number | string[]) => {
-      if (!selectedModule) return;
-
-      if (isCustomModule) {
-        updateConfig({
-          custom: {
-            ...currentTheme.config.custom,
-            [selectedModule]: {
-              ...(currentTheme.config.custom?.[selectedModule] || {}),
-              [key]: value,
-            },
-          },
-        });
-      } else {
-        updateConfig({
-          [selectedModule]: {
-            ...moduleConfig,
-            [key]: value,
-          },
-        });
-      }
-    },
-    [
-      updateConfig,
-      selectedModule,
-      moduleConfig,
-      isCustomModule,
-      currentTheme.config.custom,
-    ],
-  );
-
-  const handleIconBrowserToggle = useCallback((key: string) => {
-    setShowIconBrowser((prev) => (prev === key ? null : key));
-  }, []);
-
-  const handleIconBrowserSelect = useCallback(
-    (key: string, symbol: string) => {
-      handleChange(key, symbol);
-      setShowIconBrowser(null);
-    },
-    [handleChange],
-  );
 
   if (!selectedModule) {
     return (
@@ -173,8 +194,40 @@ export function ModuleConfig() {
     );
   }
 
+  const moduleConfig =
+    (currentTheme.config[selectedModule] as BaseModuleConfig) || {};
+
+  const isCustomModule = selectedModule in (currentTheme.config.custom ?? {});
+  const customConfig = isCustomModule
+    ? ((currentTheme.config.custom?.[selectedModule] ??
+        {}) as CustomModuleConfig)
+    : null;
+
+  const handleChange = (key: string, value: string | boolean | number) => {
+    updateConfig({
+      [selectedModule]: {
+        ...moduleConfig,
+        [key]: value,
+      },
+    });
+  };
+
+  const handleCustomChange = (key: string, value: string | string[]) => {
+    if (!isCustomModule) return;
+    updateConfig({
+      custom: {
+        ...currentTheme.config.custom,
+        [selectedModule]: {
+          ...customConfig,
+          [key]: value,
+        },
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col gap-6 rounded-lg border border-gray-700 bg-[#1e1e1e] p-6 shadow-xl">
+      {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-700 pb-4">
         <div>
           <h2 className="text-xl font-bold capitalize text-gray-100">
@@ -201,41 +254,11 @@ export function ModuleConfig() {
         </div>
       </div>
 
-      {/* Live Preview Bar */}
-      <div className="flex flex-col gap-2 rounded-md bg-black/40 p-3 ring-1 ring-inset ring-white/5">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-            Live Preview
-          </span>
-          <button
-            onClick={() =>
-              setScenarioIndex((prev) => (prev + 1) % scenarioKeys.length)
-            }
-            className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 hover:text-blue-400"
-          >
-            <Play size={10} className="fill-current" />
-            Scenario: {MOCK_SCENARIOS[scenarioKeys[scenarioIndex]].name}
-          </button>
-        </div>
-        <div className="flex min-h-[1.5rem] items-center font-mono text-sm">
-          {previewSegments.map((segment, i) => (
-            <span
-              key={i}
-              style={styleToCss(segment.style, currentTheme.config)}
-            >
-              {segment.text}
-            </span>
-          ))}
-          {previewSegments.length === 0 && (
-            <span className="italic text-gray-600">
-              Module not rendering in this scenario
-            </span>
-          )}
-        </div>
-      </div>
+      {/* Inline Preview */}
+      <ModulePreview moduleName={selectedModule} config={currentTheme.config} />
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Style Configuration */}
+        {/* Style */}
         <div className="space-y-3">
           <label className="block text-sm font-medium text-gray-300">
             Style
@@ -246,7 +269,7 @@ export function ModuleConfig() {
           />
         </div>
 
-        {/* Symbol Configuration */}
+        {/* Symbol */}
         <div className="relative space-y-3">
           <label className="block text-sm font-medium text-gray-300">
             Symbol
@@ -260,7 +283,11 @@ export function ModuleConfig() {
               className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
             <button
-              onClick={() => handleIconBrowserToggle('symbol')}
+              onClick={() =>
+                setShowIconBrowser(
+                  showIconBrowser === 'symbol' ? null : 'symbol',
+                )
+              }
               className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               Browse
@@ -274,13 +301,16 @@ export function ModuleConfig() {
             >
               <IconBrowser
                 currentSymbol={moduleConfig.symbol as string}
-                onSelect={(symbol) => handleIconBrowserSelect('symbol', symbol)}
+                onSelect={(symbol) => {
+                  handleChange('symbol', symbol);
+                  setShowIconBrowser(null);
+                }}
               />
             </div>
           )}
         </div>
 
-        {/* Format Configuration - Full Width */}
+        {/* Format String — Full Width */}
         <div className="col-span-2 space-y-3">
           <label className="block text-sm font-medium text-gray-300">
             Format String
@@ -292,133 +322,68 @@ export function ModuleConfig() {
           <div className="flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200">
             <Info className="mt-0.5 h-4 w-4 shrink-0" />
             <p>
-              Visually edit your module's format string. Click on segments to
-              edit or add new ones.
+              Visually edit your module&apos;s format string. Click on segments
+              to edit or add new ones.
             </p>
           </div>
         </div>
 
-        {/* Custom Module Advanced Options */}
-        {isCustomModule && (
+        {/* Custom Module Extended Fields */}
+        {isCustomModule && customConfig && (
           <div className="col-span-2 space-y-4 border-t border-gray-700 pt-4">
             <h3 className="text-sm font-medium text-gray-400">
-              Custom Module Logic
+              Custom Module Settings
             </h3>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-1">
                 <label className="block text-xs text-gray-500">Command</label>
                 <input
                   type="text"
-                  value={
-                    (moduleConfig as BaseModuleConfig & { command?: string })
-                      .command || ''
+                  value={customConfig.command || ''}
+                  onChange={(e) =>
+                    handleCustomChange('command', e.target.value)
                   }
-                  onChange={(e) => handleChange('command', e.target.value)}
-                  placeholder="e.g. echo hello"
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="block text-xs text-gray-500">When</label>
-                <input
-                  type="text"
-                  value={
-                    (moduleConfig as BaseModuleConfig & { when?: string })
-                      .when || ''
-                  }
-                  onChange={(e) => handleChange('when', e.target.value)}
-                  placeholder="e.g. test -f .env"
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="echo hello"
+                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div className="space-y-1">
                 <label className="block text-xs text-gray-500">
-                  Detect Files (comma separated)
+                  When (shell condition)
                 </label>
                 <input
                   type="text"
-                  value={(
-                    (
-                      moduleConfig as BaseModuleConfig & {
-                        detect_files?: string[];
-                      }
-                    ).detect_files || []
-                  ).join(', ')}
-                  onChange={(e) =>
-                    handleChange(
-                      'detect_files',
-                      e.target.value
-                        .split(',')
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    )
-                  }
-                  placeholder="e.g. .env, package.json"
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  value={customConfig.when || ''}
+                  onChange={(e) => handleCustomChange('when', e.target.value)}
+                  placeholder="test -f .env"
+                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
-              <div className="space-y-1">
-                <label className="block text-xs text-gray-500">
-                  Detect Extensions (comma separated)
-                </label>
-                <input
-                  type="text"
-                  value={(
-                    (
-                      moduleConfig as BaseModuleConfig & {
-                        detect_extensions?: string[];
-                      }
-                    ).detect_extensions || []
-                  ).join(', ')}
-                  onChange={(e) =>
-                    handleChange(
-                      'detect_extensions',
-                      e.target.value
-                        .split(',')
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    )
-                  }
-                  placeholder="e.g. py, js, ts"
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="block text-xs text-gray-500">
-                  Detect Folders (comma separated)
-                </label>
-                <input
-                  type="text"
-                  value={(
-                    (
-                      moduleConfig as BaseModuleConfig & {
-                        detect_folders?: string[];
-                      }
-                    ).detect_folders || []
-                  ).join(', ')}
-                  onChange={(e) =>
-                    handleChange(
-                      'detect_folders',
-                      e.target.value
-                        .split(',')
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    )
-                  }
-                  placeholder="e.g. .git, node_modules"
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
+              <CommaSeparatedInput
+                label="Detect Files (comma-separated)"
+                values={customConfig.detect_files || []}
+                onChange={(v) => handleCustomChange('detect_files', v)}
+                placeholder=".env, .envrc"
+              />
+              <CommaSeparatedInput
+                label="Detect Extensions (comma-separated)"
+                values={customConfig.detect_extensions || []}
+                onChange={(v) => handleCustomChange('detect_extensions', v)}
+                placeholder="py, js, ts"
+              />
+              <CommaSeparatedInput
+                label="Detect Folders (comma-separated)"
+                values={customConfig.detect_folders || []}
+                onChange={(v) => handleCustomChange('detect_folders', v)}
+                placeholder=".git, node_modules"
+              />
               <div className="space-y-1">
                 <label className="block text-xs text-gray-500">Shell</label>
                 <input
                   type="text"
-                  value={(
-                    (moduleConfig as BaseModuleConfig & { shell?: string[] })
-                      .shell || []
-                  ).join(', ')}
+                  value={(customConfig.shell || []).join(', ')}
                   onChange={(e) =>
-                    handleChange(
+                    handleCustomChange(
                       'shell',
                       e.target.value
                         .split(',')
@@ -426,15 +391,15 @@ export function ModuleConfig() {
                         .filter(Boolean),
                     )
                   }
-                  placeholder="e.g. sh, bash"
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="bash, zsh"
+                  className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
           </div>
         )}
 
-        {/* Additional Properties based on Module Type */}
+        {/* Directory-specific options */}
         {selectedModule === 'directory' && (
           <div className="col-span-2 space-y-4 border-t border-gray-700 pt-4">
             <h3 className="text-sm font-medium text-gray-400">
@@ -476,6 +441,7 @@ export function ModuleConfig() {
           </div>
         )}
 
+        {/* Git Status symbols */}
         {selectedModule === 'git_status' && (
           <div className="col-span-2 space-y-4 border-t border-gray-700 pt-4">
             <h3 className="text-sm font-medium text-gray-400">
@@ -511,7 +477,11 @@ export function ModuleConfig() {
                       className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <button
-                      onClick={() => handleIconBrowserToggle(key)}
+                      onClick={() =>
+                        setShowIconBrowser(
+                          showIconBrowser === key ? null : (key as string),
+                        )
+                      }
                       className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
                       Browse
@@ -525,9 +495,10 @@ export function ModuleConfig() {
                             key as keyof GitStatusConfig
                           ] as string
                         }
-                        onSelect={(symbol) =>
-                          handleIconBrowserSelect(key, symbol)
-                        }
+                        onSelect={(symbol) => {
+                          handleChange(key, symbol);
+                          setShowIconBrowser(null);
+                        }}
                       />
                     </div>
                   )}
