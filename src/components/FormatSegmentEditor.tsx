@@ -90,6 +90,8 @@ export function FormatSegmentEditor({
           </label>
           <button
             onClick={() => setShowIconBrowser(!showIconBrowser)}
+            aria-expanded={showIconBrowser}
+            aria-label="Toggle icon browser"
             className="rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700"
           >
             Browse Icons
