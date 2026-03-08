@@ -4,8 +4,14 @@ import { cn } from '../lib/utils';
 
 interface LoadingSpinnerProps {
   className?: string;
+  size?: number;
 }
 
-export function LoadingSpinner({ className }: LoadingSpinnerProps) {
-  return <Loader2 className={cn('animate-spin text-blue-500', className)} />;
+export function LoadingSpinner({ className, size = 24 }: LoadingSpinnerProps) {
+  return (
+    <Loader2
+      size={size}
+      className={cn('animate-spin text-blue-500', className)}
+    />
+  );
 }

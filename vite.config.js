@@ -1,8 +1,16 @@
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
+
 export default defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        visualizer({
+            emitFile: true,
+            filename: 'stats.html',
+        }),
+    ],
     server: {
         proxy: {
             '/api': {
@@ -41,7 +49,6 @@ export default defineConfig({
                     ],
                     'vendor-utils': [
                         'colord',
-                        'colorthief',
                         'node-vibrant',
                         'html2canvas',
                         '@iarna/toml',

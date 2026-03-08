@@ -23,20 +23,17 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
         ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
         target.isContentEditable;
 
-      const keys = e.key.toLowerCase();
-      const isUndoRedo =
-        (e.metaKey || e.ctrlKey) && (keys === 'z' || keys === 'y');
-
-      // If we are in an editable element, let the browser handle basic text editing keys
-      // and undo/redo natively.
-      if (isEditable && isUndoRedo) {
-        return;
+      // START FIX: Task A
+      // When in an input, suppress all custom shortcuts (like Cmd+Z for theme undo)
+      // so the browser can handle text editing natively.
+      // Exception: Allow Cmd+S (Save) to trigger from anywhere.
+      if (isEditable) {
+        const isSave = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's';
+        if (!isSave) {
+          return;
+        }
       }
-
-      // Existing general guard
-      if (isEditable && !e.metaKey && !e.ctrlKey) {
-        return;
-      }
+      // END FIX
 
       shortcutsRef.current.forEach((shortcut) => {
         const keys = shortcut.keys.toLowerCase().split('+');
