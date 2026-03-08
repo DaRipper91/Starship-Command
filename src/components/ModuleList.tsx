@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Search, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
@@ -31,7 +31,8 @@ interface ModuleItem {
   isCustom?: boolean;
 }
 
-function SortableItem({
+// Memoized SortableItem to prevent re-renders on drag
+const SortableItem = memo(function SortableItem({
   item,
   isSelected,
   onSelect,
@@ -117,9 +118,14 @@ function SortableItem({
       </div>
     </div>
   );
-}
+});
 
-export function ModuleList({ className }: { className?: string }) {
+// Memoized ModuleList to optimize list rendering
+export const ModuleList = memo(function ModuleList({
+  className,
+}: {
+  className?: string;
+}) {
   const { currentTheme, updateConfig, selectedModule, setSelectedModule } =
     useThemeStore();
   const activeModulesStore = useThemeStore(selectActiveModules);
@@ -146,9 +152,14 @@ export function ModuleList({ className }: { className?: string }) {
   const filteredActiveModules = useMemo(() => {
     if (!searchTerm) return activeModulesStore;
     const term = searchTerm.toLowerCase();
-    return activeModulesStore.filter((m) =>
-      m.name.toLowerCase().includes(term),
-    );
+    return activeModulesStore.filter((m) => {
+      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      return (
+        m.name.toLowerCase().includes(term) ||
+        def?.title.toLowerCase().includes(term) ||
+        def?.description.toLowerCase().includes(term)
+      );
+    });
   }, [activeModulesStore, searchTerm]);
 
   const inactiveModules = useMemo(() => {
@@ -156,29 +167,44 @@ export function ModuleList({ className }: { className?: string }) {
     const inactive = allModules.filter((def) => !activeNames.has(def.id));
     if (!searchTerm) return inactive;
     const term = searchTerm.toLowerCase();
-    return inactive.filter((m) => m.name.toLowerCase().includes(term));
+    return inactive.filter((m) => {
+      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      return (
+        m.name.toLowerCase().includes(term) ||
+        def?.title.toLowerCase().includes(term) ||
+        def?.description.toLowerCase().includes(term)
+      );
+    });
   }, [activeModulesStore, allModules, searchTerm]);
 
-  const handleToggle = (name: string, enable: boolean) => {
-    let newFormat = currentTheme.config.format || '';
-    if (enable) {
-      newFormat += `$${name}`;
-    } else {
-      const regex = new RegExp(`\\$${name}\\b`, 'g');
-      newFormat = newFormat.replace(regex, '');
-    }
+  const handleToggle = useCallback(
+    (name: string, enable: boolean) => {
+      setSearchTerm('');
+      let newFormat = currentTheme.config.format || '';
+      if (enable) {
+        newFormat += `$${name}`;
+      } else {
+        const regex = new RegExp(`\\$${name}\\b`, 'g');
+        newFormat = newFormat.replace(regex, '');
+      }
 
-    const existingModuleConfig =
-      (currentTheme.config[name] as BaseModuleConfig) || {};
+      const existingModuleConfig =
+        (currentTheme.config[name] as BaseModuleConfig) || {};
 
-    updateConfig({
-      format: newFormat,
-      [name]: { ...existingModuleConfig, disabled: !enable },
-    });
-  };
+      updateConfig({
+        format: newFormat,
+        [name]: { ...existingModuleConfig, disabled: !enable },
+      });
+    },
+    [currentTheme.config, updateConfig],
+  );
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -211,35 +237,38 @@ export function ModuleList({ className }: { className?: string }) {
 
   return (
     <div className={cn('flex flex-col gap-6', className)}>
+      {/* Search Input */}
       <div className="relative">
         <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+          size={14}
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
         />
         <input
-          type="text"
+          type="search"
           placeholder="Search modules..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full rounded-md border border-gray-700 bg-gray-800/50 py-2 pl-10 pr-10 text-sm text-gray-100 placeholder-gray-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-700 bg-gray-800/50 py-2 pl-9 pr-9 text-sm text-gray-100 placeholder-gray-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
         {searchTerm && (
           <button
             onClick={() => setSearchTerm('')}
+            aria-label="Clear search"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
           >
-            <X size={16} />
+            <X size={14} />
           </button>
         )}
       </div>
 
+      {/* Active Modules */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
             Active Modules
           </h2>
           <span className="text-xs text-gray-500">
-            {activeModulesStore.length} enabled
+            {filteredActiveModules.length} {searchTerm ? 'matching' : 'enabled'}
           </span>
         </div>
 
@@ -250,7 +279,7 @@ export function ModuleList({ className }: { className?: string }) {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={filteredActiveModules.map((m) => m.id)}
+            items={activeModulesStore.map((m) => m.id)}
             strategy={verticalListSortingStrategy}
           >
             <div className="flex flex-col gap-2">
@@ -289,6 +318,7 @@ export function ModuleList({ className }: { className?: string }) {
         </DndContext>
       </div>
 
+      {/* Inactive / Disabled Modules */}
       {(inactiveModules.length > 0 || searchTerm) && (
         <div className="flex flex-col gap-3 border-t border-gray-800 pt-4">
           <div className="flex items-center justify-between">
@@ -296,7 +326,7 @@ export function ModuleList({ className }: { className?: string }) {
               Disabled Modules
             </h2>
             <span className="text-xs text-gray-600">
-              {inactiveModules.length} found
+              {inactiveModules.length} {searchTerm ? 'matching' : 'disabled'}
             </span>
           </div>
 
@@ -347,6 +377,14 @@ export function ModuleList({ className }: { className?: string }) {
           </div>
         </div>
       )}
+
+      {searchTerm &&
+        filteredActiveModules.length === 0 &&
+        inactiveModules.length === 0 && (
+          <div className="py-6 text-center text-sm text-gray-500">
+            No modules found matching &quot;{searchTerm}&quot;
+          </div>
+        )}
     </div>
   );
-}
+});
