@@ -1,55 +1,49 @@
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+import { LogLevel } from '../types';
 
+/* eslint-disable no-console */
 class Logger {
   private level: LogLevel =
     import.meta.env.MODE === 'production' ? 'error' : 'debug';
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private log(level: LogLevel, message: string, ...args: unknown[]) {
     // Basic level check
     const levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
-    if (levels.indexOf(level) < levels.indexOf(this.level)) {
-      return;
-    }
+    const currentLevelIndex = levels.indexOf(this.level);
+    const targetLevelIndex = levels.indexOf(level);
 
-    const timestamp = new Date().toISOString();
-    const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+    if (targetLevelIndex >= currentLevelIndex) {
+      const timestamp = new Date().toISOString();
+      const prefix = `[${timestamp}] [${level.toUpperCase()}]`;
 
-    switch (level) {
-      case 'debug':
-        // eslint-disable-next-line no-console
-        console.debug(formattedMessage, ...args);
-        break;
-      case 'info':
-        // eslint-disable-next-line no-console
-        console.info(formattedMessage, ...args);
-        break;
-      case 'warn':
-        console.warn(formattedMessage, ...args);
-        break;
-      case 'error':
-        console.error(formattedMessage, ...args);
-        // Could integrate with a remote error reporting service like Sentry here
-        break;
+      switch (level) {
+        case 'debug':
+          console.debug(prefix, message, ...args);
+          break;
+        case 'info':
+          console.info(prefix, message, ...args);
+          break;
+        case 'warn':
+          console.warn(prefix, message, ...args);
+          break;
+        case 'error':
+          console.error(prefix, message, ...args);
+          break;
+      }
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   debug(message: string, ...args: unknown[]) {
     this.log('debug', message, ...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   info(message: string, ...args: unknown[]) {
     this.log('info', message, ...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   warn(message: string, ...args: unknown[]) {
     this.log('warn', message, ...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error(message: string, ...args: unknown[]) {
     this.log('error', message, ...args);
   }

@@ -194,6 +194,24 @@ export class TomlParser {
           ) {
             errors.push(`Module '${key}': 'disabled' must be a boolean`);
           }
+          if (
+            modConfig.format !== undefined &&
+            typeof modConfig.format !== 'string'
+          ) {
+            errors.push(`Module '${key}': 'format' must be a string`);
+          }
+          if (
+            modConfig.style !== undefined &&
+            typeof modConfig.style !== 'string'
+          ) {
+            errors.push(`Module '${key}': 'style' must be a string`);
+          }
+          if (
+            modConfig.symbol !== undefined &&
+            typeof modConfig.symbol !== 'string'
+          ) {
+            errors.push(`Module '${key}': 'symbol' must be a string`);
+          }
         }
       } else {
         // Unknown key - effectively an unknown module

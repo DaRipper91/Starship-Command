@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { ToastProvider } from '../../contexts/ToastContext';
 import { TerminalPreview } from '../TerminalPreview';
 
 // Mock xterm globals
@@ -38,7 +39,11 @@ class MockResizeObserver {
 
 describe('TerminalPreview', () => {
   it('renders correctly', () => {
-    const { container } = render(<TerminalPreview />);
+    const { container } = render(
+      <ToastProvider>
+        <TerminalPreview />
+      </ToastProvider>,
+    );
     expect(container.firstChild).toBeInTheDocument();
   });
 });

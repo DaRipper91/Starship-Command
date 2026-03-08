@@ -12,24 +12,19 @@ import {
   Undo,
   X,
 } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 
 import { AuthModal } from './components/AuthModal';
 import { CommandPalette } from './components/CommandPalette';
-import { ComparisonView } from './components/ComparisonView';
 import { DynamicThemeSettingsModal } from './components/DynamicThemeSettingsModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { ExportImport } from './components/ExportImport';
-import { PresetSelector } from './components/PresetSelector';
 import { FontSelector } from './components/FontSelector';
 import { GlobalFormatControls } from './components/GlobalFormatControls';
-import { ImagePalette } from './components/ImagePalette';
+import { LoadingSpinner } from './components/LoadingSpinner';
 import { ModuleConfig } from './components/ModuleConfig';
 import { ModuleList } from './components/ModuleList';
-import { SolarSystem } from './components/SolarSystem';
+import { PresetSelector } from './components/PresetSelector';
 import { SuggestionPanel } from './components/SuggestionPanel';
-import { TerminalPreview } from './components/TerminalPreview';
-import { ThemeGallery } from './components/ThemeGallery';
 import { ThemeUploadModal } from './components/ThemeUploadModal';
 import { WelcomeWizard } from './components/WelcomeWizard';
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
@@ -40,6 +35,37 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { cn } from './lib/utils';
 import { useThemeStore } from './stores/theme-store';
 import { useUIStore } from './stores/ui-store';
+
+const ComparisonView = React.lazy(() =>
+  import('./components/ComparisonView').then((module) => ({
+    default: module.ComparisonView,
+  })),
+);
+const ExportImport = React.lazy(() =>
+  import('./components/ExportImport').then((module) => ({
+    default: module.ExportImport,
+  })),
+);
+const ImagePalette = React.lazy(() =>
+  import('./components/ImagePalette').then((module) => ({
+    default: module.ImagePalette,
+  })),
+);
+const TerminalPreview = React.lazy(() =>
+  import('./components/TerminalPreview').then((module) => ({
+    default: module.TerminalPreview,
+  })),
+);
+const ThemeGallery = React.lazy(() =>
+  import('./components/ThemeGallery').then((module) => ({
+    default: module.ThemeGallery,
+  })),
+);
+const SolarSystem = React.lazy(() =>
+  import('./components/SolarSystem').then((module) => ({
+    default: module.SolarSystem,
+  })),
+);
 
 function AppContent() {
   const {
@@ -70,6 +96,12 @@ function AppContent() {
     setShowDynamicThemeSettings,
     showSolarSystem,
     setShowSolarSystem,
+    showAuthModal,
+    setShowAuthModal,
+    showUploadModal,
+    setShowUploadModal,
+    currentUser,
+    setCurrentUser,
     layoutMode,
     setLayoutMode,
     themeName,
@@ -78,12 +110,6 @@ function AppContent() {
     setLeftSidebarOpen,
     rightSidebarOpen,
     setRightSidebarOpen,
-    showAuthModal,
-    setShowAuthModal,
-    showUploadModal,
-    setShowUploadModal,
-    currentUser,
-    setCurrentUser,
   } = useUIStore();
 
   const { addToast } = useToast();
@@ -321,6 +347,7 @@ function AppContent() {
             </button>
           </div>
 
+          <PresetSelector />
           <button
             onClick={handleSave}
             className="flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500"
@@ -389,7 +416,15 @@ function AppContent() {
               Colors
             </h2>
             <ErrorBoundary>
-              <ImagePalette />
+              <Suspense
+                fallback={
+                  <div className="flex justify-center p-4">
+                    <LoadingSpinner size={24} />
+                  </div>
+                }
+              >
+                <ImagePalette />
+              </Suspense>
             </ErrorBoundary>
           </div>
           <div className="border-t border-gray-800 p-4">
@@ -410,11 +445,19 @@ function AppContent() {
           <div className="bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10" />
           <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center">
             <ErrorBoundary>
-              <TerminalPreview
-                id="terminal-preview-capture-source"
-                className="w-full shadow-2xl"
-                fontFamily={currentTheme.metadata.fontFamily}
-              />
+              <Suspense
+                fallback={
+                  <div className="flex h-48 items-center justify-center rounded-lg border border-gray-700 bg-gray-900 shadow-2xl">
+                    <LoadingSpinner size={32} />
+                  </div>
+                }
+              >
+                <TerminalPreview
+                  id="terminal-preview-capture-source"
+                  className="w-full shadow-2xl"
+                  fontFamily={currentTheme.metadata.fontFamily}
+                />
+              </Suspense>
             </ErrorBoundary>
           </div>
         </main>
@@ -467,16 +510,32 @@ function AppContent() {
       {/* MODALS */}
       {showExportImport && (
         <ErrorBoundary>
-          <ExportImport
-            initialTab={showExportImport}
-            onClose={() => setShowExportImport(null)}
-          />
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+                <LoadingSpinner size={32} />
+              </div>
+            }
+          >
+            <ExportImport
+              initialTab={showExportImport}
+              onClose={() => setShowExportImport(null)}
+            />
+          </Suspense>
         </ErrorBoundary>
       )}
 
       {showComparison && (
         <ErrorBoundary>
-          <ComparisonView onClose={() => setShowComparison(false)} />
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+                <LoadingSpinner size={32} />
+              </div>
+            }
+          >
+            <ComparisonView onClose={() => setShowComparison(false)} />
+          </Suspense>
         </ErrorBoundary>
       )}
 
@@ -491,7 +550,9 @@ function AppContent() {
       {showSolarSystem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <ErrorBoundary>
-            <SolarSystem onClose={() => setShowSolarSystem(false)} />
+            <Suspense fallback={<LoadingSpinner size={32} />}>
+              <SolarSystem onClose={() => setShowSolarSystem(false)} />
+            </Suspense>
           </ErrorBoundary>
         </div>
       )}
@@ -501,8 +562,8 @@ function AppContent() {
           <ErrorBoundary>
             <AuthModal
               onClose={() => setShowAuthModal(false)}
-              onLoginSuccess={(id, username) => {
-                setCurrentUser({ id, username });
+              onLoginSuccess={(id, name) => {
+                setCurrentUser({ id, name });
                 setShowAuthModal(false);
               }}
             />
@@ -535,7 +596,15 @@ function AppContent() {
             </div>
             <div className="flex-1 overflow-hidden">
               <ErrorBoundary>
-                <ThemeGallery onSelect={() => setShowGallery(false)} />
+                <Suspense
+                  fallback={
+                    <div className="flex h-full items-center justify-center">
+                      <LoadingSpinner size={32} />
+                    </div>
+                  }
+                >
+                  <ThemeGallery onSelect={() => setShowGallery(false)} />
+                </Suspense>
               </ErrorBoundary>
             </div>
           </div>

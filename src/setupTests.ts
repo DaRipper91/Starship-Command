@@ -28,3 +28,35 @@ const localStorageMock = {
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
+
+// Mock Worker
+class MockWorker {
+  url: string | URL;
+  onmessage: ((this: Worker, ev: MessageEvent) => unknown) | null = null;
+  onerror: ((this: AbstractWorker, ev: ErrorEvent) => unknown) | null = null;
+
+  constructor(stringUrl: string | URL) {
+    this.url = stringUrl;
+  }
+
+  postMessage(_message: unknown) {
+    // Dummy implementation
+  }
+
+  terminate() {
+    // Dummy implementation
+  }
+
+  addEventListener() {}
+  removeEventListener() {}
+  dispatchEvent() {
+    return true;
+  }
+}
+
+(globalThis as unknown as { Worker: typeof MockWorker }).Worker = MockWorker;
+
+// Mock createImageBitmap
+(globalThis as unknown as { createImageBitmap: unknown }).createImageBitmap = vi
+  .fn()
+  .mockResolvedValue({});
