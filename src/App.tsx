@@ -12,7 +12,7 @@ import {
   Undo,
   X,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { AuthModal } from './components/AuthModal';
 import { CommandPalette } from './components/CommandPalette';
@@ -20,6 +20,7 @@ import { ComparisonView } from './components/ComparisonView';
 import { DynamicThemeSettingsModal } from './components/DynamicThemeSettingsModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExportImport } from './components/ExportImport';
+import { PresetSelector } from './components/PresetSelector';
 import { FontSelector } from './components/FontSelector';
 import { GlobalFormatControls } from './components/GlobalFormatControls';
 import { ImagePalette } from './components/ImagePalette';
@@ -71,12 +72,21 @@ function AppContent() {
     setShowSolarSystem,
     layoutMode,
     setLayoutMode,
+    themeName,
+    setThemeName,
+    leftSidebarOpen,
+    setLeftSidebarOpen,
+    rightSidebarOpen,
+    setRightSidebarOpen,
+    showAuthModal,
+    setShowAuthModal,
+    showUploadModal,
+    setShowUploadModal,
+    currentUser,
+    setCurrentUser,
   } = useUIStore();
 
   const { addToast } = useToast();
-  const [themeName, setThemeName] = useState(
-    currentTheme.metadata.name || 'My Awesome Theme',
-  );
 
   // Derive effective layout mode
   const isMobileLayout =
@@ -85,11 +95,6 @@ function AppContent() {
   const isDesktopLayout =
     layoutMode === 'desktop' ||
     (layoutMode === 'auto' && window.innerWidth > 1024);
-
-  const [leftSidebarOpen, setLeftSidebarOpen] = useState(isDesktopLayout);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(
-    isDesktopLayout && window.innerWidth > 1280,
-  );
 
   // Sync sidebars when layout mode changes
   useEffect(() => {
@@ -100,20 +105,13 @@ function AppContent() {
       setLeftSidebarOpen(false);
       setRightSidebarOpen(false);
     }
-  }, [layoutMode]);
-
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{
-    id: number;
-    username: string;
-  } | null>(null);
+  }, [layoutMode, setLeftSidebarOpen, setRightSidebarOpen]);
 
   useDynamicTheme();
 
   useEffect(() => {
     setThemeName(currentTheme.metadata.name || 'My Awesome Theme');
-  }, [currentTheme.metadata.id, currentTheme.metadata.name]);
+  }, [currentTheme.metadata.id, currentTheme.metadata.name, setThemeName]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
@@ -374,7 +372,11 @@ function AppContent() {
                 : '-translate-x-full',
           )}
         >
-          <div className="p-4">
+          <ErrorBoundary>
+            <PresetSelector />
+          </ErrorBoundary>
+
+          <div className="border-t border-gray-800 p-4">
             <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
               Modules
             </h2>

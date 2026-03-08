@@ -1,5 +1,4 @@
 import { Copy, Download, Share2, Terminal } from 'lucide-react';
-import React from 'react';
 
 import { useToast } from '../../contexts/ToastContext';
 import { TomlParser } from '../../lib/toml-parser';

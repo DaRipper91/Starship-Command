@@ -104,7 +104,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
       try {
         // The theme object from the API already contains config_toml
         // We need to parse it back into the StarshipConfig object and load it.
-        const newConfig = JSON.parse(theme.config_toml); // Assuming it's JSON stringified TOML
+        const newConfig = JSON.parse(theme.config_toml) as Theme['config']; // Assuming it's JSON stringified TOML
         const downloadedTheme: Theme = {
           metadata: {
             id: theme.id.toString(),

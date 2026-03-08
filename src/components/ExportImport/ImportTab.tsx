@@ -40,12 +40,21 @@ export function ImportTab({ onClose }: ImportTabProps) {
       setPendingImport(null);
 
       // Try to parse to see if it's valid
-      const parsedConfig = TomlParser.parse(tomlString);
+      let parsedConfig;
+      try {
+        parsedConfig = TomlParser.parse(tomlString);
+      } catch (parseError) {
+        setValidationError(
+          `Invalid TOML syntax: ${parseError instanceof Error ? parseError.message : String(parseError)}`,
+        );
+        return false;
+      }
+
       const { valid, errors, warnings } = TomlParser.validate(parsedConfig);
 
       if (!valid) {
         setValidationError(
-          `Invalid config: ${errors.join(', ') || 'Unknown error'}`,
+          `Invalid configuration structure: ${errors.join(', ') || 'Unknown error. Check that all modules are properly formatted.'}`,
         );
         return false;
       }
@@ -64,7 +73,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
       return true;
     } catch (err) {
       setValidationError(
-        `Invalid TOML syntax: ${err instanceof Error ? err.message : String(err)}`,
+        `Import failed: ${err instanceof Error ? err.message : String(err)}`,
       );
       return false;
     }

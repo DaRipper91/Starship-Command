@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
