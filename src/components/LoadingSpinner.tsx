@@ -8,5 +8,10 @@ interface LoadingSpinnerProps {
 }
 
 export function LoadingSpinner({ className, size = 24 }: LoadingSpinnerProps) {
-  return <Loader2 size={size} className={cn('animate-spin text-blue-500', className)} />;
+  return (
+    <Loader2
+      size={size}
+      className={cn('animate-spin text-blue-500', className)}
+    />
+  );
 }
