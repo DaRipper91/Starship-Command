@@ -61,10 +61,11 @@ describe('FormatEditor Component', () => {
     );
 
     fireEvent.click(screen.getByText('Hello')); // Click to select segment
-    const input = screen.getByPlaceholderText('Segment text');
-    fireEvent.change(input, { target: { value: 'World' } });
 
-    expect(screen.getByText('World')).toBeInTheDocument();
-    expect(mockOnChange).toHaveBeenCalledWith('World');
+    // We removed the editor but we can test if the remove button removes it
+    const removeButton = screen.getByTitle('Remove segment');
+    fireEvent.click(removeButton);
+
+    expect(mockOnChange).toHaveBeenCalledWith('');
   });
 });

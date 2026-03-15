@@ -1,1 +1,973 @@
-(function(){"use strict";class R{constructor(t,e){this.pixels=t,this.opts=e;const{sigBits:i}=e,r=(x,y,m)=>(x<<2*i)+(y<<i)+m;this.getColorIndex=r;const s=8-i,o=1<<3*i,a=new Uint32Array(o);let h,u,l,_,f,b,c,g,d,p;h=l=f=0,u=_=b=Number.MAX_VALUE;const C=t.length/4;let S=0;for(;S<C;){const x=S*4;if(S++,c=t[x+0],g=t[x+1],d=t[x+2],p=t[x+3],p===0)continue;c=c>>s,g=g>>s,d=d>>s;const y=r(c,g,d);a[y]===void 0&&(a[y]=0),a[y]+=1,c>h&&(h=c),c<u&&(u=c),g>l&&(l=g),g<_&&(_=g),d>f&&(f=d),d<b&&(b=d)}this._colorCount=a.reduce((x,y)=>y>0?x+1:x,0),this.hist=a,this.rmax=h,this.rmin=u,this.gmax=l,this.gmin=_,this.bmax=f,this.bmin=b}get colorCount(){return this._colorCount}}class Q{scaleDown(t){const e=this.getWidth(),i=this.getHeight();let r=1;if(t.maxDimension>0){const s=Math.max(e,i);s>t.maxDimension&&(r=t.maxDimension/s)}else r=1/t.quality;r<1&&this.resize(e*r,i*r,r)}}function G(n,t){if(t.length>0){const e=n.data,i=e.length/4;let r,s,o,a,h;for(let u=0;u<i;u++){r=u*4,s=e[r+0],o=e[r+1],a=e[r+2],h=e[r+3];for(let l=0;l<t.length;l++)if(!t[l]?.(s,o,a,h)){e[r+3]=0;break}}}return n}function Y(n){const t=new URL(n,location.href);return t.protocol===location.protocol&&t.host===location.host&&t.port===location.port}function J(n,t){const e=new URL(n),i=new URL(t);return e.protocol===i.protocol&&e.hostname===i.hostname&&e.port===i.port}class X extends Q{_getCanvas(){if(!this._canvas)throw new Error("Canvas is not initialized");return this._canvas}_getContext(){if(!this._context)throw new Error("Context is not initialized");return this._context}_getWidth(){if(!this._width)throw new Error("Width is not initialized");return this._width}_getHeight(){if(!this._height)throw new Error("Height is not initialized");return this._height}_initCanvas(){const t=this.image;if(!t)throw new Error("Image is not initialized");const e=this._canvas=document.createElement("canvas"),i=e.getContext("2d");if(!i)throw new ReferenceError("Failed to create canvas context");this._context=i,e.className="@vibrant/canvas",e.style.display="none",this._width=e.width=t.width,this._height=e.height=t.height,i.drawImage(t,0,0),document.body.appendChild(e)}load(t){let e,i;if(typeof t=="string")e=document.createElement("img"),i=t,!Y(i)&&!J(window.location.href,i)&&(e.crossOrigin="anonymous"),e.src=i;else if(t instanceof HTMLImageElement)e=t,i=t.src;else return Promise.reject(new Error("Cannot load buffer as an image in browser"));return this.image=e,new Promise((r,s)=>{const o=()=>{this._initCanvas(),r(this)};e.complete?o():(e.onload=o,e.onerror=a=>s(new Error(`Fail to load image: ${i}`)))})}clear(){this._getContext().clearRect(0,0,this._getWidth(),this._getHeight())}update(t){this._getContext().putImageData(t,0,0)}getWidth(){return this._getWidth()}getHeight(){return this._getHeight()}resize(t,e,i){if(!this.image)throw new Error("Image is not initialized");this._width=this._getCanvas().width=t,this._height=this._getCanvas().height=e,this._getContext().scale(i,i),this._getContext().drawImage(this.image,0,0)}getPixelCount(){return this._getWidth()*this._getHeight()}getImageData(){return this._getContext().getImageData(0,0,this._getWidth(),this._getHeight())}remove(){this._canvas&&this._canvas.parentNode&&this._canvas.parentNode.removeChild(this._canvas)}}function z(n,...t){return t.forEach(e=>{if(e){for(const i in e)if(e.hasOwnProperty(i)){const r=e[i];Array.isArray(r)?n[i]=r.slice(0):typeof r=="object"?(n[i]||(n[i]={}),z(n[i],r)):n[i]=r}}}),n}function $(n,t){const{colorCount:e,quantizer:i,generators:r,filters:s}=n,o={colorCount:e},a=typeof i=="string"?{name:i,options:{}}:i;return a.options=z({},o,a.options),z({},{quantizer:a,generators:r,filters:s},t)}class K{constructor(t,e={}){this._src=t,this._opts=z({},k.DefaultOpts,e)}maxColorCount(t){return this._opts.colorCount=t,this}maxDimension(t){return this._opts.maxDimension=t,this}addFilter(t){return this._opts.filters?this._opts.filters.push(t):this._opts.filters=[t],this}removeFilter(t){if(this._opts.filters){const e=this._opts.filters.indexOf(t);e>0&&this._opts.filters.splice(e)}return this}clearFilters(){return this._opts.filters=[],this}quality(t){return this._opts.quality=t,this}useImageClass(t){return this._opts.ImageClass=t,this}useGenerator(t,e){return this._opts.generators||(this._opts.generators=[]),this._opts.generators.push(e?{name:t,options:e}:t),this}useQuantizer(t,e){return this._opts.quantizer=e?{name:t,options:e}:t,this}build(){return new k(this._src,this._opts)}getPalette(){return this.build().getPalette()}}class E{constructor(t){this.pipeline=t,this._map={}}names(){return Object.keys(this._map)}has(t){return!!this._map[t]}get(t){return this._map[t]}register(t,e){return this._map[t]=e,this.pipeline}}class Z{constructor(){this.filter=new E(this),this.quantizer=new E(this),this.generator=new E(this)}_buildProcessTasks({filters:t,quantizer:e,generators:i}){return i.length===1&&i[0]==="*"&&(i=this.generator.names()),{filters:t.map(s=>r(this.filter,s)),quantizer:r(this.quantizer,e),generators:i.map(s=>r(this.generator,s))};function r(s,o){let a,h;return typeof o=="string"?a=o:(a=o.name,h=o.options),{name:a,fn:s.get(a),options:h}}}async process(t,e){const{filters:i,quantizer:r,generators:s}=this._buildProcessTasks(e),o=await this._filterColors(i,t),a=await this._generateColors(r,o),h=await this._generatePalettes(s,a);return{colors:a,palettes:h}}_filterColors(t,e){return Promise.resolve(G(e,t.map(({fn:i})=>i)))}_generateColors(t,e){return Promise.resolve(t.fn(e.data,t.options))}async _generatePalettes(t,e){const i=await Promise.all(t.map(({fn:r,options:s})=>Promise.resolve(r(e,s))));return Promise.resolve(i.reduce((r,s,o)=>(r[t[o].name]=s,r),{}))}}function tt(n,t,e){return"#"+((1<<24)+(n<<16)+(t<<8)+e).toString(16).slice(1,7)}function et(n,t,e){n/=255,t/=255,e/=255;const i=Math.max(n,t,e),r=Math.min(n,t,e);let s=0,o=0;const a=(i+r)/2;if(i!==r){const h=i-r;switch(o=a>.5?h/(2-i-r):h/(i+r),i){case n:s=(t-e)/h+(t<e?6:0);break;case t:s=(e-n)/h+2;break;case e:s=(n-t)/h+4;break}s/=6}return[s,o,a]}function D(n,t,e){let i,r,s;function o(a,h,u){return u<0&&(u+=1),u>1&&(u-=1),u<1/6?a+(h-a)*6*u:u<1/2?h:u<2/3?a+(h-a)*(2/3-u)*6:a}if(t===0)i=r=s=e;else{const a=e<.5?e*(1+t):e+t-e*t,h=2*e-a;i=o(h,a,n+1/3),r=o(h,a,n),s=o(h,a,n-1/3)}return[i*255,r*255,s*255]}class V{static applyFilters(t,e){return e.length>0?t.filter(({r:i,g:r,b:s})=>{for(let o=0;o<e.length;o++)if(!e[o]?.(i,r,s,255))return!1;return!0}):t}static clone(t){return new V(t._rgb,t._population)}get r(){return this._rgb[0]}get g(){return this._rgb[1]}get b(){return this._rgb[2]}get rgb(){return this._rgb}get hsl(){if(!this._hsl){const[t,e,i]=this._rgb;this._hsl=et(t,e,i)}return this._hsl}get hex(){if(!this._hex){const[t,e,i]=this._rgb;this._hex=tt(t,e,i)}return this._hex}get population(){return this._population}toJSON(){return{rgb:this.rgb,population:this.population}}getYiq(){if(!this._yiq){const t=this._rgb;this._yiq=(t[0]*299+t[1]*587+t[2]*114)/1e3}return this._yiq}get titleTextColor(){return this._titleTextColor||(this._titleTextColor=this.getYiq()<200?"#fff":"#000"),this._titleTextColor}get bodyTextColor(){return this._bodyTextColor||(this._bodyTextColor=this.getYiq()<150?"#fff":"#000"),this._bodyTextColor}constructor(t,e){this._rgb=t,this._population=e}}const q=class N{constructor(t,e){this._src=t,this.opts=z({},N.DefaultOpts,e)}static use(t){this._pipeline=t}static from(t){return new K(t)}get result(){return this._result}_process(t,e){t.scaleDown(this.opts);const i=$(this.opts,e);return N._pipeline.process(t.getImageData(),i)}async getPalette(){const t=new this.opts.ImageClass;try{const e=await t.load(this._src),i=await this._process(e,{generators:["default"]});this._result=i;const r=i.palettes.default;if(!r)throw new Error("Something went wrong and a palette was not found, please file a bug against our GitHub repo: https://github.com/vibrant-Colors/node-vibrant/");return t.remove(),r}catch(e){return t.remove(),Promise.reject(e)}}async getPalettes(){const t=new this.opts.ImageClass;try{const e=await t.load(this._src),i=await this._process(e,{generators:["*"]});this._result=i;const r=i.palettes;return t.remove(),r}catch(e){return t.remove(),Promise.reject(e)}}};q.DefaultOpts={colorCount:64,quality:5,filters:[]};let k=q;k.DefaultOpts.quantizer="mmcq",k.DefaultOpts.generators=["default"],k.DefaultOpts.filters=["default"],k.DefaultOpts.ImageClass=X;const O=5,T=8-O;class I{constructor(t,e,i,r,s,o,a){this.histogram=a,this._volume=-1,this._avg=null,this._count=-1,this.dimension={r1:t,r2:e,g1:i,g2:r,b1:s,b2:o}}static build(t){const e=new R(t,{sigBits:O}),{rmin:i,rmax:r,gmin:s,gmax:o,bmin:a,bmax:h}=e;return new I(i,r,s,o,a,h,e)}invalidate(){this._volume=this._count=-1,this._avg=null}volume(){if(this._volume<0){const{r1:t,r2:e,g1:i,g2:r,b1:s,b2:o}=this.dimension;this._volume=(e-t+1)*(r-i+1)*(o-s+1)}return this._volume}count(){if(this._count<0){const{hist:t,getColorIndex:e}=this.histogram,{r1:i,r2:r,g1:s,g2:o,b1:a,b2:h}=this.dimension;let u=0;for(let l=i;l<=r;l++)for(let _=s;_<=o;_++)for(let f=a;f<=h;f++){const b=e(l,_,f);t[b]&&(u+=t[b])}this._count=u}return this._count}clone(){const{histogram:t}=this,{r1:e,r2:i,g1:r,g2:s,b1:o,b2:a}=this.dimension;return new I(e,i,r,s,o,a,t)}avg(){if(!this._avg){const{hist:t,getColorIndex:e}=this.histogram,{r1:i,r2:r,g1:s,g2:o,b1:a,b2:h}=this.dimension;let u=0;const l=1<<8-O;let _,f,b;_=f=b=0;for(let c=i;c<=r;c++)for(let g=s;g<=o;g++)for(let d=a;d<=h;d++){const p=e(c,g,d),C=t[p];C&&(u+=C,_+=C*(c+.5)*l,f+=C*(g+.5)*l,b+=C*(d+.5)*l)}u?this._avg=[~~(_/u),~~(f/u),~~(b/u)]:this._avg=[~~(l*(i+r+1)/2),~~(l*(s+o+1)/2),~~(l*(a+h+1)/2)]}return this._avg}contains(t){let[e,i,r]=t;const{r1:s,r2:o,g1:a,g2:h,b1:u,b2:l}=this.dimension;return e>>=T,i>>=T,r>>=T,e>=s&&e<=o&&i>=a&&i<=h&&r>=u&&r<=l}split(){const{hist:t,getColorIndex:e}=this.histogram,{r1:i,r2:r,g1:s,g2:o,b1:a,b2:h}=this.dimension,u=this.count();if(!u)return[];if(u===1)return[this.clone()];const l=r-i+1,_=o-s+1,f=h-a+1,b=Math.max(l,_,f);let c=null,g,d;g=d=0;let p=null;if(b===l){p="r",c=new Uint32Array(r+1);for(let m=i;m<=r;m++){g=0;for(let w=s;w<=o;w++)for(let L=a;L<=h;L++){const M=e(m,w,L);t[M]&&(g+=t[M])}d+=g,c[m]=d}}else if(b===_){p="g",c=new Uint32Array(o+1);for(let m=s;m<=o;m++){g=0;for(let w=i;w<=r;w++)for(let L=a;L<=h;L++){const M=e(w,m,L);t[M]&&(g+=t[M])}d+=g,c[m]=d}}else{p="b",c=new Uint32Array(h+1);for(let m=a;m<=h;m++){g=0;for(let w=i;w<=r;w++)for(let L=s;L<=o;L++){const M=e(w,L,m);t[M]&&(g+=t[M])}d+=g,c[m]=d}}let C=-1;const S=new Uint32Array(c.length);for(let m=0;m<c.length;m++){const w=c[m];w&&(C<0&&w>d/2&&(C=m),S[m]=d-w)}const x=this;function y(m){const w=m+"1",L=m+"2",M=x.dimension[w];let v=x.dimension[L];const A=x.clone(),F=x.clone(),W=C-M,j=v-C;for(W<=j?(v=Math.min(v-1,~~(C+j/2)),v=Math.max(0,v)):(v=Math.max(M,~~(C-1-W/2)),v=Math.min(x.dimension[L],v));!c[v];)v++;let B=S[v];for(;!B&&c[v-1];)B=S[--v];return A.dimension[L]=v,F.dimension[w]=v+1,[A,F]}return y(p)}}class H{_sort(){this._sorted||(this.contents.sort(this._comparator),this._sorted=!0)}constructor(t){this._comparator=t,this.contents=[],this._sorted=!1}push(t){this.contents.push(t),this._sorted=!1}peek(t){return this._sort(),t=typeof t=="number"?t:this.contents.length-1,this.contents[t]}pop(){return this._sort(),this.contents.pop()}size(){return this.contents.length}map(t){return this._sort(),this.contents.map(t)}}const it=.75;function U(n,t){let e=n.size();for(;n.size()<t;){const i=n.pop();if(i&&i.count()>0){const[r,s]=i.split();if(!r||(n.push(r),s&&s.count()>0&&n.push(s),n.size()===e))break;e=n.size()}else break}}const rt=(n,t)=>{if(n.length===0||t.colorCount<2||t.colorCount>256)throw new Error("Wrong MMCQ parameters");const e=I.build(n);e.histogram.colorCount;const i=new H((s,o)=>s.count()-o.count());i.push(e),U(i,it*t.colorCount);const r=new H((s,o)=>s.count()*s.volume()-o.count()*o.volume());return r.contents=i.contents,U(r,t.colorCount-r.size()),nt(r)};function nt(n){const t=[];for(;n.size();){const e=n.pop(),i=e.avg(),[r,s,o]=i;t.push(new V(i,e.count()))}return t}const st={targetDarkLuma:.26,maxDarkLuma:.45,minLightLuma:.55,targetLightLuma:.74,minNormalLuma:.3,targetNormalLuma:.5,maxNormalLuma:.7,targetMutesSaturation:.3,maxMutesSaturation:.4,targetVibrantSaturation:1,minVibrantSaturation:.35,weightSaturation:3,weightLuma:6.5,weightPopulation:.5};function ot(n){let t=0;return n.forEach(e=>{t=Math.max(t,e.population)}),t}function at(n,t){return n.Vibrant===t||n.DarkVibrant===t||n.LightVibrant===t||n.Muted===t||n.DarkMuted===t||n.LightMuted===t}function ht(n,t,e,i,r,s,o){function a(...u){let l=0,_=0;for(let f=0;f<u.length;f+=2){const b=u[f],c=u[f+1];!b||!c||(l+=b*c,_+=c)}return l/_}function h(u,l){return 1-Math.abs(u-l)}return a(h(n,t),o.weightSaturation,h(e,i),o.weightLuma,r/s,o.weightPopulation)}function P(n,t,e,i,r,s,o,a,h,u){let l=null,_=0;return t.forEach(f=>{const[,b,c]=f.hsl;if(b>=a&&b<=h&&c>=r&&c<=s&&!at(n,f)){const g=ht(b,o,c,i,f.population,e,u);(l===null||g>_)&&(l=f,_=g)}}),l}function ut(n,t,e){const i={Vibrant:null,DarkVibrant:null,LightVibrant:null,Muted:null,DarkMuted:null,LightMuted:null};return i.Vibrant=P(i,n,t,e.targetNormalLuma,e.minNormalLuma,e.maxNormalLuma,e.targetVibrantSaturation,e.minVibrantSaturation,1,e),i.LightVibrant=P(i,n,t,e.targetLightLuma,e.minLightLuma,1,e.targetVibrantSaturation,e.minVibrantSaturation,1,e),i.DarkVibrant=P(i,n,t,e.targetDarkLuma,0,e.maxDarkLuma,e.targetVibrantSaturation,e.minVibrantSaturation,1,e),i.Muted=P(i,n,t,e.targetNormalLuma,e.minNormalLuma,e.maxNormalLuma,e.targetMutesSaturation,0,e.maxMutesSaturation,e),i.LightMuted=P(i,n,t,e.targetLightLuma,e.minLightLuma,1,e.targetMutesSaturation,0,e.maxMutesSaturation,e),i.DarkMuted=P(i,n,t,e.targetDarkLuma,0,e.maxDarkLuma,e.targetMutesSaturation,0,e.maxMutesSaturation,e),i}function lt(n,t,e){if(!n.Vibrant&&!n.DarkVibrant&&!n.LightVibrant){if(!n.DarkVibrant&&n.DarkMuted){let[i,r,s]=n.DarkMuted.hsl;s=e.targetDarkLuma,n.DarkVibrant=new V(D(i,r,s),0)}if(!n.LightVibrant&&n.LightMuted){let[i,r,s]=n.LightMuted.hsl;s=e.targetDarkLuma,n.DarkVibrant=new V(D(i,r,s),0)}}if(!n.Vibrant&&n.DarkVibrant){let[i,r,s]=n.DarkVibrant.hsl;s=e.targetNormalLuma,n.Vibrant=new V(D(i,r,s),0)}else if(!n.Vibrant&&n.LightVibrant){let[i,r,s]=n.LightVibrant.hsl;s=e.targetNormalLuma,n.Vibrant=new V(D(i,r,s),0)}if(!n.DarkVibrant&&n.Vibrant){let[i,r,s]=n.Vibrant.hsl;s=e.targetDarkLuma,n.DarkVibrant=new V(D(i,r,s),0)}if(!n.LightVibrant&&n.Vibrant){let[i,r,s]=n.Vibrant.hsl;s=e.targetLightLuma,n.LightVibrant=new V(D(i,r,s),0)}if(!n.Muted&&n.Vibrant){let[i,r,s]=n.Vibrant.hsl;s=e.targetMutesSaturation,n.Muted=new V(D(i,r,s),0)}if(!n.DarkMuted&&n.DarkVibrant){let[i,r,s]=n.DarkVibrant.hsl;s=e.targetMutesSaturation,n.DarkMuted=new V(D(i,r,s),0)}if(!n.LightMuted&&n.LightVibrant){let[i,r,s]=n.LightVibrant.hsl;s=e.targetMutesSaturation,n.LightMuted=new V(D(i,r,s),0)}}const ct=((n,t)=>{t=Object.assign({},st,t);const e=ot(n),i=ut(n,e,t);return lt(i,e,t),i}),gt=new Z().filter.register("default",(n,t,e,i)=>i>=125&&!(n>250&&t>250&&e>250)).quantizer.register("mmcq",rt).generator.register("default",ct);k.use(gt),self.onmessage=async n=>{const{imageUrl:t}=n.data;try{const i=await new k(t).getPalette();if(!i)throw new Error("Failed to extract palette");const r={};i.Vibrant&&(r.primary=i.Vibrant.hex),i.Muted&&(r.secondary=i.Muted.hex),i.LightVibrant&&(r.accent=i.LightVibrant.hex),i.DarkVibrant&&(r.background=i.DarkVibrant.hex),i.LightMuted&&(r.foreground=i.LightMuted.hex),r.success=r.primary,r.warning=r.secondary,r.error=r.accent,self.postMessage({type:"success",payload:r})}catch(e){self.postMessage({type:"error",error:e instanceof Error?e.message:"Unknown error"})}}})();
+(function () {
+  'use strict';
+  class R {
+    constructor(t, e) {
+      ((this.pixels = t), (this.opts = e));
+      const { sigBits: i } = e,
+        r = (x, y, m) => (x << (2 * i)) + (y << i) + m;
+      this.getColorIndex = r;
+      const s = 8 - i,
+        o = 1 << (3 * i),
+        a = new Uint32Array(o);
+      let h, u, l, _, f, b, c, g, d, p;
+      ((h = l = f = 0), (u = _ = b = Number.MAX_VALUE));
+      const C = t.length / 4;
+      let S = 0;
+      for (; S < C; ) {
+        const x = S * 4;
+        if (
+          (S++,
+          (c = t[x + 0]),
+          (g = t[x + 1]),
+          (d = t[x + 2]),
+          (p = t[x + 3]),
+          p === 0)
+        )
+          continue;
+        ((c = c >> s), (g = g >> s), (d = d >> s));
+        const y = r(c, g, d);
+        (a[y] === void 0 && (a[y] = 0),
+          (a[y] += 1),
+          c > h && (h = c),
+          c < u && (u = c),
+          g > l && (l = g),
+          g < _ && (_ = g),
+          d > f && (f = d),
+          d < b && (b = d));
+      }
+      ((this._colorCount = a.reduce((x, y) => (y > 0 ? x + 1 : x), 0)),
+        (this.hist = a),
+        (this.rmax = h),
+        (this.rmin = u),
+        (this.gmax = l),
+        (this.gmin = _),
+        (this.bmax = f),
+        (this.bmin = b));
+    }
+    get colorCount() {
+      return this._colorCount;
+    }
+  }
+  class Q {
+    scaleDown(t) {
+      const e = this.getWidth(),
+        i = this.getHeight();
+      let r = 1;
+      if (t.maxDimension > 0) {
+        const s = Math.max(e, i);
+        s > t.maxDimension && (r = t.maxDimension / s);
+      } else r = 1 / t.quality;
+      r < 1 && this.resize(e * r, i * r, r);
+    }
+  }
+  function G(n, t) {
+    if (t.length > 0) {
+      const e = n.data,
+        i = e.length / 4;
+      let r, s, o, a, h;
+      for (let u = 0; u < i; u++) {
+        ((r = u * 4),
+          (s = e[r + 0]),
+          (o = e[r + 1]),
+          (a = e[r + 2]),
+          (h = e[r + 3]));
+        for (let l = 0; l < t.length; l++)
+          if (!t[l]?.(s, o, a, h)) {
+            e[r + 3] = 0;
+            break;
+          }
+      }
+    }
+    return n;
+  }
+  function Y(n) {
+    const t = new URL(n, location.href);
+    return (
+      t.protocol === location.protocol &&
+      t.host === location.host &&
+      t.port === location.port
+    );
+  }
+  function J(n, t) {
+    const e = new URL(n),
+      i = new URL(t);
+    return (
+      e.protocol === i.protocol &&
+      e.hostname === i.hostname &&
+      e.port === i.port
+    );
+  }
+  class X extends Q {
+    _getCanvas() {
+      if (!this._canvas) throw new Error('Canvas is not initialized');
+      return this._canvas;
+    }
+    _getContext() {
+      if (!this._context) throw new Error('Context is not initialized');
+      return this._context;
+    }
+    _getWidth() {
+      if (!this._width) throw new Error('Width is not initialized');
+      return this._width;
+    }
+    _getHeight() {
+      if (!this._height) throw new Error('Height is not initialized');
+      return this._height;
+    }
+    _initCanvas() {
+      const t = this.image;
+      if (!t) throw new Error('Image is not initialized');
+      const e = (this._canvas = document.createElement('canvas')),
+        i = e.getContext('2d');
+      if (!i) throw new ReferenceError('Failed to create canvas context');
+      ((this._context = i),
+        (e.className = '@vibrant/canvas'),
+        (e.style.display = 'none'),
+        (this._width = e.width = t.width),
+        (this._height = e.height = t.height),
+        i.drawImage(t, 0, 0),
+        document.body.appendChild(e));
+    }
+    load(t) {
+      let e, i;
+      if (typeof t == 'string')
+        ((e = document.createElement('img')),
+          (i = t),
+          !Y(i) && !J(window.location.href, i) && (e.crossOrigin = 'anonymous'),
+          (e.src = i));
+      else if (t instanceof HTMLImageElement) ((e = t), (i = t.src));
+      else
+        return Promise.reject(
+          new Error('Cannot load buffer as an image in browser'),
+        );
+      return (
+        (this.image = e),
+        new Promise((r, s) => {
+          const o = () => {
+            (this._initCanvas(), r(this));
+          };
+          e.complete
+            ? o()
+            : ((e.onload = o),
+              (e.onerror = (a) => s(new Error(`Fail to load image: ${i}`))));
+        })
+      );
+    }
+    clear() {
+      this._getContext().clearRect(0, 0, this._getWidth(), this._getHeight());
+    }
+    update(t) {
+      this._getContext().putImageData(t, 0, 0);
+    }
+    getWidth() {
+      return this._getWidth();
+    }
+    getHeight() {
+      return this._getHeight();
+    }
+    resize(t, e, i) {
+      if (!this.image) throw new Error('Image is not initialized');
+      ((this._width = this._getCanvas().width = t),
+        (this._height = this._getCanvas().height = e),
+        this._getContext().scale(i, i),
+        this._getContext().drawImage(this.image, 0, 0));
+    }
+    getPixelCount() {
+      return this._getWidth() * this._getHeight();
+    }
+    getImageData() {
+      return this._getContext().getImageData(
+        0,
+        0,
+        this._getWidth(),
+        this._getHeight(),
+      );
+    }
+    remove() {
+      this._canvas &&
+        this._canvas.parentNode &&
+        this._canvas.parentNode.removeChild(this._canvas);
+    }
+  }
+  function z(n, ...t) {
+    return (
+      t.forEach((e) => {
+        if (e) {
+          for (const i in e)
+            if (e.hasOwnProperty(i)) {
+              const r = e[i];
+              Array.isArray(r)
+                ? (n[i] = r.slice(0))
+                : typeof r == 'object'
+                  ? (n[i] || (n[i] = {}), z(n[i], r))
+                  : (n[i] = r);
+            }
+        }
+      }),
+      n
+    );
+  }
+  function $(n, t) {
+    const { colorCount: e, quantizer: i, generators: r, filters: s } = n,
+      o = { colorCount: e },
+      a = typeof i == 'string' ? { name: i, options: {} } : i;
+    return (
+      (a.options = z({}, o, a.options)),
+      z({}, { quantizer: a, generators: r, filters: s }, t)
+    );
+  }
+  class K {
+    constructor(t, e = {}) {
+      ((this._src = t), (this._opts = z({}, k.DefaultOpts, e)));
+    }
+    maxColorCount(t) {
+      return ((this._opts.colorCount = t), this);
+    }
+    maxDimension(t) {
+      return ((this._opts.maxDimension = t), this);
+    }
+    addFilter(t) {
+      return (
+        this._opts.filters
+          ? this._opts.filters.push(t)
+          : (this._opts.filters = [t]),
+        this
+      );
+    }
+    removeFilter(t) {
+      if (this._opts.filters) {
+        const e = this._opts.filters.indexOf(t);
+        e > 0 && this._opts.filters.splice(e);
+      }
+      return this;
+    }
+    clearFilters() {
+      return ((this._opts.filters = []), this);
+    }
+    quality(t) {
+      return ((this._opts.quality = t), this);
+    }
+    useImageClass(t) {
+      return ((this._opts.ImageClass = t), this);
+    }
+    useGenerator(t, e) {
+      return (
+        this._opts.generators || (this._opts.generators = []),
+        this._opts.generators.push(e ? { name: t, options: e } : t),
+        this
+      );
+    }
+    useQuantizer(t, e) {
+      return ((this._opts.quantizer = e ? { name: t, options: e } : t), this);
+    }
+    build() {
+      return new k(this._src, this._opts);
+    }
+    getPalette() {
+      return this.build().getPalette();
+    }
+  }
+  class E {
+    constructor(t) {
+      ((this.pipeline = t), (this._map = {}));
+    }
+    names() {
+      return Object.keys(this._map);
+    }
+    has(t) {
+      return !!this._map[t];
+    }
+    get(t) {
+      return this._map[t];
+    }
+    register(t, e) {
+      return ((this._map[t] = e), this.pipeline);
+    }
+  }
+  class Z {
+    constructor() {
+      ((this.filter = new E(this)),
+        (this.quantizer = new E(this)),
+        (this.generator = new E(this)));
+    }
+    _buildProcessTasks({ filters: t, quantizer: e, generators: i }) {
+      return (
+        i.length === 1 && i[0] === '*' && (i = this.generator.names()),
+        {
+          filters: t.map((s) => r(this.filter, s)),
+          quantizer: r(this.quantizer, e),
+          generators: i.map((s) => r(this.generator, s)),
+        }
+      );
+      function r(s, o) {
+        let a, h;
+        return (
+          typeof o == 'string' ? (a = o) : ((a = o.name), (h = o.options)),
+          { name: a, fn: s.get(a), options: h }
+        );
+      }
+    }
+    async process(t, e) {
+      const {
+          filters: i,
+          quantizer: r,
+          generators: s,
+        } = this._buildProcessTasks(e),
+        o = await this._filterColors(i, t),
+        a = await this._generateColors(r, o),
+        h = await this._generatePalettes(s, a);
+      return { colors: a, palettes: h };
+    }
+    _filterColors(t, e) {
+      return Promise.resolve(
+        G(
+          e,
+          t.map(({ fn: i }) => i),
+        ),
+      );
+    }
+    _generateColors(t, e) {
+      return Promise.resolve(t.fn(e.data, t.options));
+    }
+    async _generatePalettes(t, e) {
+      const i = await Promise.all(
+        t.map(({ fn: r, options: s }) => Promise.resolve(r(e, s))),
+      );
+      return Promise.resolve(
+        i.reduce((r, s, o) => ((r[t[o].name] = s), r), {}),
+      );
+    }
+  }
+  function tt(n, t, e) {
+    return (
+      '#' + ((1 << 24) + (n << 16) + (t << 8) + e).toString(16).slice(1, 7)
+    );
+  }
+  function et(n, t, e) {
+    ((n /= 255), (t /= 255), (e /= 255));
+    const i = Math.max(n, t, e),
+      r = Math.min(n, t, e);
+    let s = 0,
+      o = 0;
+    const a = (i + r) / 2;
+    if (i !== r) {
+      const h = i - r;
+      switch (((o = a > 0.5 ? h / (2 - i - r) : h / (i + r)), i)) {
+        case n:
+          s = (t - e) / h + (t < e ? 6 : 0);
+          break;
+        case t:
+          s = (e - n) / h + 2;
+          break;
+        case e:
+          s = (n - t) / h + 4;
+          break;
+      }
+      s /= 6;
+    }
+    return [s, o, a];
+  }
+  function D(n, t, e) {
+    let i, r, s;
+    function o(a, h, u) {
+      return (
+        u < 0 && (u += 1),
+        u > 1 && (u -= 1),
+        u < 1 / 6
+          ? a + (h - a) * 6 * u
+          : u < 1 / 2
+            ? h
+            : u < 2 / 3
+              ? a + (h - a) * (2 / 3 - u) * 6
+              : a
+      );
+    }
+    if (t === 0) i = r = s = e;
+    else {
+      const a = e < 0.5 ? e * (1 + t) : e + t - e * t,
+        h = 2 * e - a;
+      ((i = o(h, a, n + 1 / 3)), (r = o(h, a, n)), (s = o(h, a, n - 1 / 3)));
+    }
+    return [i * 255, r * 255, s * 255];
+  }
+  class V {
+    static applyFilters(t, e) {
+      return e.length > 0
+        ? t.filter(({ r: i, g: r, b: s }) => {
+            for (let o = 0; o < e.length; o++)
+              if (!e[o]?.(i, r, s, 255)) return !1;
+            return !0;
+          })
+        : t;
+    }
+    static clone(t) {
+      return new V(t._rgb, t._population);
+    }
+    get r() {
+      return this._rgb[0];
+    }
+    get g() {
+      return this._rgb[1];
+    }
+    get b() {
+      return this._rgb[2];
+    }
+    get rgb() {
+      return this._rgb;
+    }
+    get hsl() {
+      if (!this._hsl) {
+        const [t, e, i] = this._rgb;
+        this._hsl = et(t, e, i);
+      }
+      return this._hsl;
+    }
+    get hex() {
+      if (!this._hex) {
+        const [t, e, i] = this._rgb;
+        this._hex = tt(t, e, i);
+      }
+      return this._hex;
+    }
+    get population() {
+      return this._population;
+    }
+    toJSON() {
+      return { rgb: this.rgb, population: this.population };
+    }
+    getYiq() {
+      if (!this._yiq) {
+        const t = this._rgb;
+        this._yiq = (t[0] * 299 + t[1] * 587 + t[2] * 114) / 1e3;
+      }
+      return this._yiq;
+    }
+    get titleTextColor() {
+      return (
+        this._titleTextColor ||
+          (this._titleTextColor = this.getYiq() < 200 ? '#fff' : '#000'),
+        this._titleTextColor
+      );
+    }
+    get bodyTextColor() {
+      return (
+        this._bodyTextColor ||
+          (this._bodyTextColor = this.getYiq() < 150 ? '#fff' : '#000'),
+        this._bodyTextColor
+      );
+    }
+    constructor(t, e) {
+      ((this._rgb = t), (this._population = e));
+    }
+  }
+  const q = class N {
+    constructor(t, e) {
+      ((this._src = t), (this.opts = z({}, N.DefaultOpts, e)));
+    }
+    static use(t) {
+      this._pipeline = t;
+    }
+    static from(t) {
+      return new K(t);
+    }
+    get result() {
+      return this._result;
+    }
+    _process(t, e) {
+      t.scaleDown(this.opts);
+      const i = $(this.opts, e);
+      return N._pipeline.process(t.getImageData(), i);
+    }
+    async getPalette() {
+      const t = new this.opts.ImageClass();
+      try {
+        const e = await t.load(this._src),
+          i = await this._process(e, { generators: ['default'] });
+        this._result = i;
+        const r = i.palettes.default;
+        if (!r)
+          throw new Error(
+            'Something went wrong and a palette was not found, please file a bug against our GitHub repo: https://github.com/vibrant-Colors/node-vibrant/',
+          );
+        return (t.remove(), r);
+      } catch (e) {
+        return (t.remove(), Promise.reject(e));
+      }
+    }
+    async getPalettes() {
+      const t = new this.opts.ImageClass();
+      try {
+        const e = await t.load(this._src),
+          i = await this._process(e, { generators: ['*'] });
+        this._result = i;
+        const r = i.palettes;
+        return (t.remove(), r);
+      } catch (e) {
+        return (t.remove(), Promise.reject(e));
+      }
+    }
+  };
+  q.DefaultOpts = { colorCount: 64, quality: 5, filters: [] };
+  let k = q;
+  ((k.DefaultOpts.quantizer = 'mmcq'),
+    (k.DefaultOpts.generators = ['default']),
+    (k.DefaultOpts.filters = ['default']),
+    (k.DefaultOpts.ImageClass = X));
+  const O = 5,
+    T = 8 - O;
+  class I {
+    constructor(t, e, i, r, s, o, a) {
+      ((this.histogram = a),
+        (this._volume = -1),
+        (this._avg = null),
+        (this._count = -1),
+        (this.dimension = { r1: t, r2: e, g1: i, g2: r, b1: s, b2: o }));
+    }
+    static build(t) {
+      const e = new R(t, { sigBits: O }),
+        { rmin: i, rmax: r, gmin: s, gmax: o, bmin: a, bmax: h } = e;
+      return new I(i, r, s, o, a, h, e);
+    }
+    invalidate() {
+      ((this._volume = this._count = -1), (this._avg = null));
+    }
+    volume() {
+      if (this._volume < 0) {
+        const { r1: t, r2: e, g1: i, g2: r, b1: s, b2: o } = this.dimension;
+        this._volume = (e - t + 1) * (r - i + 1) * (o - s + 1);
+      }
+      return this._volume;
+    }
+    count() {
+      if (this._count < 0) {
+        const { hist: t, getColorIndex: e } = this.histogram,
+          { r1: i, r2: r, g1: s, g2: o, b1: a, b2: h } = this.dimension;
+        let u = 0;
+        for (let l = i; l <= r; l++)
+          for (let _ = s; _ <= o; _++)
+            for (let f = a; f <= h; f++) {
+              const b = e(l, _, f);
+              t[b] && (u += t[b]);
+            }
+        this._count = u;
+      }
+      return this._count;
+    }
+    clone() {
+      const { histogram: t } = this,
+        { r1: e, r2: i, g1: r, g2: s, b1: o, b2: a } = this.dimension;
+      return new I(e, i, r, s, o, a, t);
+    }
+    avg() {
+      if (!this._avg) {
+        const { hist: t, getColorIndex: e } = this.histogram,
+          { r1: i, r2: r, g1: s, g2: o, b1: a, b2: h } = this.dimension;
+        let u = 0;
+        const l = 1 << (8 - O);
+        let _, f, b;
+        _ = f = b = 0;
+        for (let c = i; c <= r; c++)
+          for (let g = s; g <= o; g++)
+            for (let d = a; d <= h; d++) {
+              const p = e(c, g, d),
+                C = t[p];
+              C &&
+                ((u += C),
+                (_ += C * (c + 0.5) * l),
+                (f += C * (g + 0.5) * l),
+                (b += C * (d + 0.5) * l));
+            }
+        u
+          ? (this._avg = [~~(_ / u), ~~(f / u), ~~(b / u)])
+          : (this._avg = [
+              ~~((l * (i + r + 1)) / 2),
+              ~~((l * (s + o + 1)) / 2),
+              ~~((l * (a + h + 1)) / 2),
+            ]);
+      }
+      return this._avg;
+    }
+    contains(t) {
+      let [e, i, r] = t;
+      const { r1: s, r2: o, g1: a, g2: h, b1: u, b2: l } = this.dimension;
+      return (
+        (e >>= T),
+        (i >>= T),
+        (r >>= T),
+        e >= s && e <= o && i >= a && i <= h && r >= u && r <= l
+      );
+    }
+    split() {
+      const { hist: t, getColorIndex: e } = this.histogram,
+        { r1: i, r2: r, g1: s, g2: o, b1: a, b2: h } = this.dimension,
+        u = this.count();
+      if (!u) return [];
+      if (u === 1) return [this.clone()];
+      const l = r - i + 1,
+        _ = o - s + 1,
+        f = h - a + 1,
+        b = Math.max(l, _, f);
+      let c = null,
+        g,
+        d;
+      g = d = 0;
+      let p = null;
+      if (b === l) {
+        ((p = 'r'), (c = new Uint32Array(r + 1)));
+        for (let m = i; m <= r; m++) {
+          g = 0;
+          for (let w = s; w <= o; w++)
+            for (let L = a; L <= h; L++) {
+              const M = e(m, w, L);
+              t[M] && (g += t[M]);
+            }
+          ((d += g), (c[m] = d));
+        }
+      } else if (b === _) {
+        ((p = 'g'), (c = new Uint32Array(o + 1)));
+        for (let m = s; m <= o; m++) {
+          g = 0;
+          for (let w = i; w <= r; w++)
+            for (let L = a; L <= h; L++) {
+              const M = e(w, m, L);
+              t[M] && (g += t[M]);
+            }
+          ((d += g), (c[m] = d));
+        }
+      } else {
+        ((p = 'b'), (c = new Uint32Array(h + 1)));
+        for (let m = a; m <= h; m++) {
+          g = 0;
+          for (let w = i; w <= r; w++)
+            for (let L = s; L <= o; L++) {
+              const M = e(w, L, m);
+              t[M] && (g += t[M]);
+            }
+          ((d += g), (c[m] = d));
+        }
+      }
+      let C = -1;
+      const S = new Uint32Array(c.length);
+      for (let m = 0; m < c.length; m++) {
+        const w = c[m];
+        w && (C < 0 && w > d / 2 && (C = m), (S[m] = d - w));
+      }
+      const x = this;
+      function y(m) {
+        const w = m + '1',
+          L = m + '2',
+          M = x.dimension[w];
+        let v = x.dimension[L];
+        const A = x.clone(),
+          F = x.clone(),
+          W = C - M,
+          j = v - C;
+        for (
+          W <= j
+            ? ((v = Math.min(v - 1, ~~(C + j / 2))), (v = Math.max(0, v)))
+            : ((v = Math.max(M, ~~(C - 1 - W / 2))),
+              (v = Math.min(x.dimension[L], v)));
+          !c[v];
+        )
+          v++;
+        let B = S[v];
+        for (; !B && c[v - 1]; ) B = S[--v];
+        return ((A.dimension[L] = v), (F.dimension[w] = v + 1), [A, F]);
+      }
+      return y(p);
+    }
+  }
+  class H {
+    _sort() {
+      this._sorted ||
+        (this.contents.sort(this._comparator), (this._sorted = !0));
+    }
+    constructor(t) {
+      ((this._comparator = t), (this.contents = []), (this._sorted = !1));
+    }
+    push(t) {
+      (this.contents.push(t), (this._sorted = !1));
+    }
+    peek(t) {
+      return (
+        this._sort(),
+        (t = typeof t == 'number' ? t : this.contents.length - 1),
+        this.contents[t]
+      );
+    }
+    pop() {
+      return (this._sort(), this.contents.pop());
+    }
+    size() {
+      return this.contents.length;
+    }
+    map(t) {
+      return (this._sort(), this.contents.map(t));
+    }
+  }
+  const it = 0.75;
+  function U(n, t) {
+    let e = n.size();
+    for (; n.size() < t; ) {
+      const i = n.pop();
+      if (i && i.count() > 0) {
+        const [r, s] = i.split();
+        if (!r || (n.push(r), s && s.count() > 0 && n.push(s), n.size() === e))
+          break;
+        e = n.size();
+      } else break;
+    }
+  }
+  const rt = (n, t) => {
+    if (n.length === 0 || t.colorCount < 2 || t.colorCount > 256)
+      throw new Error('Wrong MMCQ parameters');
+    const e = I.build(n);
+    e.histogram.colorCount;
+    const i = new H((s, o) => s.count() - o.count());
+    (i.push(e), U(i, it * t.colorCount));
+    const r = new H((s, o) => s.count() * s.volume() - o.count() * o.volume());
+    return ((r.contents = i.contents), U(r, t.colorCount - r.size()), nt(r));
+  };
+  function nt(n) {
+    const t = [];
+    for (; n.size(); ) {
+      const e = n.pop(),
+        i = e.avg(),
+        [r, s, o] = i;
+      t.push(new V(i, e.count()));
+    }
+    return t;
+  }
+  const st = {
+    targetDarkLuma: 0.26,
+    maxDarkLuma: 0.45,
+    minLightLuma: 0.55,
+    targetLightLuma: 0.74,
+    minNormalLuma: 0.3,
+    targetNormalLuma: 0.5,
+    maxNormalLuma: 0.7,
+    targetMutesSaturation: 0.3,
+    maxMutesSaturation: 0.4,
+    targetVibrantSaturation: 1,
+    minVibrantSaturation: 0.35,
+    weightSaturation: 3,
+    weightLuma: 6.5,
+    weightPopulation: 0.5,
+  };
+  function ot(n) {
+    let t = 0;
+    return (
+      n.forEach((e) => {
+        t = Math.max(t, e.population);
+      }),
+      t
+    );
+  }
+  function at(n, t) {
+    return (
+      n.Vibrant === t ||
+      n.DarkVibrant === t ||
+      n.LightVibrant === t ||
+      n.Muted === t ||
+      n.DarkMuted === t ||
+      n.LightMuted === t
+    );
+  }
+  function ht(n, t, e, i, r, s, o) {
+    function a(...u) {
+      let l = 0,
+        _ = 0;
+      for (let f = 0; f < u.length; f += 2) {
+        const b = u[f],
+          c = u[f + 1];
+        !b || !c || ((l += b * c), (_ += c));
+      }
+      return l / _;
+    }
+    function h(u, l) {
+      return 1 - Math.abs(u - l);
+    }
+    return a(
+      h(n, t),
+      o.weightSaturation,
+      h(e, i),
+      o.weightLuma,
+      r / s,
+      o.weightPopulation,
+    );
+  }
+  function P(n, t, e, i, r, s, o, a, h, u) {
+    let l = null,
+      _ = 0;
+    return (
+      t.forEach((f) => {
+        const [, b, c] = f.hsl;
+        if (b >= a && b <= h && c >= r && c <= s && !at(n, f)) {
+          const g = ht(b, o, c, i, f.population, e, u);
+          (l === null || g > _) && ((l = f), (_ = g));
+        }
+      }),
+      l
+    );
+  }
+  function ut(n, t, e) {
+    const i = {
+      Vibrant: null,
+      DarkVibrant: null,
+      LightVibrant: null,
+      Muted: null,
+      DarkMuted: null,
+      LightMuted: null,
+    };
+    return (
+      (i.Vibrant = P(
+        i,
+        n,
+        t,
+        e.targetNormalLuma,
+        e.minNormalLuma,
+        e.maxNormalLuma,
+        e.targetVibrantSaturation,
+        e.minVibrantSaturation,
+        1,
+        e,
+      )),
+      (i.LightVibrant = P(
+        i,
+        n,
+        t,
+        e.targetLightLuma,
+        e.minLightLuma,
+        1,
+        e.targetVibrantSaturation,
+        e.minVibrantSaturation,
+        1,
+        e,
+      )),
+      (i.DarkVibrant = P(
+        i,
+        n,
+        t,
+        e.targetDarkLuma,
+        0,
+        e.maxDarkLuma,
+        e.targetVibrantSaturation,
+        e.minVibrantSaturation,
+        1,
+        e,
+      )),
+      (i.Muted = P(
+        i,
+        n,
+        t,
+        e.targetNormalLuma,
+        e.minNormalLuma,
+        e.maxNormalLuma,
+        e.targetMutesSaturation,
+        0,
+        e.maxMutesSaturation,
+        e,
+      )),
+      (i.LightMuted = P(
+        i,
+        n,
+        t,
+        e.targetLightLuma,
+        e.minLightLuma,
+        1,
+        e.targetMutesSaturation,
+        0,
+        e.maxMutesSaturation,
+        e,
+      )),
+      (i.DarkMuted = P(
+        i,
+        n,
+        t,
+        e.targetDarkLuma,
+        0,
+        e.maxDarkLuma,
+        e.targetMutesSaturation,
+        0,
+        e.maxMutesSaturation,
+        e,
+      )),
+      i
+    );
+  }
+  function lt(n, t, e) {
+    if (!n.Vibrant && !n.DarkVibrant && !n.LightVibrant) {
+      if (!n.DarkVibrant && n.DarkMuted) {
+        let [i, r, s] = n.DarkMuted.hsl;
+        ((s = e.targetDarkLuma), (n.DarkVibrant = new V(D(i, r, s), 0)));
+      }
+      if (!n.LightVibrant && n.LightMuted) {
+        let [i, r, s] = n.LightMuted.hsl;
+        ((s = e.targetDarkLuma), (n.DarkVibrant = new V(D(i, r, s), 0)));
+      }
+    }
+    if (!n.Vibrant && n.DarkVibrant) {
+      let [i, r, s] = n.DarkVibrant.hsl;
+      ((s = e.targetNormalLuma), (n.Vibrant = new V(D(i, r, s), 0)));
+    } else if (!n.Vibrant && n.LightVibrant) {
+      let [i, r, s] = n.LightVibrant.hsl;
+      ((s = e.targetNormalLuma), (n.Vibrant = new V(D(i, r, s), 0)));
+    }
+    if (!n.DarkVibrant && n.Vibrant) {
+      let [i, r, s] = n.Vibrant.hsl;
+      ((s = e.targetDarkLuma), (n.DarkVibrant = new V(D(i, r, s), 0)));
+    }
+    if (!n.LightVibrant && n.Vibrant) {
+      let [i, r, s] = n.Vibrant.hsl;
+      ((s = e.targetLightLuma), (n.LightVibrant = new V(D(i, r, s), 0)));
+    }
+    if (!n.Muted && n.Vibrant) {
+      let [i, r, s] = n.Vibrant.hsl;
+      ((s = e.targetMutesSaturation), (n.Muted = new V(D(i, r, s), 0)));
+    }
+    if (!n.DarkMuted && n.DarkVibrant) {
+      let [i, r, s] = n.DarkVibrant.hsl;
+      ((s = e.targetMutesSaturation), (n.DarkMuted = new V(D(i, r, s), 0)));
+    }
+    if (!n.LightMuted && n.LightVibrant) {
+      let [i, r, s] = n.LightVibrant.hsl;
+      ((s = e.targetMutesSaturation), (n.LightMuted = new V(D(i, r, s), 0)));
+    }
+  }
+  const ct = (n, t) => {
+      t = Object.assign({}, st, t);
+      const e = ot(n),
+        i = ut(n, e, t);
+      return (lt(i, e, t), i);
+    },
+    gt = new Z().filter
+      .register(
+        'default',
+        (n, t, e, i) => i >= 125 && !(n > 250 && t > 250 && e > 250),
+      )
+      .quantizer.register('mmcq', rt)
+      .generator.register('default', ct);
+  (k.use(gt),
+    (self.onmessage = async (n) => {
+      const { imageUrl: t } = n.data;
+      try {
+        const i = await new k(t).getPalette();
+        if (!i) throw new Error('Failed to extract palette');
+        const r = {};
+        (i.Vibrant && (r.primary = i.Vibrant.hex),
+          i.Muted && (r.secondary = i.Muted.hex),
+          i.LightVibrant && (r.accent = i.LightVibrant.hex),
+          i.DarkVibrant && (r.background = i.DarkVibrant.hex),
+          i.LightMuted && (r.foreground = i.LightMuted.hex),
+          (r.success = r.primary),
+          (r.warning = r.secondary),
+          (r.error = r.accent),
+          self.postMessage({ type: 'success', payload: r }));
+      } catch (e) {
+        self.postMessage({
+          type: 'error',
+          error: e instanceof Error ? e.message : 'Unknown error',
+        });
+      }
+    }));
+})();

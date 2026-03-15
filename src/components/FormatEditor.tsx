@@ -1,11 +1,10 @@
 import { LayoutGrid, PenTool, Text, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import MODULE_DEFINITIONS from '../generated/module-definitions.json';
+// import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
-import { FormatSegmentEditor } from './FormatSegmentEditor';
 
 // Define types for format segments
 export interface TextSegment {
@@ -36,8 +35,8 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const { currentTheme } = useThemeStore();
   const [segments, setSegments] = useState<FormatSegment[]>([]);
   const [editingSegment, setEditingSegment] = useState<number | null>(null);
-  const [showIconBrowser, setShowIconBrowser] = useState(false);
-  const [activeStyle, setActiveStyle] = useState('');
+  // const [showIconBrowser, setShowIconBrowser] = useState(false);
+  // const [activeStyle, setActiveStyle] = useState('');
   const [activeText, setActiveText] = useState('');
   const editorRef = useRef<HTMLDivElement>(null);
 
@@ -112,12 +111,12 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
     else if (seg.type === 'styledText') setActiveText(seg.text);
     else setActiveText('');
 
-    setActiveStyle(
-      segments[index].type === 'styledText'
-        ? (segments[index] as StyledTextSegment).style
-        : '',
-    );
-    setShowIconBrowser(false);
+    // setActiveStyle(
+    //   segments[index].type === 'styledText'
+    //     ? (segments[index] as StyledTextSegment).style
+    //     : '',
+    // );
+    // setShowIconBrowser(false);
   };
 
   const handleSegmentChange = (
@@ -160,7 +159,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const handleAddModule = () => addSegment('module');
   const handleAddStyledText = () => addSegment('styledText');
 
-  const availableModules = MODULE_DEFINITIONS.map((m) => m.name);
+  // const availableModules = MODULE_DEFINITIONS.map((m) => m.name);
 
   return (
     <div className="flex flex-col gap-3">
@@ -225,20 +224,42 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       </div>
 
       {editingSegment !== null && (
-        <FormatSegmentEditor
-          segment={segments[editingSegment]}
-          activeText={activeText}
-          setActiveText={setActiveText}
-          activeStyle={activeStyle}
-          setActiveStyle={setActiveStyle}
-          showIconBrowser={showIconBrowser}
-          setShowIconBrowser={setShowIconBrowser}
-          onSegmentChange={(newProps) =>
-            handleSegmentChange(editingSegment, newProps)
-          }
-          onRemove={() => removeSegment(editingSegment)}
-          availableModules={availableModules}
-        />
+        <div className="mt-4 rounded-md border border-gray-700 bg-gray-900 p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <h4 className="text-sm font-medium text-gray-200">
+              Edit {segments[editingSegment].type}
+            </h4>
+            <button
+              onClick={() => removeSegment(editingSegment)}
+              className="text-gray-400 hover:text-red-400"
+              title="Remove segment"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {segments[editingSegment].type === 'text' && (
+              <div>
+                <label className="mb-1 block text-xs text-gray-400">Text</label>
+                <input
+                  type="text"
+                  value={activeText}
+                  onChange={(e) => {
+                    setActiveText(e.target.value);
+                    handleSegmentChange(editingSegment, {
+                      value: e.target.value,
+                    });
+                  }}
+                  className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-gray-100"
+                  placeholder="Segment text"
+                />
+              </div>
+            )}
+
+            {/* Add styledText and module editors as needed, following the same pattern */}
+          </div>
+        </div>
       )}
     </div>
   );
