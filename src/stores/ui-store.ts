@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 
-import { LayoutMode } from '../types';
+export type LayoutMode = 'auto' | 'mobile' | 'desktop' | 'terminal';
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   avatar?: string;
 }
@@ -31,6 +31,15 @@ interface UIStore {
   setShowUploadModal: (state: boolean) => void;
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
+
+  showExportImport: 'export' | 'import' | null;
+  setShowExportImport: (state: 'export' | 'import' | null) => void;
+  showGallery: boolean;
+  setShowGallery: (state: boolean) => void;
+  showComparison: boolean;
+  setShowComparison: (state: boolean) => void;
+  showCommandPalette: boolean;
+  setShowCommandPalette: (state: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -57,4 +66,13 @@ export const useUIStore = create<UIStore>((set) => ({
   setShowUploadModal: (state) => set({ showUploadModal: state }),
   currentUser: null,
   setCurrentUser: (user) => set({ currentUser: user }),
+
+  showExportImport: null,
+  setShowExportImport: (state) => set({ showExportImport: state }),
+  showGallery: false,
+  setShowGallery: (state) => set({ showGallery: state }),
+  showComparison: false,
+  setShowComparison: (state) => set({ showComparison: state }),
+  showCommandPalette: false,
+  setShowCommandPalette: (state) => set({ showCommandPalette: state }),
 }));

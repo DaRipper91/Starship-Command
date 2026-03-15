@@ -1,0 +1,1 @@
+## 2024-03-08 - Fixed React.memo and useCallback optimizations\n**Learning:** Found unnecessary re-renders in FormatEditor and FormatSegmentEditor components.\n**Action:** Reverted the changes as the code was broken, and then removed FormatSegmentEditor.tsx altogether because its usage was removed from FormatEditor.
