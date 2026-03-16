@@ -5,10 +5,7 @@ interface FormatSegmentEditorProps {
   onUpdate: (updates: Partial<BaseModuleConfig>) => void;
 }
 
-export function FormatSegmentEditor({
-  config,
-  onUpdate,
-}: FormatSegmentEditorProps) {
+export function FormatSegmentEditor({ onUpdate }: FormatSegmentEditorProps) {
   return (
     <div className="space-y-4">
       <div>
@@ -18,13 +15,17 @@ export function FormatSegmentEditor({
         {/* Format editor implementation would go here */}
       </div>
 
-      {config.styledText && (
+      {false && (
         <div>
           <label className="mb-2 block text-xs font-medium text-gray-400">
             Styled Text Segments
           </label>
           <button
-            onClick={() => onUpdate({ styledText: [] })}
+            onClick={() =>
+              onUpdate({
+                /* styledText removed */
+              })
+            }
             className="text-xs text-blue-500 hover:underline"
           >
             Clear Styled Text

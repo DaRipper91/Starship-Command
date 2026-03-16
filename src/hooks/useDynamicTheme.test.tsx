@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -50,7 +51,9 @@ describe('useDynamicTheme', () => {
       },
     });
 
-    renderHook(() => useDynamicTheme());
+    act(() => {
+      renderHook(() => useDynamicTheme());
+    });
 
     // Should not call loadTheme
     expect(loadThemeSpy).not.toHaveBeenCalled();
@@ -84,7 +87,9 @@ describe('useDynamicTheme', () => {
       },
     });
 
-    renderHook(() => useDynamicTheme());
+    act(() => {
+      renderHook(() => useDynamicTheme());
+    });
 
     // Since mockDate is 12:00 PM, which is between 07:00 and 19:00, day theme should load
     expect(loadThemeSpy).toHaveBeenCalled();
@@ -123,7 +128,9 @@ describe('useDynamicTheme', () => {
       },
     });
 
-    renderHook(() => useDynamicTheme());
+    act(() => {
+      renderHook(() => useDynamicTheme());
+    });
 
     // Since mockDate is 21:00, which is after 19:00, night theme should load
     expect(loadThemeSpy).toHaveBeenCalled();
