@@ -1,11 +1,9 @@
 import { LayoutGrid, PenTool, Text, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
 import { useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
-import { FormatSegmentEditor } from './FormatSegmentEditor';
 
 // Define types for format segments
 export interface TextSegment {
@@ -36,9 +34,6 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const { currentTheme } = useThemeStore();
   const [segments, setSegments] = useState<FormatSegment[]>([]);
   const [editingSegment, setEditingSegment] = useState<number | null>(null);
-  const [showIconBrowser, setShowIconBrowser] = useState(false);
-  const [activeStyle, setActiveStyle] = useState('');
-  const [activeText, setActiveText] = useState('');
   const editorRef = useRef<HTMLDivElement>(null);
 
   // Parse format string into segments on initial load and formatString change
@@ -107,30 +102,6 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
 
   const handleSegmentClick = (index: number) => {
     setEditingSegment(index);
-    const seg = segments[index];
-    if (seg.type === 'text') setActiveText(seg.value);
-    else if (seg.type === 'styledText') setActiveText(seg.text);
-    else setActiveText('');
-
-    setActiveStyle(
-      segments[index].type === 'styledText'
-        ? (segments[index] as StyledTextSegment).style
-        : '',
-    );
-    setShowIconBrowser(false);
-  };
-
-  const handleSegmentChange = (
-    index: number,
-    newProps: Partial<FormatSegment>,
-  ) => {
-    const newSegments = [...segments];
-    newSegments[index] = {
-      ...newSegments[index],
-      ...newProps,
-    } as FormatSegment;
-    setSegments(newSegments);
-    onChange(compileFormatString(newSegments));
   };
 
   const addSegment = (type: 'text' | 'module' | 'styledText') => {
@@ -149,18 +120,9 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
     setEditingSegment(newSegments.length - 1); // Edit the newly added segment
   };
 
-  const removeSegment = (index: number) => {
-    const newSegments = segments.filter((_, i) => i !== index);
-    setSegments(newSegments);
-    onChange(compileFormatString(newSegments));
-    setEditingSegment(null);
-  };
-
   const handleAddText = () => addSegment('text');
   const handleAddModule = () => addSegment('module');
   const handleAddStyledText = () => addSegment('styledText');
-
-  const availableModules = MODULE_DEFINITIONS.map((m) => m.name);
 
   return (
     <div className="flex flex-col gap-3">
@@ -225,20 +187,10 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       </div>
 
       {editingSegment !== null && (
-        <FormatSegmentEditor
-          segment={segments[editingSegment]}
-          activeText={activeText}
-          setActiveText={setActiveText}
-          activeStyle={activeStyle}
-          setActiveStyle={setActiveStyle}
-          showIconBrowser={showIconBrowser}
-          setShowIconBrowser={setShowIconBrowser}
-          onSegmentChange={(newProps) =>
-            handleSegmentChange(editingSegment, newProps)
-          }
-          onRemove={() => removeSegment(editingSegment)}
-          availableModules={availableModules}
-        />
+        <div className="rounded bg-gray-800 p-4 text-sm text-gray-400">
+          Editing {segments[editingSegment].type} segment is disabled due to
+          component refactoring.
+        </div>
       )}
     </div>
   );

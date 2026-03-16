@@ -401,3 +401,7 @@ export interface ColorPalette {
   error: string;
   warning: string;
 }
+
+export type LayoutMode = 'auto' | 'mobile' | 'desktop' | 'terminal';
+
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';

@@ -3,12 +3,20 @@ import { create } from 'zustand';
 import { LayoutMode } from '../types';
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   avatar?: string;
 }
 
 interface UIStore {
+  showExportImport: 'export' | 'import' | null;
+  setShowExportImport: (state: 'export' | 'import' | null) => void;
+  showGallery: boolean;
+  setShowGallery: (state: boolean) => void;
+  showComparison: boolean;
+  setShowComparison: (state: boolean) => void;
+  showCommandPalette: boolean;
+  setShowCommandPalette: (state: boolean) => void;
   layoutMode: LayoutMode;
   setLayoutMode: (mode: LayoutMode) => void;
   showThemeGallery: boolean;
@@ -34,6 +42,14 @@ interface UIStore {
 }
 
 export const useUIStore = create<UIStore>((set) => ({
+  showExportImport: null,
+  setShowExportImport: (state) => set({ showExportImport: state }),
+  showGallery: false,
+  setShowGallery: (state) => set({ showGallery: state }),
+  showComparison: false,
+  setShowComparison: (state) => set({ showComparison: state }),
+  showCommandPalette: false,
+  setShowCommandPalette: (state) => set({ showCommandPalette: state }),
   layoutMode: 'terminal',
   setLayoutMode: (mode) => set({ layoutMode: mode }),
   showThemeGallery: false,
