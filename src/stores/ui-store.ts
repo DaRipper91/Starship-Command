@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { LayoutMode } from '../types';
+export type LayoutMode = 'auto' | 'desktop' | 'mobile' | 'terminal' | 'editor';
 
 interface User {
   id: string;
@@ -31,10 +31,19 @@ interface UIStore {
   setShowUploadModal: (state: boolean) => void;
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
+
+  showExportImport: 'export' | 'import' | null;
+  setShowExportImport: (state: 'export' | 'import' | null) => void;
+  showGallery: boolean;
+  setShowGallery: (state: boolean) => void;
+  showComparison: boolean;
+  setShowComparison: (state: boolean) => void;
+  showCommandPalette: boolean;
+  setShowCommandPalette: (state: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
-  layoutMode: 'terminal',
+  layoutMode: 'auto',
   setLayoutMode: (mode) => set({ layoutMode: mode }),
   showThemeGallery: false,
   setShowThemeGallery: (state) => set({ showThemeGallery: state }),
@@ -57,4 +66,13 @@ export const useUIStore = create<UIStore>((set) => ({
   setShowUploadModal: (state) => set({ showUploadModal: state }),
   currentUser: null,
   setCurrentUser: (user) => set({ currentUser: user }),
+
+  showExportImport: null,
+  setShowExportImport: (state) => set({ showExportImport: state }),
+  showGallery: false,
+  setShowGallery: (state) => set({ showGallery: state }),
+  showComparison: false,
+  setShowComparison: (state) => set({ showComparison: state }),
+  showCommandPalette: false,
+  setShowCommandPalette: (state) => set({ showCommandPalette: state }),
 }));

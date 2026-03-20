@@ -1,4 +1,4 @@
-import { LogLevel } from '../types';
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 /* eslint-disable no-console */
 class Logger {

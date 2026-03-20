@@ -61,10 +61,10 @@ describe('FormatEditor Component', () => {
     );
 
     fireEvent.click(screen.getByText('Hello')); // Click to select segment
-    const input = screen.getByPlaceholderText('Segment text');
+    const input = screen.getByDisplayValue('Hello');
     fireEvent.change(input, { target: { value: 'World' } });
 
-    expect(screen.getByText('World')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('World')).toBeInTheDocument();
     expect(mockOnChange).toHaveBeenCalledWith('World');
   });
 });
