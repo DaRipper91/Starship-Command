@@ -5,7 +5,7 @@ import { useToast } from '../contexts/ToastContext';
 
 interface AuthModalProps {
   onClose: () => void;
-  onLoginSuccess: (userId: number, username: string) => void;
+  onLoginSuccess: (userId: string, username: string) => void;
 }
 
 export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {

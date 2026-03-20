@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0] - 2026-03-20
+
+### Audited and Verified
+
+- **Theme Import/Export Engine**: Verified full theme import/export system functionality and validations.
+- **Undo/Redo Stack**: Audited immutable history stack pattern and keyboard shortcuts.
+- **Theme Preset System**: Audited 11 built-in theme presets and the preset selector component.
+- **Type Safety Audit**: Checked TypeScript files for strict mode and removed all explicit `any` usages.
+- **State Management Refactor**: Refactored `ui-store.ts` to fully encapsulate layout mode, export/import toggles, command palette, comparison view and gallery flags, completing the removal of scattered component state.
+- **Vite Build Optimization**: Verified manual chunk splitting and build size targets.
+- **Error Boundary & Runtime Resilience**: Checked React Error Boundaries and async error handling.
+- **Code Consistency & Linting Enforcement**: Confirmed ESLint rules and fixed zero violations.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
