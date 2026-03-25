@@ -5,7 +5,61 @@ import tempfile
 import argparse
 import requests
 import shutil
+import socket
+import ipaddress
+from urllib.parse import urlparse
 from colorthief import ColorThief
+
+# Use the relative import if it's being run as a module, or just import normally
+try:
+    from server.utils import safe_download
+except ImportError:
+    # If not in the same package, we might need to adjust the path or copy the function
+    def is_safe_ip(ip_str):
+        try:
+            ip = ipaddress.ip_address(ip_str)
+            return ip.is_global and not (
+                ip.is_loopback or
+                ip.is_link_local or
+                ip.is_multicast or
+                ip.is_private
+            )
+        except ValueError:
+            return False
+
+    def safe_download(url, dest_path, timeout=10, chunk_size=8192):
+        parsed = urlparse(url)
+        if parsed.scheme not in ('http', 'https'):
+            raise ValueError(f"Unsupported scheme: {parsed.scheme}")
+
+        hostname = parsed.hostname
+        if not hostname:
+            raise ValueError("No hostname in URL")
+
+        # Resolve hostname to all possible IP addresses
+        try:
+            addr_info = socket.getaddrinfo(hostname, parsed.port or (80 if parsed.scheme == 'http' else 443))
+        except socket.gaierror as e:
+            raise ValueError(f"Could not resolve hostname {hostname}: {e}")
+
+        # Check if any of the resolved IPs are unsafe
+        for family, _, _, _, sockaddr in addr_info:
+            ip = sockaddr[0]
+            if not is_safe_ip(ip):
+                raise ValueError(f"URL resolves to an unsafe IP address: {ip}")
+
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+
+        response = requests.get(url, timeout=timeout, stream=True, headers=headers)
+        response.raise_for_status()
+
+        with open(dest_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=chunk_size):
+                f.write(chunk)
+
+        return dest_path
 
 class ColorExtractor:
     def __init__(self, input_source, output_dir=None, palette_path=None):
@@ -18,12 +72,14 @@ class ColorExtractor:
 
     def prepare_image(self):
         if self.input_source.startswith(('http://', 'https://')):
-            response = requests.get(self.input_source, timeout=10)
             img_path = os.path.join(self.temp_dir, "downloaded_image")
-            with open(img_path, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
-            self.image_path = img_path
+            try:
+                safe_download(self.input_source, img_path)
+                self.image_path = img_path
+            except ValueError as e:
+                raise ValueError(f"URL {self.input_source} is not allowed for security reasons: {e}")
+            except Exception as e:
+                raise ValueError(f"Error downloading image from {self.input_source}: {e}")
         else:
             self.image_path = os.path.abspath(self.input_source)
 
