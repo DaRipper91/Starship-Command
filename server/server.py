@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from werkzeug.utils import safe_join
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, joinedload
 from sqlalchemy import String, ForeignKey, Text
 from werkzeug.security import generate_password_hash, check_password_hash
 import traceback
@@ -183,7 +183,7 @@ def download_theme(theme_id):
 @app.route('/api/themes', methods=['GET'])
 def get_themes():
     category = request.args.get('category')
-    query = Theme.query
+    query = Theme.query.options(joinedload(Theme.author))
 
     if category:
         query = query.filter_by(category=category)
