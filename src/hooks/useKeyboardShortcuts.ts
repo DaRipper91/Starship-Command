@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 type KeyCombo = string; // e.g., "meta+s" or "ctrl+k"
 type ShortcutHandler = (e: KeyboardEvent) => void;
@@ -9,21 +9,44 @@ interface Shortcut {
   description: string;
 }
 
+interface ParsedShortcut extends Shortcut {
+  requiresMeta: boolean;
+  requiresCtrl: boolean;
+  requiresShift: boolean;
+  requiresAlt: boolean;
+  requiresMod: boolean;
+  mainKey: string;
+}
+
 export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
-  const shortcutsRef = useRef(shortcuts);
+  const parsedShortcuts = useMemo(() => {
+    return shortcuts.map((shortcut) => {
+      const keys = shortcut.keys.toLowerCase().split('+');
+      return {
+        ...shortcut,
+        requiresMeta: keys.includes('meta') || keys.includes('cmd'),
+        requiresCtrl: keys.includes('ctrl'),
+        requiresShift: keys.includes('shift'),
+        requiresAlt: keys.includes('alt'),
+        requiresMod: keys.includes('mod'),
+        mainKey: keys[keys.length - 1],
+      };
+    });
+  }, [shortcuts]);
+
+  const shortcutsRef = useRef(parsedShortcuts);
 
   useEffect(() => {
-    shortcutsRef.current = shortcuts;
-  }, [shortcuts]);
+    shortcutsRef.current = parsedShortcuts;
+  }, [parsedShortcuts]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
       const isEditable =
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
-        target.isContentEditable;
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName) ||
+        target?.isContentEditable;
 
-      // START FIX: Task A
       // When in an input, suppress all custom shortcuts (like Cmd+Z for theme undo)
       // so the browser can handle text editing natively.
       // Exception: Allow Cmd+S (Save) to trigger from anywhere.
@@ -33,15 +56,17 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
           return;
         }
       }
-      // END FIX
 
       shortcutsRef.current.forEach((shortcut) => {
-        const keys = shortcut.keys.toLowerCase().split('+');
-        const requiresMeta = keys.includes('meta') || keys.includes('cmd');
-        const requiresCtrl = keys.includes('ctrl');
-        const requiresShift = keys.includes('shift');
-        const requiresAlt = keys.includes('alt');
-        const mainKey = keys[keys.length - 1];
+        const {
+          requiresMeta,
+          requiresCtrl,
+          requiresShift,
+          requiresAlt,
+          requiresMod,
+          mainKey,
+          handler,
+        } = shortcut;
 
         const isMatch =
           (requiresMeta ? e.metaKey : !e.metaKey) &&
@@ -53,7 +78,6 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
         // On mac we often say "meta" or "cmd" but use e.metaKey.
         // On windows we often say "ctrl" and use e.ctrlKey.
         // We will support a generic "mod" for either.
-        const requiresMod = keys.includes('mod');
         const modActive = e.metaKey || e.ctrlKey;
 
         const isModMatch =
@@ -65,7 +89,7 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
 
         if (isMatch || isModMatch) {
           e.preventDefault();
-          shortcut.handler(e);
+          handler(e);
         }
       });
     };
