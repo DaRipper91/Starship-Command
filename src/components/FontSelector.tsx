@@ -1,6 +1,7 @@
 import { ChevronDown, Download, Info } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
+import { logger } from '../lib/logger';
 import { cn } from '../lib/utils';
 import { Modal } from './ui/Modal';
 
@@ -57,7 +58,7 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
         );
         await fontFace.load();
         document.fonts.add(fontFace);
-        console.warn(`Font ${currentFont} loaded.`);
+        logger.warn(`Font ${currentFont} loaded.`);
       }
     };
     loadFont();
@@ -74,7 +75,7 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
       document.body.removeChild(link);
       setShowInstallInstructions(true);
     } else {
-      console.error('No download URL found for this font.');
+      logger.error('No download URL found for this font.');
     }
   }, [currentFont]);
 
