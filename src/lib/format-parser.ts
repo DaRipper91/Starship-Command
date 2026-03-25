@@ -206,7 +206,7 @@ export function parseFormatString(
       if (i < length && expanded[i] === '[') {
         ansiStr += '[';
         i++;
-        while (i < length && /^[0-9;]$/.test(expanded[i])) {
+        while (i < length && '0123456789;'.includes(expanded[i])) {
           ansiStr += expanded[i];
           i++;
         }
@@ -304,7 +304,7 @@ export function parseFormattedString(
       if (i < length && expanded[i] === '[') {
         ansiStr += '[';
         i++;
-        while (i < length && /^[0-9;]$/.test(expanded[i])) {
+        while (i < length && '0123456789;'.includes(expanded[i])) {
           ansiStr += expanded[i];
           i++;
         }
