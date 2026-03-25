@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
+from werkzeug.utils import safe_join
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -212,11 +213,13 @@ def get_categories():
 
 # Serve React App
 @app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
 def serve(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+    if path != "":
+        safe_path = safe_join(app.static_folder, path)
+        if safe_path and os.path.isfile(safe_path):
+            return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     is_packaged = getattr(sys, 'frozen', False)
