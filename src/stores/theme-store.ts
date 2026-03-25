@@ -1,4 +1,5 @@
 import equal from 'fast-deep-equal';
+import { temporal } from 'zundo';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -16,20 +17,14 @@ export interface DynamicThemeSettings {
   nightStartTime: string;
 }
 
-interface ThemeStore {
+interface ThemeState {
   currentTheme: Theme;
   savedThemes: Theme[];
   selectedModule: string | null;
+  dynamicSettings: DynamicThemeSettings;
+}
 
-  // History
-  past: Theme[];
-  future: Theme[];
-  undo: () => void;
-  redo: () => void;
-  canUndo: () => boolean;
-  canRedo: () => boolean;
-
-  // Actions
+interface ThemeActions {
   updateConfig: (config: Partial<StarshipConfig>) => void;
   updateMetadata: (metadata: Partial<ThemeMetadata>) => void;
   setSelectedModule: (module: string | null) => void;
@@ -43,11 +38,10 @@ interface ThemeStore {
   importToml: (tomlString: string) => void;
 
   // Dynamic Theme
-  dynamicSettings: DynamicThemeSettings;
   updateDynamicSettings: (settings: Partial<DynamicThemeSettings>) => void;
 }
 
-const HISTORY_LIMIT = 50;
+export type ThemeStore = ThemeState & ThemeActions;
 
 const createDefaultDynamicSettings = (): DynamicThemeSettings => ({
   enabled: false,
@@ -67,210 +61,148 @@ const createDefaultTheme = (): Theme => ({
   config: TomlParser.getDefaultConfig(),
 });
 
-// Helper for deep cloning
-const deepClone = <T>(obj: T): T => {
-  if (typeof structuredClone === 'function') {
-    return structuredClone(obj);
-  }
-  return JSON.parse(JSON.stringify(obj));
-};
-
 export const useThemeStore = create<ThemeStore>()(
-  persist(
-    (set, get) => ({
-      currentTheme: createDefaultTheme(),
-      savedThemes: [],
-      selectedModule: null,
-      dynamicSettings: createDefaultDynamicSettings(),
-      past: [],
-      future: [],
+  temporal(
+    persist(
+      (set, get) => ({
+        currentTheme: createDefaultTheme(),
+        savedThemes: [],
+        selectedModule: null,
+        dynamicSettings: createDefaultDynamicSettings(),
 
-      undo: () => {
-        set((state) => {
-          if (state.past.length === 0) return {};
-          const previous = deepClone(state.past[state.past.length - 1]);
-          const newPast = state.past.slice(0, -1);
-          return {
-            past: newPast,
-            currentTheme: previous,
-            future: [deepClone(state.currentTheme), ...state.future],
-          };
-        });
-      },
-
-      redo: () => {
-        set((state) => {
-          if (state.future.length === 0) return {};
-          const next = deepClone(state.future[0]);
-          const newFuture = state.future.slice(1);
-          return {
-            past: [...state.past, deepClone(state.currentTheme)],
-            currentTheme: next,
-            future: newFuture,
-          };
-        });
-      },
-
-      canUndo: () => get().past.length > 0,
-      canRedo: () => get().future.length > 0,
-
-      updateConfig: (newConfig) => {
-        set((state) => {
-          const nextTheme = {
-            ...state.currentTheme,
-            config: {
-              ...state.currentTheme.config,
-              // Ensure palettes.global is merged correctly
-              palettes: {
-                ...state.currentTheme.config.palettes,
-                global: {
-                  ...state.currentTheme.config.palettes?.global,
-                  ...newConfig.palettes?.global,
+        updateConfig: (newConfig) => {
+          set((state) => {
+            const nextTheme = {
+              ...state.currentTheme,
+              config: {
+                ...state.currentTheme.config,
+                palettes: {
+                  ...state.currentTheme.config.palettes,
+                  global: {
+                    ...state.currentTheme.config.palettes?.global,
+                    ...newConfig.palettes?.global,
+                  },
                 },
+                ...Object.fromEntries(
+                  Object.entries(newConfig).filter(
+                    ([key]) => key !== 'palettes',
+                  ),
+                ),
               },
-              // Merge other config directly
-              ...Object.fromEntries(
-                Object.entries(newConfig).filter(([key]) => key !== 'palettes'),
-              ),
-            },
-            metadata: {
-              ...state.currentTheme.metadata,
-              updated: new Date(),
-            },
-          };
+              metadata: {
+                ...state.currentTheme.metadata,
+                updated: new Date(),
+              },
+            };
 
-          // Optimization: Don't update if config hasn't changed
-          if (equal(state.currentTheme.config, nextTheme.config)) {
-            return {};
+            if (equal(state.currentTheme.config, nextTheme.config)) {
+              return {};
+            }
+
+            return { currentTheme: nextTheme };
+          });
+        },
+
+        updateMetadata: (newMetadata) => {
+          set((state) => ({
+            currentTheme: {
+              ...state.currentTheme,
+              metadata: {
+                ...state.currentTheme.metadata,
+                ...newMetadata,
+                updated: new Date(),
+              },
+            },
+          }));
+        },
+
+        setSelectedModule: (module) => {
+          set({ selectedModule: module });
+        },
+
+        loadTheme: (theme) => {
+          set({
+            currentTheme: theme,
+            selectedModule: null,
+          });
+        },
+
+        saveTheme: (previewImage?: string) => {
+          const { currentTheme, savedThemes } = get();
+          const themeToSave = { ...currentTheme };
+          if (previewImage) {
+            themeToSave.metadata.previewImage = previewImage;
+          }
+          const existingIndex = savedThemes.findIndex(
+            (t) => t.metadata.id === themeToSave.metadata.id,
+          );
+
+          const newSavedThemes = [...savedThemes];
+          if (existingIndex >= 0) {
+            newSavedThemes[existingIndex] = themeToSave;
+          } else {
+            newSavedThemes.push(themeToSave);
           }
 
-          // Use deepClone for history to ensure immutability
-          return {
-            past: [...state.past, deepClone(state.currentTheme)].slice(
-              -HISTORY_LIMIT,
-            ),
-            currentTheme: nextTheme, // nextTheme is newly created, so it's safe
-            future: [], // Clear redo stack on new change
-          };
-        });
-      },
+          set({ savedThemes: newSavedThemes });
+        },
 
-      updateMetadata: (newMetadata) => {
-        set((state) => {
-          const nextTheme = {
-            ...state.currentTheme,
-            metadata: {
-              ...state.currentTheme.metadata,
-              ...newMetadata,
-              updated: new Date(),
+        deleteTheme: (id) => {
+          set((state) => ({
+            savedThemes: state.savedThemes.filter((t) => t.metadata.id !== id),
+          }));
+        },
+
+        resetTheme: () => {
+          set({
+            currentTheme: createDefaultTheme(),
+            selectedModule: null,
+          });
+        },
+
+        exportToml: () => {
+          const { currentTheme } = get();
+          return TomlParser.stringify(currentTheme.config);
+        },
+
+        importToml: (tomlString) => {
+          const config = TomlParser.parse(tomlString);
+          set((state) => ({
+            currentTheme: {
+              ...state.currentTheme,
+              config,
+              metadata: {
+                ...state.currentTheme.metadata,
+                updated: new Date(),
+              },
             },
-          };
-          return {
-            past: [...state.past, deepClone(state.currentTheme)].slice(
-              -HISTORY_LIMIT,
-            ),
-            currentTheme: nextTheme,
-            future: [],
-          };
-        });
-      },
+            selectedModule: null,
+          }));
+        },
 
-      setSelectedModule: (module) => {
-        set({ selectedModule: module });
-      },
-
-      loadTheme: (theme) => {
-        set((state) => ({
-          past: [...state.past, deepClone(state.currentTheme)].slice(
-            -HISTORY_LIMIT,
-          ),
-          currentTheme: deepClone(theme),
-          selectedModule: null,
-          future: [],
-        }));
-      },
-
-      saveTheme: (previewImage?: string) => {
-        const { currentTheme, savedThemes } = get();
-        // We clone currentTheme to avoid reference issues in savedThemes
-        const themeToSave = deepClone(currentTheme);
-        if (previewImage) {
-          themeToSave.metadata.previewImage = previewImage;
-        }
-        const existingIndex = savedThemes.findIndex(
-          (t) => t.metadata.id === themeToSave.metadata.id,
-        );
-
-        const newSavedThemes = [...savedThemes];
-        if (existingIndex >= 0) {
-          // Update existing
-          newSavedThemes[existingIndex] = themeToSave;
-        } else {
-          // Add new
-          newSavedThemes.push(themeToSave);
-        }
-
-        set({ savedThemes: newSavedThemes });
-      },
-
-      deleteTheme: (id) => {
-        set((state) => ({
-          savedThemes: state.savedThemes.filter((t) => t.metadata.id !== id),
-        }));
-      },
-
-      resetTheme: () => {
-        set((state) => ({
-          past: [...state.past, deepClone(state.currentTheme)].slice(
-            -HISTORY_LIMIT,
-          ),
-          currentTheme: createDefaultTheme(),
-          selectedModule: null,
-          future: [],
-        }));
-      },
-
-      exportToml: () => {
-        const { currentTheme } = get();
-        return TomlParser.stringify(currentTheme.config);
-      },
-
-      importToml: (tomlString) => {
-        const config = TomlParser.parse(tomlString);
-        set((state) => ({
-          past: [...state.past, deepClone(state.currentTheme)].slice(
-            -HISTORY_LIMIT,
-          ),
-          currentTheme: {
-            ...state.currentTheme,
-            config,
-            metadata: {
-              ...state.currentTheme.metadata,
-              updated: new Date(),
+        updateDynamicSettings: (settings) => {
+          set((state) => ({
+            dynamicSettings: {
+              ...state.dynamicSettings,
+              ...settings,
             },
-          },
-          selectedModule: null,
-          future: [],
-        }));
+          }));
+        },
+      }),
+      {
+        name: 'starship-theme-storage',
+        storage: createDebouncedStorage(() => localStorage),
+        partialize: (state) => ({
+          savedThemes: state.savedThemes,
+          currentTheme: state.currentTheme,
+          dynamicSettings: state.dynamicSettings,
+        }),
       },
-
-      updateDynamicSettings: (settings) => {
-        set((state) => ({
-          dynamicSettings: {
-            ...state.dynamicSettings,
-            ...settings,
-          },
-        }));
-      },
-    }),
+    ),
     {
-      name: 'starship-theme-storage',
-      storage: createDebouncedStorage(() => localStorage),
+      limit: 50,
       partialize: (state) => ({
-        savedThemes: state.savedThemes,
         currentTheme: state.currentTheme,
-        dynamicSettings: state.dynamicSettings,
-        // Don't persist history or selection
       }),
     },
   ),
@@ -286,7 +218,6 @@ export const selectActiveModules = (state: ThemeStore) => {
     }),
   );
 
-  // Ensure MODULE_DEFINITIONS are also ModuleItem compatible
   const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
     id: def.name,
     name: def.name,

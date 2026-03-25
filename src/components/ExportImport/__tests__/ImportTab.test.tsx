@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { type Mock, vi } from 'vitest';
 
 import { useToast } from '../../../contexts/ToastContext';
@@ -20,6 +19,8 @@ describe('ImportTab URL Import', () => {
   const mockOnClose = vi.fn();
   const mockAddToast = vi.fn();
   const mockImportToml = vi.fn();
+  const mockFetch = vi.fn();
+  const mockConfirm = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -32,13 +33,14 @@ describe('ImportTab URL Import', () => {
       importToml: mockImportToml,
     });
 
-    global.fetch = vi.fn() as unknown as typeof fetch;
-    global.confirm = vi.fn().mockReturnValue(true);
+    mockConfirm.mockReturnValue(true);
+    vi.stubGlobal('fetch', mockFetch);
+    vi.stubGlobal('confirm', mockConfirm);
   });
 
   it('displays a validation error when fetch fails (res.ok is false)', async () => {
     // Mock fetch to return a non-ok response
-    (global.fetch as Mock).mockResolvedValue({
+    mockFetch.mockResolvedValue({
       ok: false,
       text: async () => 'Not Found',
     });
@@ -56,9 +58,7 @@ describe('ImportTab URL Import', () => {
     await userEvent.click(fetchButton);
 
     // Assert fetch was called with the correct URL
-    expect(global.fetch).toHaveBeenCalledWith(
-      'https://example.com/starship.toml',
-    );
+    expect(mockFetch).toHaveBeenCalledWith('https://example.com/starship.toml');
 
     // Wait for the error message to appear
     await waitFor(() => {
@@ -72,7 +72,7 @@ describe('ImportTab URL Import', () => {
 
   it('displays a validation error when fetch rejects completely (network error)', async () => {
     // Mock fetch to simulate a network failure
-    (global.fetch as Mock).mockRejectedValue(new Error('Network error'));
+    mockFetch.mockRejectedValue(new Error('Network error'));
 
     render(<ImportTab onClose={mockOnClose} />);
 
@@ -99,7 +99,7 @@ describe('ImportTab URL Import', () => {
   it('successfully fetches and validates TOML on a successful URL import', async () => {
     // Mock fetch to return a valid TOML text
     const validToml = '[character]\nsuccess_symbol = "❯"';
-    (global.fetch as Mock).mockResolvedValue({
+    mockFetch.mockResolvedValue({
       ok: true,
       text: async () => validToml,
     });

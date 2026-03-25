@@ -74,14 +74,12 @@ function AppContent() {
     updateMetadata,
     saveTheme,
     resetTheme,
-    undo,
-    redo,
-    canUndo,
-    canRedo,
   } = useThemeStore();
 
-  const isUndoPossible = canUndo();
-  const isRedoPossible = canRedo();
+  const { undo, redo, pastStates, futureStates } =
+    useThemeStore.temporal.getState();
+  const isUndoPossible = pastStates.length > 0;
+  const isRedoPossible = futureStates.length > 0;
 
   const {
     showExportImport,
