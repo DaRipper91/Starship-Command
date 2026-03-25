@@ -5,7 +5,7 @@ import { useToast } from '../contexts/ToastContext';
 
 interface AuthModalProps {
   onClose: () => void;
-  onLoginSuccess: (userId: number, username: string) => void;
+  onLoginSuccess: (userId: string, username: string) => void;
 }
 
 export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
@@ -42,7 +42,7 @@ export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
 
       if (isLogin) {
         addToast('Logged in successfully', 'success');
-        onLoginSuccess(data.user_id, username);
+        onLoginSuccess(String(data.user_id), username);
       } else {
         addToast('Registered successfully. Please log in.', 'success');
         setIsLogin(true);

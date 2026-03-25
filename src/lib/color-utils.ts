@@ -227,14 +227,15 @@ export class ColorUtils {
       };
 
       // Create bitmap to transfer to worker
-      createImageBitmap(imageFile)
-        .then((bitmap) => {
+      (async () => {
+        try {
+          const bitmap = await createImageBitmap(imageFile);
           worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
-        })
-        .catch((err) => {
+        } catch (err) {
           reject(err);
           worker.terminate();
-        });
+        }
+      })();
     });
   }
 }
