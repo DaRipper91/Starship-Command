@@ -6,7 +6,7 @@ import { useThemeStore } from '../stores/theme-store';
 
 interface ThemeUploadModalProps {
   onClose: () => void;
-  userId: number;
+  userId: string;
 }
 
 export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
