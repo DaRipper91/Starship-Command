@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { LayoutMode } from '../types';
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   avatar?: string;
 }
@@ -13,6 +13,14 @@ interface UIStore {
   setLayoutMode: (mode: LayoutMode) => void;
   showThemeGallery: boolean;
   setShowThemeGallery: (state: boolean) => void;
+  showGallery: boolean;
+  setShowGallery: (state: boolean) => void;
+  showExportImport: 'export' | 'import' | null;
+  setShowExportImport: (state: 'export' | 'import' | null) => void;
+  showComparison: boolean;
+  setShowComparison: (state: boolean) => void;
+  showCommandPalette: boolean;
+  setShowCommandPalette: (state: boolean) => void;
   showWelcomeWizard: boolean;
   setShowWelcomeWizard: (state: boolean) => void;
   showDynamicThemeSettings: boolean;
@@ -38,6 +46,14 @@ export const useUIStore = create<UIStore>((set) => ({
   setLayoutMode: (mode) => set({ layoutMode: mode }),
   showThemeGallery: false,
   setShowThemeGallery: (state) => set({ showThemeGallery: state }),
+  showGallery: false,
+  setShowGallery: (state) => set({ showGallery: state }),
+  showExportImport: null,
+  setShowExportImport: (state) => set({ showExportImport: state }),
+  showComparison: false,
+  setShowComparison: (state) => set({ showComparison: state }),
+  showCommandPalette: false,
+  setShowCommandPalette: (state) => set({ showCommandPalette: state }),
   showWelcomeWizard: !localStorage.getItem('welcome-wizard-seen'),
   setShowWelcomeWizard: (state) => set({ showWelcomeWizard: state }),
   showDynamicThemeSettings: false,
