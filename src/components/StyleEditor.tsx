@@ -1,5 +1,5 @@
 import { Bold, Italic, Underline } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { cn } from '../lib/utils';
 import { ColorPicker } from './ColorPicker';
@@ -10,7 +10,12 @@ interface StyleEditorProps {
   className?: string;
 }
 
-export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
+// Memoized to prevent unnecessary re-renders when parent theme configuration updates.
+export const StyleEditor = React.memo(function StyleEditor({
+  value,
+  onChange,
+  className,
+}: StyleEditorProps) {
   const [fgColor, setFgColor] = useState('');
   const [bgColor, setBgColor] = useState('');
   const [isBold, setIsBold] = useState(false);
@@ -60,74 +65,93 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
     setIsInverted(inverted);
   }, [value]);
 
-  const updateStyle = (
-    newFg: string,
-    newBg: string,
-    modifiers: {
-      bold: boolean;
-      italic: boolean;
-      underline: boolean;
-      dimmed: boolean;
-      inverted: boolean;
+  const updateStyle = useCallback(
+    (
+      newFg: string,
+      newBg: string,
+      modifiers: {
+        bold: boolean;
+        italic: boolean;
+        underline: boolean;
+        dimmed: boolean;
+        inverted: boolean;
+      },
+    ) => {
+      const parts: string[] = [];
+
+      if (modifiers.bold) parts.push('bold');
+      if (modifiers.italic) parts.push('italic');
+      if (modifiers.underline) parts.push('underline');
+      if (modifiers.dimmed) parts.push('dimmed');
+      if (modifiers.inverted) parts.push('inverted');
+
+      if (newBg) parts.push(`bg:${newBg}`);
+      if (newFg) parts.push(newFg);
+
+      onChange(parts.join(' '));
     },
-  ) => {
-    const parts: string[] = [];
+    [onChange],
+  );
 
-    if (modifiers.bold) parts.push('bold');
-    if (modifiers.italic) parts.push('italic');
-    if (modifiers.underline) parts.push('underline');
-    if (modifiers.dimmed) parts.push('dimmed');
-    if (modifiers.inverted) parts.push('inverted');
+  const handleModifierChange = useCallback(
+    (mod: 'bold' | 'italic' | 'underline' | 'dimmed' | 'inverted') => {
+      const modifiers = {
+        bold: isBold,
+        italic: isItalic,
+        underline: isUnderline,
+        dimmed: isDimmed,
+        inverted: isInverted,
+      };
+      modifiers[mod] = !modifiers[mod];
 
-    if (newBg) parts.push(`bg:${newBg}`);
-    if (newFg) parts.push(newFg);
+      // Update local state for immediate feedback
+      if (mod === 'bold') setIsBold(!isBold);
+      if (mod === 'italic') setIsItalic(!isItalic);
+      if (mod === 'underline') setIsUnderline(!isUnderline);
+      if (mod === 'dimmed') setIsDimmed(!isDimmed);
+      if (mod === 'inverted') setIsInverted(!isInverted);
 
-    onChange(parts.join(' '));
-  };
+      updateStyle(fgColor, bgColor, modifiers);
+    },
+    [
+      isBold,
+      isItalic,
+      isUnderline,
+      isDimmed,
+      isInverted,
+      fgColor,
+      bgColor,
+      updateStyle,
+    ],
+  );
 
-  const handleModifierChange = (
-    mod: 'bold' | 'italic' | 'underline' | 'dimmed' | 'inverted',
-  ) => {
-    const modifiers = {
-      bold: isBold,
-      italic: isItalic,
-      underline: isUnderline,
-      dimmed: isDimmed,
-      inverted: isInverted,
-    };
-    modifiers[mod] = !modifiers[mod];
+  const handleFgChange = useCallback(
+    (color: string) => {
+      setFgColor(color);
+      updateStyle(color, bgColor, {
+        bold: isBold,
+        italic: isItalic,
+        underline: isUnderline,
+        dimmed: isDimmed,
+        inverted: isInverted,
+      });
+    },
+    [bgColor, isBold, isItalic, isUnderline, isDimmed, isInverted, updateStyle],
+  );
 
-    // Update local state for immediate feedback
-    if (mod === 'bold') setIsBold(!isBold);
-    if (mod === 'italic') setIsItalic(!isItalic);
-    if (mod === 'underline') setIsUnderline(!isUnderline);
-    if (mod === 'dimmed') setIsDimmed(!isDimmed);
-    if (mod === 'inverted') setIsInverted(!isInverted);
-
-    updateStyle(fgColor, bgColor, modifiers);
-  };
-
-  const handleFgChange = (color: string) => {
-    setFgColor(color);
-    updateStyle(color, bgColor, {
-      bold: isBold,
-      italic: isItalic,
-      underline: isUnderline,
-      dimmed: isDimmed,
-      inverted: isInverted,
-    });
-  };
-
-  const handleBgChange = (color: string) => {
-    setBgColor(color);
-    updateStyle(fgColor, color, {
-      bold: isBold,
-      italic: isItalic,
-      underline: isUnderline,
-      dimmed: isDimmed,
-      inverted: isInverted,
-    });
-  };
+  const handleBgChange = useCallback(
+    (color: string) => {
+      setBgColor(color);
+      updateStyle(fgColor, color, {
+        bold: isBold,
+        italic: isItalic,
+        underline: isUnderline,
+        dimmed: isDimmed,
+        inverted: isInverted,
+      });
+    },
+    [fgColor, isBold, isItalic, isUnderline, isDimmed, isInverted, updateStyle],
+  );
 
   return (
     <div
@@ -228,4 +252,4 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
       </div>
     </div>
   );
-}
+});

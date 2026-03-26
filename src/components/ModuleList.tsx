@@ -200,6 +200,7 @@ export const ModuleList = memo(function ModuleList({
   );
 
   const sensors = useSensors(
+    // Configured with distance: 5 to prevent expensive full-list re-renders during simple clicks
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 5,

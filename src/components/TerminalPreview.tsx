@@ -16,6 +16,8 @@ import { FitAddon } from 'xterm-addon-fit';
 import { useToast } from '../contexts/ToastContext';
 import { useDebounce } from '../hooks/useDebounce';
 import { ColorUtils } from '../lib/color-utils';
+
+const PREVIEW_DEBOUNCE_MS = 250;
 import { parseFormattedString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { translateThemeToXterm } from '../lib/theme-to-xterm';
@@ -183,7 +185,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
       return parseFormattedString(format, currentTheme.config, scenario);
     }, [currentTheme.config, scenarioIndex, scenarioKeys]);
 
-    const debouncedSegments = useDebounce(segments, 200);
+    const debouncedSegments = useDebounce(segments, PREVIEW_DEBOUNCE_MS);
 
     useEffect(() => {
       const term = xtermRef.current;
