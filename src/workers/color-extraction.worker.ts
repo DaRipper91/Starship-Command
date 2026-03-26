@@ -1,10 +1,14 @@
 import { Vibrant } from 'node-vibrant/browser';
 
 self.onmessage = async (e) => {
-  const { imageUrl } = e.data;
+  const { imageUrl, imageBitmap } = e.data;
 
   try {
-    const vibrant = new Vibrant(imageUrl);
+    const input = imageBitmap || imageUrl;
+    if (!input) {
+      throw new Error('No image input provided');
+    }
+    const vibrant = new Vibrant(input);
     const palette = await vibrant.getPalette();
 
     if (!palette) {
