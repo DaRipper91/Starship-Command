@@ -178,8 +178,8 @@ function AppContent() {
 
   useKeyboardShortcuts([
     { keys: 'mod+s', description: 'Save current theme', handler: handleSave },
-    { keys: 'mod+z', description: 'Undo', handler: undo },
-    { keys: 'mod+shift+z', description: 'Redo', handler: redo },
+    { keys: 'mod+z', description: 'Undo', handler: () => undo() },
+    { keys: 'mod+shift+z', description: 'Redo', handler: () => redo() },
     {
       keys: 'mod+k',
       description: 'Open Command Palette',
@@ -204,8 +204,13 @@ function AppContent() {
 
   const commandActions = [
     { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: handleSave },
-    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: undo },
-    { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: redo },
+    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: () => undo() },
+    {
+      id: 'redo',
+      title: 'Redo',
+      shortcut: 'Cmd+Shift+Z',
+      perform: () => redo(),
+    },
     { id: 'new', title: 'New Theme', perform: handleNew },
     {
       id: 'gallery',
@@ -251,6 +256,9 @@ function AppContent() {
                 'rounded p-2 text-gray-400 hover:bg-gray-800',
                 !isMobileLayout && isDesktopLayout && 'lg:hidden',
               )}
+              aria-label={
+                leftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'
+              }
             >
               <Menu size={20} />
             </button>
@@ -272,6 +280,7 @@ function AppContent() {
             <button
               onClick={() => setShowCommandPalette(true)}
               className="rounded p-2 text-gray-400 hover:bg-gray-800"
+              aria-label="Open command palette"
             >
               <Keyboard size={18} />
             </button>
@@ -281,6 +290,9 @@ function AppContent() {
                 'rounded p-2 text-gray-400 hover:bg-gray-800',
                 isDesktopLayout && 'xl:hidden',
               )}
+              aria-label={
+                rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
+              }
             >
               <Settings size={20} />
             </button>
@@ -330,16 +342,18 @@ function AppContent() {
 
           <div className="flex items-center gap-1 border-r border-gray-700 pr-2">
             <button
-              onClick={undo}
+              onClick={() => undo()}
               disabled={!isUndoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              aria-label="Undo"
             >
               <Undo size={16} />
             </button>
             <button
-              onClick={redo}
+              onClick={() => redo()}
               disabled={!isRedoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              aria-label="Redo"
             >
               <Redo size={16} />
             </button>
@@ -378,6 +392,7 @@ function AppContent() {
           <button
             onClick={() => setShowDynamicThemeSettings(true)}
             className="hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 xl:block"
+            aria-label="Dynamic theme settings"
           >
             <Settings size={18} />
           </button>
