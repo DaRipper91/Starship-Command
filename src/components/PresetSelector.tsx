@@ -10,7 +10,8 @@ export function PresetSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { currentTheme, loadTheme, savedThemes, past } = useThemeStore();
+  const { currentTheme, loadTheme, savedThemes } = useThemeStore();
+  const { pastStates } = useThemeStore.temporal.getState();
   const { addToast } = useToast();
   const confirm = useConfirmation();
 
@@ -52,7 +53,7 @@ export function PresetSelector() {
       }
     }
 
-    const hasHistory = past.length > 0;
+    const hasHistory = pastStates.length > 0;
 
     if (hasUnsavedChanges && hasHistory) {
       const confirmed = await confirm({

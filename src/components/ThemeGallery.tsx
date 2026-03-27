@@ -19,7 +19,8 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
   const confirm = useConfirmation();
 
   const handleLoad = async (theme: Theme) => {
-    const { currentTheme, savedThemes, past } = useThemeStore.getState();
+    const { currentTheme, savedThemes } = useThemeStore.getState();
+    const { pastStates } = useThemeStore.temporal.getState();
 
     // Check if unsaved
     const saved = savedThemes.find(
@@ -42,7 +43,7 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
     }
 
     // Only prompt if there is history (user has done something)
-    const hasHistory = past.length > 0;
+    const hasHistory = pastStates.length > 0;
 
     if (hasUnsavedChanges && hasHistory) {
       const confirmed = await confirm({
