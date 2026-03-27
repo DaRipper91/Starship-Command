@@ -178,8 +178,8 @@ function AppContent() {
 
   useKeyboardShortcuts([
     { keys: 'mod+s', description: 'Save current theme', handler: handleSave },
-    { keys: 'mod+z', description: 'Undo', handler: () => undo() },
-    { keys: 'mod+shift+z', description: 'Redo', handler: () => redo() },
+    { keys: 'mod+z', description: 'Undo', handler: undo },
+    { keys: 'mod+shift+z', description: 'Redo', handler: redo },
     {
       keys: 'mod+k',
       description: 'Open Command Palette',
@@ -204,8 +204,8 @@ function AppContent() {
 
   const commandActions = [
     { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: handleSave },
-    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: () => undo() },
-    { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: () => redo() },
+    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: undo },
+    { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: redo },
     { id: 'new', title: 'New Theme', perform: handleNew },
     {
       id: 'gallery',
@@ -330,14 +330,14 @@ function AppContent() {
 
           <div className="flex items-center gap-1 border-r border-gray-700 pr-2">
             <button
-              onClick={() => undo()}
+              onClick={undo}
               disabled={!isUndoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Undo size={16} />
             </button>
             <button
-              onClick={() => redo()}
+              onClick={redo}
               disabled={!isRedoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >

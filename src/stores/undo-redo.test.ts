@@ -25,7 +25,7 @@ describe('Undo/Redo Logic', () => {
 
     const temporalState = useThemeStore.temporal.getState();
     expect(temporalState.pastStates.length).toBe(1);
-    expect(temporalState.pastStates[0]?.currentTheme?.config?.format).toBe(
+    expect(temporalState.pastStates[0].currentTheme.config.format).toBe(
       'initial',
     );
 
