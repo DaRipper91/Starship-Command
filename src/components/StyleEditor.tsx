@@ -207,6 +207,7 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
                 ? 'border-blue-500 bg-blue-600 text-white'
                 : 'bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200',
             )}
+            aria-label="Toggle Dimmed"
             aria-pressed={isDimmed}
           >
             Dim
@@ -220,6 +221,7 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
                 ? 'border-blue-500 bg-blue-600 text-white'
                 : 'bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200',
             )}
+            aria-label="Toggle Inverted"
             aria-pressed={isInverted}
           >
             Inverted

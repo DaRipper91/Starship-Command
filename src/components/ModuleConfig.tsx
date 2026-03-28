@@ -289,6 +289,8 @@ export function ModuleConfig() {
                 )
               }
               className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              aria-expanded={showIconBrowser === 'symbol'}
+              aria-label="Toggle Icon Browser for symbol"
             >
               Browse
             </button>
@@ -483,6 +485,8 @@ export function ModuleConfig() {
                         )
                       }
                       className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      aria-expanded={showIconBrowser === key}
+                      aria-label={`Toggle Icon Browser for ${key}`}
                     >
                       Browse
                     </button>
