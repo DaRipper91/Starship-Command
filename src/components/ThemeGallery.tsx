@@ -1,4 +1,5 @@
 import { Clock, Play, Trash2 } from 'lucide-react';
+import { useStore } from 'zustand';
 
 import { useConfirmation } from '../contexts/ConfirmationContext';
 import { useToast } from '../contexts/ToastContext';
@@ -18,8 +19,10 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
   const { addToast } = useToast();
   const confirm = useConfirmation();
 
+  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
+
   const handleLoad = async (theme: Theme) => {
-    const { currentTheme, savedThemes, past } = useThemeStore.getState();
+    const { currentTheme, savedThemes } = useThemeStore.getState();
 
     // Check if unsaved
     const saved = savedThemes.find(
@@ -42,7 +45,7 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
     }
 
     // Only prompt if there is history (user has done something)
-    const hasHistory = past.length > 0;
+    const hasHistory = pastStates.length > 0;
 
     if (hasUnsavedChanges && hasHistory) {
       const confirmed = await confirm({
