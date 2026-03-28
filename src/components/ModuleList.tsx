@@ -111,7 +111,7 @@ const SortableItem = memo(function SortableItem({
             e.stopPropagation();
             onSelect(item.name);
           }}
-          className="text-xs text-gray-400 hover:text-blue-400"
+          className="rounded px-1 text-xs text-gray-400 hover:text-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           Configure
         </button>
@@ -361,7 +361,7 @@ export const ModuleList = memo(function ModuleList({
                       e.stopPropagation();
                       setSelectedModule(module.name);
                     }}
-                    className="text-xs text-gray-500 hover:text-blue-400"
+                    className="rounded px-1 text-xs text-gray-500 hover:text-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
                     Configure
                   </button>
