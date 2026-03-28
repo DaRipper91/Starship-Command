@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import React, { Suspense, useEffect } from 'react';
+import { useStore } from 'zustand';
 
 import { AuthModal } from './components/AuthModal';
 import { CommandPalette } from './components/CommandPalette';
@@ -76,8 +77,13 @@ function AppContent() {
     resetTheme,
   } = useThemeStore();
 
-  const { undo, redo, pastStates, futureStates } =
-    useThemeStore.temporal.getState();
+  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
+  const futureStates = useStore(useThemeStore.temporal, (state) => state.futureStates);
+  const undo = useThemeStore.temporal.getState().undo;
+  const redo = useThemeStore.temporal.getState().redo;
+
+  const handleUndo = () => undo();
+  const handleRedo = () => redo();
   const isUndoPossible = pastStates.length > 0;
   const isRedoPossible = futureStates.length > 0;
 
@@ -178,8 +184,8 @@ function AppContent() {
 
   useKeyboardShortcuts([
     { keys: 'mod+s', description: 'Save current theme', handler: handleSave },
-    { keys: 'mod+z', description: 'Undo', handler: undo },
-    { keys: 'mod+shift+z', description: 'Redo', handler: redo },
+    { keys: 'mod+z', description: 'Undo', handler: handleUndo },
+    { keys: 'mod+shift+z', description: 'Redo', handler: handleRedo },
     {
       keys: 'mod+k',
       description: 'Open Command Palette',
@@ -330,14 +336,14 @@ function AppContent() {
 
           <div className="flex items-center gap-1 border-r border-gray-700 pr-2">
             <button
-              onClick={undo}
+              onClick={handleUndo}
               disabled={!isUndoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Undo size={16} />
             </button>
             <button
-              onClick={redo}
+              onClick={handleRedo}
               disabled={!isRedoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >

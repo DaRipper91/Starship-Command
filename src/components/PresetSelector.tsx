@@ -1,5 +1,6 @@
 import { ChevronDown, Palette } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useStore } from 'zustand';
 
 import { useConfirmation } from '../contexts/ConfirmationContext';
 import { useToast } from '../contexts/ToastContext';
@@ -10,7 +11,8 @@ export function PresetSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { currentTheme, loadTheme, savedThemes, past } = useThemeStore();
+  const { currentTheme, loadTheme, savedThemes } = useThemeStore();
+  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
   const { addToast } = useToast();
   const confirm = useConfirmation();
 
@@ -52,7 +54,7 @@ export function PresetSelector() {
       }
     }
 
-    const hasHistory = past.length > 0;
+    const hasHistory = pastStates.length > 0;
 
     if (hasUnsavedChanges && hasHistory) {
       const confirmed = await confirm({
