@@ -38,8 +38,7 @@ export function ImagePalette() {
         worker.terminate();
       };
 
-      worker.onerror = (e) => {
-        console.error('Worker error:', e);
+      worker.onerror = () => {
         addToast('Worker failed to extract palette.', 'error');
         setIsExtracting(false);
         worker.terminate();
