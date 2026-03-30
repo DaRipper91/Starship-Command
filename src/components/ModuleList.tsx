@@ -25,6 +25,10 @@ import { cn } from '../lib/utils';
 import { selectActiveModules, useThemeStore } from '../stores/theme-store';
 import { BaseModuleConfig } from '../types/starship.types';
 
+const MODULE_DEF_MAP = new Map(
+  MODULE_DEFINITIONS.map((def) => [def.name, def]),
+);
+
 interface ModuleItem {
   id: string;
   name: string;
@@ -153,7 +157,7 @@ export const ModuleList = memo(function ModuleList({
     if (!searchTerm) return activeModulesStore;
     const term = searchTerm.toLowerCase();
     return activeModulesStore.filter((m) => {
-      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      const def = MODULE_DEF_MAP.get(m.id);
       return (
         m.name.toLowerCase().includes(term) ||
         def?.title.toLowerCase().includes(term) ||
@@ -168,7 +172,7 @@ export const ModuleList = memo(function ModuleList({
     if (!searchTerm) return inactive;
     const term = searchTerm.toLowerCase();
     return inactive.filter((m) => {
-      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      const def = MODULE_DEF_MAP.get(m.id);
       return (
         m.name.toLowerCase().includes(term) ||
         def?.title.toLowerCase().includes(term) ||

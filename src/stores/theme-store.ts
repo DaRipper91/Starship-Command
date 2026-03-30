@@ -210,25 +210,17 @@ export const useThemeStore = create<ThemeStore>()(
 
 // Selector for active modules
 export const selectActiveModules = (state: ThemeStore) => {
-  const customModules = Object.keys(state.currentTheme.config.custom || {}).map(
-    (id) => ({
-      id,
-      name: id,
-      isCustom: true,
-    }),
+  const customModuleNames = new Set(
+    Object.keys(state.currentTheme.config.custom || {}),
   );
-
-  const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
-    id: def.name,
-    name: def.name,
-    isCustom: false,
-  }));
-
-  const allModules = [...predefinedModules, ...customModules];
 
   const format = state.currentTheme.config.format || '';
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
-  const existingModuleNames = new Set(allModules.map((m) => m.name));
+
+  const existingModuleNames = new Set([
+    ...MODULE_DEFINITIONS.map((def) => def.name),
+    ...customModuleNames,
+  ]);
 
   const parsedModules = matches
     .map((m, i) => {
@@ -236,8 +228,7 @@ export const selectActiveModules = (state: ThemeStore) => {
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom:
-          allModules.find((mod) => mod.name === name)?.isCustom || false,
+        isCustom: customModuleNames.has(name),
       };
     })
     .filter((item) => existingModuleNames.has(item.name));
