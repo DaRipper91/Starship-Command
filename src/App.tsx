@@ -77,8 +77,14 @@ function AppContent() {
     resetTheme,
   } = useThemeStore();
 
-  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
-  const futureStates = useStore(useThemeStore.temporal, (state) => state.futureStates);
+  const pastStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.pastStates,
+  );
+  const futureStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.futureStates,
+  );
   const undo = useThemeStore.temporal.getState().undo;
   const redo = useThemeStore.temporal.getState().redo;
 

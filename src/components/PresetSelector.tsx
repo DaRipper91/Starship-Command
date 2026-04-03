@@ -12,7 +12,10 @@ export function PresetSelector() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { currentTheme, loadTheme, savedThemes } = useThemeStore();
-  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
+  const pastStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.pastStates,
+  );
   const { addToast } = useToast();
   const confirm = useConfirmation();
 
