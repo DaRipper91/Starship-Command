@@ -309,6 +309,8 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
             <button
               onClick={() => setShowFontLoader((p) => !p)}
               title="Font settings"
+              aria-label="Toggle font settings"
+              aria-expanded={showFontLoader}
               className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
             >
               {showFontLoader ? <ChevronUp size={14} /> : <Type size={14} />}
@@ -316,6 +318,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
             <button
               onClick={handleCopyToClipboard}
               title="Copy screenshot to clipboard"
+              aria-label="Copy screenshot to clipboard"
               className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
             >
               <Copy size={14} />
@@ -323,6 +326,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
             <button
               onClick={handleDownload}
               title="Download PNG"
+              aria-label="Download PNG screenshot"
               className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
             >
               <Download size={14} />
