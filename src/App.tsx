@@ -77,8 +77,14 @@ function AppContent() {
     resetTheme,
   } = useThemeStore();
 
-  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
-  const futureStates = useStore(useThemeStore.temporal, (state) => state.futureStates);
+  const pastStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.pastStates,
+  );
+  const futureStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.futureStates,
+  );
   const undo = useThemeStore.temporal.getState().undo;
   const redo = useThemeStore.temporal.getState().redo;
 
@@ -257,6 +263,10 @@ function AppContent() {
                 'rounded p-2 text-gray-400 hover:bg-gray-800',
                 !isMobileLayout && isDesktopLayout && 'lg:hidden',
               )}
+              aria-label={
+                leftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'
+              }
+              title={leftSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
             >
               <Menu size={20} />
             </button>
@@ -278,6 +288,8 @@ function AppContent() {
             <button
               onClick={() => setShowCommandPalette(true)}
               className="rounded p-2 text-gray-400 hover:bg-gray-800"
+              aria-label="Open command palette"
+              title="Command Palette (Ctrl+K)"
             >
               <Keyboard size={18} />
             </button>
@@ -287,6 +299,12 @@ function AppContent() {
                 'rounded p-2 text-gray-400 hover:bg-gray-800',
                 isDesktopLayout && 'xl:hidden',
               )}
+              aria-label={
+                rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
+              }
+              title={
+                rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
+              }
             >
               <Settings size={20} />
             </button>
@@ -339,6 +357,10 @@ function AppContent() {
               onClick={handleUndo}
               disabled={!isUndoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              aria-label={
+                isUndoPossible ? 'Undo last action' : 'Nothing to undo'
+              }
+              title={isUndoPossible ? 'Undo (Ctrl+Z)' : 'Nothing to undo'}
             >
               <Undo size={16} />
             </button>
@@ -346,6 +368,10 @@ function AppContent() {
               onClick={handleRedo}
               disabled={!isRedoPossible}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              aria-label={
+                isRedoPossible ? 'Redo last action' : 'Nothing to redo'
+              }
+              title={isRedoPossible ? 'Redo (Ctrl+Shift+Z)' : 'Nothing to redo'}
             >
               <Redo size={16} />
             </button>
@@ -384,6 +410,8 @@ function AppContent() {
           <button
             onClick={() => setShowDynamicThemeSettings(true)}
             className="hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 xl:block"
+            aria-label="Dynamic theme settings"
+            title="Dynamic theme settings"
           >
             <Settings size={18} />
           </button>
