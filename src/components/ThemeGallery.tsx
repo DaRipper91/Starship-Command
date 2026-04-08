@@ -19,7 +19,10 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
   const { addToast } = useToast();
   const confirm = useConfirmation();
 
-  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
+  const pastStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.pastStates,
+  );
 
   const handleLoad = async (theme: Theme) => {
     const { currentTheme, savedThemes } = useThemeStore.getState();

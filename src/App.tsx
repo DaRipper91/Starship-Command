@@ -77,8 +77,14 @@ function AppContent() {
     resetTheme,
   } = useThemeStore();
 
-  const pastStates = useStore(useThemeStore.temporal, (state) => state.pastStates);
-  const futureStates = useStore(useThemeStore.temporal, (state) => state.futureStates);
+  const pastStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.pastStates,
+  );
+  const futureStates = useStore(
+    useThemeStore.temporal,
+    (state) => state.futureStates,
+  );
   const undo = useThemeStore.temporal.getState().undo;
   const redo = useThemeStore.temporal.getState().redo;
 
@@ -338,6 +344,8 @@ function AppContent() {
             <button
               onClick={handleUndo}
               disabled={!isUndoPossible}
+              title={!isUndoPossible ? 'No past history' : 'Undo'}
+              aria-label={!isUndoPossible ? 'No past history' : 'Undo'}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Undo size={16} />
@@ -345,6 +353,8 @@ function AppContent() {
             <button
               onClick={handleRedo}
               disabled={!isRedoPossible}
+              title={!isRedoPossible ? 'No future history' : 'Redo'}
+              aria-label={!isRedoPossible ? 'No future history' : 'Redo'}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Redo size={16} />

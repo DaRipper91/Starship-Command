@@ -27,3 +27,6 @@ Before committing, please run:
 - `npm run build` (to ensure type safety - uses `tsc -b`)
 
 We use `husky` and `lint-staged` to automatically check your code on commit. Running `npm run lint` is required to ensure consistent code styling.
+
+### Pre-commit hook
+The repository enforces a `lint-staged` pre-commit hook which automatically runs `eslint --fix` and `prettier --write` on staged TypeScript and TSX files to prevent linting and formatting issues from being committed.
