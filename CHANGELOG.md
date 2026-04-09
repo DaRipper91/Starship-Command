@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.0] - 2026-03-09
+
+### Fixed
+- Replaced unhandled promise `.then().catch()` chains with robust `async/await` and `try/catch` block in `src/lib/color-utils.ts` to ensure runtime resilience and prevent memory leaks.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
