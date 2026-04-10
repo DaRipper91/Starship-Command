@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { translateThemeToXterm } from './theme-to-xterm';
+
 import { StarshipConfig } from '../types/starship.types';
+import { translateThemeToXterm } from './theme-to-xterm';
 
 describe('translateThemeToXterm', () => {
   it('should return default theme values for an empty config', () => {
@@ -27,8 +28,8 @@ describe('translateThemeToXterm', () => {
           color0: '#111111',
           color1: '#ff0000',
           color8: '#222222',
-        }
-      }
+        },
+      },
     };
     const theme = translateThemeToXterm(config);
 
@@ -52,8 +53,8 @@ describe('translateThemeToXterm', () => {
         'my-theme': {
           bg: '#222222',
           fg: '#dddddd',
-        }
-      }
+        },
+      },
     };
     const theme = translateThemeToXterm(config);
 
@@ -67,9 +68,9 @@ describe('translateThemeToXterm', () => {
         global: {
           bg: 'color0',
           color0: '#000000',
-          fg: '#ffffff'
-        }
-      }
+          fg: '#ffffff',
+        },
+      },
     };
     const theme = translateThemeToXterm(config);
 
@@ -97,8 +98,8 @@ describe('translateThemeToXterm', () => {
           color13: '#00000d',
           color14: '#00000e',
           color15: '#00000f',
-        }
-      }
+        },
+      },
     };
     const theme = translateThemeToXterm(config);
 
