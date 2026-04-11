@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { LayoutMode } from '../types';
 
-interface User {
+export interface User {
   id: number;
   name: string;
   avatar?: string;
