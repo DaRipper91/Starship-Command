@@ -1,277 +1,224 @@
-# Research Report: Starship Theme Creator - Feature & UX Enhancement
+# Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines a comprehensive feature and UX enhancement strategy for a visual, no-code editor for Starship shell prompts. Based on analysis of modern configuration builders, design tools (Figma, Coolors), and terminal customization workflows (Oh-My-Zsh, Gogh), this report proposes 12 feature recommendations and 12 UI/UX design improvements to elevate the Starship Theme Creator into a premium developer tool.
+This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
-## 📊 PART A: Feature Recommendations
+## 📊 Part A: Feature Recommendations
 
-**1. Semantic Color Token System**
-* **Category:** Advanced Customization
-* **Description:** Instead of hardcoding hex values into every module, users define a color palette (e.g., "Primary", "Error", "Git Modified") and map modules to these semantic tokens.
-* **User Value:** Allows users to change the entire aesthetic of their prompt with a single palette swap without editing individual module configurations.
-* **Implementation Complexity:** Medium
-* **Similar Example:** Tailwind CSS themes, Figma Local Variables
-* **Priority:** High
+### 1. Feature Name: GitHub Gist & Dotfiles Integration
+**Category:** Export / Developer Workflow
+**Description:** Allows users to directly export and sync their `starship.toml` to a GitHub Gist or an existing dotfiles repository via OAuth, enabling seamless remote backups and easy syncing across multiple machines.
+**User Value:** Developers store configs in dotfiles. Eliminating the manual copy-paste step streamlines their natural workflow.
+**Implementation Complexity:** Medium (requires GitHub OAuth and API integration)
+**Similar Example:** Settings Sync in VS Code, Raycast settings export.
+**Priority:** High
 
-**2. One-Click GitHub Dotfiles Integration**
-* **Category:** Developer Workflow Integration
-* **Description:** An authentication flow that allows users to directly push their generated `starship.toml` to their personal `dotfiles` repository on GitHub.
-* **User Value:** Eliminates the friction of downloading the TOML and manually moving it to the correct local directory.
-* **Implementation Complexity:** High
-* **Similar Example:** Vercel/Netlify GitHub integrations, GitHub Codespaces configuration
-* **Priority:** High
+### 2. Feature Name: Dynamic Environment Preview Simulator
+**Category:** Performance & Testing
+**Description:** A dropdown suite of "Mock Environments" (e.g., "In a Git Repo with modifications", "In a Node.js project", "Inside an AWS workspace context") that instantly injects dummy state into the xterm.js preview.
+**User Value:** Users can see how their prompt behaves conditionally without having to export the theme, load it in their local terminal, and manually create those environments to test.
+**Implementation Complexity:** Medium (requires mapping mock states to xterm rendering)
+**Similar Example:** Responsive viewport testing in Chrome DevTools; SwiftUI Canvas previews with mock data.
+**Priority:** High
 
-**3. AI-Powered Prompt Assistant**
-* **Category:** AI-Assisted Features
-* **Description:** A text input where users can type "I want a minimal prompt that shows Git status and Node version in pastel colors", and the AI generates the corresponding Starship configuration.
-* **User Value:** Drastically lowers the learning curve for beginners and serves as a rapid prototyping tool for power users.
-* **Implementation Complexity:** High
-* **Similar Example:** GitHub Copilot Chat, Vercel v0
-* **Priority:** Medium
+### 3. Feature Name: Community Theme Marketplace
+**Category:** Community Features / Collaboration
+**Description:** A built-in gallery where users can publish, browse, upvote, and fork Starship themes created by others.
+**User Value:** Lowers the barrier to entry for beginners and builds an active community around the tool. Creators can showcase their aesthetic setups.
+**Implementation Complexity:** High (requires database, user auth, and moderation)
+**Similar Example:** Figma Community, Obsidian Theme Browser, Oh-My-Zsh theme wikis.
+**Priority:** Medium
 
-**4. Real-Time Contrast & Accessibility Checker**
-* **Category:** Accessibility Features
-* **Description:** Automatically checks the contrast ratio between the chosen text colors and common terminal background colors (e.g., standard dark/light themes) based on WCAG guidelines, warning users if a module might be unreadable.
-* **User Value:** Prevents users from designing themes that look good on the website but fail in real-world terminal usage.
-* **Implementation Complexity:** Low
-* **Similar Example:** Coolors.co contrast checker, Chrome DevTools color picker
-* **Priority:** High
+### 4. Feature Name: WCAG Contrast & Accessibility Linter
+**Category:** AI-Assisted / Accessibility
+**Description:** An automated checker that warns users if their background/foreground text combinations fail WCAG contrast ratios, ensuring prompt readability.
+**User Value:** Terminal themes often suffer from poor contrast (e.g., dark blue on black). This prevents eye strain and builds accessible default themes.
+**Implementation Complexity:** Low (simple color math algorithms)
+**Similar Example:** Coolors.co contrast checker, Webflow's built-in vision simulator.
+**Priority:** High
 
-**5. Shareable Theme Links with Live Previews**
-* **Category:** Collaboration & Sharing
-* **Description:** Encodes the configuration state into the URL (or stores it in a lightweight database) so users can share their themes via a simple link (e.g., `starship-creator.app/t/abc123xyz`).
-* **User Value:** Enables creators to share their setups on Reddit, Discord, and GitHub seamlessly, driving organic growth.
-* **Implementation Complexity:** Medium
-* **Similar Example:** CodeSandbox, Ray.so
-* **Priority:** High
+### 5. Feature Name: One-Click Installation Script Generator
+**Category:** Export / Onboarding
+**Description:** Generates a cross-platform snippet (bash/zsh, powershell) that curls/downloads Starship, installs it, and pulls down the generated `starship.toml` in one go.
+**User Value:** Makes it incredibly easy for users (or content creators sharing with their audience) to install a theme on a completely fresh machine.
+**Implementation Complexity:** Low (string interpolation for bash/ps1 scripts)
+**Similar Example:** Homebrew installation script, Oh-My-Zsh setup curl command.
+**Priority:** Medium
 
-**6. Multi-OS Environment Sandbox Testing**
-* **Category:** Performance & Testing
-* **Description:** Allows users to toggle the preview environment to simulate different scenarios (e.g., inside a Git repo with uncommitted changes, in a Python virtual environment, acting as root user).
-* **User Value:** Reduces the trial-and-error of testing a prompt in the actual terminal by simulating real-world contexts directly in the browser.
-* **Implementation Complexity:** Medium
-* **Similar Example:** Responsively App, Postman mock servers
-* **Priority:** High
+### 6. Feature Name: Intelligent "Format String" Visual Builder
+**Category:** Advanced Customization
+**Description:** A node-based or token-based drag-and-drop editor specifically for the overarching `format` and `right_format` configuration strings, rather than just module toggle lists.
+**User Value:** The root `format` string is the hardest part of Starship to visualize. A block-based visual editor simplifies managing structural layout.
+**Implementation Complexity:** High (complex state synchronization)
+**Similar Example:** Zapier automation builder, Notion database property arrangement.
+**Priority:** High
 
-**7. "Time Travel" Version History**
-* **Category:** Core Functionality
-* **Description:** Auto-saves every significant change and provides a timeline to revert to previous states of the configuration.
-* **User Value:** Users can experiment freely with complex nested formats without the fear of permanently breaking their prompt.
-* **Implementation Complexity:** Medium
-* **Similar Example:** Google Docs Version History, Figma History
-* **Priority:** Medium
+### 7. Feature Name: Global Color Variable Manager
+**Category:** Advanced Customization
+**Description:** Allows defining a central color palette (e.g., `primary = "#ff0000"`) and assigning those variables to module colors. Updating the global variable updates all linked modules.
+**User Value:** Drastically speeds up theme creation and ensures aesthetic consistency across 50+ modules.
+**Implementation Complexity:** Medium
+**Similar Example:** Figma Local Variables, Tailwind CSS config, CSS Custom Properties.
+**Priority:** High
 
-**8. Advanced Format String Sandbox**
-* **Category:** Advanced Customization
-* **Description:** A specialized mini-editor specifically for constructing complex nested Starship format strings (e.g., `[ $symbol ($version) ]($style)`), highlighting syntax and visualizing the nesting levels.
-* **User Value:** Format strings are the most error-prone part of Starship configuration. A dedicated UI prevents syntax errors.
-* **Implementation Complexity:** High
-* **Similar Example:** Regex101.com, AST Explorer
-* **Priority:** High
+### 8. Feature Name: AI-Prompt Natural Language Generator
+**Category:** AI-Assisted Features
+**Description:** A text input where users type: "Make a cyberpunk theme with neon pink and green, showing only git and node." The AI outputs a ready-to-tweak visual representation.
+**User Value:** Provides an instant "blank canvas" starting point tailored exactly to the user's vibe, removing the initial friction of configuration.
+**Implementation Complexity:** High (requires LLM API integration and JSON schema parsing)
+**Similar Example:** Vercel v0, Webflow AI, Framer AI.
+**Priority:** Low (but high wow-factor)
 
-**9. Community Theme Marketplace / Gallery**
-* **Category:** Community Features
-* **Description:** An integrated gallery where users can browse, upvote, and fork themes created by the community. Includes tags like "Minimal", "Nerd Fonts", "Colorful".
-* **User Value:** Provides inspiration and out-of-the-box solutions for users who don't want to build from scratch.
-* **Implementation Complexity:** High
-* **Similar Example:** VS Code Extensions Marketplace, Oh-My-Zsh theme wiki
-* **Priority:** Medium
+### 9. Feature Name: Local Snapshot Time Machine
+**Category:** Advanced Customization / Safety
+**Description:** Automatically saves local history "snapshots" of the theme at major milestones, allowing users to restore previous states beyond simple undo/redo.
+**User Value:** Encourages experimentation because users know they can always revert to an older, working version of their theme.
+**Implementation Complexity:** Low (Local Storage + state serialization)
+**Similar Example:** Excalidraw local version history, Google Docs version history.
+**Priority:** Medium
 
-**10. CLI Tool Companion (`starship-creator-cli`)**
-* **Category:** Developer Workflow Integration
-* **Description:** A lightweight CLI that users can run locally to instantly apply themes downloaded or synced from the web app, or launch the web app with their current local config loaded.
-* **User Value:** Bridges the gap between the web browser and the local terminal environment.
-* **Implementation Complexity:** Medium
-* **Similar Example:** Tailwind CLI, Stellar theme manager
-* **Priority:** Low
-
-**11. Visual "Nerd Font" Glyph Picker**
-* **Category:** Core Functionality
-* **Description:** An integrated modal to search and select Nerd Font icons directly, rather than requiring the user to copy-paste them from an external cheat sheet.
-* **User Value:** Icons are a core part of Starship themes. Having a native picker saves significant time.
-* **Implementation Complexity:** Low
-* **Similar Example:** Notion's emoji picker, Raycast symbol search
-* **Priority:** High
-
-**12. Responsive Mobile Read-Only View**
-* **Category:** Mobile/Responsive Features
-* **Description:** While heavy editing is desktop-focused, mobile users get a specialized "view-only" mode that lets them browse themes, save them to their account, or copy installation commands.
-* **User Value:** Captures users browsing Reddit or Twitter on their phones who want to save a theme for later.
-* **Implementation Complexity:** Low
-* **Similar Example:** GitHub mobile app code viewer
-* **Priority:** Medium
+### 10. Feature Name: Mobile-First Responsive Editing
+**Category:** Mobile/Responsive Features
+**Description:** A bottom-sheet-based interface for mobile devices that allows quick editing of colors and format strings without horizontal scrolling.
+**User Value:** Users occasionally want to tweak their configs from their phones or tablets while commuting or thinking away from their desks.
+**Implementation Complexity:** Medium
+**Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
+**Priority:** Medium
 
 ---
 
-## 🎨 PART B: UI/UX Design Suggestions
+## 🎨 Part B: UI/UX Design Suggestions
 
-**1. Command Palette for Fast Navigation**
-* **Design Element:** Global App Interface
-* **Current State:** Users likely rely on mouse clicks to find and add modules.
-* **Proposed Improvement:** Implement a `Cmd/Ctrl + K` menu to quickly search for modules, apply presets, or switch themes.
-* **User Benefit:** Power users (the core demographic) heavily prefer keyboard navigation. This speeds up workflows immensely.
-* **Design Reference:** Linear, VS Code, Raycast
-* **Accessibility Impact:** Improves accessibility by providing a keyboard-only alternative to complex drag-and-drop actions.
-* **Implementation Notes:** Use `cmdk` or `kbar` React libraries.
+### 1. Design Element: Module Library Organization
+**Current State:** Often a long, flat list of 50+ modules.
+**Proposed Improvement:** Group modules into collapsible, visually distinct categories (e.g., "Git & Source Control", "Languages & Runtimes", "Cloud Providers", "System Metrics").
+**User Benefit:** Reduces cognitive load and scrolling fatigue.
+**Design Reference:** Notion's "/" command menu block categories; VS Code settings sidebar.
+**Accessibility Impact:** Makes keyboard navigation faster using category headers.
+**Implementation Notes:** Update `MODULE_DEFINITIONS` metadata to include tags/categories.
 
-**2. Contextual Split-Pane Editor**
-* **Design Element:** Layout & Information Architecture
-* **Current State:** Likely a single column of settings or overlapping modals.
-* **Proposed Improvement:** A permanent 3-pane layout: Left (Module List / Drag & Drop), Center (Interactive Terminal Preview), Right (Contextual Settings for the selected module).
-* **User Benefit:** Prevents context switching. Users always see how their granular settings affect the live preview.
-* **Design Reference:** Figma, Webflow, Retool
-* **Accessibility Impact:** Keeps logical flow left-to-right. Ensure pane resizers are keyboard accessible.
-* **Implementation Notes:** Use `react-resizable-panels`.
+### 2. Design Element: Split-Pane Real-Time Preview
+**Current State:** Fixed layout where preview and editor compete for space.
+**Proposed Improvement:** Implement a resizable, draggable split pane (e.g., left 60% editor, right 40% fixed preview) with an option to pop the preview into a floating picture-in-picture window.
+**User Benefit:** Users on different screen sizes can optimize their workspace, and the preview never leaves their sight while scrolling through deep settings.
+**Design Reference:** CodeSandbox/StackBlitz resizable panes.
+**Accessibility Impact:** Users with screen magnifiers can isolate the preview or editor.
+**Implementation Notes:** Use `react-split-pane` or similar standard resizable layout components.
 
-**3. Progressive Disclosure for Module Settings**
-* **Design Element:** Visual Hierarchy & Spacing
-* **Current State:** Exposing all 20+ variables for a complex module at once can be overwhelming.
-* **Proposed Improvement:** Show only "Basic" settings (Format, Symbol, Style) by default. Hide advanced variables behind an "Advanced Configuration" accordion.
-* **User Benefit:** Reduces cognitive load for beginners while keeping power features available for advanced users.
-* **Design Reference:** Stripe Dashboard settings, macOS System Settings
-* **Accessibility Impact:** Easier screen reader navigation due to fewer DOM elements on initial render.
-* **Implementation Notes:** Utilize simple React state toggles for the accordion.
+### 3. Design Element: Module Configuration Form
+**Current State:** A dense list of all possible TOML properties for a module.
+**Proposed Improvement:** Progressive Disclosure: show only the 3-4 most common settings (e.g., format, style, disabled) by default, hiding the rest behind an "Advanced Settings" accordion.
+**User Benefit:** Prevents overwhelming new users while keeping power features available for experts.
+**Design Reference:** Stripe Dashboard settings; macOS System Settings advanced tabs.
+**Accessibility Impact:** Cleaner DOM structure; less tab-stops to reach the next module.
+**Implementation Notes:** Add `advanced: boolean` to schema definitions.
 
-**4. Context-Aware Documentation Tooltips**
-* **Design Element:** Empty States & First-Use Experience
-* **Current State:** Users must constantly cross-reference the official Starship documentation.
-* **Proposed Improvement:** Add small `(?)` icons next to module settings that, on hover/focus, display the exact description from the official Starship docs.
-* **User Benefit:** Keeps the user inside the application, reducing friction and learning time.
-* **Design Reference:** AWS Console info icons, Vercel dashboard
-* **Accessibility Impact:** Use `aria-describedby` to link the tooltip to the input for screen readers.
-* **Implementation Notes:** Can scrape or statically map descriptions from the Starship docs repository.
+### 4. Design Element: Contextual Documentation Tooltips
+**Current State:** Users must guess what a property does or open a new tab to starship.rs.
+**Proposed Improvement:** Add small "info" (i) icons next to every property label that, on hover/focus, displays a tooltip containing the official Starship documentation for that property.
+**User Benefit:** Keeps users "in the flow" inside the app, drastically reducing context switching.
+**Design Reference:** AWS Console info tooltips; VS Code hover documentation.
+**Accessibility Impact:** Needs `aria-describedby` and focusability to ensure screen readers read the help text.
+**Implementation Notes:** Scrape or sync `starship.rs` markdown docs into a JSON map for the frontend.
 
-**5. Skeleton Loading for xterm.js Initialization**
-* **Design Element:** Loading States & Animations
-* **Current State:** Terminal preview might pop in abruptly or show a blank black box while xterm/fonts load.
-* **Proposed Improvement:** Display an animated skeleton UI mimicking terminal lines until xterm.js and Nerd Fonts are fully loaded.
-* **User Benefit:** Makes the app feel faster and more polished; prevents layout shift.
-* **Design Reference:** YouTube video loading skeletons, Next.js loading UI
-* **Accessibility Impact:** Use `aria-busy="true"` and `aria-live="polite"`.
-* **Implementation Notes:** CSS pulse animation on `div` blocks resembling text.
+### 5. Design Element: Color Picker Interactions
+**Current State:** Standard HTML color picker or basic hex input.
+**Proposed Improvement:** A specialized terminal color picker that defaults to the 16 standard ANSI colors (with names) while also allowing custom hex inputs and direct sampling from an uploaded background image.
+**User Benefit:** Encourages the creation of themes that play nicely with existing terminal color schemes (by relying on base ANSI colors) rather than hardcoded hex codes.
+**Design Reference:** Tailwind Play color picker; Coolors.co palette generator.
+**Accessibility Impact:** Clear visual indication and text labels for ANSI colors.
+**Implementation Notes:** Create a custom React component combining a predefined palette grid and a hex/RGB input.
 
-**6. Floating Action "Unsaved Changes" Bar**
-* **Design Element:** Feedback & Validation
-* **Current State:** Unclear when changes are synced or need to be exported.
-* **Proposed Improvement:** A sticky bar at the bottom or top that appears when edits are made, showing "Unsaved Changes" with a prominent "Export TOML" or "Sync" button.
-* **User Benefit:** Clear call-to-action that prevents users from accidentally closing the tab and losing work.
-* **Design Reference:** Shopify admin panel, WordPress customizer
-* **Accessibility Impact:** Use `role="alert"` for the banner appearance.
-* **Implementation Notes:** Tie to the global Zustand/Redux state tracking `isDirty`.
+### 6. Design Element: Terminal Background Simulator (Dark/Light)
+**Current State:** Preview is likely statically dark or matches OS theme.
+**Proposed Improvement:** A quick toggle switch directly above the xterm preview to flip between dark, light, and transparent background variants.
+**User Benefit:** Instantly verifies that the text contrast is legible in both environments without changing the OS system theme.
+**Design Reference:** GitHub UI theme switcher; Storybook background toggle.
+**Accessibility Impact:** Validates accessibility for multiple visual modes.
+**Implementation Notes:** Dynamically update the xterm.js instance background styling properties.
 
-**7. Interactive Canvas for Drag & Drop**
-* **Design Element:** Interactive Elements
-* **Current State:** Vertical list sorting for modules.
-* **Proposed Improvement:** Allow users to drag modules *directly within the terminal preview* or a visual block representation of the prompt, rather than an abstract sidebar list.
-* **User Benefit:** Direct manipulation is more intuitive than editing a secondary list representation.
-* **Design Reference:** Squarespace block editor, Notion drag handles
-* **Accessibility Impact:** Requires robust keyboard fallback (e.g., Space to pick up, arrows to move, Space to drop).
-* **Implementation Notes:** `dnd-kit` supports complex hit areas and keyboard accessibility natively.
+### 7. Design Element: Visual "Undo/Redo" Feedback
+**Current State:** Silent buttons or keyboard shortcuts that change the state.
+**Proposed Improvement:** When Undo/Redo is triggered, show a brief, non-intrusive toast notification specifying *what* was changed (e.g., "↩️ Undid: Changed Git Branch color").
+**User Benefit:** Prevents the "what just happened?" feeling when hitting Ctrl+Z in a complex visual editor.
+**Design Reference:** Google Docs offline sync status; Figma contextual toasts.
+**Accessibility Impact:** ARIA live regions announce the exact state change to screen readers.
+**Implementation Notes:** Tie the `zundo` temporal store action descriptions to a toast provider.
 
-**8. Syntax-Highlighted TOML Export Preview**
-* **Design Element:** Typography & Readability
-* **Current State:** Exporting might just trigger a file download.
-* **Proposed Improvement:** A modal showing the generated TOML with syntax highlighting, a "Copy to Clipboard" button, and a raw download button.
-* **User Benefit:** Developers often prefer to inspect the output code before integrating it into their dotfiles.
-* **Design Reference:** Carbon.now.sh export, Tailwind Play
-* **Accessibility Impact:** Ensure code blocks use semantic `<pre>` and `<code>` tags.
-* **Implementation Notes:** Use `prismjs` or `shiki` for accurate TOML highlighting.
+### 8. Design Element: Keyboard Shortcut Overlay
+**Current State:** Hidden shortcuts or completely mouse-driven.
+**Proposed Improvement:** A dedicated "Keyboard Shortcuts" modal accessed via `Cmd/Ctrl + /` that lists hotkeys (e.g., `Cmd+S` to export, `Esc` to close modules, `?` for help).
+**User Benefit:** Transforms intermediate users into power users, dramatically speeding up their workflow.
+**Design Reference:** Slack, Jira, and GitHub shortcut overlays (press `?`).
+**Accessibility Impact:** Crucial for keyboard-only users to navigate the app efficiently.
+**Implementation Notes:** Extend the existing `useKeyboardShortcuts` hook to include an overlay trigger.
 
-**9. Sticky Search / Filter for Module List**
-* **Design Element:** Layout
-* **Current State:** Scrolling through 50+ modules to find "kubernetes" is tedious.
-* **Proposed Improvement:** A sticky search bar at the top of the module list sidebar that filters the list in real-time.
-* **User Benefit:** Massive time saving. Reduces friction when looking for specific language integrations.
-* **Design Reference:** macOS Finder search, Slack channel switcher
-* **Accessibility Impact:** Auto-focus on `Cmd+F` or `/`. Provide clear `aria-live` announcements on the number of results found.
-* **Implementation Notes:** Simple client-side text filtering against module names and descriptions.
+### 9. Design Element: First-Use "Empty State" Experience
+**Current State:** Blank editor or a completely default, boring prompt.
+**Proposed Improvement:** An interactive Welcome modal offering "Start from Scratch" or 3 highly stylized template starting points ("The Minimalist", "The Cloud Engineer", "The Aesthetic").
+**User Benefit:** Provides immediate gratification and demonstrates the capabilities of the tool in 5 seconds.
+**Design Reference:** Canva template selection on startup; Notion empty page templates.
+**Accessibility Impact:** Clear, large, descriptive buttons for onboarding.
+**Implementation Notes:** Load pre-configured JSON states directly into the `ui-store` on first load.
 
-**10. Visual Hierarchy in Format Strings**
-* **Design Element:** Typography & Readability
-* **Current State:** Editing format strings like `[$symbol($version)]($style)` in a standard text input.
-* **Proposed Improvement:** A rich-text-like input where variables (`$symbol`), brackets, and plain text are color-coded dynamically as the user types.
-* **User Benefit:** Prevents mismatched brackets and typos, a common source of invalid Starship configurations.
-* **Design Reference:** CodeMirror, GitHub issue markdown inputs
-* **Accessibility Impact:** Ensure contrast of highlighted variables is high.
-* **Implementation Notes:** Can be achieved with a lightweight editor like `react-simple-code-editor` combined with Prism.
-
-**11. Space/Tab/Newline Visualizers**
-* **Design Element:** Visual Hierarchy & Spacing
-* **Current State:** Trailing spaces in format strings are invisible but crucial for terminal layout.
-* **Proposed Improvement:** Toggleable visible whitespace characters (e.g., `·` for space, `↵` for newline) in the module editor and preview.
-* **User Benefit:** Solves a major pain point where prompts look misaligned due to hidden trailing spaces.
-* **Design Reference:** VS Code "Render Whitespace", Microsoft Word formatting marks
-* **Accessibility Impact:** Visual only; screen readers naturally interpret spaces/newlines.
-* **Implementation Notes:** CSS pseudo-elements or specific character replacement in the preview logic.
-
-**12. "Undo/Redo" Toast Notifications**
-* **Design Element:** Error States & Recovery
-* **Current State:** Unclear if an undo action succeeded.
-* **Proposed Improvement:** Brief, non-blocking toast notifications when using `Ctrl+Z` / `Ctrl+Shift+Z` (e.g., "Undid: Changed Node color").
-* **User Benefit:** Confirms to the user that their keyboard shortcut was registered and explicitly states what was reverted.
-* **Design Reference:** Gmail "Message Deleted. Undo." toasts
-* **Accessibility Impact:** Requires `role="status"` and `aria-live="polite"` so screen readers read the toast.
-* **Implementation Notes:** Integrate with `react-hot-toast` or similar, triggering on the history stack state change.
+### 10. Design Element: Interactive Format String Hierarchy Representation
+**Current State:** A raw text input for `format = "$directory$git_branch"`.
+**Proposed Improvement:** Render the format string as interactive "chips" or "blocks" with distinct shapes for line breaks `\n` and spaces. Users can drag these chips to reorder them.
+**User Benefit:** Demystifies the formatting syntax. Line breaks and groupings become tangible objects rather than abstract escape characters.
+**Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
+**Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
+**Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
 
 ---
 
-## 🔬 PART C: Specific Research Questions Answered
+## 🎨 Specific Research Questions Addressed
 
-### Features
+**How do other config builders handle version control/history?**
+*Best Practice:* Most modern builders use a Local Storage timeline mapping state deltas (like Figma's version history or Excalidraw). Advanced ones integrate directly with GitHub OAuth to read/write from specific repository paths or Gists.
 
-*   **How do other config builders handle version control/history?**
-    *   *Observation:* Tools like Webflow and Retool use an immutable state history stack. They allow users to define "checkpoints" or automatically create snapshots on major events (e.g., adding a new module).
-    *   *Application:* Implement a global history stack in the Zustand store, capturing the entire TOML JSON representation on every debounced change.
-*   **What export formats would developers find valuable beyond TOML?**
-    *   *Observation:* Developers manage dotfiles differently. Some use bare Git repos, some use GNU Stow, others use Ansible/Chezmoi.
-    *   *Application:* Beyond raw `.toml`, offer an install script (`curl -sS ... | sh`), a Nix Flake snippet, and a raw JSON format for users who script their dotfile generation.
-*   **How can we leverage AI for prompt suggestions or accessibility checks?**
-    *   *Observation:* AI excels at mapping natural language to configuration schemas.
-    *   *Application:* An LLM (via an API) can translate "Make it look like Cyberpunk 2077" into a specific color palette and set of angular nerd font symbols, instantly mapping them to the Starship schema.
-*   **What testing/preview features would reduce trial-and-error?**
-    *   *Observation:* Prompts change dynamically based on the directory context (e.g., inside a git repo).
-    *   *Application:* A "Mock Environment" dashboard where users can toggle flags: `is_git_repo: true`, `git_status: modified`, `node_env: active`, `battery: 20%`. The preview instantly reflects these mock states.
-*   **How can teams collaborate on shared prompt themes?**
-    *   *Observation:* Enterprise teams want standardized terminal experiences for onboarding.
-    *   *Application:* Allow exporting themes to a central "Team Gist" or GitHub repo directly, ensuring all devs can pull the standard corporate Starship prompt.
-*   **What marketplace or community features would increase engagement?**
-    *   *Observation:* Developers love to showcase their setups (e.g., r/unixporn).
-    *   *Application:* A "Theme of the Week" spotlight and a 1-click "Fork Theme" button to encourage iterating on community designs.
-*   **How can we integrate with existing dotfiles workflows?**
-    *   *Observation:* Manually copying `.toml` files is tedious.
-    *   *Application:* A companion CLI (`npx starship-theme-sync`) that fetches the user's latest saved theme from the cloud and applies it locally.
-*   **What would make this tool indispensable for terminal content creators?**
-    *   *Observation:* Creators (YouTubers, bloggers) need high-quality visuals.
-    *   *Application:* A "Presentation Export" mode that generates high-resolution SVG or PNG mockups of the terminal prompt (like Carbon.now.sh) for use in articles and thumbnails.
+**What export formats would developers find valuable beyond TOML?**
+*Suggestions:* Direct export to Nix expressions (for NixOS users), installation bash scripts (for instant setup), and JSON (for programmatic manipulation by other tools).
 
-### UI/UX
+**How can we leverage AI for prompt suggestions or accessibility checks?**
+*Innovation:* Use basic algorithms (non-AI) to calculate WCAG contrast against the terminal background. Use AI (LLMs) to map natural language "vibes" ("make it look like a retro 80s arcade") into a specific combination of module toggles and color hex codes.
 
-*   **What are the best patterns for organizing 50+ Starship modules?**
-    *   *Observation:* Flat lists fail at scale.
-    *   *Application:* Categorize modules natively: "Languages" (Node, Rust), "Environment" (Git, Directory, Battery), "Cloud" (AWS, Kube), and "Custom". Use a collapsible tree view with a sticky search bar.
-*   **How should we handle the complexity of nested format strings?**
-    *   *Observation:* `[$symbol]($style)` syntax is hard to read.
-    *   *Application:* Use tokenized input fields where variables like `$symbol` render as pill-shaped UI elements rather than raw text, similar to how Zapier maps data fields.
-*   **What's the ideal layout for editing + preview side-by-side?**
-    *   *Observation:* Vertical splitting limits terminal width.
-    *   *Application:* A classic 3-column layout (Sidebar/Modules, Center/Terminal, Right/Settings) maximizes horizontal space for the terminal while keeping context accessible.
-*   **How can we make color picking faster and more intuitive?**
-    *   *Observation:* Developers hate picking hex codes manually.
-    *   *Application:* Provide a default "Terminal Standard" palette (ANSI colors), an Eyedropper tool to pick from uploaded desktop wallpapers, and support for pasting raw hex/rgb values directly into the input.
-*   **What contextual help would reduce the learning curve?**
-    *   *Observation:* Starship has a lot of specific terminology.
-    *   *Application:* Hover-over tooltips for all settings, and an embedded "Mini Docs" pane that updates automatically based on the currently selected module.
-*   **How should we visualize the prompt structure hierarchy?**
-    *   *Observation:* Prompts are fundamentally sequential blocks.
-    *   *Application:* Represent the prompt as a horizontal train of blocks in the UI. Left-prompt blocks flow left-to-right, right-prompt blocks flow right-to-left.
-*   **What keyboard shortcuts would power users expect?**
-    *   *Observation:* Devs want to keep hands on the keyboard.
-    *   *Application:* `Cmd+S` (Save/Export), `Cmd+Z` (Undo), `Cmd+K` (Command Palette), `/` (Search Modules), `Esc` (Deselect Module), `Delete` (Remove selected module).
-*   **How can we better communicate when changes are saved/synced?**
-    *   *Observation:* Silent background saving causes anxiety.
-    *   *Application:* A subtle, animated "Cloud Sync" icon in the header that spins on changes and turns into a green checkmark when state is persisted, coupled with an explicit "Unsaved Changes" banner for local-only work.
+**What testing/preview features would reduce trial-and-error?**
+*Innovation:* The "Mock Environment Simulator" is the key here. Providing dropdowns that simulate "I am on the main branch with 3 uncommitted files" or "I am in an AWS directory" instantly proves the prompt works without the user needing to CD into those exact directories locally.
 
----
-*End of Report*
+**How can teams collaborate on shared prompt themes?**
+*Approach:* A URL-based state sharing system (e.g., `themecreator.app/view?state=base64...`) for easy sharing in Slack. For true collaboration, a "Team Workspace" backend where configs are synced via an API.
+
+**What marketplace or community features would increase engagement?**
+*Approach:* A "Theme of the Week" spotlight and a 1-click "Fork Theme" button to encourage iterating on community designs. A place where creators can upload, tag, and comment on themes.
+
+**How can we integrate with existing dotfiles workflows?**
+*Approach:* A companion CLI tool (`npx starship-theme-sync`) that automatically fetches the user's latest saved theme from a designated URL or Gist, allowing developers to type one command to sync their machine.
+
+**What would make this tool indispensable for terminal content creators?**
+*Approach:* High-resolution image generation. A "Presentation Mode" that renders the terminal as a beautiful macOS-style window, allowing one-click export to PNG/SVG with custom backgrounds, specifically tailored for YouTube thumbnails or blog posts.
+
+**What are the best patterns for organizing 50+ Starship modules?**
+*Approach:* A robust search bar at the top, combined with semantic categories (Cloud, Langs, System). The list should use virtualized rendering to handle performance.
+
+**How should we handle the complexity of nested format strings?**
+*Approach:* Visual node-based syntax (like Unreal Engine Blueprints or Scratch) where nested formats are literal containers that you can drag module-chips into.
+
+**What's the ideal layout for editing + preview side-by-side?**
+*Approach:* A resizable, split-pane layout with the ability to "pop out" the preview into a floating window.
+
+**How can we make color picking faster and more intuitive?**
+*Approach:* Default to the 16 standard ANSI colors as a quick-select grid, allowing users to override with custom hex values only when necessary.
+
+**What contextual help would reduce the learning curve?**
+*Approach:* Inline "info" tooltips next to module properties that pull documentation directly from `starship.rs`.
+
+**How should we visualize the prompt structure hierarchy?**
+*Approach:* Drag-and-drop tokens/chips for variables and formatting instead of raw text.
+
+**What keyboard shortcuts would power users expect?**
+*Approach:* Ctrl+Z for Undo, Ctrl+S for Save/Export, Cmd+/ for a shortcuts overlay, and Esc to blur inputs or close modals.
+
+**How can we better communicate when changes are saved/synced?**
+*Approach:* A persistent, small sync indicator in the header (e.g., "🟢 Local edits saved", "☁️ Synced to Gist") that updates passively, rather than blocking the UI with modal popups.
