@@ -149,18 +149,27 @@ export const ModuleList = memo(function ModuleList({
     return [...predefinedModules, ...customModules];
   }, [currentTheme.config.custom]);
 
+  // Memoize definitions as a map for O(1) lookups to avoid O(N^2) bottlenecks
+  const moduleDefinitionsMap = useMemo(() => {
+    const map = new Map();
+    MODULE_DEFINITIONS.forEach((d) => map.set(d.name, d));
+    return map;
+  }, []);
+
   const filteredActiveModules = useMemo(() => {
     if (!searchTerm) return activeModulesStore;
     const term = searchTerm.toLowerCase();
     return activeModulesStore.filter((m) => {
-      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      // O(1) lookup replacing O(N) Array.prototype.find inside filter
+      // Note: activeModulesStore objects have id containing index, always use m.name for metadata lookups
+      const def = moduleDefinitionsMap.get(m.name);
       return (
         m.name.toLowerCase().includes(term) ||
         def?.title.toLowerCase().includes(term) ||
         def?.description.toLowerCase().includes(term)
       );
     });
-  }, [activeModulesStore, searchTerm]);
+  }, [activeModulesStore, searchTerm, moduleDefinitionsMap]);
 
   const inactiveModules = useMemo(() => {
     const activeNames = new Set(activeModulesStore.map((m) => m.name));
@@ -168,14 +177,15 @@ export const ModuleList = memo(function ModuleList({
     if (!searchTerm) return inactive;
     const term = searchTerm.toLowerCase();
     return inactive.filter((m) => {
-      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      // O(1) lookup replacing O(N) Array.prototype.find inside filter
+      const def = moduleDefinitionsMap.get(m.id);
       return (
         m.name.toLowerCase().includes(term) ||
         def?.title.toLowerCase().includes(term) ||
         def?.description.toLowerCase().includes(term)
       );
     });
-  }, [activeModulesStore, allModules, searchTerm]);
+  }, [activeModulesStore, allModules, searchTerm, moduleDefinitionsMap]);
 
   const handleToggle = useCallback(
     (name: string, enable: boolean) => {
