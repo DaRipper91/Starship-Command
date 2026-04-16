@@ -149,18 +149,22 @@ export const ModuleList = memo(function ModuleList({
     return [...predefinedModules, ...customModules];
   }, [currentTheme.config.custom]);
 
+  const moduleDefinitionsLookup = useMemo(() => {
+    return new Map(MODULE_DEFINITIONS.map((d) => [d.name, d]));
+  }, []);
+
   const filteredActiveModules = useMemo(() => {
     if (!searchTerm) return activeModulesStore;
     const term = searchTerm.toLowerCase();
     return activeModulesStore.filter((m) => {
-      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      const def = moduleDefinitionsLookup.get(m.id);
       return (
         m.name.toLowerCase().includes(term) ||
         def?.title.toLowerCase().includes(term) ||
         def?.description.toLowerCase().includes(term)
       );
     });
-  }, [activeModulesStore, searchTerm]);
+  }, [activeModulesStore, searchTerm, moduleDefinitionsLookup]);
 
   const inactiveModules = useMemo(() => {
     const activeNames = new Set(activeModulesStore.map((m) => m.name));
@@ -168,14 +172,14 @@ export const ModuleList = memo(function ModuleList({
     if (!searchTerm) return inactive;
     const term = searchTerm.toLowerCase();
     return inactive.filter((m) => {
-      const def = MODULE_DEFINITIONS.find((d) => d.name === m.id);
+      const def = moduleDefinitionsLookup.get(m.id);
       return (
         m.name.toLowerCase().includes(term) ||
         def?.title.toLowerCase().includes(term) ||
         def?.description.toLowerCase().includes(term)
       );
     });
-  }, [activeModulesStore, allModules, searchTerm]);
+  }, [activeModulesStore, allModules, searchTerm, moduleDefinitionsLookup]);
 
   const handleToggle = useCallback(
     (name: string, enable: boolean) => {

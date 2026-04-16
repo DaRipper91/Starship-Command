@@ -230,14 +230,18 @@ export const selectActiveModules = (state: ThemeStore) => {
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
   const existingModuleNames = new Set(allModules.map((m) => m.name));
 
+  // Create a Map for O(1) module lookups to replace O(N^2) .find() inside .map()
+  const customModulesLookup = new Map(
+    allModules.map((m) => [m.name, m.isCustom]),
+  );
+
   const parsedModules = matches
     .map((m, i) => {
       const name = m.substring(1);
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom:
-          allModules.find((mod) => mod.name === name)?.isCustom || false,
+        isCustom: customModulesLookup.get(name) || false,
       };
     })
     .filter((item) => existingModuleNames.has(item.name));

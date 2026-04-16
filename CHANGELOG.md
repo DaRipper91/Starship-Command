@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Performance Improvements
+
+- **O(N²) Array Lookup Optimizations**: Replaced nested `Array.prototype.find()` calls with $O(1)$ `Map` lookups inside `.map()` and `.filter()` iteration blocks in `ModuleList.tsx` and `theme-store.ts`, resolving significant performance bottlenecks during list rendering.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
@@ -93,15 +99,18 @@
 ## [1.4.0] - 2024-10-27
 
 ### Added
+
 - **Theme Import/Export Engine**: Full system to serialize theme state to a valid Starship TOML config file and download it. Implemented a robust import parser that validates and handles unsupported modules.
 - **Undo/Redo History Stack**: Full history system with zundo for all editor state mutations. Wired Ctrl+Z / Ctrl+Shift+Z globally.
 - **Theme Preset System**: Built-in curated set of 8+ presets including Dracula, Nord, Solarized, and more. Easily applied via a single click.
 
 ### Changed
+
 - **State Management Refactor**: Centralized UI state inside `ui-store.ts` and Domain state inside `theme-store.ts` ensuring clean separation without scattered UI state hooks.
 - **Code Consistency & Linting Enforcement**: Implemented strict ESLint rules (no console, hook rules, unused variables) and ran full lint auto-fix. Added Husky and lint-staged pre-commit hooks to ensure quality before commits. Added Contributing guidelines.
 - **Type Safety Audit**: Replaced `any` across the codebase ensuring complete type coverage with `unknown` and strict mode enablement.
 - **Vite Build Optimization**: Implemented manual chunk splitting for `vendor-ui`, `vendor-core`, `vendor-utils`, and `vendor-terminal`. Ensured all chunks pass the 400kb threshold. Tree-shaking enabled.
 
 ### Fixed
+
 - **Error Boundary & Runtime Resilience**: Ensured all major feature sections (terminal preview, module builder, gallery) are wrapped inside comprehensive `<ErrorBoundary>` tags. Included try-catch blocks across all async fetch / IO operations.
