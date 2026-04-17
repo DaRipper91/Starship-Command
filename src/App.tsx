@@ -259,6 +259,9 @@ function AppContent() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
+              aria-label={
+                leftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'
+              }
               className={cn(
                 'rounded p-2 text-gray-400 hover:bg-gray-800',
                 !isMobileLayout && isDesktopLayout && 'lg:hidden',
@@ -283,12 +286,16 @@ function AppContent() {
           <div className="flex items-center gap-1 xl:hidden">
             <button
               onClick={() => setShowCommandPalette(true)}
+              aria-label="Open command palette"
               className="rounded p-2 text-gray-400 hover:bg-gray-800"
             >
               <Keyboard size={18} />
             </button>
             <button
               onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
+              aria-label={
+                rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
+              }
               className={cn(
                 'rounded p-2 text-gray-400 hover:bg-gray-800',
                 isDesktopLayout && 'xl:hidden',
@@ -304,6 +311,7 @@ function AppContent() {
           <div className="flex items-center rounded-lg bg-gray-800 p-1">
             <button
               onClick={() => setLayoutMode('mobile')}
+              aria-label="Mobile Mode"
               className={cn(
                 'rounded px-2 py-1 transition-colors',
                 layoutMode === 'mobile'
@@ -316,6 +324,7 @@ function AppContent() {
             </button>
             <button
               onClick={() => setLayoutMode('auto')}
+              aria-label="Auto Layout"
               className={cn(
                 'rounded px-2 py-1 text-[10px] font-bold transition-colors',
                 layoutMode === 'auto'
@@ -328,6 +337,7 @@ function AppContent() {
             </button>
             <button
               onClick={() => setLayoutMode('desktop')}
+              aria-label="Desktop Mode"
               className={cn(
                 'rounded px-2 py-1 transition-colors',
                 layoutMode === 'desktop'
@@ -344,6 +354,8 @@ function AppContent() {
             <button
               onClick={handleUndo}
               disabled={!isUndoPossible}
+              aria-label={!isUndoPossible ? 'Undo (disabled)' : 'Undo'}
+              title={!isUndoPossible ? 'Nothing to undo' : 'Undo'}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Undo size={16} />
@@ -351,6 +363,8 @@ function AppContent() {
             <button
               onClick={handleRedo}
               disabled={!isRedoPossible}
+              aria-label={!isRedoPossible ? 'Redo (disabled)' : 'Redo'}
+              title={!isRedoPossible ? 'Nothing to redo' : 'Redo'}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Redo size={16} />
@@ -389,6 +403,7 @@ function AppContent() {
 
           <button
             onClick={() => setShowDynamicThemeSettings(true)}
+            aria-label="Dynamic Theme Settings"
             className="hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 xl:block"
           >
             <Settings size={18} />
