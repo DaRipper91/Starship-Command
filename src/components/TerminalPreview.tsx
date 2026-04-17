@@ -309,6 +309,8 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
             <button
               onClick={() => setShowFontLoader((p) => !p)}
               title="Font settings"
+              aria-label="Toggle font settings"
+              aria-expanded={showFontLoader}
               className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
             >
               {showFontLoader ? <ChevronUp size={14} /> : <Type size={14} />}
@@ -316,6 +318,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
             <button
               onClick={handleCopyToClipboard}
               title="Copy screenshot to clipboard"
+              aria-label="Copy screenshot to clipboard"
               className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
             >
               <Copy size={14} />
@@ -323,6 +326,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
             <button
               onClick={handleDownload}
               title="Download PNG"
+              aria-label="Download PNG screenshot"
               className="rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300"
             >
               <Download size={14} />
@@ -342,6 +346,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
                 value={fontUrl}
                 onChange={(e) => setFontUrl(e.target.value)}
                 placeholder="Font URL (.woff2 or .ttf)…"
+                aria-label="Font URL"
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
               <input
@@ -349,6 +354,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
                 value={fontFamilyInput}
                 onChange={(e) => setFontFamilyInput(e.target.value)}
                 placeholder="Font family name (e.g. JetBrainsMono Nerd Font)…"
+                aria-label="Font family name"
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
               <div className="flex gap-2">
