@@ -87,6 +87,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
 **Priority:** Medium
 
+### 11. Feature Name: Semantic Theme Engine
+**Category:** AI-Assisted Features
+**Description:** Employs an on-device LLM (via WebGPU or transformers.js) to infer terminal meaning from natural language queries (e.g., "warm forest sunset with bold fonts"). It generates a complete cohesive Starship format layout and color palette automatically without making API calls.
+**User Value:** High-end AI personalization with full data privacy, keeping user prompts entirely offline.
+**Implementation Complexity:** High
+**Similar Example:** Raycast Pro AI features, local Chrome AI models.
+**Priority:** Medium
+
+### 12. Feature Name: Gamified Developer Achievements
+**Category:** Community Features / Gamification
+**Description:** Unlocks badges and "achievements" as users configure increasingly complex Starship features, such as successfully defining a custom conditional module, configuring a 4-level deep color palette, or sharing a highly upvoted theme.
+**User Value:** Keeps users engaged and acts as a tutorial mechanic by incentivizing exploration of advanced features.
+**Implementation Complexity:** Medium
+**Similar Example:** StackOverflow badges, GitHub profile achievements.
+**Priority:** Low
+
 ---
 
 ## 🎨 Part B: UI/UX Design Suggestions
@@ -170,6 +186,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
+
+### 11. Design Element: Semantic Screen Reader Overlays
+**Current State:** Drag-and-drop lists and deep property hierarchies often have confusing focus management for keyboard and screen reader users.
+**Proposed Improvement:** Implement invisible, ARIA-live descriptive regions that narrate drag-and-drop spatial actions (e.g., "Git branch module moved to position 4, right after directory").
+**User Benefit:** Makes the tool significantly more accessible to visually impaired developers who still want to maintain control over their terminal configurations.
+**Design Reference:** dnd-kit's official accessibility announcements; Atlassian Pragmatic drag-and-drop accessibility patterns.
+**Accessibility Impact:** Core functionality enhancement for visually impaired users.
+**Implementation Notes:** Extend the `useSensors` configuration within the `DndContext` and add an `aria-live` readout span.
+
+### 12. Design Element: Error Recovery Time-Travel
+**Current State:** If a user breaks their format string, the prompt breaks or looks odd, requiring manual fixes.
+**Proposed Improvement:** A floating "Revert to last working state" button that appears when the internal xterm parser throws an exception or fails to render cleanly due to malformed TOML state.
+**User Benefit:** Prevents frustrating states where users are stuck debugging missing brackets in their `$format` variables.
+**Design Reference:** React Error Boundary fallback UI; VS Code syntax error recovery.
+**Accessibility Impact:** Safe failure state prevents lock-in.
+**Implementation Notes:** Hook into the format parser's try-catch to update an `isBroken` state that reveals the recovery prompt.
 
 ---
 
