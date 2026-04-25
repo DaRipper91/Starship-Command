@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -89,6 +89,25 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 
 ---
 
+
+### 11. Feature Name: Automated Performance Profiler
+**Category:** Performance & Testing
+**Description:** Analyzes the active modules and configuration to provide an estimated "Prompt Latency" score (e.g., "Expected rendering time: ~45ms"), warning if slow modules (like `git_status` in large repos or `kubernetes`) are enabled without optimizations.
+**User Value:** Starship is known for speed, but bad configurations can slow it down. This prevents users from blindly adding 30 modules and ruining their shell performance.
+**Implementation Complexity:** Medium (requires heuristics and benchmarking data for each module)
+**Similar Example:** Lighthouse performance scores, Webpack bundle analyzer warnings.
+**Priority:** Medium
+
+### 12. Feature Name: Live Share Collaborator Mode
+**Category:** Collaboration & Sharing
+**Description:** A multiplayer mode where multiple users can connect to the same session via WebRTC and edit the prompt together in real-time, seeing each other's cursors.
+**User Value:** Teams can sit together remotely and design a standard shell prompt for their entire engineering organization without screen-sharing latency.
+**Implementation Complexity:** High (requires WebRTC or WebSocket server for state synchronization like Yjs)
+**Similar Example:** Figma multiplayer, Visual Studio Live Share, Excalidraw collaboration.
+**Priority:** Low
+
+---
+
 ## 🎨 Part B: UI/UX Design Suggestions
 
 ### 1. Design Element: Module Library Organization
@@ -170,6 +189,25 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
+
+---
+
+
+### 11. Design Element: Loading State Skeletons for Preview
+**Current State:** Terminal preview either blocks until ready or pops in abruptly.
+**Proposed Improvement:** Display an animated skeleton of a generic terminal prompt (e.g., pulsing gray blocks matching the structure) while the initial `xterm.js` and fonts are loading.
+**User Benefit:** Reduces perceived loading time and prevents layout shift on initial load.
+**Design Reference:** YouTube video skeletons; Slack channel loading states.
+**Accessibility Impact:** Requires `aria-busy="true"` on the container during the loading phase.
+**Implementation Notes:** Render a CSS-only skeleton layout that gets replaced by the `TerminalPreview` canvas once `xterm` reports it's fully initialized.
+
+### 12. Design Element: "Unsaved Changes" Warning on Exit
+**Current State:** Users might accidentally close the tab and lose their unsaved theme edits.
+**Proposed Improvement:** A native browser `beforeunload` dialog combined with a visual indicator (like an asterisk next to the theme name) that warns users if they try to close or reload the page with un-exported changes.
+**User Benefit:** Prevents catastrophic data loss if a user spends 30 minutes tweaking colors and accidentally hits `Cmd+W`.
+**Design Reference:** GitHub issue comment unsaved warnings; Figma's offline unsaved indicator.
+**Accessibility Impact:** Ensures screen reader users are also warned via standard browser dialogues before navigation.
+**Implementation Notes:** Use `window.addEventListener('beforeunload')`, checked against the Zustand `useThemeStore.temporal.getState().pastStates.length`.
 
 ---
 
