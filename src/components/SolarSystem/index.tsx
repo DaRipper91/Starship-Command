@@ -97,7 +97,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
     const confirmed = await confirm({
       title: `Download & Apply "${theme.name}"?`,
       message:
-        'This will replace your current theme. Ensure you have saved any unsaved changes.',
+        'This will replace your current theme. Ensure you have saved unsaved changes.',
       confirmText: 'Apply Theme',
     });
     if (confirmed) {
