@@ -230,14 +230,18 @@ export const selectActiveModules = (state: ThemeStore) => {
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
   const existingModuleNames = new Set(allModules.map((m) => m.name));
 
+  // ⚡ Bolt: O(1) Set lookup replacing O(n) Array.find to improve selector performance
+  const customModuleNames = new Set(
+    Object.keys(state.currentTheme.config.custom || {}),
+  );
+
   const parsedModules = matches
     .map((m, i) => {
       const name = m.substring(1);
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom:
-          allModules.find((mod) => mod.name === name)?.isCustom || false,
+        isCustom: customModuleNames.has(name),
       };
     })
     .filter((item) => existingModuleNames.has(item.name));
