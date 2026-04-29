@@ -180,6 +180,8 @@ export function IconBrowser({ onSelect, currentSymbol }: IconBrowserProps) {
                       : 'border-gray-800 bg-gray-800 hover:border-gray-600 hover:bg-gray-700',
                   )}
                   title={symbol.name}
+                  aria-label={`Select symbol: ${symbol.name}`}
+                  aria-pressed={isSelected}
                 >
                   <span
                     className={cn(
