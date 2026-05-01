@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -89,6 +89,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 
 ---
 
+### 11. Feature Name: Cross-Terminal Sync API
+**Category:** Developer Workflow
+**Description:** A background daemon that automatically synchronizes the active Starship theme directly to running terminal sessions (e.g., Alacritty, iTerm2, WezTerm) without needing to source files manually.
+**User Value:** Instant gratification when switching themes without needing to restart terminals or manually run commands.
+**Implementation Complexity:** High (requires terminal-specific IPC or signal handling)
+**Similar Example:** macOS auto dark mode switching across apps.
+**Priority:** Medium
+
+### 12. Feature Name: Shareable Configuration Snippets
+**Category:** Collaboration / Export
+**Description:** Allow users to select a subset of modules and export just those modules as a snippet (e.g., "My Git Config") to share with others, who can then import and merge it into their existing theme.
+**User Value:** Users often just want to borrow someone else's cool git format, not their entire theme.
+**Implementation Complexity:** Medium
+**Similar Example:** VS Code snippet sharing.
+**Priority:** High
+
+
 ## 🎨 Part B: UI/UX Design Suggestions
 
 ### 1. Design Element: Module Library Organization
@@ -172,6 +189,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
 
 ---
+
+### 11. Design Element: Error State Visualization
+**Current State:** Syntax errors in custom format strings are either silently ignored or break the preview.
+**Proposed Improvement:** Inline red squiggly underlines in the format string input, accompanied by a small tooltip explaining the error (e.g., "Unmatched $ variable").
+**User Benefit:** Faster debugging of complex format strings.
+**Design Reference:** VS Code error squigglies.
+**Accessibility Impact:** Requires `aria-invalid` and a text-based error announcement.
+**Implementation Notes:** Needs a real-time parsing validator hooked to the input element.
+
+### 12. Design Element: Loading States for Heavy Operations
+**Current State:** Image palette extraction freezes the UI momentarily.
+**Proposed Improvement:** Add a skeleton loader or a spinner overlay with a "Extracting colors..." message during the Web Worker operation.
+**User Benefit:** Reassures the user that the app hasn't crashed during heavy processing.
+**Design Reference:** Material UI skeleton loaders.
+**Accessibility Impact:** Use `aria-busy="true"` and an `aria-live` region for the loading text.
+**Implementation Notes:** Tie a loading state to the worker promise.
+
 
 ## 🎨 Specific Research Questions Addressed
 
