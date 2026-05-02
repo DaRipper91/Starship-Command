@@ -205,7 +205,14 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
                   // Remove segment logic
                   const newSegments = [...segments];
                   newSegments.splice(index, 1);
-                  onChange(segmentsToFormatString(newSegments));
+                  const newFormatString = newSegments
+                    .map((s) => {
+                      if (s.type === 'module') return `$${s.value}`;
+                      if (s.type === 'styledText') return `[${s.text}](${s.style})`;
+                      return s.value;
+                    })
+                    .join('');
+                  onChange(newFormatString);
                   setEditingSegment(null);
                 }}
               />
