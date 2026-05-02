@@ -208,7 +208,8 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
                   const newFormatString = newSegments
                     .map((s) => {
                       if (s.type === 'module') return `$${s.value}`;
-                      if (s.type === 'styledText') return `[${s.text}](${s.style})`;
+                      if (s.type === 'styledText')
+                        return `[${s.text}](${s.style})`;
                       return s.value;
                     })
                     .join('');
