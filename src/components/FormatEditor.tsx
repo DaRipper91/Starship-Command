@@ -172,6 +172,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
           <button
             key={index}
             onClick={() => handleSegmentClick(index)}
+            aria-label={`Edit ${segment.type} segment ${index + 1}`}
             className={cn(
               'flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium',
               editingSegment === index
@@ -193,7 +194,30 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
               {segment.type === 'module' && `$${segment.value}`}
               {segment.type === 'styledText' && `[${segment.text}]`}
             </span>
-            {editingSegment === index && <X size={10} className="ml-1" />}
+            {editingSegment === index && (
+              <X
+                size={10}
+                className="ml-1"
+                aria-label="Remove segment"
+                role="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Remove segment logic
+                  const newSegments = [...segments];
+                  newSegments.splice(index, 1);
+                  const newFormatString = newSegments
+                    .map((s) => {
+                      if (s.type === 'module') return `$${s.value}`;
+                      if (s.type === 'styledText')
+                        return `[${s.text}](${s.style})`;
+                      return s.value;
+                    })
+                    .join('');
+                  onChange(newFormatString);
+                  setEditingSegment(null);
+                }}
+              />
+            )}
           </button>
         ))}
         {segments.length === 0 && (
