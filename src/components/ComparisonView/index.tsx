@@ -77,6 +77,7 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
           </h2>
           <div className="flex items-center gap-3">
             <button
+              aria-label="Export screenshot"
               onClick={handleExportImage}
               className="flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-gray-200 hover:bg-gray-600"
             >
