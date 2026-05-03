@@ -115,6 +115,7 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
           ))}
           <li className="mt-1 border-t border-gray-700 pt-1">
             <button
+              aria-label="Download and Install Font"
               onClick={handleDownload}
               className="flex w-full items-center gap-2 px-3 py-2 text-sm text-blue-400 hover:bg-gray-700"
             >
