@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -87,6 +87,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
 **Priority:** Medium
 
+### 11. Feature Name: Dynamic "Prompt Length" Warning
+**Category:** Performance & Testing
+**Description:** A progress-bar style indicator that calculates the approximate character width of the prompt and warns the user if their prompt is taking up more than 50% of an average 80-character terminal width.
+**User Value:** Prevents users from accidentally creating prompts so long that they have no room to type commands.
+**Implementation Complexity:** Low (simple character counting of parsed output)
+**Similar Example:** Twitter/X character limit ring; SEO title length bars.
+**Priority:** Medium
+
+### 12. Feature Name: Interactive Performance Profiler
+**Category:** Performance & Testing
+**Description:** Uses Starship's built-in `starship explain` or simulated latency metrics to show users how many milliseconds each module takes to render. Warns if heavy modules (like cloud integrations or deep git status) might cause terminal lag.
+**User Value:** Starship is built for speed, but poorly configured prompts can still be slow. This ensures users build blazing-fast prompts.
+**Implementation Complexity:** High (requires either WASM starship bindings or simulated mock latency data)
+**Similar Example:** Lighthouse performance scores; Chrome DevTools Network waterfall.
+**Priority:** Medium
+
 ---
 
 ## 🎨 Part B: UI/UX Design Suggestions
@@ -170,6 +186,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
+
+### 11. Design Element: "Quick Add" Inline Plus Button
+**Current State:** To add a module, users must open the sidebar, find the module, and toggle it.
+**Proposed Improvement:** Hovering between any two active modules in the "Format Editor" or terminal preview shows a small `+` button that opens a mini search-popover to instantly insert a module at that exact position.
+**User Benefit:** Reduces friction and mouse travel when building the structure of the prompt.
+**Design Reference:** Notion's block `+` menu; Webflow canvas element insertion.
+**Accessibility Impact:** Must be keyboard focusable (e.g., using Tab between module blocks).
+**Implementation Notes:** Requires the format string to be parsed into interactive React components rather than just a plain text input.
+
+### 12. Design Element: "Diff" View for Theme Changes
+**Current State:** No visual indication of what changed between the currently saved theme and the unsaved edits.
+**Proposed Improvement:** A side-by-side or inline "diff" view modal that highlights exactly which TOML properties were added, removed, or changed before the user exports or saves.
+**User Benefit:** Gives power users confidence in what they are actually exporting, mirroring their typical Git workflow.
+**Design Reference:** GitHub pull request split view; VS Code Git changes view.
+**Accessibility Impact:** Use text labels (`[Added]`, `[Removed]`) alongside green/red color coding.
+**Implementation Notes:** Use a standard JS diff library on the serialized `starship.toml` output.
 
 ---
 
