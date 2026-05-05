@@ -51,14 +51,18 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
   useEffect(() => {
     // Dynamically load selected font when component mounts or font changes
     const loadFont = async () => {
-      if (currentFont && fontPreviewUrls[currentFont]) {
-        const fontFace = new FontFace(
-          currentFont,
-          `url(${fontPreviewUrls[currentFont]})`,
-        );
-        await fontFace.load();
-        document.fonts.add(fontFace);
-        logger.warn(`Font ${currentFont} loaded.`);
+      try {
+        if (currentFont && fontPreviewUrls[currentFont]) {
+          const fontFace = new FontFace(
+            currentFont,
+            `url(${fontPreviewUrls[currentFont]})`,
+          );
+          await fontFace.load();
+          document.fonts.add(fontFace);
+          logger.warn(`Font ${currentFont} loaded.`);
+        }
+      } catch (err) {
+        logger.error(`Failed to load font ${currentFont}:`, err);
       }
     };
     loadFont();
