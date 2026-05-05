@@ -19,12 +19,16 @@ export function SuggestionPanel() {
 
   useEffect(() => {
     const fetchSuggestions = async () => {
-      const env = await SuggestionEngine.detectEnvironment();
-      const opts = SuggestionEngine.suggestOptimizations(
-        currentTheme.config,
-        env,
-      );
-      setSuggestions(opts as Suggestion[]);
+      try {
+        const env = await SuggestionEngine.detectEnvironment();
+        const opts = SuggestionEngine.suggestOptimizations(
+          currentTheme.config,
+          env,
+        );
+        setSuggestions(opts as Suggestion[]);
+      } catch (err) {
+        console.error('Failed to generate suggestions:', err);
+      }
     };
     fetchSuggestions();
   }, [currentTheme.config]);
