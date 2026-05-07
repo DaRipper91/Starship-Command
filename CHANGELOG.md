@@ -1,6 +1,8 @@
 # Changelog
 
 ## [1.6.0] - 2026-03-08
+- **Features**: Verified Theme Import/Export Engine, Undo/Redo History Stack, and Theme Preset System.
+- **Improvements**: Audited Type Safety, State Management Refactor, Vite Build Optimization, Error Boundary, and Code Consistency.
 
 ### Audited and Verified
 
