@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -89,6 +89,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 
 ---
 
+### 11. Feature Name: Export to NixOS Flake
+**Category:** Export / Power User
+**Description:** A dedicated export option that translates the Starship TOML configuration into a reproducible Nix expression suitable for use in a NixOS or Home Manager configuration.
+**User Value:** NixOS power users manage all their configurations declaratively. Offering direct Nix export removes the manual conversion step.
+**Implementation Complexity:** Medium (requires TOML-to-Nix formatting logic)
+**Similar Example:** Home Manager configuration options.
+**Priority:** Medium
+
+### 12. Feature Name: Gamified Theme Challenges
+**Category:** Community Features / Gamification
+**Description:** A weekly challenge prompt (e.g. "Create the most readable Cyberpunk theme") with community voting and a leaderboard.
+**User Value:** Gamification encourages users to explore the tool's deeper features and keeps them coming back.
+**Implementation Complexity:** High (requires backend, user accounts, and a voting system)
+**Similar Example:** Frontend Mentor challenges, CSSBattle.
+**Priority:** Low
+
 ## 🎨 Part B: UI/UX Design Suggestions
 
 ### 1. Design Element: Module Library Organization
@@ -172,6 +188,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
 
 ---
+
+### 11. Design Element: Compact "Power User" Density Mode
+**Current State:** Standard spacing suitable for beginners.
+**Proposed Improvement:** A toggle in settings that drastically reduces padding and margin across the entire UI, allowing more modules and settings to fit on screen simultaneously.
+**User Benefit:** Power users who know the modules well do not need large touch targets and prefer seeing as much information as possible without scrolling.
+**Design Reference:** Gmail display density settings; Slack compact theme.
+**Accessibility Impact:** Compact mode can be harder to click, so it should be strictly opt-in and standard padding should remain the accessible default.
+**Implementation Notes:** Use a React context to switch Tailwind spacing utility variables.
+
+### 12. Design Element: Interactive "Diff" View for Theme Changes
+**Current State:** The user just sees the current theme preview, with no visual indication of what changed from the saved baseline.
+**Proposed Improvement:** A side-by-side or split slider preview that highlights modified properties or newly added modules in a "diff" style (e.g. green background for new modules).
+**User Benefit:** Users can easily compare their current tweaks against their baseline theme before committing or exporting.
+**Design Reference:** VS Code diff editor; GitHub split view.
+**Accessibility Impact:** Diff colors must maintain high contrast or use underlining for colorblind users.
+**Implementation Notes:** Compare the active state object against the saved snapshot object and pass a `highlightMode` flag to the renderer.
 
 ## 🎨 Specific Research Questions Addressed
 
