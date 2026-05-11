@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -87,6 +87,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
 **Priority:** Medium
 
+### 11. Feature Name: Theme Performance Profiler
+**Category:** Performance & Testing
+**Description:** A built-in benchmark tool that estimates the rendering time of the created prompt based on the active modules, warning users if their configuration might cause terminal latency.
+**User Value:** Starship is fast, but complex custom commands or poorly optimized cloud modules can slow it down. Users want to know if their theme will feel sluggish before they install it.
+**Implementation Complexity:** Medium (simulated execution time estimates)
+**Similar Example:** Lighthouse in Chrome DevTools.
+**Priority:** Medium
+
+### 12. Feature Name: Multi-Profile Support & Switcher
+**Category:** Advanced Customization
+**Description:** Allows users to create and manage multiple profiles within a single configuration (e.g., a "work" profile with AWS/K8s and a "personal" minimal profile), generating helper scripts to switch between them.
+**User Value:** Developers often have different contexts. A quick way to design, export, and toggle themes based on the context increases the utility of the tool.
+**Implementation Complexity:** Medium
+**Similar Example:** Arc Browser Spaces, Raycast profiles.
+**Priority:** High
+
+
 ---
 
 ## 🎨 Part B: UI/UX Design Suggestions
@@ -171,6 +188,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
 
+### 11. Design Element: "Quick Add" Command Palette
+**Current State:** Users must scroll the left sidebar to find and enable a module.
+**Proposed Improvement:** Implement a `Cmd+K` command palette specifically for adding modules, applying presets, or jumping to specific settings.
+**User Benefit:** Massively speeds up navigation for power users who know exactly what they are looking for, bypassing the visual hierarchy.
+**Design Reference:** Linear's command menu; VS Code Command Palette.
+**Accessibility Impact:** Extremely high for keyboard users; completely avoids manual list traversal.
+**Implementation Notes:** Can use standard command palette libraries (like `cmdk`) to implement the overlay.
+
+### 12. Design Element: Performance Warnings on Module Toggle
+**Current State:** Modules are toggled without indicating their performance impact.
+**Proposed Improvement:** Add a small, unobtrusive warning icon or badge next to historically slow modules (e.g., `kubernetes`, `aws`, `gcloud`) that displays a tooltip explaining potential latency when enabled.
+**User Benefit:** Sets correct expectations. If a user enables an expensive module, they won't blame the tool or Starship if their terminal slows down, as they were warned.
+**Design Reference:** Android's battery drain warnings in settings.
+**Accessibility Impact:** Badges must have descriptive alt-text/aria-labels.
+**Implementation Notes:** Tag `MODULE_DEFINITIONS` with an `isExpensive` flag and render conditionally.
+
+
 ---
 
 ## 🎨 Specific Research Questions Addressed
@@ -222,3 +256,38 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 
 **How can we better communicate when changes are saved/synced?**
 *Approach:* A persistent, small sync indicator in the header (e.g., "🟢 Local edits saved", "☁️ Synced to Gist") that updates passively, rather than blocking the UI with modal popups.
+
+
+## 🚀 Bonus Points & Advanced Opportunities
+
+**Emerging AI/ML features in similar tools:**
+- *Pattern Found:* Tools like Cursor and GitHub Copilot use LLMs to generate configuration blocks.
+- *Application:* We can introduce a "Fix my prompt" button where an AI reviews the user's `starship.toml` for inefficiencies or recommends modules based on their current active technologies (detected from the preview simulation).
+
+**Novel approaches to configuration editing:**
+- *Pattern Found:* Node-based interfaces (like WebAudio visualizers or Unreal Blueprints).
+- *Application:* The "Intelligent Format String Visual Builder" (Feature 6) applies this by turning the linear `format` string into a 2D node map where users can visually branch their prompts for different conditions.
+
+**Accessibility innovations:**
+- *Pattern Found:* Real-time vision-loss simulation.
+- *Application:* Beyond simple WCAG checks, providing a toggle to view the terminal preview through various color-blindness filters (Deuteranomaly, Protanopia) ensures themes are universally legible.
+
+**Mobile-first design patterns:**
+- *Pattern Found:* Bottom-sheet contexts and thumb-zone navigation.
+- *Application:* Mobile users can use swipe gestures on the module list to quick-disable/enable modules, and the configuration form slides up as a bottom sheet over the terminal preview, prioritizing screen real estate for the visual output.
+
+**Gamification or engagement mechanics:**
+- *Pattern Found:* "Developer Stats" or configuration scorecards.
+- *Application:* Implementing a "Theme Complexity Score" or "Performance Rating" that gamifies optimization. Users get achievements for building themes that load in under 5ms, encouraging them to learn about Starship's performance features.
+
+**Monetization strategies for similar tools:**
+- *Pattern Found:* Freemium tier for collaboration or advanced exports.
+- *Application:* The core editor remains free and open-source. A "Pro" tier could offer cloud sync for dotfiles across unlimited machines, private team themes for agencies/enterprises, or direct integration with GitHub enterprise to standardize prompts across a company.
+
+**Integration opportunities with popular dev tools:**
+- *Pattern Found:* IDE extensions matching terminal themes.
+- *Application:* A one-click export that generates both a `starship.toml` AND a matching VS Code `.json` theme or iTerm2 `.itermcolors` profile, ensuring total desktop synchronization.
+
+**Community-building features:**
+- *Pattern Found:* Weekly design challenges.
+- *Application:* A "Theme of the Week" banner on the home page, challenging users to create a theme based on a specific palette (e.g., "Neon Tokyo"), with voting and leaderboards to drive returning traffic.
