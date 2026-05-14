@@ -615,6 +615,7 @@ function AppContent() {
               <button
                 onClick={() => setShowGallery(false)}
                 className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+                aria-label="Close theme gallery"
               >
                 <X size={20} />
               </button>

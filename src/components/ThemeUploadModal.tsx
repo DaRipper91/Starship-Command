@@ -82,6 +82,7 @@ export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
         <button
           onClick={onClose}
           className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+          aria-label="Close modal"
         >
           <X size={20} />
         </button>
