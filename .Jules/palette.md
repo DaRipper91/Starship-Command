@@ -1,4 +1,3 @@
-## 2024-05-13 - [Focus styles & ARIA labels missing from primary header layout buttons]
-
-**Learning:** Found several top-level header buttons in App.tsx (e.g. Menu, Command Palette, Settings, View modes, Undo, Redo) that use icons but lack aria-labels. They also lack explicit `focus-visible` styling which reduces accessibility for keyboard navigation.
-**Action:** Will implement proper aria-labels and consider focus-visible styles where appropriate for these highly trafficked buttons.
+## 2024-05-15 - [Added missing ARIA labels to Auth and Upload modals]
+**Learning:** [Missing ARIA labels on icon-only close buttons are a common accessibility anti-pattern in React modals that use lucide-react icons, making them invisible to screen readers.]
+**Action:** [Always check for missing `aria-label` attributes when using `<X size={20} />` or similar icon-only buttons as close actions across all modal components.]
