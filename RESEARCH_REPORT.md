@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -87,6 +87,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
 **Priority:** Medium
 
+
+### 11. Feature Name: Built-in Custom Module Snippet Library
+**Category:** Advanced Customization / Community Features
+**Description:** A library of pre-written custom modules for common tools (e.g. displaying Docker daemon status, specific framework versions, or battery life) that users can insert with one click.
+**User Value:** Writing `command` and `when` conditions for custom modules is error-prone. Snippets provide instant value for power-user features.
+**Implementation Complexity:** Low
+**Similar Example:** Raycast script commands gallery, VS Code snippet marketplace.
+**Priority:** Medium
+
+### 12. Feature Name: Theme "Diff" Viewer
+**Category:** Advanced Customization / Developer Workflow
+**Description:** A modal that shows a git-style diff comparing the currently generated `starship.toml` against the user's previously exported version.
+**User Value:** Reassures power users exactly what lines are changing, preventing accidental overrides of manual tweaks.
+**Implementation Complexity:** Medium (requires a lightweight text diffing library)
+**Similar Example:** GitHub PR diff viewer, VS Code Settings JSON diff.
+**Priority:** High
+
 ---
 
 ## 🎨 Part B: UI/UX Design Suggestions
@@ -170,6 +187,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
+
+
+### 11. Design Element: Floating Action Button (FAB) for Export
+**Current State:** Export button might be buried in a menu or header, requiring scrolling back up.
+**Proposed Improvement:** Add a prominent, sticky "Export Theme" FAB in the bottom right corner that subtly pulses when unsaved changes exist.
+**User Benefit:** Makes the primary call-to-action (getting the config out of the tool) always accessible regardless of scroll position.
+**Design Reference:** Material Design FABs, CodePen save button.
+**Accessibility Impact:** Requires a high-contrast background and `aria-label="Export Theme"`.
+**Implementation Notes:** Easy to add via Tailwind fixed positioning.
+
+### 12. Design Element: Syntax Highlighting in Raw TOML View
+**Current State:** Viewing the raw TOML output might be plain text.
+**Proposed Improvement:** Integrate a lightweight syntax highlighter (like Prism.js or Shiki) to colorize the TOML output in the export modal.
+**User Benefit:** Makes it much easier for developers to visually parse the configuration before copying it.
+**Design Reference:** GitHub code blocks, Stripe API documentation.
+**Accessibility Impact:** Ensure the chosen syntax highlighting theme meets WCAG contrast ratios.
+**Implementation Notes:** Integrate a library like `react-syntax-highlighter` for the export preview component.
 
 ---
 
