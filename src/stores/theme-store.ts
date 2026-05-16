@@ -228,7 +228,12 @@ export const selectActiveModules = (state: ThemeStore) => {
 
   const format = state.currentTheme.config.format || '';
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
-  const existingModuleNames = new Set(allModules.map((m) => m.name));
+
+  // Precompute Map for O(1) lookups instead of O(N) Array.prototype.find
+  const isCustomMap = new Map<string, boolean>();
+  for (const mod of allModules) {
+    isCustomMap.set(mod.name, mod.isCustom);
+  }
 
   const parsedModules = matches
     .map((m, i) => {
@@ -236,11 +241,10 @@ export const selectActiveModules = (state: ThemeStore) => {
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom:
-          allModules.find((mod) => mod.name === name)?.isCustom || false,
+        isCustom: isCustomMap.get(name) || false,
       };
     })
-    .filter((item) => existingModuleNames.has(item.name));
+    .filter((item) => isCustomMap.has(item.name));
 
   return parsedModules;
 };
