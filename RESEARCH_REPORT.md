@@ -87,6 +87,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
 **Priority:** Medium
 
+### 11. Feature Name: Multi-Device Config Synchronization
+**Category:** Developer Workflow
+**Description:** A feature that allows users to create an account and sync their Starship config securely across multiple workstations in real-time, removing the need for manual dotfile transfer.
+**User Value:** Simplifies the lives of developers who use a work laptop, personal desktop, and remote servers.
+**Implementation Complexity:** High (requires backend database and conflict resolution)
+**Similar Example:** Google Chrome Sync, VS Code Settings Sync.
+**Priority:** Medium
+
+### 12. Feature Name: AI-Powered Theme Conversion
+**Category:** AI-Assisted Features
+**Description:** A tool that takes a screenshot of an existing terminal theme (or from a movie/game) and uses AI vision to extract colors, layout, and fonts, generating an equivalent Starship theme automatically.
+**User Value:** Users can easily replicate aesthetics they see online without manual trial and error.
+**Implementation Complexity:** High (Requires Vision API and advanced color parsing)
+**Similar Example:** Vercel v0 image-to-code, color palette generators from images.
+**Priority:** Low
+
 ---
 
 ## 🎨 Part B: UI/UX Design Suggestions
@@ -170,6 +186,22 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
+
+### 11. Design Element: "Focus Mode" Full-Screen Preview
+**Current State:** Editor and preview share screen space.
+**Proposed Improvement:** A "Focus Mode" button that maximizes the terminal preview to fill the entire screen, with a minimal floating toolbar for basic tweaks.
+**User Benefit:** Helps creators and users see exactly how the terminal will feel without visual distractions from the editor UI.
+**Design Reference:** Figma presentation mode, Notion full-width view.
+**Accessibility Impact:** High contrast, less cluttered view for visually impaired users.
+**Implementation Notes:** CSS full-screen API or a high z-index fixed container.
+
+### 12. Design Element: Interactive Tutorial Overlay
+**Current State:** Users are dropped directly into the editor.
+**Proposed Improvement:** A non-intrusive step-by-step interactive tutorial that highlights UI elements (e.g., "Click here to add a module", "Here is your live preview") using a spotlight effect on first visit.
+**User Benefit:** Reduces confusion for users unfamiliar with Starship's module concepts.
+**Design Reference:** Shepherd.js product tours, Intercom onboarding tours.
+**Accessibility Impact:** Can be skipped with `Esc`, fully keyboard navigable.
+**Implementation Notes:** Use a library like `reactour` or `shepherd.js` to manage the overlay state.
 
 ---
 
