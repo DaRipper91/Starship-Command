@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { PRESET_THEMES } from '../lib/presets';
 import { useThemeStore } from '../stores/theme-store';
@@ -6,6 +6,17 @@ import { useThemeStore } from '../stores/theme-store';
 export function useDynamicTheme() {
   const { loadTheme, savedThemes, currentTheme, dynamicSettings } =
     useThemeStore();
+
+  // Create a memoized Map for O(1) lookups to avoid O(N) .find() during interval
+  const themesMap = useMemo(() => {
+    const map = new Map();
+    [...savedThemes, ...PRESET_THEMES].forEach((theme) => {
+      if (!map.has(theme.metadata.id)) {
+        map.set(theme.metadata.id, theme);
+      }
+    });
+    return map;
+  }, [savedThemes]);
 
   useEffect(() => {
     if (!dynamicSettings.enabled) return;
@@ -39,9 +50,7 @@ export function useDynamicTheme() {
 
       // Only apply if the theme is different from current to avoid unnecessary re-renders
       if (currentTheme.metadata.id !== themeToApplyId) {
-        const targetTheme =
-          savedThemes.find((theme) => theme.metadata.id === themeToApplyId) ||
-          PRESET_THEMES.find((theme) => theme.metadata.id === themeToApplyId);
+        const targetTheme = themesMap.get(themeToApplyId);
 
         if (targetTheme) {
           loadTheme(targetTheme);
@@ -56,7 +65,7 @@ export function useDynamicTheme() {
     return () => clearInterval(intervalId);
   }, [
     loadTheme,
-    savedThemes,
+    themesMap,
     currentTheme.metadata.id,
     dynamicSettings.enabled,
     dynamicSettings.dayThemeId,
