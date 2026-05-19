@@ -1,4 +1,3 @@
-## 2024-05-13 - [Focus styles & ARIA labels missing from primary header layout buttons]
-
-**Learning:** Found several top-level header buttons in App.tsx (e.g. Menu, Command Palette, Settings, View modes, Undo, Redo) that use icons but lack aria-labels. They also lack explicit `focus-visible` styling which reduces accessibility for keyboard navigation.
-**Action:** Will implement proper aria-labels and consider focus-visible styles where appropriate for these highly trafficked buttons.
+## 2025-02-12 - Aria Labels on Close Buttons
+**Learning:** Found several modal and panel close/dismiss buttons across the application that were icon-only and missing `aria-label`s. This is a common pattern where visual feedback is adequate for sighted users but screen reader users lack context.
+**Action:** Always verify icon-only buttons (`<X size={...} />`, `<TrashIcon />`, etc.) have descriptive `aria-label`s. Added labels to `AuthModal`, `ThemeUploadModal`, `SuggestionPanel`, `App` (Theme Gallery close), and `FormatEditor` / `FormatSegmentEditor` segment remove buttons.

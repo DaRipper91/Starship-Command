@@ -123,6 +123,7 @@ export function FormatSegmentEditor({
       <button
         onClick={onRemove}
         className="mt-2 self-end rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-500"
+        aria-label="Remove Segment"
       >
         Remove Segment
       </button>

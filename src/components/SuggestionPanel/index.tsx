@@ -80,6 +80,7 @@ export function SuggestionPanel() {
               <button
                 onClick={() => handleDismiss(s.title)}
                 className="absolute right-2 top-2 text-gray-500 opacity-0 transition-opacity hover:text-white group-hover:opacity-100"
+                aria-label="Dismiss suggestion"
               >
                 <X size={14} />
               </button>
