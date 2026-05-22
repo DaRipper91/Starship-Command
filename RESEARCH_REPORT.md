@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -89,6 +89,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 
 ---
 
+
+### 11. Feature Name: Real-time Multi-user Collaboration
+**Category:** Collaboration
+**Description:** Allows multiple users to simultaneously edit the same Starship theme in real-time, complete with cursor presence and live updates.
+**User Value:** Great for teams trying to standardize their prompt configurations, or for educational contexts where an expert is helping a beginner.
+**Implementation Complexity:** High (requires WebSockets, CRDTs or OT like Yjs)
+**Similar Example:** Figma multiplayer, Google Docs, CodeSandbox Live.
+**Priority:** Low
+
+### 12. Feature Name: Automated Dotfiles PR Generator
+**Category:** Export / Developer Workflow
+**Description:** Connects to GitHub, forks the user's dotfiles repo, updates the starship.toml, and automatically creates a Pull Request with the changes.
+**User Value:** Takes the GitHub Gist sync a step further by integrating directly into users' existing configuration as code workflows.
+**Implementation Complexity:** High (GitHub API, Git manipulation via API)
+**Similar Example:** Dependabot PR generation, Vercel Git Integration.
+**Priority:** Medium
+
 ## 🎨 Part B: UI/UX Design Suggestions
 
 ### 1. Design Element: Module Library Organization
@@ -172,6 +189,23 @@ This report outlines 10 major features and 10 UI/UX design improvements for the 
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
 
 ---
+
+
+### 11. Design Element: Drag-and-Drop Reordering Animations
+**Current State:** Instant, jarring updates when reordering modules.
+**Proposed Improvement:** Add fluid physics-based animations when picking up, dragging, and dropping module cards in the sidebar.
+**User Benefit:** Provides spatial awareness and tactile feedback, making the UI feel more premium and intuitive.
+**Design Reference:** Linear's board view, Apple's list reordering in Reminders.
+**Accessibility Impact:** Requires `aria-roledescription` and specific keyboard shortcuts for reordering (Space to pick up, Arrows to move) to ensure parity with mouse drag-and-drop.
+**Implementation Notes:** Use `dnd-kit`'s sortable preset with framer-motion or CSS transitions for the transform values.
+
+### 12. Design Element: Advanced Search & Filtering for Modules
+**Current State:** Flat scrolling list of modules.
+**Proposed Improvement:** Implement a sticky search bar at the top of the module list, along with quick filter chips (e.g., "Active", "Cloud", "Git").
+**User Benefit:** When dealing with 50+ modules, users need to quickly find the one they want without scrolling. Filtering by "Active" is crucial for managing existing themes.
+**Design Reference:** macOS System Settings search, VS Code Extensions view.
+**Accessibility Impact:** Search input needs `role="search"` and appropriate focus management when results update.
+**Implementation Notes:** Implement fuzzy search (e.g., Fuse.js) on the module metadata and update the rendered list state.
 
 ## 🎨 Specific Research Questions Addressed
 
