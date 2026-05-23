@@ -2,7 +2,7 @@
 
 A professional, web-based theme creator and visual editor for the [Starship](https://starship.rs) cross-shell prompt.
 
-![Starship Command Preview](https://raw.githubusercontent.com/starship/starship/master/media/demo.gif) *(Placeholder for actual preview image)*
+![Starship Command Preview](https://raw.githubusercontent.com/starship/starship/master/media/demo.gif) _(Placeholder for actual preview image)_
 
 ## 🚀 Features
 
@@ -35,17 +35,20 @@ A professional, web-based theme creator and visual editor for the [Starship](htt
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/DaRipper91/Starship-Command.git
    cd Starship-Command
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -67,11 +70,13 @@ python server.py
 ## 🧪 Testing
 
 Run the test suite:
+
 ```bash
 npm test
 ```
 
 Generate a coverage report:
+
 ```bash
 npm run test:coverage
 ```

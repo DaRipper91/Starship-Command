@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.0] - 2026-03-09
+
+### Audited and Verified
+
+- Verified all features and improvements are implemented successfully.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
