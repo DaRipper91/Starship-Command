@@ -19,6 +19,7 @@ We enforce strict code quality rules using ESLint and Prettier.
 - **No Console Logs**: Production code must not contain `console.log`. It will throw an error in production environments. Use `console.warn` or `console.error` sparingly.
 - **Unused Variables**: Unused variables are strictly forbidden. Prefix with `_` if they are intentionally unused.
 - **React Hooks**: Follow the rules of React Hooks rigorously.
+- **Pre-commit Checks**: We use `lint-staged` with `husky` to ensure that future commits cannot introduce new lint violations.
 
 Before committing, please run:
 
