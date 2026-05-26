@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas';
 import { ArrowLeftRight, Camera, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { useToast } from '../../contexts/ToastContext';
 import { PRESET_THEMES } from '../../lib/presets';
@@ -16,7 +16,19 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
   const { currentTheme, savedThemes } = useThemeStore();
   const { addToast } = useToast();
 
-  const allThemes = [currentTheme, ...savedThemes, ...PRESET_THEMES];
+  // O(1) lookup map for themes, prioritizing currentTheme over saved/presets
+  const themeMap = useMemo(() => {
+    const allThemes = [currentTheme, ...savedThemes, ...PRESET_THEMES];
+    const map = new Map<string, Theme>();
+    for (const theme of allThemes) {
+      if (!map.has(theme.metadata.id)) {
+        map.set(theme.metadata.id, theme);
+      }
+    }
+    return map;
+  }, [currentTheme, savedThemes]);
+
+  const uniqueThemes = useMemo(() => Array.from(themeMap.values()), [themeMap]);
 
   // By default compare current vs a clean preset or the first saved theme
   const [themeA, setThemeA] = useState<Theme>(currentTheme);
@@ -103,14 +115,11 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
               <select
                 value={themeA.metadata.id}
                 onChange={(e) =>
-                  setThemeA(
-                    allThemes.find((t) => t.metadata.id === e.target.value) ||
-                      themeA,
-                  )
+                  setThemeA(themeMap.get(e.target.value) || themeA)
                 }
                 className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none"
               >
-                {allThemes.map((t) => (
+                {uniqueThemes.map((t) => (
                   <option key={`a-${t.metadata.id}`} value={t.metadata.id}>
                     {t.metadata.name}
                   </option>
@@ -130,14 +139,11 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
               <select
                 value={themeB.metadata.id}
                 onChange={(e) =>
-                  setThemeB(
-                    allThemes.find((t) => t.metadata.id === e.target.value) ||
-                      themeB,
-                  )
+                  setThemeB(themeMap.get(e.target.value) || themeB)
                 }
                 className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none"
               >
-                {allThemes.map((t) => (
+                {uniqueThemes.map((t) => (
                   <option key={`b-${t.metadata.id}`} value={t.metadata.id}>
                     {t.metadata.name}
                   </option>
