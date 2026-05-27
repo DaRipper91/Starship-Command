@@ -89,6 +89,7 @@ const SortableItem = memo(function SortableItem({
           onToggle(item.name, e.target.checked);
         }}
         className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500"
+        aria-label={`Toggle module ${item.name}`}
       />
 
       <span
@@ -361,6 +362,7 @@ export const ModuleList = memo(function ModuleList({
                     handleToggle(module.name, e.target.checked);
                   }}
                   className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500"
+                  aria-label={`Toggle module ${module.name}`}
                 />
                 <span className="select-none font-mono text-sm text-gray-400">
                   {module.name}
