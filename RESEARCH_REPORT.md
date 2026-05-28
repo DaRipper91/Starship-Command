@@ -1,7 +1,7 @@
 # Starship Theme Creator: Feature & UX Enhancement Research
 
 ## 🎯 Executive Summary
-This report outlines 12 major features and 12 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
+This report outlines 10 major features and 10 UI/UX design improvements for the Starship Theme Creator, aimed at transforming it from a simple visual editor into an indispensable tool for developers, teams, and content creators.
 
 ---
 
@@ -87,22 +87,6 @@ This report outlines 12 major features and 12 UI/UX design improvements for the 
 **Similar Example:** Framer web editor on mobile, Github Codespaces mobile view.
 **Priority:** Medium
 
-### 11. Feature Name: Live Multiplayer Collaboration
-**Category:** Collaboration & sharing
-**Description:** A feature allowing multiple users to edit the same Starship theme simultaneously in real time.
-**User Value:** Teams can work together to standardize their prompt themes collaboratively.
-**Implementation Complexity:** High (requires WebSockets and CRDTs)
-**Similar Example:** Figma multiplayer editing.
-**Priority:** Medium
-
-### 12. Feature Name: Automated CI/CD Export
-**Category:** Developer workflow integration
-**Description:** An integration to automatically push the generated `starship.toml` to a selected GitHub repository via GitHub Actions.
-**User Value:** Streamlines the deployment of standard themes across an organization's repositories.
-**Implementation Complexity:** High
-**Similar Example:** Vercel automated deployments.
-**Priority:** Low
-
 ---
 
 ## 🎨 Part B: UI/UX Design Suggestions
@@ -186,22 +170,6 @@ This report outlines 12 major features and 12 UI/UX design improvements for the 
 **Design Reference:** macOS Mail smart search tokens; Jira JQL basic builder.
 **Accessibility Impact:** Chips must be focusable and re-orderable via spacebar/arrows (like `dnd-kit` accessibility features).
 **Implementation Notes:** Parse the format string into an array of objects, map to UI components, and serialize back to string on change.
-
-### 11. Design Element: Theme Export Success State
-**Current State:** A simple toast message appears when exporting a theme.
-**Proposed Improvement:** A celebratory modal with confetti and easy copy/share links for the exported theme.
-**User Benefit:** Increases user satisfaction and encourages sharing themes with the community.
-**Design Reference:** Mailchimp campaign sent success screen.
-**Accessibility Impact:** Requires reduced motion support for confetti animations.
-**Implementation Notes:** Use `react-confetti` and respect `prefers-reduced-motion`.
-
-### 12. Design Element: "Undo" History Visualization
-**Current State:** Standard undo/redo functionality without visual history.
-**Proposed Improvement:** A visual timeline or list showing the history of changes, allowing users to jump back to a specific state.
-**User Benefit:** Users can easily navigate complex editing histories without guessing what Ctrl+Z will revert.
-**Design Reference:** Photoshop History panel.
-**Accessibility Impact:** History list must be navigable via keyboard and announced by screen readers.
-**Implementation Notes:** Extend the `zundo` integration to expose the past states list to the UI.
 
 ---
 
