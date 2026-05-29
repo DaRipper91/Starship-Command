@@ -1,3 +1,4 @@
-## 2026-04-13 - O(N²) Array.prototype.find in Component render loops
-**Learning:** React component render loops (like `.filter` or `.map`) that execute `Array.prototype.find()` against another array create a hidden O(N²) bottleneck. This becomes highly visible on lists with complex filtering logic, like the drag-and-drop `ModuleList` which compares `activeModulesStore` against `MODULE_DEFINITIONS`.
-**Action:** Always pre-compute a lookup `Map` or `Set` outside the `.map()` or `.filter()` loop using `useMemo` to enable O(1) lookups, dropping the algorithmic complexity to O(N). Ensure that you index by the correct ID field based on the collection's structure.
+## 2024-05-14 - [O(1) lookups for theme retrieval]
+
+**Learning:** High-frequency logic like recurring checks in hooks (e.g., `useDynamicTheme`'s `setInterval`) use O(N) array `.find()` operations multiple times.
+**Action:** Replace `savedThemes.find(...) || PRESET_THEMES.find(...)` with a memoized `Map` lookup for O(1) retrieval to improve efficiency, per the memory guidelines.

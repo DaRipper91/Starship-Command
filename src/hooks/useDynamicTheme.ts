@@ -1,11 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { PRESET_THEMES } from '../lib/presets';
 import { useThemeStore } from '../stores/theme-store';
+import type { Theme } from '../types/starship.types';
 
 export function useDynamicTheme() {
   const { loadTheme, savedThemes, currentTheme, dynamicSettings } =
     useThemeStore();
+
+  const themeMap = useMemo(() => {
+    const map = new Map<string, Theme>();
+    const allThemes = [...savedThemes, ...PRESET_THEMES];
+    allThemes.forEach((theme) => {
+      if (!map.has(theme.metadata.id)) {
+        map.set(theme.metadata.id, theme);
+      }
+    });
+    return map;
+  }, [savedThemes]);
 
   useEffect(() => {
     if (!dynamicSettings.enabled) return;
@@ -39,9 +51,7 @@ export function useDynamicTheme() {
 
       // Only apply if the theme is different from current to avoid unnecessary re-renders
       if (currentTheme.metadata.id !== themeToApplyId) {
-        const targetTheme =
-          savedThemes.find((theme) => theme.metadata.id === themeToApplyId) ||
-          PRESET_THEMES.find((theme) => theme.metadata.id === themeToApplyId);
+        const targetTheme = themeMap.get(themeToApplyId);
 
         if (targetTheme) {
           loadTheme(targetTheme);
@@ -56,7 +66,7 @@ export function useDynamicTheme() {
     return () => clearInterval(intervalId);
   }, [
     loadTheme,
-    savedThemes,
+    themeMap,
     currentTheme.metadata.id,
     dynamicSettings.enabled,
     dynamicSettings.dayThemeId,
