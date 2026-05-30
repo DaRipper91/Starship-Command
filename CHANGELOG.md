@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.0] - 2026-03-10
+
+### Added
+- **Theme Import/Export Engine**: Full theme import/export system to serialize theme state to a valid Starship TOML config file and download it. Implemented a matching import parser that validates structure and loads it back.
+- **Undo/Redo History Stack**: Full immutable undo/redo history stack pattern for all editor state mutations with keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z).
+- **Theme Preset System**: Curated set of built-in theme presets with a single-click preset selector component.
+
+### Improved
+- **Type Safety Audit**: Eliminated all `any` uses and ensured strict mode. Documented types in `types/starship.types.ts`.
+- **State Management Refactor**: Refactored logic to centralize editor/theme state through Zustand `theme-store.ts`.
+- **Vite Build Optimization**: Implemented manual chunk splitting to separate vendor libraries, ensuring smaller chunk sizes under 400kb.
+- **Error Boundary & Runtime Resilience**: Wrapped major features with React Error Boundaries with fallback UI.
+- **Code Consistency & Linting Enforcement**: Enforced strict rules in `.eslintrc.cjs` and added `lint-staged` pre-commit hooks.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
