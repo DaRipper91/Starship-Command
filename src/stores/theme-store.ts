@@ -230,14 +230,18 @@ export const selectActiveModules = (state: ThemeStore) => {
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
   const existingModuleNames = new Set(allModules.map((m) => m.name));
 
+  const isCustomMap = new Map<string, boolean>();
+  for (const m of allModules) {
+    isCustomMap.set(m.name, m.isCustom);
+  }
+
   const parsedModules = matches
     .map((m, i) => {
       const name = m.substring(1);
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom:
-          allModules.find((mod) => mod.name === name)?.isCustom || false,
+        isCustom: isCustomMap.get(name) || false,
       };
     })
     .filter((item) => existingModuleNames.has(item.name));
