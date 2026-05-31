@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0] - 2026-03-09
+
+### Audited and Verified
+- **Theme Import/Export Engine**: Verified full theme import/export system functionality and validations.
+- **Undo/Redo Stack**: Audited immutable history stack pattern and keyboard shortcuts.
+- **Theme Preset System**: Audited built-in theme presets and the preset selector component.
+- **Type Safety Audit**: Checked TypeScript files for strict mode and removed all explicit `any` usages.
+- **State Management Refactor**: Verified state is refactored into a centralized store using Zustand (`theme-store.ts`).
+- **Vite Build Optimization**: Verified manual chunk splitting, tree-shaking, and build size targets.
+- **Error Boundary & Runtime Resilience**: Checked React Error Boundaries and async error handling.
+- **Code Consistency & Linting Enforcement**: Confirmed ESLint rules and fixed zero violations. Updated CONTRIBUTING.md.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
@@ -11,8 +23,6 @@
 - **Vite Build Optimization**: Verified manual chunk splitting and build size targets.
 - **Error Boundary & Runtime Resilience**: Checked React Error Boundaries and async error handling.
 - **Code Consistency & Linting Enforcement**: Confirmed ESLint rules and fixed zero violations.
-
-# Changelog
 
 ## [1.5.0] - 2026-03-04
 
