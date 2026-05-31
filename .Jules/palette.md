@@ -1,4 +1,4 @@
-## 2024-05-13 - [Focus styles & ARIA labels missing from primary header layout buttons]
+## 2026-05-31 - Missing aria-labels on Custom Modals
 
-**Learning:** Found several top-level header buttons in App.tsx (e.g. Menu, Command Palette, Settings, View modes, Undo, Redo) that use icons but lack aria-labels. They also lack explicit `focus-visible` styling which reduces accessibility for keyboard navigation.
-**Action:** Will implement proper aria-labels and consider focus-visible styles where appropriate for these highly trafficked buttons.
+**Learning:** The application implements several custom modals (AuthModal, ThemeUploadModal) that use an icon-only `<X size={20} />` close button. However, while some standardized components like `src/components/ui/Modal.tsx` have `aria-label="Close modal"`, these custom standalone modals omitted the aria-label entirely, creating an accessibility issue for screen readers interacting with modal dialogs.
+**Action:** When implementing or reviewing custom modal components that deviate from the standard `ui/Modal`, specifically verify that the close button includes an appropriate `aria-label` attribute.
