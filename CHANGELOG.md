@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.0] - 2026-03-09
+
+### Fixed
+- Replaced `npm` commands with their `pnpm` equivalents in `CONTRIBUTING.md` and `.husky/pre-commit` to align with the repository's strict usage of `pnpm`.
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
