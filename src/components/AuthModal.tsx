@@ -65,7 +65,8 @@ export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
         </h2>
         <button
           onClick={onClose}
-          className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+          className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          aria-label="Close"
         >
           <X size={20} />
         </button>
