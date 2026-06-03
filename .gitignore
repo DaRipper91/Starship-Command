@@ -1,0 +1,13 @@
+node_modules/
+dist/
+platforms/desktop/node_modules/
+platforms/desktop/dist/
+server/venv/
+server/__pycache__/
+instance/
+.env
+.DS_Store
+*.log
+android/.gradle/
+android/app/build/
+android/capacitor-cordova-android-plugins/

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Starship Command</string>
+    <string name="title_activity_main">Starship Command</string>
+    <string name="package_name">com.daripper91.starshipcommand</string>
+    <string name="custom_url_scheme">com.daripper91.starshipcommand</string>
+</resources>

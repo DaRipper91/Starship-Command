@@ -1,0 +1,38 @@
+<svg width="1024" height="256" viewBox="0 0 1024 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid Dark Deep Slate Background -->
+  <rect width="1024" height="256" fill="#2d333b" />
+  
+  <!-- Icon 1: Pipette (Color Selection) -->
+  <g transform="translate(64, 64) scale(0.5)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M 180 20 L 220 60" stroke="#82aaff" />
+    <path d="M 60 140 L 180 20 L 220 60 L 100 180 L 20 220 L 60 140 Z" stroke="#b4f9f8" />
+    <path d="M 60 140 L 100 180" stroke="#82aaff" />
+  </g>
+  
+  <!-- Icon 2: 3D Cube (Modules) -->
+  <g transform="translate(320, 64) scale(0.5)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#b4f9f8">
+    <path d="M 128 20 L 230 80 L 230 200 L 128 260 L 26 200 L 26 80 Z" />
+    <path d="M 128 20 L 128 140" stroke="#82aaff" />
+    <path d="M 128 140 L 230 80" stroke="#82aaff" />
+    <path d="M 128 140 L 26 80" stroke="#82aaff" />
+    <path d="M 128 140 L 128 260" opacity="0.5" />
+  </g>
+  
+  <!-- Icon 3: Terminal with Heartbeat (Performance) -->
+  <g transform="translate(576, 64) scale(0.5)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="20" y="40" width="216" height="160" rx="10" stroke="#b4f9f8" />
+    <path d="M 40 120 L 80 120 L 100 60 L 130 180 L 150 120 L 216 120" stroke="#82aaff" />
+    <circle cx="45" cy="65" r="6" fill="#82aaff" stroke="none" />
+  </g>
+  
+  <!-- Icon 4: Android Robot Head (Native) -->
+  <g transform="translate(832, 64) scale(0.5)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#b4f9f8">
+    <path d="M 40 100 A 88 88 0 0 1 216 100 L 216 180 L 40 180 Z" />
+    <!-- Eyes -->
+    <circle cx="85" cy="130" r="10" fill="#82aaff" stroke="none" />
+    <circle cx="171" cy="130" r="10" fill="#82aaff" stroke="none" />
+    <!-- Antennas -->
+    <path d="M 70 40 L 95 80" stroke="#82aaff" />
+    <path d="M 186 40 L 161 80" stroke="#82aaff" />
+  </g>
+</svg>

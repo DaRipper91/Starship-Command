@@ -1,0 +1,95 @@
+package core
+
+data class NerdSymbol(val name: String, val glyph: String, val category: String)
+
+object NerdFonts {
+    val Symbols = listOf(
+        // Powerline & Separators
+        NerdSymbol("Powerline Branch", "\uE0A0", "Powerline"),
+        NerdSymbol("Powerline LN", "\uE0A1", "Powerline"),
+        NerdSymbol("Powerline RO", "\uE0A2", "Powerline"),
+        NerdSymbol("Powerline Right Arrow", "\uE0B0", "Powerline"),
+        NerdSymbol("Powerline Right Soft", "\uE0B1", "Powerline"),
+        NerdSymbol("Powerline Left Arrow", "\uE0B2", "Powerline"),
+        NerdSymbol("Powerline Left Soft", "\uE0B3", "Powerline"),
+        NerdSymbol("Powerline Right Rounded", "\uE0B4", "Powerline"),
+        NerdSymbol("Powerline Left Rounded", "\uE0B6", "Powerline"),
+        NerdSymbol("Powerline Right Angled", "\uE0B8", "Powerline"),
+        NerdSymbol("Powerline Left Angled", "\uE0BA", "Powerline"),
+        NerdSymbol("Powerline Flame Right", "\uE0C0", "Powerline"),
+        NerdSymbol("Powerline Flame Left", "\uE0C2", "Powerline"),
+        NerdSymbol("Powerline Pixel Right", "\uE0C4", "Powerline"),
+        NerdSymbol("Powerline Pixel Left", "\uE0C6", "Powerline"),
+
+        // OS Logos
+        NerdSymbol("Apple", "\uF179", "OS"),
+        NerdSymbol("Linux", "\uF17C", "OS"),
+        NerdSymbol("Windows", "\uF17A", "OS"),
+        NerdSymbol("Android", "\uF17B", "OS"),
+        NerdSymbol("Ubuntu", "\uF31B", "OS"),
+        NerdSymbol("Fedora", "\uF30A", "OS"),
+        NerdSymbol("Arch", "\uF303", "OS"),
+        NerdSymbol("Debian", "\uF306", "OS"),
+        NerdSymbol("Kali", "\uF307", "OS"),
+        NerdSymbol("CentOS", "\uF304", "OS"),
+        NerdSymbol("Alpine", "\uF300", "OS"),
+        NerdSymbol("Mint", "\uF30E", "OS"),
+        NerdSymbol("Raspberry Pi", "\uF315", "OS"),
+
+        // Languages & Dev
+        NerdSymbol("Node.js", "\uE718", "Languages"),
+        NerdSymbol("Python", "\uE73C", "Languages"),
+        NerdSymbol("Rust", "\uE7A8", "Languages"),
+        NerdSymbol("Go", "\uE627", "Languages"),
+        NerdSymbol("Java", "\uE738", "Languages"),
+        NerdSymbol("Kotlin", "\uE634", "Languages"),
+        NerdSymbol("JavaScript", "\uE74E", "Languages"),
+        NerdSymbol("TypeScript", "\uE628", "Languages"),
+        NerdSymbol("React", "\uE7BA", "Languages"),
+        NerdSymbol("PHP", "\uE73D", "Languages"),
+        NerdSymbol("Ruby", "\uE739", "Languages"),
+        NerdSymbol("C++", "\uE61D", "Languages"),
+        NerdSymbol("C#", "\uF031B", "Languages"),
+        NerdSymbol("Swift", "\uE755", "Languages"),
+        NerdSymbol("Docker", "\uF308", "Languages"),
+        NerdSymbol("Git", "\uF1D3", "Languages"),
+        NerdSymbol("GitHub", "\uF09B", "Languages"),
+        NerdSymbol("GitLab", "\uF296", "Languages"),
+        NerdSymbol("Bitbucket", "\uF171", "Languages"),
+        NerdSymbol("NPM", "\uE71E", "Languages"),
+        NerdSymbol("Yarn", "\uE6A7", "Languages"),
+
+        // Cloud & DB
+        NerdSymbol("AWS", "\uE7AD", "Cloud"),
+        NerdSymbol("Azure", "\uF0311", "Cloud"),
+        NerdSymbol("Google Cloud", "\uF0312", "Cloud"),
+        NerdSymbol("Database", "\uF1C0", "DB"),
+        NerdSymbol("PostgreSQL", "\uE76E", "DB"),
+        NerdSymbol("MongoDB", "\uE7AF", "DB"),
+        NerdSymbol("Redis", "\uE76D", "DB"),
+
+        // General UI
+        NerdSymbol("Home", "\uF015", "UI"),
+        NerdSymbol("Directory", "\uF07B", "UI"),
+        NerdSymbol("File", "\uF15B", "UI"),
+        NerdSymbol("Gear", "\uF013", "UI"),
+        NerdSymbol("Check", "\uF00C", "UI"),
+        NerdSymbol("Error", "\uF00D", "UI"),
+        NerdSymbol("Warning", "\uF071", "UI"),
+        NerdSymbol("Info", "\uF05A", "UI"),
+        NerdSymbol("Lock", "\uF023", "UI"),
+        NerdSymbol("Unlock", "\uF09C", "UI"),
+        NerdSymbol("Time", "\uF017", "UI"),
+        NerdSymbol("Calendar", "\uF073", "UI"),
+        NerdSymbol("User", "\uF007", "UI"),
+        NerdSymbol("Computer", "\uF108", "UI"),
+        NerdSymbol("Server", "\uF233", "UI"),
+        NerdSymbol("Terminal", "\uF120", "UI"),
+        NerdSymbol("Code", "\uF121", "UI"),
+        NerdSymbol("Search", "\uF002", "UI"),
+        NerdSymbol("Edit", "\uF040", "UI"),
+        NerdSymbol("Trash", "\uF1F8", "UI"),
+        NerdSymbol("Download", "\uF019", "UI"),
+        NerdSymbol("Upload", "\uF093", "UI")
+    )
+}

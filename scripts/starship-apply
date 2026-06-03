@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Starship Command Enhanced: Configuration Applier for Termux
+# Usage: starship-apply
+
+set -e
+
+# Configuration
+CONFIG_PATH="$HOME/.config/starship.toml"
+BACKUP_PATH="$HOME/.config/starship.toml.bak"
+
+echo "🚀 Starship Command: Apply from Clipboard"
+
+# Check for termux-api
+if ! command -v termux-clipboard-get &> /dev/null; then
+    echo "❌ Error: 'termux-api' is not installed."
+    echo "Please run: pkg install termux-api"
+    exit 1
+fi
+
+# Get content from clipboard
+CONTENT=$(termux-clipboard-get)
+
+if [ -z "$CONTENT" ]; then
+    echo "❌ Error: Clipboard is empty."
+    exit 1
+fi
+
+# Basic TOML validation (check for at least one bracketed section)
+if [[ ! "$CONTENT" =~ \[.*\] ]]; then
+    echo "❌ Error: Clipboard content does not look like a valid Starship TOML configuration."
+    exit 1
+fi
+
+# Create backup
+if [ -f "$CONFIG_PATH" ]; then
+    echo "💾 Backing up existing config to $BACKUP_PATH"
+    cp "$CONFIG_PATH" "$BACKUP_PATH"
+fi
+
+# Write new config
+echo "$CONTENT" > "$CONFIG_PATH"
+
+echo "✅ Success! Configuration applied to $CONFIG_PATH"
+echo "🔄 Run 'exec $SHELL' or restart your terminal to see changes."

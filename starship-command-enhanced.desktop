@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Starship Command Enhanced
+Comment=Visual editor for Starship shell prompts
+Exec=starship-command-enhanced
+Icon=starship-command-enhanced
+Terminal=false
+Type=Application
+Categories=Development;System;
