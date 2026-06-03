@@ -81,8 +81,7 @@ export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
         <h2 className="text-lg font-bold text-white">Upload to Community</h2>
         <button
           onClick={onClose}
-          aria-label="Close"
-          className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
         >
           <X size={20} />
         </button>
