@@ -79,12 +79,13 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
             <button
               onClick={handleExportImage}
               className="flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-gray-200 hover:bg-gray-600"
+              aria-label="Export screenshot"
             >
               <Camera size={16} /> Screenshot
             </button>
             <button
               onClick={onClose}
-              className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+              className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               aria-label="Close"
             >
               <X size={20} />

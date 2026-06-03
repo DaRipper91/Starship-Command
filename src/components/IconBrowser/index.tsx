@@ -152,6 +152,7 @@ export function IconBrowser({ onSelect, currentSymbol }: IconBrowserProps) {
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white',
               )}
+              aria-label={`Filter by category: ${category}`}
             >
               {category}
             </button>

@@ -136,7 +136,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
         <h2 className="text-lg font-bold text-white">Solar System Themes</h2>
         <button
           onClick={onClose}
-          className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+          className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           aria-label="Close"
         >
           <X size={20} />
@@ -154,6 +154,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
               <button
                 onClick={() => setSelectedCategory(null)}
                 className={`w-full rounded px-2 py-1 text-left text-sm transition-colors ${!selectedCategory ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                aria-label="Show all themes"
               >
                 All Themes
               </button>
@@ -163,6 +164,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
                 <button
                   onClick={() => setSelectedCategory(cat)}
                   className={`w-full rounded px-2 py-1 text-left text-sm transition-colors ${selectedCategory === cat ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                  aria-label={`Filter by category: ${cat}`}
                 >
                   {cat}
                 </button>
