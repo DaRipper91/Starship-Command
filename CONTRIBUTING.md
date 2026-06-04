@@ -26,4 +26,4 @@ Before committing, please run:
 - `npm run lint` (to check for violations)
 - `npm run build` (to ensure type safety - uses `tsc -b`)
 
-We use `husky` and `lint-staged` to automatically check your code on commit. Running `npm run lint` is required to ensure consistent code styling.
+We use `husky` and `lint-staged` to automatically check your code on commit. Running `npm run lint` is required to ensure consistent code styling. Future commits cannot introduce new lint violations thanks to this pre-commit hook.

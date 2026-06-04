@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0] - 2026-04-25
+
+### Added
+- **Type Safety**: Removed remaining explicit `any` usages.
+- **Documentation**: Updated `CONTRIBUTING.md` to reflect new linting rules.
+
+# Changelog
+
 ## [1.6.0] - 2026-03-08
 
 ### Audited and Verified
