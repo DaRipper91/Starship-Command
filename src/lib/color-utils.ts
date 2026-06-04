@@ -210,31 +210,25 @@ export class ColorUtils {
   static async extractColorsFromImage(
     imageFile: File | Blob,
   ): Promise<ExtendedColorPalette> {
-    return new Promise((resolve, reject) => {
-      const worker = new Worker(
-        new URL('../workers/color-extraction.worker.ts', import.meta.url),
-        { type: 'module' },
-      );
+    const worker = new Worker(
+      new URL('../workers/color-extraction.worker.ts', import.meta.url),
+      { type: 'module' },
+    );
 
-      worker.onmessage = (e) => {
-        resolve(e.data);
-        worker.terminate();
-      };
+    try {
+      const bitmap = await createImageBitmap(imageFile);
 
-      worker.onerror = (e) => {
-        reject(e);
-        worker.terminate();
-      };
-
-      // Create bitmap to transfer to worker
-      createImageBitmap(imageFile)
-        .then((bitmap) => {
-          worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
-        })
-        .catch((err) => {
-          reject(err);
-          worker.terminate();
-        });
-    });
+      return await new Promise((resolve, reject) => {
+        worker.onmessage = (e) => {
+          resolve(e.data);
+        };
+        worker.onerror = (e) => {
+          reject(e);
+        };
+        worker.postMessage({ imageBitmap: bitmap }, [bitmap]);
+      });
+    } finally {
+      worker.terminate();
+    }
   }
 }
