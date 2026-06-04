@@ -3,11 +3,13 @@
 ## [1.7.0] - 2026-04-21
 
 ### Added
+
 - **Theme Import/Export Engine**: Built full theme import/export system with validation.
 - **Undo/Redo History Stack**: Implemented full undo/redo stack using `zundo` with keyboard shortcuts.
 - **Theme Preset System**: Built a curated set of 11 built-in theme presets.
 
 ### Changed
+
 - **Type Safety Audit**: Eliminated `any` types and strengthened interfaces.
 - **State Management Refactor**: Centralized state management into a Zustand store.
 - **Vite Build Optimization**: Configured manual chunk splitting and verified tree-shaking.
