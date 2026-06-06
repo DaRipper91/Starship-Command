@@ -93,7 +93,7 @@ export function WelcomeWizard() {
           <div className="mt-auto">
             <button
               onClick={handleComplete}
-              className="text-xs text-gray-500 underline underline-offset-2 hover:text-gray-300"
+              className="text-xs text-gray-500 underline underline-offset-2 hover:text-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               Skip Wizard
             </button>
@@ -104,7 +104,7 @@ export function WelcomeWizard() {
         <div className="relative flex flex-1 flex-col p-8">
           <button
             onClick={handleComplete}
-            className="absolute right-4 top-4 text-gray-500 hover:text-white"
+            className="absolute right-4 top-4 text-gray-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="Close Wizard"
           >
             <X size={20} />
