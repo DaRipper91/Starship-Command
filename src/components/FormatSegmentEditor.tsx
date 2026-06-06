@@ -122,7 +122,7 @@ export function FormatSegmentEditor({
 
       <button
         onClick={onRemove}
-        className="mt-2 self-end rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-500"
+        className="mt-2 self-end rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
       >
         Remove Segment
       </button>

@@ -1,9 +1,5 @@
-## 2024-05-13 - [Focus styles & ARIA labels missing from primary header layout buttons]
+## 2024-05-13 - [Focus styles & ARIA labels missing from modal close buttons & header buttons]
 
-**Learning:** Found several top-level header buttons in App.tsx (e.g. Menu, Command Palette, Settings, View modes, Undo, Redo) that use icons but lack aria-labels. They also lack explicit `focus-visible` styling which reduces accessibility for keyboard navigation.
-**Action:** Will implement proper aria-labels and consider focus-visible styles where appropriate for these highly trafficked buttons.
+**Learning:** Found several top-level header buttons in App.tsx (e.g. Menu, Command Palette, Settings, View modes, Undo, Redo) that use icons but lack aria-labels. They also lack explicit `focus-visible` styling which reduces accessibility for keyboard navigation. Additionally, noticed close buttons within WelcomeWizard and IconBrowser components lacking explicit `focus-visible` styling.
 
-## 2024-05-13 - [Focus styles & ARIA labels missing from modal instances and sub-components]
-
-**Learning:** Found several close buttons within Modals that lacked aria-labels and explicit `focus-visible` styling which reduces accessibility for keyboard navigation. I also noticed some other icon-only buttons like those in IconBrowser lacking `aria-label`.
-**Action:** Will ensure to implement proper aria-labels and focus-visible styles for close buttons on any new modal instance components in the future.
+**Action:** Will implement proper aria-labels and focus-visible styles (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`) for these highly trafficked buttons across App.tsx, IconBrowser, and WelcomeWizard components.

@@ -287,7 +287,7 @@ function AppContent() {
             <button
               onClick={() => setShowCommandPalette(true)}
               aria-label="Open command palette"
-              className="rounded p-2 text-gray-400 hover:bg-gray-800"
+              className="rounded p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               <Keyboard size={18} />
             </button>
