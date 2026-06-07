@@ -287,7 +287,8 @@ function AppContent() {
             <button
               onClick={() => setShowCommandPalette(true)}
               aria-label="Open command palette"
-              className="rounded p-2 text-gray-400 hover:bg-gray-800"
+              title="Open command palette (⌘K / Ctrl+K)"
+              className="rounded p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               <Keyboard size={18} />
             </button>
@@ -297,7 +298,7 @@ function AppContent() {
                 rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
               }
               className={cn(
-                'rounded p-2 text-gray-400 hover:bg-gray-800',
+                'rounded p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
                 isDesktopLayout && 'xl:hidden',
               )}
             >
@@ -313,7 +314,7 @@ function AppContent() {
               onClick={() => setLayoutMode('mobile')}
               aria-label="Mobile Mode"
               className={cn(
-                'rounded px-2 py-1 transition-colors',
+                'rounded px-2 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
                 layoutMode === 'mobile'
                   ? 'bg-blue-600 text-white'
                   : 'text-gray-400 hover:text-gray-200',
@@ -326,7 +327,7 @@ function AppContent() {
               onClick={() => setLayoutMode('auto')}
               aria-label="Auto Layout"
               className={cn(
-                'rounded px-2 py-1 text-[10px] font-bold transition-colors',
+                'rounded px-2 py-1 text-[10px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
                 layoutMode === 'auto'
                   ? 'bg-blue-600 text-white'
                   : 'text-gray-400 hover:text-gray-200',
@@ -339,7 +340,7 @@ function AppContent() {
               onClick={() => setLayoutMode('desktop')}
               aria-label="Desktop Mode"
               className={cn(
-                'rounded px-2 py-1 transition-colors',
+                'rounded px-2 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
                 layoutMode === 'desktop'
                   ? 'bg-blue-600 text-white'
                   : 'text-gray-400 hover:text-gray-200',
@@ -355,8 +356,8 @@ function AppContent() {
               onClick={handleUndo}
               disabled={!isUndoPossible}
               aria-label={!isUndoPossible ? 'Undo (disabled)' : 'Undo'}
-              title={!isUndoPossible ? 'Nothing to undo' : 'Undo'}
-              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              title={!isUndoPossible ? 'Nothing to undo' : 'Undo (⌘Z / Ctrl+Z)'}
+              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-30"
             >
               <Undo size={16} />
             </button>
@@ -364,8 +365,12 @@ function AppContent() {
               onClick={handleRedo}
               disabled={!isRedoPossible}
               aria-label={!isRedoPossible ? 'Redo (disabled)' : 'Redo'}
-              title={!isRedoPossible ? 'Nothing to redo' : 'Redo'}
-              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              title={
+                !isRedoPossible
+                  ? 'Nothing to redo'
+                  : 'Redo (⌘⇧Z / Ctrl+Shift+Z)'
+              }
+              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-30"
             >
               <Redo size={16} />
             </button>
@@ -374,14 +379,16 @@ function AppContent() {
           <PresetSelector />
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500"
+            title="Save Theme (⌘S / Ctrl+S)"
+            className="flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <Save size={14} className="xs:block hidden" /> Save
           </button>
 
           <button
             onClick={() => setShowGallery(true)}
-            className="rounded bg-gray-800 px-3 py-1.5 text-xs font-medium hover:bg-gray-700"
+            title="Gallery (⌘O / Ctrl+O)"
+            className="rounded bg-gray-800 px-3 py-1.5 text-xs font-medium hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             Gallery
           </button>
