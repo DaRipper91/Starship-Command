@@ -355,7 +355,7 @@ function AppContent() {
               onClick={handleUndo}
               disabled={!isUndoPossible}
               aria-label={!isUndoPossible ? 'Undo (disabled)' : 'Undo'}
-              title={!isUndoPossible ? 'Nothing to undo' : 'Undo'}
+              title={!isUndoPossible ? 'Nothing to undo' : 'Undo (⌘Z / Ctrl+Z)'}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Undo size={16} />
@@ -364,7 +364,11 @@ function AppContent() {
               onClick={handleRedo}
               disabled={!isRedoPossible}
               aria-label={!isRedoPossible ? 'Redo (disabled)' : 'Redo'}
-              title={!isRedoPossible ? 'Nothing to redo' : 'Redo'}
+              title={
+                !isRedoPossible
+                  ? 'Nothing to redo'
+                  : 'Redo (⌘⇧Z / Ctrl+Shift+Z)'
+              }
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Redo size={16} />
@@ -374,6 +378,7 @@ function AppContent() {
           <PresetSelector />
           <button
             onClick={handleSave}
+            title="Save Theme (⌘S / Ctrl+S)"
             className="flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500"
           >
             <Save size={14} className="xs:block hidden" /> Save
