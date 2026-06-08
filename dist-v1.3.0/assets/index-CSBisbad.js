@@ -1,3 +1,7392 @@
-import{r as $t,b as kt,a as ke,C as St,A as ve,I as V,X as P,c as m,S as Se,F as Tt,d as we,e as Et,f as Ye,D as ce,h as Xe,i as At,T as Ze,L as It,U as Rt,j as Qe,k as Ft,l as Mt,m as et,R as D,P as Dt,B as zt,n as Lt,o as Ot,p as Re,q as Fe,s as Me,t as le,u as Pt,v as Ut,w as De,x as Bt,y as Gt,z as Wt,E as qt,G as Ht,H as tt,J as Kt,K as Jt,M as Vt,N as Yt,O as Xt,Q as Zt,V as Qt,W as er,Z as tr,Y as rr,_ as ar,$ as sr,a0 as nr,a1 as or,a2 as ir,a3 as lr,a4 as dr,a5 as cr,a6 as mr,a7 as ur,a8 as pr,a9 as fr,aa as yr,ab as gr,ac as br,ad as hr}from"./vendor-ui-w59QX4Dl.js";import{k as rt,w as H,r as xr,h as Te}from"./vendor-utils-DEXV5Djj.js";import{t as vr,c as wr,a as at}from"./vendor-core-reBk8YMH.js";import{r as jr,a as _r}from"./vendor-terminal-DyMPUPMx.js";(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const n of document.querySelectorAll('link[rel="modulepreload"]'))s(n);new MutationObserver(n=>{for(const o of n)if(o.type==="childList")for(const d of o.addedNodes)d.tagName==="LINK"&&d.rel==="modulepreload"&&s(d)}).observe(document,{childList:!0,subtree:!0});function r(n){const o={};return n.integrity&&(o.integrity=n.integrity),n.referrerPolicy&&(o.referrerPolicy=n.referrerPolicy),n.crossOrigin==="use-credentials"?o.credentials="include":n.crossOrigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function s(n){if(n.ep)return;n.ep=!0;const o=r(n);fetch(n.href,o)}})();var pe={exports:{}},Q={};var ze;function Nr(){if(ze)return Q;ze=1;var a=$t(),t=Symbol.for("react.element"),r=Symbol.for("react.fragment"),s=Object.prototype.hasOwnProperty,n=a.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,o={key:!0,ref:!0,__self:!0,__source:!0};function d(i,l,c){var f,y={},v=null,g=null;c!==void 0&&(v=""+c),l.key!==void 0&&(v=""+l.key),l.ref!==void 0&&(g=l.ref);for(f in l)s.call(l,f)&&!o.hasOwnProperty(f)&&(y[f]=l[f]);if(i&&i.defaultProps)for(f in l=i.defaultProps,l)y[f]===void 0&&(y[f]=l[f]);return{$$typeof:t,type:i,key:v,ref:g,props:y,_owner:n.current}}return Q.Fragment=r,Q.jsx=d,Q.jsxs=d,Q}var Le;function Cr(){return Le||(Le=1,pe.exports=Nr()),pe.exports}var e=Cr(),ne={},Oe;function $r(){if(Oe)return ne;Oe=1;var a=kt();return ne.createRoot=a.createRoot,ne.hydrateRoot=a.hydrateRoot,ne}var kr=$r();const Sr=ke(kr);function T(...a){return vr(wr(a))}function st(){return crypto.randomUUID()}function Tr({toasts:a,onRemove:t}){return e.jsx("div",{className:"fixed bottom-4 right-4 z-50 flex flex-col gap-2",children:a.map(r=>e.jsxs("div",{className:T("animate-in slide-in-from-bottom-5 flex min-w-[300px] items-center gap-3 rounded-lg border p-4 shadow-lg transition-all",r.type==="success"&&"border-green-800 bg-green-900/90 text-green-100",r.type==="error"&&"border-red-800 bg-red-900/90 text-red-100",r.type==="info"&&"border-blue-800 bg-blue-900/90 text-blue-100"),children:[r.type==="success"&&e.jsx(St,{size:18,className:"shrink-0"}),r.type==="error"&&e.jsx(ve,{size:18,className:"shrink-0"}),r.type==="info"&&e.jsx(V,{size:18,className:"shrink-0"}),e.jsx("p",{className:"flex-1 text-sm font-medium",children:r.message}),e.jsx("button",{onClick:()=>t(r.id),className:"rounded p-1 opacity-70 hover:bg-black/20 hover:opacity-100","aria-label":"Close notification",children:e.jsx(P,{size:14})})]},r.id))})}const nt=m.createContext(void 0);function Er({children:a}){const[t,r]=m.useState([]),s=m.useCallback(o=>{r(d=>d.filter(i=>i.id!==o))},[]),n=m.useCallback((o,d="info")=>{const i=st();r(l=>[...l,{id:i,message:o,type:d}]),setTimeout(()=>{s(i)},3e3)},[s]);return e.jsxs(nt.Provider,{value:{addToast:n,removeToast:s},children:[a,e.jsx(Tr,{toasts:t,onRemove:s})]})}function q(){const a=m.useContext(nt);if(a===void 0)throw new Error("useToast must be used within a ToastProvider");return a}function Ar({onClose:a,onLoginSuccess:t}){const[r,s]=m.useState(!0),[n,o]=m.useState(""),[d,i]=m.useState(""),[l,c]=m.useState(""),[f,y]=m.useState(!1),{addToast:v}=q(),g=async w=>{w.preventDefault(),y(!0);const x=r?"/api/login":"/api/register",u=r?{username:n,password:l}:{username:n,email:d,password:l};try{const b=await fetch(x,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(u)}),p=await b.json();if(!b.ok)throw new Error(p.error||"Authentication failed");r?(v("Logged in successfully","success"),t(p.user_id,n)):(v("Registered successfully. Please log in.","success"),s(!0))}catch(b){v(b instanceof Error?b.message:"An error occurred","error")}finally{y(!1)}};return e.jsxs("div",{className:"flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsx("h2",{className:"text-lg font-bold text-white",children:r?"Log In":"Register"}),e.jsx("button",{onClick:a,className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white",children:e.jsx(P,{size:20})})]}),e.jsxs("div",{className:"p-6",children:[e.jsxs("form",{onSubmit:g,className:"flex flex-col gap-4",children:[e.jsxs("div",{children:[e.jsx("label",{className:"mb-1 block text-sm font-medium text-gray-300",children:"Username"}),e.jsx("input",{type:"text",required:!0,value:n,onChange:w=>o(w.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),!r&&e.jsxs("div",{children:[e.jsx("label",{className:"mb-1 block text-sm font-medium text-gray-300",children:"Email"}),e.jsx("input",{type:"email",required:!0,value:d,onChange:w=>i(w.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-1 block text-sm font-medium text-gray-300",children:"Password"}),e.jsx("input",{type:"password",required:!0,value:l,onChange:w=>c(w.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),e.jsx("button",{type:"submit",disabled:f,className:"mt-2 w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50",children:f?"Processing...":r?"Log In":"Register"})]}),e.jsxs("div",{className:"mt-4 text-center text-sm text-gray-400",children:[r?"Don't have an account? ":"Already have an account? ",e.jsx("button",{type:"button",onClick:()=>s(!r),className:"text-blue-500 hover:underline",children:r?"Register":"Log In"})]})]})]})}function Ir({isOpen:a,onClose:t,actions:r}){const[s,n]=m.useState("");if(!a)return null;const o=r.filter(d=>d.title.toLowerCase().includes(s.toLowerCase()));return e.jsx("div",{className:"fixed inset-0 z-[100] flex items-start justify-center bg-black/50 p-4 pt-[15vh] backdrop-blur-sm",children:e.jsxs("div",{className:"animate-in fade-in zoom-in-95 flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl duration-200",children:[e.jsxs("div",{className:"flex items-center gap-3 border-b border-gray-800 p-4",children:[e.jsx(Se,{className:"text-gray-400",size:20}),e.jsx("input",{autoFocus:!0,type:"text",placeholder:"Type a command or search...",value:s,onChange:d=>n(d.target.value),onKeyDown:d=>{d.key==="Escape"&&t(),d.key==="Enter"&&o.length>0&&(o[0].perform(),t())},className:"flex-1 bg-transparent text-lg text-white placeholder-gray-500 focus:outline-none"}),e.jsx("button",{onClick:t,className:"rounded bg-gray-800 p-1 text-gray-400 hover:bg-gray-700 hover:text-white","aria-label":"Close command palette",children:e.jsx(P,{size:16})})]}),e.jsx("div",{className:"scrollbar-thin scrollbar-thumb-gray-700 flex max-h-[300px] flex-col overflow-y-auto p-2",children:o.length===0?e.jsx("div",{className:"py-8 text-center text-gray-500",children:"No matching commands found."}):o.map((d,i)=>e.jsxs("button",{onClick:()=>{d.perform(),t()},className:T("flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors hover:bg-gray-800 hover:text-white",i===0&&s&&"bg-gray-800 text-white"),children:[e.jsx("div",{className:"text-gray-400",children:d.icon||e.jsx(Tt,{size:18})}),e.jsx("span",{className:"flex-1 text-gray-300",children:d.title}),d.shortcut&&e.jsx("span",{className:"rounded border border-gray-700 bg-gray-800 px-2 py-1 font-mono text-xs tracking-widest text-gray-500",children:d.shortcut})]},d.id))})]})})}var fe=function(a){var t=a/255;return t<.04045?t/12.92:Math.pow((t+.055)/1.055,2.4)},ye=function(a){return .2126*fe(a.r)+.7152*fe(a.g)+.0722*fe(a.b)};function ot(a){a.prototype.luminance=function(){return t=ye(this.rgba),(r=2)===void 0&&(r=0),s===void 0&&(s=Math.pow(10,r)),Math.round(s*t)/s+0;var t,r,s},a.prototype.contrast=function(t){t===void 0&&(t="#FFF");var r,s,n,o,d,i,l,c=t instanceof a?t:new a(t);return o=this.rgba,d=c.toRgb(),i=ye(o),l=ye(d),r=i>l?(i+.05)/(l+.05):(l+.05)/(i+.05),(s=2)===void 0&&(s=0),n===void 0&&(n=Math.pow(10,s)),Math.floor(n*r)/n+0},a.prototype.isReadable=function(t,r){return t===void 0&&(t="#FFF"),r===void 0&&(r={}),this.contrast(t)>=(i=(d=(s=r).size)===void 0?"normal":d,(o=(n=s.level)===void 0?"AA":n)==="AAA"&&i==="normal"?7:o==="AA"&&i==="large"?3:4.5);var s,n,o,d,i}}function Rr(a){var t={analogous:[-30,0,30],complementary:[0,180],"double-split-complementary":[-30,0,30,150,210],rectangle:[0,60,180,240],tetradic:[0,90,180,270],triadic:[0,120,240],"split-complementary":[0,150,210]};a.prototype.harmonies=function(r){var s=this;return r===void 0&&(r="complementary"),t[r].map(function(n){return s.rotate(n)})}}function it(a,t){var r={white:"#ffffff",bisque:"#ffe4c4",blue:"#0000ff",cadetblue:"#5f9ea0",chartreuse:"#7fff00",chocolate:"#d2691e",coral:"#ff7f50",antiquewhite:"#faebd7",aqua:"#00ffff",azure:"#f0ffff",whitesmoke:"#f5f5f5",papayawhip:"#ffefd5",plum:"#dda0dd",blanchedalmond:"#ffebcd",black:"#000000",gold:"#ffd700",goldenrod:"#daa520",gainsboro:"#dcdcdc",cornsilk:"#fff8dc",cornflowerblue:"#6495ed",burlywood:"#deb887",aquamarine:"#7fffd4",beige:"#f5f5dc",crimson:"#dc143c",cyan:"#00ffff",darkblue:"#00008b",darkcyan:"#008b8b",darkgoldenrod:"#b8860b",darkkhaki:"#bdb76b",darkgray:"#a9a9a9",darkgreen:"#006400",darkgrey:"#a9a9a9",peachpuff:"#ffdab9",darkmagenta:"#8b008b",darkred:"#8b0000",darkorchid:"#9932cc",darkorange:"#ff8c00",darkslateblue:"#483d8b",gray:"#808080",darkslategray:"#2f4f4f",darkslategrey:"#2f4f4f",deeppink:"#ff1493",deepskyblue:"#00bfff",wheat:"#f5deb3",firebrick:"#b22222",floralwhite:"#fffaf0",ghostwhite:"#f8f8ff",darkviolet:"#9400d3",magenta:"#ff00ff",green:"#008000",dodgerblue:"#1e90ff",grey:"#808080",honeydew:"#f0fff0",hotpink:"#ff69b4",blueviolet:"#8a2be2",forestgreen:"#228b22",lawngreen:"#7cfc00",indianred:"#cd5c5c",indigo:"#4b0082",fuchsia:"#ff00ff",brown:"#a52a2a",maroon:"#800000",mediumblue:"#0000cd",lightcoral:"#f08080",darkturquoise:"#00ced1",lightcyan:"#e0ffff",ivory:"#fffff0",lightyellow:"#ffffe0",lightsalmon:"#ffa07a",lightseagreen:"#20b2aa",linen:"#faf0e6",mediumaquamarine:"#66cdaa",lemonchiffon:"#fffacd",lime:"#00ff00",khaki:"#f0e68c",mediumseagreen:"#3cb371",limegreen:"#32cd32",mediumspringgreen:"#00fa9a",lightskyblue:"#87cefa",lightblue:"#add8e6",midnightblue:"#191970",lightpink:"#ffb6c1",mistyrose:"#ffe4e1",moccasin:"#ffe4b5",mintcream:"#f5fffa",lightslategray:"#778899",lightslategrey:"#778899",navajowhite:"#ffdead",navy:"#000080",mediumvioletred:"#c71585",powderblue:"#b0e0e6",palegoldenrod:"#eee8aa",oldlace:"#fdf5e6",paleturquoise:"#afeeee",mediumturquoise:"#48d1cc",mediumorchid:"#ba55d3",rebeccapurple:"#663399",lightsteelblue:"#b0c4de",mediumslateblue:"#7b68ee",thistle:"#d8bfd8",tan:"#d2b48c",orchid:"#da70d6",mediumpurple:"#9370db",purple:"#800080",pink:"#ffc0cb",skyblue:"#87ceeb",springgreen:"#00ff7f",palegreen:"#98fb98",red:"#ff0000",yellow:"#ffff00",slateblue:"#6a5acd",lavenderblush:"#fff0f5",peru:"#cd853f",palevioletred:"#db7093",violet:"#ee82ee",teal:"#008080",slategray:"#708090",slategrey:"#708090",aliceblue:"#f0f8ff",darkseagreen:"#8fbc8f",darkolivegreen:"#556b2f",greenyellow:"#adff2f",seagreen:"#2e8b57",seashell:"#fff5ee",tomato:"#ff6347",silver:"#c0c0c0",sienna:"#a0522d",lavender:"#e6e6fa",lightgreen:"#90ee90",orange:"#ffa500",orangered:"#ff4500",steelblue:"#4682b4",royalblue:"#4169e1",turquoise:"#40e0d0",yellowgreen:"#9acd32",salmon:"#fa8072",saddlebrown:"#8b4513",sandybrown:"#f4a460",rosybrown:"#bc8f8f",darksalmon:"#e9967a",lightgoldenrodyellow:"#fafad2",snow:"#fffafa",lightgrey:"#d3d3d3",lightgray:"#d3d3d3",dimgray:"#696969",dimgrey:"#696969",olivedrab:"#6b8e23",olive:"#808000"},s={};for(var n in r)s[r[n]]=n;var o={};a.prototype.toName=function(d){if(!(this.rgba.a||this.rgba.r||this.rgba.g||this.rgba.b))return"transparent";var i,l,c=s[this.toHex()];if(c)return c;if(d?.closest){var f=this.toRgb(),y=1/0,v="black";if(!o.length)for(var g in r)o[g]=new a(r[g]).toRgb();for(var w in r){var x=(i=f,l=o[w],Math.pow(i.r-l.r,2)+Math.pow(i.g-l.g,2)+Math.pow(i.b-l.b,2));x<y&&(y=x,v=w)}return v}},t.string.push([function(d){var i=d.toLowerCase(),l=i==="transparent"?"#0000":r[i];return l?new a(l).toRgb():null},"name"])}rt([ot,Rr,it]);class k{static resolveColor(t,r){return r[t]?r[t]:H(t).isValid()?H(t).toHex():"#ffffff"}static hexToRgb(t){const r=H(t);return r.isValid()?r.toRgb():null}static generateComplementary(t){return H(t).harmonies("complementary").map(r=>r.toHex())}static generateAnalogous(t){return H(t).harmonies("analogous").map(r=>r.toHex())}static generateTriadic(t){return H(t).harmonies("triadic").map(r=>r.toHex())}static checkContrast(t,r){const s=H(r).contrast(t);return{ratio:s,AA:s>=4.5,AAA:s>=7}}static toAnsiStyle(t,r={}){const s=[];return r.bold&&s.push("bold"),r.italic&&s.push("italic"),r.dimmed&&s.push("dimmed"),r.inverted&&s.push("inverted"),r.underline&&s.push("underline"),r.bg&&s.push(`bg:${r.bg}`),t&&s.push(t),s.join(" ")}static presets={Nord:{primary:"#88C0D0",secondary:"#81A1C1",accent:"#5E81AC",background:"#2E3440",foreground:"#D8DEE9",success:"#A3BE8C",warning:"#EBCB8B",error:"#BF616A"},Dracula:{primary:"#BD93F9",secondary:"#6272A4",accent:"#FF79C6",background:"#282A36",foreground:"#F8F8F2",success:"#50FA7B",warning:"#F1FA8C",error:"#FF5555"},Gruvbox:{primary:"#d79921",secondary:"#458588",accent:"#b16286",background:"#282828",foreground:"#ebdbb2",success:"#98971a",warning:"#fabd2f",error:"#cc241d"},Catppuccin:{primary:"#cba6f7",secondary:"#89b4fa",accent:"#f5c2e7",background:"#1e1e2e",foreground:"#cdd6f4",success:"#a6e3a1",warning:"#f9e2af",error:"#f38ba8"},TokyoNight:{primary:"#7aa2f7",secondary:"#7dcfff",accent:"#bb9af7",background:"#1a1b26",foreground:"#c0caf5",success:"#9ece6a",warning:"#e0af68",error:"#f7768e"},OneDark:{primary:"#61afef",secondary:"#c678dd",accent:"#98c379",background:"#282c34",foreground:"#abb2bf",success:"#98c379",warning:"#e5c07b",error:"#e06c75"},Monokai:{primary:"#fd971f",secondary:"#66d9ef",accent:"#ae81ff",background:"#272822",foreground:"#f8f8f2",success:"#a6e22e",warning:"#f4bf75",error:"#f92672"},Solarized:{primary:"#268bd2",secondary:"#2aa198",accent:"#d33682",background:"#002b36",foreground:"#839496",success:"#859900",warning:"#b58900",error:"#dc322f"}}}var Fr=xr();const Pe=ke(Fr),J=JSON.parse('[{"name":"aws","title":"AWS","description":"The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.\\nThe output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\\n\\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.\\nIf the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\\n\\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile\\nis read from the `AWS_VAULT` env var and the credentials expiration date\\nis read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`\\nvar.\\n\\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile\\nis read from the `AWSU_PROFILE` env var.\\n\\nWhen using [`AWSume`](https://awsu.me) the profile\\nis read from the `AWSUME_PROFILE` env var and the credentials expiration\\ndate is read from the `AWSUME_EXPIRATION` env var.\\n\\nWhen using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile\\nis read from the `AWS_SSO_PROFILE` env var.","properties":[{"name":"format","description":"The format for the module.","type":"string","default":"on [$symbol($profile )(\\\\($region\\\\) )(\\\\[$duration\\\\] )]($style)"},{"name":"symbol","description":"The symbol used before displaying the current AWS profile.","type":"string","default":"☁️  "},{"name":"style","description":"The style for the module.","type":"string","default":"bold yellow"},{"name":"disabled","description":"Disables the AWS module.","type":"boolean","default":false},{"name":"region_aliases","description":"Table of region aliases to display in addition to the AWS name.","type":"object","default":{}},{"name":"profile_aliases","description":"Table of profile aliases to display in addition to the AWS name.","type":"object","default":{}},{"name":"expiration_symbol","description":"The symbol displayed when the temporary credentials have expired.","type":"string","default":"X"},{"name":"force_display","description":"If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.","type":"boolean","default":false}]},{"name":"azure","title":"azure","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol($subscription)]($style) "},{"name":"symbol","description":"","type":"string","default":"󰠅 "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"subscription_aliases","description":"","type":"object","default":{}}]},{"name":"battery","title":"battery","description":"","properties":[{"name":"full_symbol","description":"","type":"string","default":"󰁹 "},{"name":"charging_symbol","description":"","type":"string","default":"󰂄 "},{"name":"discharging_symbol","description":"","type":"string","default":"󰂃 "},{"name":"unknown_symbol","description":"","type":"string","default":"󰁽 "},{"name":"empty_symbol","description":"","type":"string","default":"󰂎 "},{"name":"display","description":"","type":"array","default":[{"threshold":10,"style":"red bold","charging_symbol":null,"discharging_symbol":null}]},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"format","description":"","type":"string","default":"[$symbol$percentage]($style) "}]},{"name":"buf","title":"buf","description":"","properties":[{"name":"format","description":"","type":"string","default":"with [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐃 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["buf.yaml","buf.gen.yaml","buf.work.yaml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"bun","title":"bun","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🥟 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["bun.lock","bun.lockb","bunfig.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"c","title":"c","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version(-$name) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"symbol","description":"","type":"string","default":"C "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["c","h"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"commands","description":"","type":"array","default":[["cc","--version"],["gcc","--version"],["clang","--version"]]}]},{"name":"character","title":"character","description":"","properties":[{"name":"format","description":"","type":"string","default":"$symbol "},{"name":"success_symbol","description":"","type":"string","default":"[❯](bold green)"},{"name":"error_symbol","description":"","type":"string","default":"[❯](bold red)"},{"name":"vimcmd_symbol","description":"","type":"string","default":"[❮](bold green)"},{"name":"vimcmd_visual_symbol","description":"","type":"string","default":"[❮](bold yellow)"},{"name":"vimcmd_replace_symbol","description":"","type":"string","default":"[❮](bold purple)"},{"name":"vimcmd_replace_one_symbol","description":"","type":"string","default":"[❮](bold purple)"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"cmake","title":"cmake","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"△ "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["CMakeLists.txt","CMakeCache.txt"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"cmd_duration","title":"cmd_duration","description":"","properties":[{"name":"min_time","description":"","type":"integer","default":2000},{"name":"format","description":"","type":"string","default":"took [$duration]($style) "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"show_milliseconds","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"show_notifications","description":"","type":"boolean","default":false},{"name":"min_time_to_notify","description":"","type":"integer","default":45000},{"name":"notification_timeout","description":"","type":["integer","null"]}]},{"name":"cobol","title":"cobol","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⚙️ "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["cbl","cob","CBL","COB"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"conda","title":"conda","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":1},{"name":"format","description":"","type":"string","default":"via [$symbol$environment]($style) "},{"name":"symbol","description":"","type":"string","default":"🅒 "},{"name":"style","description":"","type":"string","default":"green bold"},{"name":"ignore_base","description":"","type":"boolean","default":true},{"name":"detect_env_vars","description":"","type":"array","default":["!PIXI_ENVIRONMENT_NAME"]},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"container","title":"container","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol \\\\[$name\\\\]]($style) "},{"name":"symbol","description":"","type":"string","default":"⬢"},{"name":"style","description":"","type":"string","default":"red bold dimmed"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"cpp","title":"cpp","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version(-$name) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"symbol","description":"","type":"string","default":"C "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["c","h"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"commands","description":"","type":"array","default":[["cc","--version"],["gcc","--version"],["clang","--version"]]}]},{"name":"crystal","title":"crystal","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🔮 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["cr"]},{"name":"detect_files","description":"","type":"array","default":["shard.yml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"daml","title":"daml","description":"","properties":[{"name":"symbol","description":"","type":"string","default":"Λ "},{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"bold cyan"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["daml.yaml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"dart","title":"dart","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🎯 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["dart"]},{"name":"detect_files","description":"","type":"array","default":["pubspec.yaml","pubspec.yml","pubspec.lock"]},{"name":"detect_folders","description":"","type":"array","default":[".dart_tool"]}]},{"name":"deno","title":"deno","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🦕 "},{"name":"style","description":"","type":"string","default":"green bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["deno.json","deno.jsonc","deno.lock","mod.ts","deps.ts","mod.js","deps.js"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"directory","title":"directory","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":3},{"name":"truncate_to_repo","description":"","type":"boolean","default":true},{"name":"substitutions","description":"","type":"object","default":{}},{"name":"fish_style_pwd_dir_length","description":"","type":"integer","default":0},{"name":"use_logical_path","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"[$path]($style)[$read_only]($read_only_style) "},{"name":"repo_root_format","description":"","type":"string","default":"[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"repo_root_style","description":"","type":["string","null"],"default":null},{"name":"before_repo_root_style","description":"","type":["string","null"],"default":null},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"read_only","description":"","type":"string","default":"🔒"},{"name":"read_only_style","description":"","type":"string","default":"red"},{"name":"truncation_symbol","description":"","type":"string","default":""},{"name":"home_symbol","description":"","type":"string","default":"~"},{"name":"use_os_path_sep","description":"","type":"boolean","default":true}]},{"name":"direnv","title":"direnv","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol$loaded/$allowed]($style) "},{"name":"symbol","description":"","type":"string","default":"direnv "},{"name":"style","description":"","type":"string","default":"bold bright-yellow"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_env_vars","description":"","type":"array","default":["DIRENV_FILE"]},{"name":"detect_files","description":"","type":"array","default":[".envrc"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"allowed_msg","description":"","type":"string","default":"allowed"},{"name":"not_allowed_msg","description":"","type":"string","default":"not allowed"},{"name":"denied_msg","description":"","type":"string","default":"denied"},{"name":"loaded_msg","description":"","type":"string","default":"loaded"},{"name":"unloaded_msg","description":"","type":"string","default":"not loaded"}]},{"name":"docker_context","title":"docker_context","description":"","properties":[{"name":"symbol","description":"","type":"string","default":"🐳 "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"format","description":"","type":"string","default":"via [$symbol$context]($style) "},{"name":"only_with_files","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["compose.yml","compose.yaml","docker-compose.yml","docker-compose.yaml","Dockerfile"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"dotnet","title":"dotnet","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )(🎯 $tfm )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":".NET "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"heuristic","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["csproj","fsproj","xproj"]},{"name":"detect_files","description":"","type":"array","default":["global.json","project.json","Directory.Build.props","Directory.Build.targets","Packages.props"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"elixir","title":"elixir","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version \\\\(OTP $otp_version\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"💧 "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["mix.exs"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"elm","title":"elm","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🌳 "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["elm"]},{"name":"detect_files","description":"","type":"array","default":["elm.json","elm-package.json",".elm-version"]},{"name":"detect_folders","description":"","type":"array","default":["elm-stuff"]}]},{"name":"erlang","title":"erlang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["rebar.config","erlang.mk"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"fennel","title":"fennel","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🧅 "},{"name":"style","description":"","type":"string","default":"bold green"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"detect_extensions","description":"","type":"array","default":["fnl"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"fill","title":"fill","description":"","properties":[{"name":"style","description":"","type":"string","default":"bold black"},{"name":"symbol","description":"","type":"string","default":"."},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"fortran","title":"fortran","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version(-$name) )]($style)"},{"name":"version_format","description":"","type":"string","default":"${raw}"},{"name":"symbol","description":"","type":"string","default":"🅵  "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["f","F","for","FOR","ftn","FTN","f77","F77","f90","F90","f95","F95","f03","F03","f08","F08","f18","F18"]},{"name":"detect_files","description":"","type":"array","default":["fpm.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"commands","description":"","type":"array","default":[["gfortran","--version"],["flang","--version"],["flang-new","--version"]]}]},{"name":"fossil_branch","title":"fossil_branch","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$branch]($style) "},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"fossil_metrics","title":"fossil_metrics","description":"","properties":[{"name":"format","description":"","type":"string","default":"([+$added]($added_style) )([-$deleted]($deleted_style) )"},{"name":"added_style","description":"","type":"string","default":"bold green"},{"name":"deleted_style","description":"","type":"string","default":"bold red"},{"name":"only_nonzero_diffs","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"gcloud","title":"gcloud","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$account(@$domain)(\\\\($region\\\\))]($style) "},{"name":"symbol","description":"","type":"string","default":"☁️  "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"region_aliases","description":"","type":"object","default":{}},{"name":"project_aliases","description":"","type":"object","default":{}},{"name":"detect_env_vars","description":"","type":"array","default":[]}]},{"name":"git_branch","title":"git_branch","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$branch(:$remote_branch)]($style) "},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"only_attached","description":"","type":"boolean","default":false},{"name":"always_show_remote","description":"","type":"boolean","default":false},{"name":"ignore_branches","description":"","type":"array","default":[]},{"name":"ignore_bare_repo","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"git_commit","title":"git_commit","description":"","properties":[{"name":"commit_hash_length","description":"","type":"integer","default":7},{"name":"format","description":"","type":"string","default":"[\\\\($hash$tag\\\\)]($style) "},{"name":"style","description":"","type":"string","default":"green bold"},{"name":"only_detached","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"tag_symbol","description":"","type":"string","default":" 🏷  "},{"name":"tag_disabled","description":"","type":"boolean","default":true},{"name":"tag_max_candidates","description":"","type":"integer","default":0}]},{"name":"git_metrics","title":"git_metrics","description":"","properties":[{"name":"added_style","description":"","type":"string","default":"bold green"},{"name":"deleted_style","description":"","type":"string","default":"bold red"},{"name":"only_nonzero_diffs","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"([+$added]($added_style) )([-$deleted]($deleted_style) )"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"ignore_submodules","description":"","type":"boolean","default":false}]},{"name":"git_state","title":"git_state","description":"","properties":[{"name":"rebase","description":"","type":"string","default":"REBASING"},{"name":"merge","description":"","type":"string","default":"MERGING"},{"name":"revert","description":"","type":"string","default":"REVERTING"},{"name":"cherry_pick","description":"","type":"string","default":"CHERRY-PICKING"},{"name":"bisect","description":"","type":"string","default":"BISECTING"},{"name":"am","description":"","type":"string","default":"AM"},{"name":"am_or_rebase","description":"","type":"string","default":"AM/REBASE"},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"format","description":"","type":"string","default":"\\\\([$state( $progress_current/$progress_total)]($style)\\\\) "},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"git_status","title":"git_status","description":"","properties":[{"name":"format","description":"","type":"string","default":"([\\\\[$all_status$ahead_behind\\\\]]($style) )"},{"name":"style","description":"","type":"string","default":"red bold"},{"name":"stashed","description":"","type":"string","default":"\\\\$"},{"name":"ahead","description":"","type":"string","default":"⇡"},{"name":"behind","description":"","type":"string","default":"⇣"},{"name":"up_to_date","description":"","type":"string","default":""},{"name":"diverged","description":"","type":"string","default":"⇕"},{"name":"conflicted","description":"","type":"string","default":"="},{"name":"deleted","description":"","type":"string","default":"✘"},{"name":"renamed","description":"","type":"string","default":"»"},{"name":"modified","description":"","type":"string","default":"!"},{"name":"staged","description":"","type":"string","default":"+"},{"name":"untracked","description":"","type":"string","default":"?"},{"name":"typechanged","description":"","type":"string","default":""},{"name":"ignore_submodules","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"use_git_executable","description":"","type":"boolean","default":false},{"name":"windows_starship","description":"","type":["string","null"]}]},{"name":"gleam","title":"gleam","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⭐ "},{"name":"style","description":"","type":"string","default":"bold #FFAFF3"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["gleam"]},{"name":"detect_files","description":"","type":"array","default":["gleam.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"golang","title":"golang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐹 "},{"name":"style","description":"","type":"string","default":"bold cyan"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"not_capable_style","description":"","type":"string","default":"bold red"},{"name":"detect_extensions","description":"","type":"array","default":["go"]},{"name":"detect_files","description":"","type":"array","default":["go.mod","go.sum","go.work","glide.yaml","Gopkg.yml","Gopkg.lock",".go-version"]},{"name":"detect_folders","description":"","type":"array","default":["Godeps"]}]},{"name":"gradle","title":"gradle","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🅶 "},{"name":"style","description":"","type":"string","default":"bold bright-cyan"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"recursive","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["gradle","gradle.kts"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":["gradle"]}]},{"name":"guix_shell","title":"guix_shell","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol]($style) "},{"name":"symbol","description":"","type":"string","default":"🐃 "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"haskell","title":"haskell","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"λ "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["hs","cabal","hs-boot"]},{"name":"detect_files","description":"","type":"array","default":["stack.yaml","cabal.project"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"haxe","title":"haxe","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⌘ "},{"name":"style","description":"","type":"string","default":"bold fg:202"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["hx","hxml"]},{"name":"detect_files","description":"","type":"array","default":["haxelib.json","hxformat.json",".haxerc"]},{"name":"detect_folders","description":"","type":"array","default":[".haxelib","haxe_libraries"]}]},{"name":"helm","title":"helm","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⎈ "},{"name":"style","description":"","type":"string","default":"bold white"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["helmfile.yaml","Chart.yaml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"hg_branch","title":"hg_branch","description":"","properties":[{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"format","description":"","type":"string","default":"on [$symbol$branch(:$topic)]($style) "},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"hg_state","title":"hg_state","description":"","properties":[{"name":"merge","description":"","type":"string","default":"MERGING"},{"name":"rebase","description":"","type":"string","default":"REBASING"},{"name":"update","description":"","type":"string","default":"UPDATING"},{"name":"bisect","description":"","type":"string","default":"BISECTING"},{"name":"shelve","description":"","type":"string","default":"SHELVING"},{"name":"graft","description":"","type":"string","default":"GRAFTING"},{"name":"transplant","description":"","type":"string","default":"TRANSPLANTING"},{"name":"histedit","description":"","type":"string","default":"HISTEDITING"},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"format","description":"","type":"string","default":"\\\\([$state]($style)\\\\) "},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"hostname","title":"hostname","description":"","properties":[{"name":"ssh_only","description":"","type":"boolean","default":true},{"name":"ssh_symbol","description":"","type":"string","default":"🌐 "},{"name":"trim_at","description":"","type":"string","default":"."},{"name":"detect_env_vars","description":"","type":"array","default":[]},{"name":"format","description":"","type":"string","default":"[$ssh_symbol$hostname]($style) in "},{"name":"style","description":"","type":"string","default":"green dimmed bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"aliases","description":"","type":"object","default":{}}]},{"name":"java","title":"java","description":"","properties":[{"name":"disabled","description":"","type":"boolean","default":false},{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"red dimmed"},{"name":"symbol","description":"","type":"string","default":"☕ "},{"name":"detect_extensions","description":"","type":"array","default":["java","class","jar","gradle","clj","cljc"]},{"name":"detect_files","description":"","type":"array","default":["pom.xml","build.gradle.kts","build.sbt",".java-version","deps.edn","project.clj","build.boot",".sdkmanrc"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"jobs","title":"jobs","description":"","properties":[{"name":"threshold","description":"","type":"integer","default":1},{"name":"symbol_threshold","description":"","type":"integer","default":1},{"name":"number_threshold","description":"","type":"integer","default":2},{"name":"format","description":"","type":"string","default":"[$symbol$number]($style) "},{"name":"symbol","description":"","type":"string","default":"✦"},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"julia","title":"julia","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"ஃ "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["jl"]},{"name":"detect_files","description":"","type":"array","default":["Project.toml","Manifest.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"kotlin","title":"kotlin","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🅺 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"kotlin_binary","description":"","type":"string","default":"kotlin"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["kt","kts"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"kubernetes","title":"kubernetes","description":"","properties":[{"name":"symbol","description":"","type":"string","default":"☸ "},{"name":"format","description":"","type":"string","default":"[$symbol$context( \\\\($namespace\\\\))]($style) in "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"context_aliases","description":"","type":"object","default":{}},{"name":"user_aliases","description":"","type":"object","default":{}},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"detect_env_vars","description":"","type":"array","default":[]},{"name":"contexts","description":"","type":"array","default":[]}]},{"name":"line_break","title":"line_break","description":"","properties":[{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"localip","title":"localip","description":"","properties":[{"name":"ssh_only","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"[$localipv4]($style) "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"lua","title":"lua","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🌙 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"lua_binary","description":"","type":"string","default":"lua"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["lua"]},{"name":"detect_files","description":"","type":"array","default":[".lua-version"]},{"name":"detect_folders","description":"","type":"array","default":["lua"]}]},{"name":"memory_usage","title":"memory_usage","description":"","properties":[{"name":"threshold","description":"","type":"integer","default":75},{"name":"format","description":"","type":"string","default":"via $symbol[$ram( | $swap)]($style) "},{"name":"style","description":"","type":"string","default":"white bold dimmed"},{"name":"symbol","description":"","type":"string","default":"🐏 "},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"meson","title":"meson","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":4294967295},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"format","description":"","type":"string","default":"via [$symbol$project]($style) "},{"name":"symbol","description":"","type":"string","default":"⬢ "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"mise","title":"mise","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$health]($style) "},{"name":"symbol","description":"","type":"string","default":"mise "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["mise.toml","mise.local.toml",".mise.toml",".mise.local.toml"]},{"name":"detect_folders","description":"","type":"array","default":[".mise"]},{"name":"healthy_symbol","description":"","type":"string","default":"healthy"},{"name":"unhealthy_symbol","description":"","type":"string","default":"unhealthy"}]},{"name":"mojo","title":"mojo","description":"","properties":[{"name":"format","description":"","type":"string","default":"with [$symbol($version )]($style)"},{"name":"symbol","description":"","type":"string","default":"🔥 "},{"name":"style","description":"","type":"string","default":"bold 208"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["mojo","🔥"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"nats","title":"nats","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol($name )]($style)"},{"name":"symbol","description":"","type":"string","default":"✉️ "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"netns","title":"netns","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol \\\\[$name\\\\]]($style) "},{"name":"symbol","description":"","type":"string","default":"🛜"},{"name":"style","description":"","type":"string","default":"blue bold dimmed"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"nim","title":"nim","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"👑 "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["nim","nims","nimble"]},{"name":"detect_files","description":"","type":"array","default":["nim.cfg"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"nix_shell","title":"nix_shell","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol$state( \\\\($name\\\\))]($style) "},{"name":"symbol","description":"","type":"string","default":"❄️  "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"impure_msg","description":"","type":"string","default":"impure"},{"name":"pure_msg","description":"","type":"string","default":"pure"},{"name":"unknown_msg","description":"","type":"string","default":""},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"heuristic","description":"","type":"boolean","default":false}]},{"name":"nodejs","title":"nodejs","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold green"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"not_capable_style","description":"","type":"string","default":"bold red"},{"name":"detect_extensions","description":"","type":"array","default":["js","mjs","cjs","ts","mts","cts"]},{"name":"detect_files","description":"","type":"array","default":["package.json",".node-version",".nvmrc","!bunfig.toml","!bun.lock","!bun.lockb"]},{"name":"detect_folders","description":"","type":"array","default":["node_modules"]}]},{"name":"ocaml","title":"ocaml","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )(\\\\($switch_indicator$switch_name\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"global_switch_indicator","description":"","type":"string","default":""},{"name":"local_switch_indicator","description":"","type":"string","default":"*"},{"name":"symbol","description":"","type":"string","default":"🐫 "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["opam","ml","mli","re","rei"]},{"name":"detect_files","description":"","type":"array","default":["dune","dune-project","jbuild","jbuild-ignore",".merlin"]},{"name":"detect_folders","description":"","type":"array","default":["_opam","esy.lock"]}]},{"name":"odin","title":"odin","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"show_commit","description":"","type":"boolean","default":false},{"name":"symbol","description":"","type":"string","default":"Ø "},{"name":"style","description":"","type":"string","default":"bold bright-blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["odin"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"opa","title":"opa","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🪖 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["rego"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"openstack","title":"openstack","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$cloud(\\\\($project\\\\))]($style) "},{"name":"symbol","description":"","type":"string","default":"☁️  "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"os","title":"os","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol]($style)"},{"name":"style","description":"","type":"string","default":"bold white"},{"name":"symbols","description":"","type":"object","default":{"AIX":"➿ ","Alpaquita":"🔔 ","AlmaLinux":"💠 ","Alpine":"🏔️ ","ALTLinux":"Ⓐ ","Amazon":"🙂 ","Android":"🤖 ","AOSC":"🐱 ","Arch":"🎗️ ","Artix":"🎗️ ","Bluefin":"🐟 ","CachyOS":"🎗️ ","CentOS":"💠 ","Debian":"🌀 ","Elementary":"🍏 ","DragonFly":"🐉 ","Emscripten":"🔗 ","EndeavourOS":"🚀 ","Fedora":"🎩 ","FreeBSD":"😈 ","Garuda":"🦅 ","Gentoo":"🗜️ ","HardenedBSD":"🛡️ ","Illumos":"🐦 ","Ios":"📱 ","InstantOS":"⏲️ ","Kali":"🐉 ","Linux":"🐧 ","Mabox":"📦 ","Macos":"🍎 ","Manjaro":"🥭 ","Mariner":"🌊 ","MidnightBSD":"🌘 ","Mint":"🌿 ","NetBSD":"🚩 ","NixOS":"❄️ ","Nobara":"🎩 ","OpenBSD":"🐡 ","OpenCloudOS":"☁️ ","openEuler":"🦉 ","openSUSE":"🦎 ","OracleLinux":"🦴 ","PikaOS":"🐤 ","Pop":"🍭 ","Raspbian":"🍓 ","Redhat":"🎩 ","RedHatEnterprise":"🎩 ","RockyLinux":"💠 ","Redox":"🧪 ","Solus":"⛵ ","SUSE":"🦎 ","Ubuntu":"🎯 ","Ultramarine":"🔷 ","Unknown":"❓ ","Uos":"🐲 ","Void":" ","Windows":"🪟 ","Zorin":"🔹 "}},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"package","title":"package","description":"","properties":[{"name":"format","description":"","type":"string","default":"is [$symbol$version]($style) "},{"name":"symbol","description":"","type":"string","default":"📦 "},{"name":"style","description":"","type":"string","default":"208 bold"},{"name":"display_private","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"version_format","description":"","type":"string","default":"v${raw}"}]},{"name":"perl","title":"perl","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐪 "},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["pl","pm","pod"]},{"name":"detect_files","description":"","type":"array","default":["Makefile.PL","Build.PL","cpanfile","cpanfile.snapshot","META.json","META.yml",".perl-version"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"php","title":"php","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐘 "},{"name":"style","description":"","type":"string","default":"147 bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["php"]},{"name":"detect_files","description":"","type":"array","default":["composer.json",".php-version"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"pijul_channel","title":"pijul_channel","description":"","properties":[{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"format","description":"","type":"string","default":"on [$symbol$channel]($style) "},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"pixi","title":"pixi","description":"","properties":[{"name":"pixi_binary","description":"","default":["pixi"]},{"name":"show_default_environment","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"via [$symbol($version )(\\\\($environment\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🧚 "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["pixi.toml","pixi.lock"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"pulumi","title":"pulumi","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($username@)$stack]($style) "},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold 5"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"search_upwards","description":"","type":"boolean","default":true}]},{"name":"purescript","title":"purescript","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"<=> "},{"name":"style","description":"","type":"string","default":"bold white"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["purs"]},{"name":"detect_files","description":"","type":"array","default":["spago.dhall","spago.yaml","spago.lock"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"python","title":"python","description":"","properties":[{"name":"pyenv_version_name","description":"","type":"boolean","default":false},{"name":"pyenv_prefix","description":"","type":"string","default":"pyenv "},{"name":"python_binary","description":"","default":[["python"],["python3"],["python2"]]},{"name":"format","description":"","type":"string","default":"via [${symbol}${pyenv_prefix}(${version} )(\\\\($virtualenv\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"symbol","description":"","type":"string","default":"🐍 "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["py","ipynb"]},{"name":"detect_files","description":"","type":"array","default":["requirements.txt",".python-version","pyproject.toml","Pipfile","tox.ini","setup.py","__init__.py"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"detect_env_vars","description":"","type":"array","default":["VIRTUAL_ENV"]}]},{"name":"quarto","title":"quarto","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⨁ "},{"name":"style","description":"","type":"string","default":"bold #75AADB"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["qmd"]},{"name":"detect_files","description":"","type":"array","default":["_quarto.yml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"raku","title":"raku","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version-$vm_version )]($style)"},{"name":"version_format","description":"","type":"string","default":"${raw}"},{"name":"symbol","description":"","type":"string","default":"🦋 "},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["p6","pm6","pod6","raku","rakumod"]},{"name":"detect_files","description":"","type":"array","default":["META6.json"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"red","title":"red","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🔺 "},{"name":"style","description":"","type":"string","default":"red bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["red","reds"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"rlang","title":"rlang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"symbol","description":"","type":"string","default":"📐 "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["R","Rd","Rmd","Rproj","Rsx"]},{"name":"detect_files","description":"","type":"array","default":["DESCRIPTION"]},{"name":"detect_folders","description":"","type":"array","default":[".Rproj.user"]}]},{"name":"ruby","title":"ruby","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"💎 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["rb"]},{"name":"detect_files","description":"","type":"array","default":["Gemfile",".ruby-version"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"detect_variables","description":"","type":"array","default":["RUBY_VERSION","RBENV_VERSION"]}]},{"name":"rust","title":"rust","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🦀 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["rs"]},{"name":"detect_files","description":"","type":"array","default":["Cargo.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"scala","title":"scala","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"style","description":"","type":"string","default":"red bold"},{"name":"symbol","description":"","type":"string","default":"🆂 "},{"name":"detect_extensions","description":"","type":"array","default":["sbt","scala"]},{"name":"detect_files","description":"","type":"array","default":[".scalaenv",".sbtenv","build.sbt"]},{"name":"detect_folders","description":"","type":"array","default":[".metals"]}]},{"name":"shell","title":"shell","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$indicator]($style) "},{"name":"bash_indicator","description":"","type":"string","default":"bsh"},{"name":"fish_indicator","description":"","type":"string","default":"fsh"},{"name":"zsh_indicator","description":"","type":"string","default":"zsh"},{"name":"powershell_indicator","description":"","type":"string","default":"psh"},{"name":"pwsh_indicator","description":"","type":["string","null"]},{"name":"ion_indicator","description":"","type":"string","default":"ion"},{"name":"elvish_indicator","description":"","type":"string","default":"esh"},{"name":"tcsh_indicator","description":"","type":"string","default":"tsh"},{"name":"nu_indicator","description":"","type":"string","default":"nu"},{"name":"xonsh_indicator","description":"","type":"string","default":"xsh"},{"name":"cmd_indicator","description":"","type":"string","default":"cmd"},{"name":"unknown_indicator","description":"","type":"string","default":""},{"name":"style","description":"","type":"string","default":"white bold"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"shlvl","title":"shlvl","description":"","properties":[{"name":"threshold","description":"","type":"integer","default":2},{"name":"format","description":"","type":"string","default":"[$symbol$shlvl]($style) "},{"name":"symbol","description":"","type":"string","default":"↕️  "},{"name":"repeat","description":"","type":"boolean","default":false},{"name":"repeat_offset","description":"","type":"integer","default":0},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"singularity","title":"singularity","description":"","properties":[{"name":"symbol","description":"","type":"string","default":""},{"name":"format","description":"","type":"string","default":"[$symbol\\\\[$env\\\\]]($style) "},{"name":"style","description":"","type":"string","default":"blue bold dimmed"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"solidity","title":"solidity","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version)]($style)"},{"name":"version_format","description":"","type":"string","default":"v${major}.${minor}.${patch}"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"symbol","description":"","type":"string","default":"S "},{"name":"compiler","description":"","default":["solc"]},{"name":"detect_extensions","description":"","type":"array","default":["sol"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"spack","title":"spack","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":1},{"name":"format","description":"","type":"string","default":"via [$symbol$environment]($style) "},{"name":"symbol","description":"","type":"string","default":"🅢 "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"status","title":"status","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol$status]($style) "},{"name":"symbol","description":"","type":"string","default":"❌"},{"name":"success_symbol","description":"","type":"string","default":""},{"name":"not_executable_symbol","description":"","type":"string","default":"🚫"},{"name":"not_found_symbol","description":"","type":"string","default":"🔍"},{"name":"sigint_symbol","description":"","type":"string","default":"🧱"},{"name":"signal_symbol","description":"","type":"string","default":"⚡"},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"success_style","description":"","type":["string","null"]},{"name":"failure_style","description":"","type":["string","null"]},{"name":"map_symbol","description":"","type":"boolean","default":false},{"name":"recognize_signal_code","description":"","type":"boolean","default":true},{"name":"pipestatus","description":"","type":"boolean","default":false},{"name":"pipestatus_separator","description":"","type":"string","default":"|"},{"name":"pipestatus_format","description":"","type":"string","default":"\\\\[$pipestatus\\\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) "},{"name":"pipestatus_segment_format","description":"","type":["string","null"]},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"sudo","title":"sudo","description":"","properties":[{"name":"format","description":"","type":"string","default":"[as $symbol]($style)"},{"name":"symbol","description":"","type":"string","default":"🧙 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"allow_windows","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"swift","title":"swift","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐦 "},{"name":"style","description":"","type":"string","default":"bold 202"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["swift"]},{"name":"detect_files","description":"","type":"array","default":["Package.swift"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"terraform","title":"terraform","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol$workspace]($style) "},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"💠 "},{"name":"style","description":"","type":"string","default":"bold 105"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["tf","tfplan","tfstate"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[".terraform"]},{"name":"commands","description":"","type":"array","default":[["terraform","version"],["tofu","version"]]}]},{"name":"time","title":"time","description":"","properties":[{"name":"format","description":"","type":"string","default":"at [$time]($style) "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"use_12hr","description":"","type":"boolean","default":false},{"name":"time_format","description":"","type":["string","null"]},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"utc_time_offset","description":"","type":"string","default":"local"},{"name":"time_range","description":"","type":"string","default":"-"}]},{"name":"config","title":"Top-Level Config","description":"Global configuration settings for Starship.","properties":[{"name":"$schema","description":"","type":"string","default":"https://starship.rs/config-schema.json"},{"name":"format","description":"","type":"string","default":"$all"},{"name":"right_format","description":"","type":"string","default":""},{"name":"continuation_prompt","description":"","type":"string","default":"[∙](bright-black) "},{"name":"scan_timeout","description":"","type":"integer","default":30},{"name":"command_timeout","description":"","type":"integer","default":500},{"name":"add_newline","description":"","type":"boolean","default":true},{"name":"follow_symlinks","description":"","type":"boolean","default":true},{"name":"palette","description":"","type":["string","null"]},{"name":"palettes","description":"","type":"object","default":{}},{"name":"profiles","description":"","type":"object","default":{}},{"name":"env_var","description":"","type":"object","default":{}},{"name":"custom","description":"","type":"object","default":{}}]},{"name":"typst","title":"typst","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"t "},{"name":"style","description":"","type":"string","default":"bold #0093A7"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["typ"]},{"name":"detect_files","description":"","type":"array","default":["template.typ"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"username","title":"username","description":"","properties":[{"name":"detect_env_vars","description":"","type":"array","default":[]},{"name":"format","description":"","type":"string","default":"[$user]($style) in "},{"name":"style_root","description":"","type":"string","default":"red bold"},{"name":"style_user","description":"","type":"string","default":"yellow bold"},{"name":"show_always","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"aliases","description":"","type":"object","default":{}}]},{"name":"vagrant","title":"vagrant","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⍱ "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["Vagrantfile"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"vcsh","title":"vcsh","description":"","properties":[{"name":"symbol","description":"","type":"string","default":""},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"format","description":"","type":"string","default":"vcsh [$symbol$repo]($style) "},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"vlang","title":"vlang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"V "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["v"]},{"name":"detect_files","description":"","type":"array","default":["v.mod","vpkg.json",".vpkg-lock.json"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"xmake","title":"xmake","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"△ "},{"name":"style","description":"","type":"string","default":"bold green"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["xmake.lua"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"zig","title":"zig","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"↯ "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["zig"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]}]');class F{static parse(t){try{const r=Pe.parse(t);if(typeof r!="object"||r===null)throw new Error("Parsed TOML result is not an object");return r}catch(r){throw console.error("Failed to parse TOML:",r),new Error(`Invalid TOML syntax: ${r instanceof Error?r.message:String(r)}`)}}static stringify(t){try{const r=JSON.parse(JSON.stringify(t));return Pe.stringify(r)}catch(r){throw console.error("Failed to stringify config:",r),new Error("Failed to generate TOML")}}static getDefaultConfig(){return{add_newline:!0,format:"$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character",character:{success_symbol:"[➜](bold green)",error_symbol:"[➜](bold red)"},directory:{truncation_length:3,truncate_to_repo:!1},git_branch:{symbol:"🌱 ",format:"[$symbol$branch]($style) ",truncation_length:24},git_status:{format:"([$all_status$ahead_behind]($style) )",conflicted:"🏳",ahead:"🏎💨",behind:"😰",diverged:"😵",up_to_date:"✓",untracked:"🤷",stashed:"📦",modified:"📝",staged:"[++()](green)",renamed:"👅",deleted:"🗑"},nodejs:{format:"via [⬢ $version](bold green) "}}}static validate(t){const r=[],s=[];if(typeof t!="object"||t===null)return{valid:!1,errors:["Configuration must be an object"],warnings:[]};const n=["format","right_format","continuation_prompt","add_newline","scan_timeout","command_timeout","palette","palettes","custom"];t.format!==void 0&&typeof t.format!="string"&&r.push("Format must be a string"),t.add_newline!==void 0&&typeof t.add_newline!="boolean"&&r.push("add_newline must be a boolean"),t.scan_timeout!==void 0&&typeof t.scan_timeout!="number"&&r.push("scan_timeout must be a number"),t.command_timeout!==void 0&&typeof t.command_timeout!="number"&&r.push("command_timeout must be a number"),t.palette!==void 0&&typeof t.palette!="string"&&r.push("palette must be a string"),t.palettes!==void 0&&(typeof t.palettes!="object"||Array.isArray(t.palettes))&&r.push("palettes must be a table"),t.custom!==void 0&&(typeof t.custom!="object"||Array.isArray(t.custom))&&r.push("custom must be a table");const o=new Set(J.map(d=>d.name));return Object.keys(t).forEach(d=>{if(!n.includes(d))if(o.has(d)){const i=t[d];if(typeof i!="object"&&i!==void 0)r.push(`Module '${d}' must be a table (object)`);else if(i&&typeof i=="object"&&!Array.isArray(i)){const l=i;l.disabled!==void 0&&typeof l.disabled!="boolean"&&r.push(`Module '${d}': 'disabled' must be a boolean`)}}else s.push(`Unknown module or setting: '${d}'. It may be supported by Starship but not yet by this editor.`)}),{valid:r.length===0,errors:r,warnings:s}}static merge(t,r){if(!r)return t;if(!t)return r;const s={...t};return Object.keys(r).forEach(n=>{n==="__proto__"||n==="constructor"||n==="prototype"||(typeof r[n]=="object"&&r[n]!==null&&!Array.isArray(r[n])&&typeof s[n]=="object"&&s[n]!==null&&!Array.isArray(s[n])?s[n]=F.merge(s[n],r[n]):s[n]=r[n])}),s}}const Y=[{metadata:{id:"preset-clean",name:"Clean",description:"Minimalist theme with just the essentials",author:"Starship Team",tags:["minimal","clean"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{format:"$directory$git_branch$character",directory:{truncation_length:3,style:"bold cyan"},git_branch:{style:"bold purple",symbol:"🌱 "},character:{success_symbol:"[❯](bold green)",error_symbol:"[❯](bold red)"}}},{metadata:{id:"preset-oneline",name:"One Line",description:"Compact single-line prompt",author:"Starship Team",tags:["minimal","compact"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{add_newline:!1,format:"$username@$hostname $directory $git_branch $character",username:{style_user:"white bold",show_always:!0},hostname:{ssh_only:!1,style:"white dimmed"},directory:{style:"blue"}}},{metadata:{id:"preset-dev",name:"Full Stack",description:"Shows all language versions",author:"Dev Community",tags:["developer","languages"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),nodejs:{disabled:!1},rust:{disabled:!1},python:{disabled:!1},golang:{disabled:!1},java:{disabled:!1},php:{disabled:!1},docker_context:{disabled:!1}}},{metadata:{id:"preset-nord",name:"Nord",description:"Nord color scheme based theme",author:"Arctic Ice Studio",tags:["aesthetic","dark"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.Nord.primary},git_branch:{style:k.presets.Nord.secondary},character:{success_symbol:`[➜](${k.presets.Nord.success})`,error_symbol:`[➜](${k.presets.Nord.error})`}}},{metadata:{id:"preset-dracula",name:"Dracula",description:"Dracula color scheme",author:"Dracula Theme",tags:["aesthetic","dark","vampire"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.Dracula.primary},git_branch:{style:k.presets.Dracula.secondary},character:{success_symbol:`[⚡](${k.presets.Dracula.success})`,error_symbol:`[⚡](${k.presets.Dracula.error})`}}},{metadata:{id:"preset-gruvbox",name:"Gruvbox",description:"Retro groove color scheme",author:"morhetz",tags:["retro","warm","dark"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.Gruvbox.primary},git_branch:{style:k.presets.Gruvbox.secondary},character:{success_symbol:`[➜](${k.presets.Gruvbox.success})`,error_symbol:`[➜](${k.presets.Gruvbox.error})`}}},{metadata:{id:"preset-catppuccin",name:"Catppuccin",description:"Soothing pastel theme",author:"Catppuccin",tags:["pastel","aesthetic"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.Catppuccin.primary},git_branch:{style:k.presets.Catppuccin.secondary},character:{success_symbol:`[➜](${k.presets.Catppuccin.success})`,error_symbol:`[➜](${k.presets.Catppuccin.error})`}}},{metadata:{id:"preset-tokyonight",name:"Tokyo Night",description:"A clean, dark Visual Studio Code theme",author:"enkia",tags:["night","dark","vscode"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.TokyoNight.primary},git_branch:{style:k.presets.TokyoNight.secondary},character:{success_symbol:`[➜](${k.presets.TokyoNight.success})`,error_symbol:`[➜](${k.presets.TokyoNight.error})`}}},{metadata:{id:"preset-onedark",name:"One Dark",description:"Atom One Dark theme",author:"Atom",tags:["dark","atom"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.OneDark.primary},git_branch:{style:k.presets.OneDark.secondary},character:{success_symbol:`[➜](${k.presets.OneDark.success})`,error_symbol:`[➜](${k.presets.OneDark.error})`}}},{metadata:{id:"preset-monokai",name:"Monokai",description:"The classic Monokai theme",author:"Monokai",tags:["classic","high-contrast"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.Monokai.primary},git_branch:{style:k.presets.Monokai.secondary},character:{success_symbol:`[➜](${k.presets.Monokai.success})`,error_symbol:`[➜](${k.presets.Monokai.error})`}}},{metadata:{id:"preset-solarized",name:"Solarized Dark",description:"Precision colors for machines and people",author:"Ethan Schoonover",tags:["classic","solarized"],created:new Date("2024-01-01"),updated:new Date("2024-01-01"),isPreset:!0},config:{...F.getDefaultConfig(),directory:{style:k.presets.Solarized.primary},git_branch:{style:k.presets.Solarized.secondary},character:{success_symbol:`[➜](${k.presets.Solarized.success})`,error_symbol:`[➜](${k.presets.Solarized.error})`}}}];var ge,Ue;function Mr(){return Ue||(Ue=1,ge=function a(t,r){if(t===r)return!0;if(t&&r&&typeof t=="object"&&typeof r=="object"){if(t.constructor!==r.constructor)return!1;var s,n,o;if(Array.isArray(t)){if(s=t.length,s!=r.length)return!1;for(n=s;n--!==0;)if(!a(t[n],r[n]))return!1;return!0}if(t.constructor===RegExp)return t.source===r.source&&t.flags===r.flags;if(t.valueOf!==Object.prototype.valueOf)return t.valueOf()===r.valueOf();if(t.toString!==Object.prototype.toString)return t.toString()===r.toString();if(o=Object.keys(t),s=o.length,s!==Object.keys(r).length)return!1;for(n=s;n--!==0;)if(!Object.prototype.hasOwnProperty.call(r,o[n]))return!1;for(n=s;n--!==0;){var d=o[n];if(!a(t[d],r[d]))return!1}return!0}return t!==t&&r!==r}),ge}var Dr=Mr();const zr=ke(Dr),Lr={};function lt(a,t){let r;try{r=a()}catch{return}return{getItem:n=>{var o;const d=l=>l===null?null:JSON.parse(l,void 0),i=(o=r.getItem(n))!=null?o:null;return i instanceof Promise?i.then(d):d(i)},setItem:(n,o)=>r.setItem(n,JSON.stringify(o,void 0)),removeItem:n=>r.removeItem(n)}}const re=a=>t=>{try{const r=a(t);return r instanceof Promise?r:{then(s){return re(s)(r)},catch(s){return this}}}catch(r){return{then(s){return this},catch(s){return re(s)(r)}}}},Or=(a,t)=>(r,s,n)=>{let o={getStorage:()=>localStorage,serialize:JSON.stringify,deserialize:JSON.parse,partialize:u=>u,version:0,merge:(u,b)=>({...b,...u}),...t},d=!1;const i=new Set,l=new Set;let c;try{c=o.getStorage()}catch{}if(!c)return a((...u)=>{console.warn(`[zustand persist middleware] Unable to update item '${o.name}', the given storage is currently unavailable.`),r(...u)},s,n);const f=re(o.serialize),y=()=>{const u=o.partialize({...s()});let b;const p=f({state:u,version:o.version}).then(C=>c.setItem(o.name,C)).catch(C=>{b=C});if(b)throw b;return p},v=n.setState;n.setState=(u,b)=>{v(u,b),y()};const g=a((...u)=>{r(...u),y()},s,n);let w;const x=()=>{var u;if(!c)return;d=!1,i.forEach(p=>p(s()));const b=((u=o.onRehydrateStorage)==null?void 0:u.call(o,s()))||void 0;return re(c.getItem.bind(c))(o.name).then(p=>{if(p)return o.deserialize(p)}).then(p=>{if(p)if(typeof p.version=="number"&&p.version!==o.version){if(o.migrate)return o.migrate(p.state,p.version);console.error("State loaded from storage couldn't be migrated since no migrate function was provided")}else return p.state}).then(p=>{var C;return w=o.merge(p,(C=s())!=null?C:g),r(w,!0),y()}).then(()=>{b?.(w,void 0),d=!0,l.forEach(p=>p(w))}).catch(p=>{b?.(void 0,p)})};return n.persist={setOptions:u=>{o={...o,...u},u.getStorage&&(c=u.getStorage())},clearStorage:()=>{c?.removeItem(o.name)},getOptions:()=>o,rehydrate:()=>x(),hasHydrated:()=>d,onHydrate:u=>(i.add(u),()=>{i.delete(u)}),onFinishHydration:u=>(l.add(u),()=>{l.delete(u)})},x(),w||g},Pr=(a,t)=>(r,s,n)=>{let o={storage:lt(()=>localStorage),partialize:x=>x,version:0,merge:(x,u)=>({...u,...x}),...t},d=!1;const i=new Set,l=new Set;let c=o.storage;if(!c)return a((...x)=>{console.warn(`[zustand persist middleware] Unable to update item '${o.name}', the given storage is currently unavailable.`),r(...x)},s,n);const f=()=>{const x=o.partialize({...s()});return c.setItem(o.name,{state:x,version:o.version})},y=n.setState;n.setState=(x,u)=>{y(x,u),f()};const v=a((...x)=>{r(...x),f()},s,n);n.getInitialState=()=>v;let g;const w=()=>{var x,u;if(!c)return;d=!1,i.forEach(p=>{var C;return p((C=s())!=null?C:v)});const b=((u=o.onRehydrateStorage)==null?void 0:u.call(o,(x=s())!=null?x:v))||void 0;return re(c.getItem.bind(c))(o.name).then(p=>{if(p)if(typeof p.version=="number"&&p.version!==o.version){if(o.migrate)return[!0,o.migrate(p.state,p.version)];console.error("State loaded from storage couldn't be migrated since no migrate function was provided")}else return[!1,p.state];return[!1,void 0]}).then(p=>{var C;const[h,_]=p;if(g=o.merge(_,(C=s())!=null?C:v),r(g,!0),h)return f()}).then(()=>{b?.(g,void 0),g=s(),d=!0,l.forEach(p=>p(g))}).catch(p=>{b?.(void 0,p)})};return n.persist={setOptions:x=>{o={...o,...x},x.storage&&(c=x.storage)},clearStorage:()=>{c?.removeItem(o.name)},getOptions:()=>o,rehydrate:()=>w(),hasHydrated:()=>d,onHydrate:x=>(i.add(x),()=>{i.delete(x)}),onFinishHydration:x=>(l.add(x),()=>{l.delete(x)})},o.skipHydration||w(),g||v},Ur=(a,t)=>"getStorage"in t||"serialize"in t||"deserialize"in t?((Lr?"production":void 0)!=="production"&&console.warn("[DEPRECATED] `getStorage`, `serialize` and `deserialize` options are deprecated. Use `storage` option instead."),Or(a,t)):Pr(a,t),dt=Ur;function Br(a,t){const r=lt(a);if(!r)return;const s=1e3,n={};return{...r,setItem:(o,d)=>{n[o]&&clearTimeout(n[o]),n[o]=setTimeout(()=>{r.setItem(o,d),delete n[o]},s)}}}const Gr=()=>({enabled:!1,dayThemeId:"preset-clean",nightThemeId:"preset-dracula",dayStartTime:"07:00",nightStartTime:"19:00"}),Be=()=>({metadata:{id:st(),name:"Untitled Theme",created:new Date,updated:new Date},config:F.getDefaultConfig()}),G=a=>typeof structuredClone=="function"?structuredClone(a):JSON.parse(JSON.stringify(a)),M=at()(dt((a,t)=>({currentTheme:Be(),savedThemes:[],selectedModule:null,dynamicSettings:Gr(),past:[],future:[],undo:()=>{a(r=>{if(r.past.length===0)return{};const s=G(r.past[r.past.length-1]);return{past:r.past.slice(0,-1),currentTheme:s,future:[G(r.currentTheme),...r.future]}})},redo:()=>{a(r=>{if(r.future.length===0)return{};const s=G(r.future[0]),n=r.future.slice(1);return{past:[...r.past,G(r.currentTheme)],currentTheme:s,future:n}})},canUndo:()=>t().past.length>0,canRedo:()=>t().future.length>0,updateConfig:r=>{a(s=>{const n={...s.currentTheme,config:{...s.currentTheme.config,palettes:{...s.currentTheme.config.palettes,global:{...s.currentTheme.config.palettes?.global,...r.palettes?.global}},...Object.fromEntries(Object.entries(r).filter(([o])=>o!=="palettes"))},metadata:{...s.currentTheme.metadata,updated:new Date}};return zr(s.currentTheme.config,n.config)?{}:{past:[...s.past,G(s.currentTheme)].slice(-50),currentTheme:n,future:[]}})},updateMetadata:r=>{a(s=>{const n={...s.currentTheme,metadata:{...s.currentTheme.metadata,...r,updated:new Date}};return{past:[...s.past,G(s.currentTheme)].slice(-50),currentTheme:n,future:[]}})},setSelectedModule:r=>{a({selectedModule:r})},loadTheme:r=>{a(s=>({past:[...s.past,G(s.currentTheme)].slice(-50),currentTheme:G(r),selectedModule:null,future:[]}))},saveTheme:r=>{const{currentTheme:s,savedThemes:n}=t(),o=G(s);r&&(o.metadata.previewImage=r);const d=n.findIndex(l=>l.metadata.id===o.metadata.id),i=[...n];d>=0?i[d]=o:i.push(o),a({savedThemes:i})},deleteTheme:r=>{a(s=>({savedThemes:s.savedThemes.filter(n=>n.metadata.id!==r)}))},resetTheme:()=>{a(r=>({past:[...r.past,G(r.currentTheme)].slice(-50),currentTheme:Be(),selectedModule:null,future:[]}))},exportToml:()=>{const{currentTheme:r}=t();return F.stringify(r.config)},importToml:r=>{const s=F.parse(r);a(n=>({past:[...n.past,G(n.currentTheme)].slice(-50),currentTheme:{...n.currentTheme,config:s,metadata:{...n.currentTheme.metadata,updated:new Date}},selectedModule:null,future:[]}))},updateDynamicSettings:r=>{a(s=>({dynamicSettings:{...s.dynamicSettings,...r}}))}}),{name:"starship-theme-storage",storage:Br(()=>localStorage),partialize:a=>({savedThemes:a.savedThemes,currentTheme:a.currentTheme,dynamicSettings:a.dynamicSettings})})),Wr=a=>{const t=Object.keys(a.currentTheme.config.custom||{}).map(l=>({id:l,name:l,isCustom:!0})),s=[...J.map(l=>({id:l.name,name:l.name,isCustom:!1})),...t],o=(a.currentTheme.config.format||"").match(/\$([a-zA-Z0-9_]+)/g)||[],d=new Set(s.map(l=>l.name));return o.map((l,c)=>{const f=l.substring(1);return{id:`${f}-${c}`,name:f,isCustom:s.find(y=>y.name===f)?.isCustom||!1}}).filter(l=>d.has(l.name))};function qr({onClose:a}){const{currentTheme:t,savedThemes:r}=M(),{addToast:s}=q(),n=[t,...r,...Y],[o,d]=m.useState(t),[i,l]=m.useState(r[0]||Y[0]),c=m.useRef(null),f=()=>{d(i),l(o)},y=async()=>{if(c.current)try{const u=(await Te(c.current,{backgroundColor:"#0d1117",scale:2})).toDataURL("image/png"),b=document.createElement("a");b.href=u,b.download=`comparison-${o.metadata.name}-vs-${i.metadata.name}.png`,b.click(),s("Comparison image downloaded!","success")}catch{s("Failed to generate image","error")}},v=x=>Object.keys(x.config).filter(u=>{if(u==="format")return!1;const b=x.config[u];return typeof b=="object"&&b!==null&&"disabled"in b?b.disabled!==!0:!0}).length,g=v(o),w=v(i);return e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm",children:e.jsxs("div",{className:"flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsxs("h2",{className:"flex items-center gap-2 text-lg font-bold text-white",children:[e.jsx(we,{size:20,className:"text-blue-500"}),"Theme Comparison"]}),e.jsxs("div",{className:"flex items-center gap-3",children:[e.jsxs("button",{onClick:y,className:"flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-gray-200 hover:bg-gray-600",children:[e.jsx(Et,{size:16})," Screenshot"]}),e.jsx("button",{onClick:a,className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white","aria-label":"Close",children:e.jsx(P,{size:20})})]})]}),e.jsxs("div",{className:"flex flex-1 flex-col overflow-y-auto p-6",ref:c,children:[e.jsxs("div",{className:"mb-6 flex items-center justify-center gap-4",children:[e.jsx("div",{className:"flex-1",children:e.jsx("select",{value:o.metadata.id,onChange:x=>d(n.find(u=>u.metadata.id===x.target.value)||o),className:"w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none",children:n.map(x=>e.jsx("option",{value:x.metadata.id,children:x.metadata.name},`a-${x.metadata.id}`))})}),e.jsx("button",{onClick:f,className:"rounded-full bg-gray-800 p-3 text-gray-400 transition-transform hover:bg-gray-700 hover:text-white active:scale-95","aria-label":"Swap themes",children:e.jsx(we,{size:20})}),e.jsx("div",{className:"flex-1",children:e.jsx("select",{value:i.metadata.id,onChange:x=>l(n.find(u=>u.metadata.id===x.target.value)||i),className:"w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none",children:n.map(x=>e.jsx("option",{value:x.metadata.id,children:x.metadata.name},`b-${x.metadata.id}`))})})]}),e.jsxs("div",{className:"grid flex-1 grid-cols-2 gap-6",children:[e.jsxs("div",{className:"flex flex-col gap-4",children:[e.jsxs("div",{className:"flex flex-col gap-1 rounded-lg border border-gray-800 bg-gray-900/50 p-4",children:[e.jsx("h3",{className:"font-semibold text-gray-200",children:o.metadata.name}),e.jsxs("p",{className:"text-xs text-gray-500",children:["Active Modules: ",g]})]}),e.jsx("div",{className:"pointer-events-none relative flex-1",children:e.jsx("div",{className:"h-full overflow-y-auto whitespace-pre rounded-lg border border-gray-700 bg-[#1e1e1e] p-4 font-mono text-xs text-gray-300",children:F.stringify(o.config)})})]}),e.jsxs("div",{className:"flex flex-col gap-4",children:[e.jsxs("div",{className:"flex flex-col gap-1 rounded-lg border border-gray-800 bg-gray-900/50 p-4",children:[e.jsx("h3",{className:"font-semibold text-gray-200",children:i.metadata.name}),e.jsxs("p",{className:"text-xs text-gray-500",children:["Active Modules: ",w]})]}),e.jsx("div",{className:"pointer-events-none relative flex-1",children:e.jsx("div",{className:"h-full overflow-y-auto whitespace-pre rounded-lg border border-gray-700 bg-[#1e1e1e] p-4 font-mono text-xs text-gray-300",children:F.stringify(i.config)})})]})]})]})]})})}function Hr({onClose:a}){const{dynamicSettings:t,updateDynamicSettings:r,savedThemes:s}=M(),n=[...s,...Y],o=()=>{r({enabled:!t.enabled})},d=i=>{const{name:l,value:c}=i.target;r({[l]:c})};return e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm",children:e.jsxs("div",{className:"flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsx("h2",{className:"text-lg font-bold text-white",children:"Dynamic Theme Settings"}),e.jsx("button",{onClick:a,className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white","aria-label":"Close",children:e.jsx(P,{size:20})})]}),e.jsxs("div",{className:"flex flex-col gap-6 p-6",children:[e.jsxs("div",{className:"flex items-center justify-between",children:[e.jsxs("div",{children:[e.jsx("h3",{className:"text-base font-medium text-white",children:"Enable Dynamic Theme"}),e.jsx("p",{className:"text-sm text-gray-400",children:"Automatically switch themes based on time of day."})]}),e.jsx("button",{onClick:o,className:`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${t.enabled?"bg-blue-600":"bg-gray-600"}`,"aria-label":"Toggle dynamic theme","aria-checked":t.enabled,role:"switch",children:e.jsx("span",{className:`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${t.enabled?"translate-x-6":"translate-x-1"}`})})]}),e.jsx("div",{className:"h-px bg-gray-800"}),e.jsxs("div",{className:`flex flex-col gap-4 ${t.enabled?"":"pointer-events-none opacity-50"}`,children:[e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("label",{className:"text-sm font-medium text-gray-300",children:"Day Theme"}),e.jsx("select",{name:"dayThemeId",value:t.dayThemeId,onChange:d,className:"w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none",children:n.map(i=>e.jsx("option",{value:i.metadata.id,children:i.metadata.name},i.metadata.id))})]}),e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("label",{className:"text-sm font-medium text-gray-300",children:"Day Start Time"}),e.jsx("input",{type:"time",name:"dayStartTime",value:t.dayStartTime,onChange:d,className:"w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none"})]}),e.jsx("div",{className:"my-2 h-px bg-gray-800"}),e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("label",{className:"text-sm font-medium text-gray-300",children:"Night Theme"}),e.jsx("select",{name:"nightThemeId",value:t.nightThemeId,onChange:d,className:"w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none",children:n.map(i=>e.jsx("option",{value:i.metadata.id,children:i.metadata.name},i.metadata.id))})]}),e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("label",{className:"text-sm font-medium text-gray-300",children:"Night Start Time"}),e.jsx("input",{type:"time",name:"nightStartTime",value:t.nightStartTime,onChange:d,className:"w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none"})]})]})]})]})})}const Kr=m.createContext(null),be={didCatch:!1,error:null};let Jr=class extends m.Component{constructor(t){super(t),this.resetErrorBoundary=this.resetErrorBoundary.bind(this),this.state=be}static getDerivedStateFromError(t){return{didCatch:!0,error:t}}resetErrorBoundary(...t){const{error:r}=this.state;r!==null&&(this.props.onReset?.({args:t,reason:"imperative-api"}),this.setState(be))}componentDidCatch(t,r){this.props.onError?.(t,r)}componentDidUpdate(t,r){const{didCatch:s}=this.state,{resetKeys:n}=this.props;s&&r.error!==null&&Vr(t.resetKeys,n)&&(this.props.onReset?.({next:n,prev:t.resetKeys,reason:"keys"}),this.setState(be))}render(){const{children:t,fallbackRender:r,FallbackComponent:s,fallback:n}=this.props,{didCatch:o,error:d}=this.state;let i=t;if(o){const l={error:d,resetErrorBoundary:this.resetErrorBoundary};if(typeof r=="function")i=r(l);else if(s)i=m.createElement(s,l);else if(n!==void 0)i=n;else throw d}return m.createElement(Kr.Provider,{value:{didCatch:o,error:d,resetErrorBoundary:this.resetErrorBoundary}},i)}};function Vr(a=[],t=[]){return a.length!==t.length||a.some((r,s)=>!Object.is(r,t[s]))}function Yr({error:a,resetErrorBoundary:t}){return e.jsx("div",{className:"flex h-screen w-full flex-col items-center justify-center bg-gray-900 text-white",role:"alert",children:e.jsxs("div",{className:"flex flex-col items-center gap-4 rounded-lg border border-red-800 bg-red-900/20 p-8 text-center",children:[e.jsx(Ye,{className:"h-12 w-12 text-red-500"}),e.jsx("h2",{className:"text-2xl font-bold",children:"Something went wrong"}),e.jsx("p",{className:"max-w-md text-red-300",children:"An unexpected error occurred. You can try refreshing the application."}),e.jsx("pre",{className:"mt-2 w-full max-w-md overflow-auto rounded bg-black/30 p-4 text-left text-xs text-red-200",children:a.message}),e.jsx("button",{onClick:t,className:"mt-4 rounded bg-red-600 px-6 py-2 font-semibold text-white hover:bg-red-500",children:"Refresh Application"})]})})}const O=({children:a})=>e.jsx(Jr,{FallbackComponent:Yr,onReset:()=>window.location.reload(),children:a});function Xr(){const{currentTheme:a}=M(),{addToast:t}=q(),r=()=>{try{const o=F.stringify(a.config),d=new Blob([o],{type:"text/plain;charset=utf-8"}),i=URL.createObjectURL(d),l=document.createElement("a");l.href=i,l.download="starship.toml",document.body.appendChild(l),l.click(),document.body.removeChild(l),URL.revokeObjectURL(i),t("File downloaded successfully!","success")}catch{t("Failed to generate file.","error")}},s=async()=>{try{const o=F.stringify(a.config);await navigator.clipboard.writeText(o),t("Copied to clipboard!","success")}catch{t("Failed to copy text.","error")}},n=async()=>{try{const o=F.stringify(a.config),d=btoa(encodeURIComponent(o)),i=`${window.location.origin}${window.location.pathname}?theme=${d}`;await navigator.clipboard.writeText(i),t("Share URL copied to clipboard!","success")}catch{t("Failed to create share URL.","error")}};return e.jsxs("div",{className:"grid gap-6 md:grid-cols-2",children:[e.jsxs("div",{className:"flex flex-col gap-3",children:[e.jsxs("button",{onClick:r,className:"group flex items-center gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-900/10",children:[e.jsx("div",{className:"rounded-full bg-blue-900/30 p-2 text-blue-400 transition-colors group-hover:bg-blue-600 group-hover:text-white",children:e.jsx(ce,{size:20})}),e.jsxs("div",{children:[e.jsx("div",{className:"font-semibold text-gray-200",children:"Download .toml"}),e.jsx("div",{className:"text-xs text-gray-500",children:"Save directly to your computer"})]})]}),e.jsxs("button",{onClick:s,className:"group flex items-center gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-colors hover:border-green-500 hover:bg-green-900/10",children:[e.jsx("div",{className:"rounded-full bg-green-900/30 p-2 text-green-400 transition-colors group-hover:bg-green-600 group-hover:text-white",children:e.jsx(Xe,{size:20})}),e.jsxs("div",{children:[e.jsx("div",{className:"font-semibold text-gray-200",children:"Copy to Clipboard"}),e.jsx("div",{className:"text-xs text-gray-500",children:"Paste into your starship.toml"})]})]}),e.jsxs("button",{onClick:n,className:"group flex items-center gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-colors hover:border-purple-500 hover:bg-purple-900/10",children:[e.jsx("div",{className:"rounded-full bg-purple-900/30 p-2 text-purple-400 transition-colors group-hover:bg-purple-600 group-hover:text-white",children:e.jsx(At,{size:20})}),e.jsxs("div",{children:[e.jsx("div",{className:"font-semibold text-gray-200",children:"Share Link"}),e.jsx("div",{className:"text-xs text-gray-500",children:"Generate a URL to this theme"})]})]})]}),e.jsxs("div",{className:"flex flex-col gap-2 rounded-lg border border-gray-700 bg-black/50 p-4",children:[e.jsxs("div",{className:"flex items-center gap-2 text-sm font-medium text-gray-400",children:[e.jsx(Ze,{size:16})," Install Command"]}),e.jsxs("div",{className:"flex-1 rounded border border-gray-800 bg-[#0d1117] p-3 font-mono text-xs text-gray-300",children:["mkdir -p ~/.config && touch ~/.config/starship.toml",e.jsx("br",{}),e.jsx("br",{}),"# Paste the clipboard contents into ~/.config/starship.toml"]})]})]})}function Zr({className:a}){return e.jsx(It,{className:T("animate-spin text-blue-500",a)})}function Qr({onClose:a}){const{importToml:t}=M(),{addToast:r}=q(),[s,n]=m.useState(""),[o,d]=m.useState(""),[i,l]=m.useState(null),[c,f]=m.useState([]),[y,v]=m.useState(null),[g,w]=m.useState(!1),x=h=>{try{t(h),r("Theme imported successfully!","success"),a()}catch(_){l(`Failed to import: ${_ instanceof Error?_.message:String(_)}`)}},u=h=>{try{l(null),f([]),v(null);const _=F.parse(h),{valid:$,errors:j,warnings:N}=F.validate(_);return $?N.length>0?(f(N),v(h),!1):confirm("This will overwrite your current theme. Are you sure?")?(x(h),!0):!1:(l(`Invalid config: ${j.join(", ")||"Unknown error"}`),!1)}catch(_){return l(`Invalid TOML syntax: ${_ instanceof Error?_.message:String(_)}`),!1}},b=h=>{const _=h.target.files?.[0];if(_)try{const $=new FileReader;$.onload=j=>{try{const N=j.target?.result;u(N)}catch(N){l(`Failed to process file: ${N instanceof Error?N.message:String(N)}`)}},$.onerror=()=>{l("Failed to read file.")},$.readAsText(_)}catch($){l(`Failed to load file: ${$ instanceof Error?$.message:String($)}`)}finally{h.target.value=""}},p=()=>{if(!s.trim()){l("Please paste TOML configuration first.");return}try{u(s)}catch(h){l(`Failed to import: ${h instanceof Error?h.message:String(h)}`)}},C=async()=>{if(!o.trim()){l("Please enter a URL.");return}w(!0),l(null);try{const h=await fetch(o);if(!h.ok)throw new Error("Failed to fetch from URL");const _=await h.text();u(_)}catch{l("Failed to fetch from URL. Make sure it points to a raw text file.")}finally{w(!1)}};return e.jsxs("div",{className:"flex flex-col gap-6",children:[i&&e.jsxs("div",{className:"flex items-start gap-2 rounded-md border border-red-800 bg-red-900/20 p-3 text-sm text-red-200",children:[e.jsx(ve,{size:16,className:"mt-0.5 shrink-0"}),e.jsx("p",{children:i})]}),c.length>0&&y&&e.jsxs("div",{className:"flex flex-col gap-3 rounded-md border border-yellow-800 bg-yellow-900/20 p-4 text-sm text-yellow-200",children:[e.jsxs("div",{className:"flex items-start gap-2 font-semibold",children:[e.jsx(ve,{size:18,className:"shrink-0"}),e.jsx("p",{children:"Import Warnings"})]}),e.jsxs("ul",{className:"ml-6 list-disc space-y-1 opacity-90",children:[c.slice(0,5).map((h,_)=>e.jsx("li",{children:h},_)),c.length>5&&e.jsxs("li",{children:["...and ",c.length-5," more warnings"]})]}),e.jsx("p",{className:"mt-2 text-yellow-100 opacity-90",children:"This will overwrite your current theme. Do you still want to proceed?"}),e.jsxs("div",{className:"mt-3 flex gap-3",children:[e.jsx("button",{onClick:()=>x(y),className:"rounded bg-yellow-600 px-4 py-2 font-medium text-white hover:bg-yellow-500",children:"Import Anyway"}),e.jsx("button",{onClick:()=>{f([]),v(null)},className:"rounded border border-yellow-700 bg-transparent px-4 py-2 font-medium text-yellow-200 hover:bg-yellow-900/40",children:"Cancel"})]})]}),e.jsxs("div",{className:"grid gap-6 md:grid-cols-2",children:[e.jsxs("div",{className:"flex flex-col gap-4",children:[e.jsxs("div",{className:"relative overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-colors hover:border-blue-500",children:[e.jsx("input",{type:"file",accept:".toml,.txt",onChange:b,className:"absolute inset-0 z-10 cursor-pointer opacity-0"}),e.jsxs("div",{className:"flex flex-col items-center justify-center p-6 text-center",children:[e.jsx(Rt,{className:"mb-2 text-gray-400",size:24}),e.jsx("div",{className:"font-semibold text-gray-200",children:"Upload File"}),e.jsx("div",{className:"text-xs text-gray-500",children:"Drop your starship.toml here"})]})]}),e.jsxs("div",{className:"flex flex-col gap-2 rounded-lg border border-gray-700 bg-gray-800 p-4",children:[e.jsxs("div",{className:"flex items-center gap-2 text-sm font-medium text-gray-300",children:[e.jsx(Qe,{size:16})," From URL / Gist"]}),e.jsxs("div",{className:"flex gap-2",children:[e.jsx("input",{type:"url",value:o,onChange:h=>d(h.target.value),placeholder:"https://raw.githubusercontent.com/...",disabled:g,className:"flex-1 rounded border border-gray-700 bg-gray-900 px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"}),e.jsxs("button",{onClick:C,disabled:g,className:"flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50",children:[g&&e.jsx(Zr,{className:"h-4 w-4 text-white"}),g?"Loading...":"Fetch"]})]})]})]}),e.jsxs("div",{className:"flex flex-col gap-2 rounded-lg border border-gray-700 bg-gray-800 p-4",children:[e.jsxs("div",{className:"flex items-center justify-between",children:[e.jsxs("div",{className:"flex items-center gap-2 text-sm font-medium text-gray-300",children:[e.jsx(Ft,{size:16})," Paste TOML"]}),e.jsx("button",{onClick:p,className:"rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-500",children:"Import"})]}),e.jsx("textarea",{value:s,onChange:h=>n(h.target.value),placeholder:"[character]\\nsuccess_symbol = '❯'\\n...",className:"flex-1 resize-none rounded border border-gray-700 bg-gray-900 p-3 font-mono text-xs text-gray-300 focus:border-blue-500 focus:outline-none",rows:8})]})]})]})}function ea({onClose:a,initialTab:t="export"}){const[r,s]=m.useState(t);return e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm",children:e.jsxs("div",{className:"flex w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsxs("div",{className:"flex items-center gap-4",children:[e.jsx("button",{onClick:()=>s("export"),className:T("text-lg font-bold transition-colors",r==="export"?"text-white":"text-gray-500 hover:text-gray-300"),children:"Export"}),e.jsx("span",{className:"text-gray-600",children:"/"}),e.jsx("button",{onClick:()=>s("import"),className:T("text-lg font-bold transition-colors",r==="import"?"text-white":"text-gray-500 hover:text-gray-300"),children:"Import"})]}),e.jsx("button",{onClick:a,className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white","aria-label":"Close",children:e.jsx(P,{size:20})})]}),e.jsx("div",{className:"p-6",children:r==="export"?e.jsx(Xr,{}):e.jsx(Qr,{onClose:a})})]})})}function ct({isOpen:a,onClose:t,title:r,children:s,className:n,footer:o}){return a?e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm","aria-labelledby":"modal-title",role:"dialog","aria-modal":"true",onClick:t,children:e.jsxs("div",{className:T("relative w-full max-w-lg rounded-xl border border-gray-700 bg-gray-800 text-gray-200 shadow-2xl",n),onClick:d=>d.stopPropagation(),children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-700 px-6 py-4",children:[e.jsx("h3",{id:"modal-title",className:"text-lg font-semibold",children:r}),e.jsx("button",{onClick:t,className:"rounded-full p-1.5 text-gray-400 transition-colors hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500","aria-label":"Close modal",children:e.jsx(P,{size:20})})]}),e.jsx("div",{className:"px-6 py-5",children:s}),o&&e.jsx("div",{className:"flex justify-end gap-3 border-t border-gray-700 px-6 py-4",children:o})]})}):null}const ta=["FiraCode NF","JetBrainsMono NF","Hack NF","RobotoMono NF","MesloLGS NF"],ra={"FiraCode NF":"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip","JetBrainsMono NF":"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip","Hack NF":"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip","RobotoMono NF":"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip","MesloLGS NF":"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip"},Ge={"FiraCode NF":"https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf","JetBrainsMono NF":"https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Nerd%20Font%20Complete.ttf","Hack NF":"https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Hack/Regular/complete/Hack%20Nerd%20Font%20Complete.ttf","RobotoMono NF":"https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/RobotoMono/Regular/complete/Roboto%20Mono%20Nerd%20Font%20Complete.ttf","MesloLGS NF":"https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Meslo/M/Regular/complete/Meslo%20LGS%20NF%20Regular.ttf"};function aa({currentFont:a,onSelectFont:t}){const[r,s]=m.useState(!1),[n,o]=m.useState(!1);m.useEffect(()=>{(async()=>{if(a&&Ge[a]){const l=new FontFace(a,`url(${Ge[a]})`);await l.load(),document.fonts.add(l),console.warn(`Font ${a} loaded.`)}})()},[a]);const d=m.useCallback(()=>{const i=ra[a];if(i){const l=document.createElement("a");l.href=i,l.download=`${a.replace(/ /g,"")}.zip`,document.body.appendChild(l),l.click(),document.body.removeChild(l),o(!0)}else console.error("No download URL found for this font.")},[a]);return e.jsxs("div",{className:"relative",children:[e.jsxs("button",{type:"button",className:"flex w-full items-center justify-between rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 shadow-sm transition-colors hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",onClick:()=>s(!r),"aria-haspopup":"listbox","aria-expanded":r,children:[e.jsx("span",{style:{fontFamily:a},children:a}),e.jsx(Mt,{size:16,className:T("transform transition-transform",r?"rotate-180":"rotate-0")})]}),r&&e.jsxs("ul",{className:"absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-md border border-gray-700 bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",children:[ta.map(i=>e.jsx("li",{className:"cursor-pointer select-none px-3 py-2 text-sm text-gray-200 hover:bg-gray-700",onClick:()=>{t(i),s(!1)},style:{fontFamily:i},children:i},i)),e.jsx("li",{className:"mt-1 border-t border-gray-700 pt-1",children:e.jsxs("button",{onClick:d,className:"flex w-full items-center gap-2 px-3 py-2 text-sm text-blue-400 hover:bg-gray-700",children:[e.jsx(ce,{size:16}),' Download & Install "',a,'"']})})]}),e.jsx(ct,{isOpen:n,onClose:()=>o(!1),title:`Install ${a}`,children:e.jsxs("div",{className:"space-y-4 text-gray-300",children:[e.jsx("p",{children:"Your font has been downloaded! Now, follow these steps to install it:"}),e.jsxs("ul",{className:"list-inside list-disc space-y-2",children:[e.jsxs("li",{children:[e.jsx("strong",{children:"1. Locate the downloaded .zip file:"})," Check your browser's downloads (e.g., `~/Downloads/$",a.replace(/ /g,""),".zip`)."]}),e.jsxs("li",{children:[e.jsx("strong",{children:"2. Extract the fonts:"})," Unzip the downloaded file. You'll find several `.ttf` or `.otf` font files inside."]}),e.jsxs("li",{children:[e.jsx("strong",{children:"3. Install the fonts:"}),e.jsxs("ul",{className:"ml-4 list-inside list-disc space-y-1 text-sm text-gray-400",children:[e.jsxs("li",{children:[e.jsx("strong",{children:"Windows:"}),' Select all font files, right-click, and choose "Install" or "Install for all users."']}),e.jsxs("li",{children:[e.jsx("strong",{children:"macOS:"}),' Select all font files, double-click, and in the Font Book window, click "Install Font."']}),e.jsxs("li",{children:[e.jsx("strong",{children:"Linux:"})," Copy the font files to `~/.local/share/fonts/` (for your user) or `/usr/share/fonts/` (system-wide) and then run `fc-cache -fv` in your terminal."]})]})]}),e.jsxs("li",{children:[e.jsx("strong",{children:"4. Configure your terminal:"})," Open your terminal's settings (e.g., Alacritty, iTerm2, Konsole, GNOME Terminal) and set the font family to `",a,"`."]}),e.jsxs("li",{children:[e.jsx("strong",{children:"5. Restart your terminal:"})," Close and reopen your terminal application to apply the new font."]})]}),e.jsxs("div",{className:"flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200",children:[e.jsx(V,{size:16,className:"mt-0.5 shrink-0"}),e.jsxs("p",{children:[e.jsx("strong",{children:"Note:"})," Starship itself does not install fonts. This action helps you get the font onto your system, but you must configure your terminal emulator to use it."]})]})]})})]})}const sa=["All","Arrows","Git","Languages","Cloud","Containers","Misc"],na=[{icon:"",name:"Powerline Arrow Right",category:"Arrows"},{icon:"",name:"Powerline Arrow Left",category:"Arrows"},{icon:"",name:"Powerline Arrow Right Thin",category:"Arrows"},{icon:"",name:"Powerline Arrow Left Thin",category:"Arrows"},{icon:"",name:"Flame Right",category:"Arrows"},{icon:"",name:"Rounded Right",category:"Arrows"},{icon:"",name:"Rounded Right Thin",category:"Arrows"},{icon:"",name:"Rounded Left",category:"Arrows"},{icon:"",name:"Rounded Left Thin",category:"Arrows"},{icon:"",name:"Slant Right",category:"Arrows"},{icon:"",name:"Slant Left",category:"Arrows"},{icon:"",name:"Pixelated Right",category:"Arrows"},{icon:"",name:"Pixelated Left",category:"Arrows"},{icon:"",name:"Ice Right",category:"Arrows"},{icon:"",name:"Ice Left",category:"Arrows"},{icon:"→",name:"Right Arrow",category:"Arrows"},{icon:"⇒",name:"Right Double Arrow",category:"Arrows"},{icon:"➔",name:"Heavy Right Arrow",category:"Arrows"},{icon:"➜",name:"Heavy Round Right Arrow",category:"Arrows"},{icon:"❯",name:"Heavy Right Angle Bracket",category:"Arrows"},{icon:"⚡",name:"Lightning Zap",category:"Arrows"},{icon:"",name:"Branch (Powerline)",category:"Git"},{icon:"",name:"Branch (FontAwesome)",category:"Git"},{icon:"",name:"Git Repo",category:"Git"},{icon:"",name:"Pull Request",category:"Git"},{icon:"",name:"Commit",category:"Git"},{icon:"±",name:"Plus-Minus (Status)",category:"Git"},{icon:"⇡",name:"Upwards Dashed Arrow (Ahead)",category:"Git"},{icon:"⇣",name:"Downwards Dashed Arrow (Behind)",category:"Git"},{icon:"⇕",name:"Up Down Arrow (Diverged)",category:"Git"},{icon:"x",name:"Cross (Conflicted)",category:"Git"},{icon:"!",name:"Exclamation (Modified)",category:"Git"},{icon:"+",name:"Plus (Added)",category:"Git"},{icon:"?",name:"Question (Untracked)",category:"Git"},{icon:"",name:"Node.js (NerdFont)",category:"Languages"},{icon:"",name:"React",category:"Languages"},{icon:"",name:"Python (NerdFont)",category:"Languages"},{icon:"",name:"Rust (NerdFont)",category:"Languages"},{icon:"",name:"Go (NerdFont)",category:"Languages"},{icon:"",name:"Java (NerdFont)",category:"Languages"},{icon:"",name:"PHP (NerdFont)",category:"Languages"},{icon:"",name:"Ruby (NerdFont)",category:"Languages"},{icon:"",name:"C++",category:"Languages"},{icon:"",name:"C#",category:"Languages"},{icon:"",name:"Cloud (FontAwesome)",category:"Cloud"},{icon:"",name:"AWS (NerdFont)",category:"Cloud"},{icon:"",name:"Azure (NerdFont)",category:"Cloud"},{icon:"☁️",name:"Cloud Emoji",category:"Cloud"},{icon:"",name:"Docker (FontAwesome)",category:"Containers"},{icon:"󱃾",name:"Kubernetes (Material)",category:"Containers"},{icon:"📦",name:"Package",category:"Containers"},{icon:"󰏗",name:"Box (Material)",category:"Containers"},{icon:"",name:"Folder (Solid)",category:"Misc"},{icon:"",name:"Folder (Open)",category:"Misc"},{icon:"",name:"Home",category:"Misc"},{icon:"",name:"Arch Linux",category:"Misc"},{icon:"",name:"Apple",category:"Misc"},{icon:"",name:"Windows",category:"Misc"},{icon:"🚀",name:"Rocket",category:"Misc"},{icon:"✓",name:"Check",category:"Misc"},{icon:"✗",name:"Cross",category:"Misc"},{icon:"",name:"Clock (FontAwesome)",category:"Misc"},{icon:"",name:"Battery (Half)",category:"Misc"}];function de({onSelect:a,currentSymbol:t}){const[r,s]=m.useState(""),[n,o]=m.useState("All"),d=na.filter(i=>{const l=n==="All"||i.category===n,c=i.name.toLowerCase().includes(r.toLowerCase())||i.icon.includes(r);return l&&c});return e.jsxs("div",{className:"flex h-full max-h-[400px] flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 shadow-xl",children:[e.jsxs("div",{className:"flex flex-col gap-3 border-b border-gray-800 p-4",children:[e.jsxs("div",{className:"relative",children:[e.jsx(Se,{className:"absolute left-3 top-1/2 -translate-y-1/2 text-gray-500",size:16}),e.jsx("input",{type:"text",placeholder:"Search symbols...",value:r,onChange:i=>s(i.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800 py-2 pl-9 pr-8 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),r&&e.jsx("button",{onClick:()=>s(""),className:"absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 hover:bg-gray-700 hover:text-white","aria-label":"Clear search",children:e.jsx(P,{size:14})})]}),e.jsx("div",{className:"scrollbar-none flex gap-2 overflow-x-auto pb-1",children:sa.map(i=>e.jsx("button",{onClick:()=>o(i),className:T("whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition-colors",n===i?"bg-blue-600 text-white":"bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"),children:i},i))})]}),e.jsx("div",{className:"scrollbar-thin scrollbar-thumb-gray-700 flex-1 overflow-y-auto p-4",children:d.length===0?e.jsxs("div",{className:"flex h-32 items-center justify-center text-sm text-gray-500",children:['No symbols found matching "',r,'"']}):e.jsx("div",{className:"grid grid-cols-6 gap-2 sm:grid-cols-8",children:d.map((i,l)=>{const c=t?.includes(i.icon);return e.jsxs("button",{onClick:()=>a(i.icon),className:T("group relative flex aspect-square flex-col items-center justify-center rounded-md border transition-all",c?"border-blue-500 bg-blue-900/20":"border-gray-800 bg-gray-800 hover:border-gray-600 hover:bg-gray-700"),title:i.name,children:[e.jsx("span",{className:T("text-xl",c?"text-blue-400":"text-gray-200 group-hover:text-white"),children:i.icon}),c&&e.jsx("div",{className:"absolute -right-1 -top-1 rounded-full bg-blue-500 p-0.5 text-white",children:e.jsx(et,{size:10})})]},`${i.icon}-${l}`)})})})]})}function me(){return(me=Object.assign||function(a){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var s in r)Object.prototype.hasOwnProperty.call(r,s)&&(a[s]=r[s])}return a}).apply(this,arguments)}function mt(a,t){if(a==null)return{};var r,s,n={},o=Object.keys(a);for(s=0;s<o.length;s++)t.indexOf(r=o[s])>=0||(n[r]=a[r]);return n}function je(a){var t=m.useRef(a),r=m.useRef(function(s){t.current&&t.current(s)});return t.current=a,r.current}var ae=function(a,t,r){return t===void 0&&(t=0),r===void 0&&(r=1),a>r?r:a<t?t:a},ee=function(a){return"touches"in a},_e=function(a){return a&&a.ownerDocument.defaultView||self},We=function(a,t,r){var s=a.getBoundingClientRect(),n=ee(t)?(function(o,d){for(var i=0;i<o.length;i++)if(o[i].identifier===d)return o[i];return o[0]})(t.touches,r):t;return{left:ae((n.pageX-(s.left+_e(a).pageXOffset))/s.width),top:ae((n.pageY-(s.top+_e(a).pageYOffset))/s.height)}},qe=function(a){!ee(a)&&a.preventDefault()},ut=D.memo(function(a){var t=a.onMove,r=a.onKey,s=mt(a,["onMove","onKey"]),n=m.useRef(null),o=je(t),d=je(r),i=m.useRef(null),l=m.useRef(!1),c=m.useMemo(function(){var g=function(u){qe(u),(ee(u)?u.touches.length>0:u.buttons>0)&&n.current?o(We(n.current,u,i.current)):x(!1)},w=function(){return x(!1)};function x(u){var b=l.current,p=_e(n.current),C=u?p.addEventListener:p.removeEventListener;C(b?"touchmove":"mousemove",g),C(b?"touchend":"mouseup",w)}return[function(u){var b=u.nativeEvent,p=n.current;if(p&&(qe(b),!(function(h,_){return _&&!ee(h)})(b,l.current)&&p)){if(ee(b)){l.current=!0;var C=b.changedTouches||[];C.length&&(i.current=C[0].identifier)}p.focus(),o(We(p,b,i.current)),x(!0)}},function(u){var b=u.which||u.keyCode;b<37||b>40||(u.preventDefault(),d({left:b===39?.05:b===37?-.05:0,top:b===40?.05:b===38?-.05:0}))},x]},[d,o]),f=c[0],y=c[1],v=c[2];return m.useEffect(function(){return v},[v]),D.createElement("div",me({},s,{onTouchStart:f,onMouseDown:f,className:"react-colorful__interactive",ref:n,onKeyDown:y,tabIndex:0,role:"slider"}))}),Ee=function(a){return a.filter(Boolean).join(" ")},pt=function(a){var t=a.color,r=a.left,s=a.top,n=s===void 0?.5:s,o=Ee(["react-colorful__pointer",a.className]);return D.createElement("div",{className:o,style:{top:100*n+"%",left:100*r+"%"}},D.createElement("div",{className:"react-colorful__pointer-fill",style:{backgroundColor:t}}))},z=function(a,t,r){return t===void 0&&(t=0),r===void 0&&(r=Math.pow(10,t)),Math.round(r*a)/r},oa=function(a){return ma(Ne(a))},Ne=function(a){return a[0]==="#"&&(a=a.substring(1)),a.length<6?{r:parseInt(a[0]+a[0],16),g:parseInt(a[1]+a[1],16),b:parseInt(a[2]+a[2],16),a:a.length===4?z(parseInt(a[3]+a[3],16)/255,2):1}:{r:parseInt(a.substring(0,2),16),g:parseInt(a.substring(2,4),16),b:parseInt(a.substring(4,6),16),a:a.length===8?z(parseInt(a.substring(6,8),16)/255,2):1}},ia=function(a){return ca(da(a))},la=function(a){var t=a.s,r=a.v,s=a.a,n=(200-t)*r/100;return{h:z(a.h),s:z(n>0&&n<200?t*r/100/(n<=100?n:200-n)*100:0),l:z(n/2),a:z(s,2)}},Ce=function(a){var t=la(a);return"hsl("+t.h+", "+t.s+"%, "+t.l+"%)"},da=function(a){var t=a.h,r=a.s,s=a.v,n=a.a;t=t/360*6,r/=100,s/=100;var o=Math.floor(t),d=s*(1-r),i=s*(1-(t-o)*r),l=s*(1-(1-t+o)*r),c=o%6;return{r:z(255*[s,i,d,d,l,s][c]),g:z(255*[l,s,s,i,d,d][c]),b:z(255*[d,d,l,s,s,i][c]),a:z(n,2)}},oe=function(a){var t=a.toString(16);return t.length<2?"0"+t:t},ca=function(a){var t=a.r,r=a.g,s=a.b,n=a.a,o=n<1?oe(z(255*n)):"";return"#"+oe(t)+oe(r)+oe(s)+o},ma=function(a){var t=a.r,r=a.g,s=a.b,n=a.a,o=Math.max(t,r,s),d=o-Math.min(t,r,s),i=d?o===t?(r-s)/d:o===r?2+(s-t)/d:4+(t-r)/d:0;return{h:z(60*(i<0?i+6:i)),s:z(o?d/o*100:0),v:z(o/255*100),a:n}},ua=D.memo(function(a){var t=a.hue,r=a.onChange,s=Ee(["react-colorful__hue",a.className]);return D.createElement("div",{className:s},D.createElement(ut,{onMove:function(n){r({h:360*n.left})},onKey:function(n){r({h:ae(t+360*n.left,0,360)})},"aria-label":"Hue","aria-valuenow":z(t),"aria-valuemax":"360","aria-valuemin":"0"},D.createElement(pt,{className:"react-colorful__hue-pointer",left:t/360,color:Ce({h:t,s:100,v:100,a:1})})))}),pa=D.memo(function(a){var t=a.hsva,r=a.onChange,s={backgroundColor:Ce({h:t.h,s:100,v:100,a:1})};return D.createElement("div",{className:"react-colorful__saturation",style:s},D.createElement(ut,{onMove:function(n){r({s:100*n.left,v:100-100*n.top})},onKey:function(n){r({s:ae(t.s+100*n.left,0,100),v:ae(t.v-100*n.top,0,100)})},"aria-label":"Color","aria-valuetext":"Saturation "+z(t.s)+"%, Brightness "+z(t.v)+"%"},D.createElement(pt,{className:"react-colorful__saturation-pointer",top:1-t.v/100,left:t.s/100,color:Ce(t)})))}),ft=function(a,t){if(a===t)return!0;for(var r in a)if(a[r]!==t[r])return!1;return!0},fa=function(a,t){return a.toLowerCase()===t.toLowerCase()||ft(Ne(a),Ne(t))};function ya(a,t,r){var s=je(r),n=m.useState(function(){return a.toHsva(t)}),o=n[0],d=n[1],i=m.useRef({color:t,hsva:o});m.useEffect(function(){if(!a.equal(t,i.current.color)){var c=a.toHsva(t);i.current={hsva:c,color:t},d(c)}},[t,a]),m.useEffect(function(){var c;ft(o,i.current.hsva)||a.equal(c=a.fromHsva(o),i.current.color)||(i.current={hsva:o,color:c},s(c))},[o,a,s]);var l=m.useCallback(function(c){d(function(f){return Object.assign({},f,c)})},[]);return[o,l]}var ga=typeof window<"u"?m.useLayoutEffect:m.useEffect,ba=function(){return typeof __webpack_nonce__<"u"?__webpack_nonce__:void 0},He=new Map,ha=function(a){ga(function(){var t=a.current?a.current.ownerDocument:document;if(t!==void 0&&!He.has(t)){var r=t.createElement("style");r.innerHTML=`.react-colorful{position:relative;display:flex;flex-direction:column;width:200px;height:200px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default}.react-colorful__saturation{position:relative;flex-grow:1;border-color:transparent;border-bottom:12px solid #000;border-radius:8px 8px 0 0;background-image:linear-gradient(0deg,#000,transparent),linear-gradient(90deg,#fff,hsla(0,0%,100%,0))}.react-colorful__alpha-gradient,.react-colorful__pointer-fill{content:"";position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;border-radius:inherit}.react-colorful__alpha-gradient,.react-colorful__saturation{box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}.react-colorful__alpha,.react-colorful__hue{position:relative;height:24px}.react-colorful__hue{background:linear-gradient(90deg,red 0,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,red)}.react-colorful__last-control{border-radius:0 0 8px 8px}.react-colorful__interactive{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:inherit;outline:none;touch-action:none}.react-colorful__pointer{position:absolute;z-index:1;box-sizing:border-box;width:28px;height:28px;transform:translate(-50%,-50%);background-color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,.2)}.react-colorful__interactive:focus .react-colorful__pointer{transform:translate(-50%,-50%) scale(1.1)}.react-colorful__alpha,.react-colorful__alpha-pointer{background-color:#fff;background-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>')}.react-colorful__saturation-pointer{z-index:3}.react-colorful__hue-pointer{z-index:2}`,He.set(t,r);var s=ba();s&&r.setAttribute("nonce",s),t.head.appendChild(r)}},[])},xa=function(a){var t=a.className,r=a.colorModel,s=a.color,n=s===void 0?r.defaultColor:s,o=a.onChange,d=mt(a,["className","colorModel","color","onChange"]),i=m.useRef(null);ha(i);var l=ya(r,n,o),c=l[0],f=l[1],y=Ee(["react-colorful",t]);return D.createElement("div",me({},d,{ref:i,className:y}),D.createElement(pa,{hsva:c,onChange:f}),D.createElement(ua,{hue:c.h,onChange:f,className:"react-colorful__last-control"}))},va={defaultColor:"000",toHsva:oa,fromHsva:function(a){return ia({h:a.h,s:a.s,v:a.v,a:1})},equal:fa},wa=function(a){return D.createElement(xa,me({},a,{colorModel:va}))};rt([it,ot]);const ja=["#000000","#FF0000","#00FF00","#FFFF00","#0000FF","#FF00FF","#00FFFF","#FFFFFF","#808080","#C0C0C0"],_a=D.memo(function({color:t,onClick:r,title:s,ariaLabel:n}){const o=m.useRef(null);return m.useEffect(()=>{o.current&&(o.current.style.backgroundColor=t)},[t]),e.jsx("button",{type:"button",ref:o,"data-color":t,className:"h-6 w-6 rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:ring-offset-gray-800",onClick:r,title:s,"aria-label":n})});function Ke({color:a,onChange:t,label:r,className:s}){const[n,o]=m.useState(!1),[d,i]=m.useState(a),l=m.useRef(null),c=m.useRef(null),{currentTheme:f}=M(),y=m.useMemo(()=>{const b=f.config.palettes?.[f.config.palette||"global"]||{},p=Object.values(b);return[...new Set([...p,...ja])]},[f.config.palette,f.config.palettes]);m.useEffect(()=>{i(a)},[a]),m.useEffect(()=>{function b(p){l.current&&!l.current.contains(p.target)&&o(!1)}return document.addEventListener("mousedown",b),()=>document.removeEventListener("mousedown",b)},[]);const v=m.useCallback(b=>{i(b),t(b)},[t]),g=b=>{i(b.target.value),H(b.target.value).isValid()&&t(b.target.value)},w=m.useCallback(b=>{const p=b.currentTarget.getAttribute("data-color");p&&v(p)},[v]);m.useEffect(()=>{c.current&&(c.current.style.backgroundColor=d)},[d]);const x=k.checkContrast(d,"#000000"),u=x.ratio>=4.5;return e.jsxs("div",{className:T("relative",s),ref:l,children:[r&&e.jsx("label",{className:"mb-1.5 block text-xs font-medium text-gray-400",children:r}),e.jsxs("div",{className:"flex gap-2",children:[e.jsx("button",{type:"button",ref:c,className:"h-9 w-9 shrink-0 cursor-pointer rounded-md border border-gray-700 shadow-sm transition-transform active:scale-95",onClick:()=>o(!n),"aria-label":`Toggle color picker, current color is ${d}`,"aria-expanded":n}),e.jsxs("div",{className:"relative flex-1",children:[e.jsx("input",{type:"text",value:d,onChange:g,className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 font-mono text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",placeholder:"#000000 or red"}),n?e.jsx("button",{onClick:()=>o(!1),className:"absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white","aria-label":"Confirm color",children:e.jsx(et,{size:14})}):e.jsx("button",{onClick:()=>o(!0),className:"absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300","aria-label":"Pick color","aria-expanded":n,children:e.jsx(Dt,{size:14})})]})]}),!u&&d&&e.jsxs("div",{className:"mt-1 flex items-center gap-1.5 text-xs text-yellow-500",children:[e.jsx(Ye,{size:12}),e.jsxs("span",{children:["Low contrast (",x.ratio.toFixed(1),":1)"]})]}),n&&e.jsxs("div",{className:"absolute left-0 top-full z-50 mt-2 w-64 rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-xl",children:[e.jsx("div",{className:"mb-3",children:e.jsx(wa,{color:d.startsWith("#")?d:"#ffffff",onChange:v})}),e.jsx("div",{className:"grid grid-cols-5 gap-2",children:y.map(b=>e.jsx(_a,{color:b,onClick:w,title:b,ariaLabel:`Select color ${b}`},b))})]})]})}function yt({value:a,onChange:t,className:r}){const[s,n]=m.useState(""),[o,d]=m.useState(""),[i,l]=m.useState(!1),[c,f]=m.useState(!1),[y,v]=m.useState(!1),[g,w]=m.useState(!1),[x,u]=m.useState(!1);m.useEffect(()=>{if(!a){n(""),d(""),l(!1),f(!1),v(!1),w(!1),u(!1);return}const _=a.split(/\s+/);let $="",j="",N=!1,I=!1,L=!1,B=!1,U=!1;_.forEach(E=>{E==="bold"?N=!0:E==="italic"?I=!0:E==="underline"?L=!0:E==="dimmed"?B=!0:E==="inverted"?U=!0:E.startsWith("bg:")?j=E.substring(3):$=E}),n($),d(j),l(N),f(I),v(L),w(B),u(U)},[a]);const b=(_,$,j)=>{const N=[];j.bold&&N.push("bold"),j.italic&&N.push("italic"),j.underline&&N.push("underline"),j.dimmed&&N.push("dimmed"),j.inverted&&N.push("inverted"),$&&N.push(`bg:${$}`),_&&N.push(_),t(N.join(" "))},p=_=>{const $={bold:i,italic:c,underline:y,dimmed:g,inverted:x};$[_]=!$[_],_==="bold"&&l(!i),_==="italic"&&f(!c),_==="underline"&&v(!y),_==="dimmed"&&w(!g),_==="inverted"&&u(!x),b(s,o,$)},C=_=>{n(_),b(_,o,{bold:i,italic:c,underline:y,dimmed:g,inverted:x})},h=_=>{d(_),b(s,_,{bold:i,italic:c,underline:y,dimmed:g,inverted:x})};return e.jsxs("div",{className:T("flex flex-col gap-4 rounded-md border border-gray-700 bg-gray-800 p-4",r),children:[e.jsxs("div",{className:"flex gap-4",children:[e.jsxs("div",{className:"flex-1",children:[e.jsx("label",{className:"mb-2 block text-xs font-medium text-gray-400",children:"Foreground"}),e.jsx(Ke,{color:s,onChange:C})]}),e.jsxs("div",{className:"flex-1",children:[e.jsx("label",{className:"mb-2 block text-xs font-medium text-gray-400",children:"Background"}),e.jsx(Ke,{color:o,onChange:h})]})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-2 block text-xs font-medium text-gray-400",children:"Modifiers"}),e.jsxs("div",{className:"flex flex-wrap gap-2",children:[e.jsx("button",{onClick:()=>p("bold"),className:T("flex items-center justify-center rounded border border-transparent p-2 transition-colors",i?"border-blue-500 bg-blue-600 text-white":"bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200"),title:"Bold","aria-label":"Toggle Bold","aria-pressed":i,children:e.jsx(zt,{size:16})}),e.jsx("button",{onClick:()=>p("italic"),className:T("flex items-center justify-center rounded border border-transparent p-2 transition-colors",c?"border-blue-500 bg-blue-600 text-white":"bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200"),title:"Italic","aria-label":"Toggle Italic","aria-pressed":c,children:e.jsx(Lt,{size:16})}),e.jsx("button",{onClick:()=>p("underline"),className:T("flex items-center justify-center rounded border border-transparent p-2 transition-colors",y?"border-blue-500 bg-blue-600 text-white":"bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200"),title:"Underline","aria-label":"Toggle Underline","aria-pressed":y,children:e.jsx(Ot,{size:16})}),e.jsx("button",{onClick:()=>p("dimmed"),className:T("flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors",g?"border-blue-500 bg-blue-600 text-white":"bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200"),"aria-pressed":g,children:"Dim"}),e.jsx("button",{onClick:()=>p("inverted"),className:T("flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors",x?"border-blue-500 bg-blue-600 text-white":"bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200"),"aria-pressed":x,children:"Inverted"})]})]})]})}function Na({segment:a,activeText:t,setActiveText:r,activeStyle:s,setActiveStyle:n,showIconBrowser:o,setShowIconBrowser:d,onSegmentChange:i,onRemove:l,availableModules:c}){const{currentTheme:f}=M();return e.jsxs("div",{className:"mt-4 flex flex-col gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-inner",children:[e.jsxs("h4",{className:"text-sm font-semibold capitalize text-gray-200",children:["Edit ",a.type.replace("Text"," Text")," Segment"]}),(a.type==="text"||a.type==="styledText")&&e.jsx("input",{type:"text",value:t,onChange:y=>{r(y.target.value),i({value:y.target.value}),a.type==="styledText"&&i({text:y.target.value})},className:"w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",placeholder:"Segment text"}),a.type==="module"&&e.jsx("select",{value:a.value,onChange:y=>i({value:y.target.value}),className:"w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",children:c.map(y=>e.jsx("option",{value:y,children:y.replace(/_/g," ")},y))}),(a.type==="styledText"||a.type==="module")&&e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("label",{className:"text-xs font-medium text-gray-400",children:"Style"}),e.jsx(yt,{value:s,onChange:y=>{n(y),i({style:y})}})]}),(a.type==="module"||a.type==="styledText")&&e.jsxs("div",{className:"relative flex flex-col gap-2",children:[e.jsx("label",{className:"text-xs font-medium text-gray-400",children:"Symbol (via Icon Browser)"}),e.jsx("button",{onClick:()=>d(!o),className:"rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700",children:"Browse Icons"}),o&&e.jsx("div",{className:"absolute left-0 top-full z-50 mt-1 w-full sm:w-[300px]",children:e.jsx(de,{currentSymbol:a.type==="module"?f.config[a.value]?.symbol||"":a.text,onSelect:y=>{a.type==="styledText"&&(i({text:y}),r(y)),d(!1)}})})]}),e.jsx("button",{onClick:l,className:"mt-2 self-end rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-500",children:"Remove Segment"})]})}function $e({formatString:a,onChange:t}){const{currentTheme:r}=M(),[s,n]=m.useState([]),[o,d]=m.useState(null),[i,l]=m.useState(!1),[c,f]=m.useState(""),[y,v]=m.useState(""),g=m.useRef(null);m.useEffect(()=>{n((N=>{const I=[],L=N,B=/(\[([^\]]+)\]\(([^)]+)\)|\$([a-zA-Z0-9_]+))/g;let U=0,E;for(;(E=B.exec(L))!==null;)E.index>U&&I.push({type:"text",value:L.substring(U,E.index)}),E[1].startsWith("[")?I.push({type:"styledText",text:E[2],style:E[3]}):E[4]&&I.push({type:"module",value:E[4],style:r.config[E[4]]?.style}),U=B.lastIndex;return L.length>U&&I.push({type:"text",value:L.substring(U)}),I})(a))},[a,r.config]);const w=m.useCallback(j=>j.map(N=>N.type==="text"?N.value:N.type==="module"?`$${N.value}`:N.type==="styledText"?`[${N.text}](${N.style})`:"").join(""),[]),x=j=>{d(j);const N=s[j];N.type==="text"?v(N.value):N.type==="styledText"?v(N.text):v(""),f(s[j].type==="styledText"?s[j].style:""),l(!1)},u=(j,N)=>{const I=[...s];I[j]={...I[j],...N},n(I),t(w(I))},b=j=>{const N=[...s];j==="text"&&N.push({type:"text",value:"New Text"}),j==="module"&&N.push({type:"module",value:"directory"}),j==="styledText"&&N.push({type:"styledText",text:"Styled Text",style:"white"}),n(N),t(w(N)),d(N.length-1)},p=j=>{const N=s.filter((I,L)=>L!==j);n(N),t(w(N)),d(null)},C=()=>b("text"),h=()=>b("module"),_=()=>b("styledText"),$=J.map(j=>j.name);return e.jsxs("div",{className:"flex flex-col gap-3",children:[e.jsxs("div",{className:"flex min-h-[40px] flex-wrap items-center gap-2 rounded-md border border-gray-700 bg-gray-800 p-2",ref:g,children:[s.map((j,N)=>e.jsxs("button",{onClick:()=>x(N),className:T("flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium",o===N?"bg-blue-600 text-white":"bg-gray-700 text-gray-300 hover:bg-gray-600"),children:[j.type==="text"&&e.jsx(Re,{size:12,className:"text-gray-400"}),j.type==="module"&&e.jsx(Fe,{size:12,className:"text-purple-400"}),j.type==="styledText"&&e.jsx(Me,{size:12,className:"text-green-400"}),e.jsxs("span",{children:[j.type==="text"&&j.value,j.type==="module"&&`$${j.value}`,j.type==="styledText"&&`[${j.text}]`]}),o===N&&e.jsx(P,{size:10,className:"ml-1"})]},N)),s.length===0&&e.jsx("span",{className:"p-1 text-sm italic text-gray-500",children:"Click + to add segments"})]}),e.jsxs("div",{className:"flex gap-2",children:[e.jsxs("button",{onClick:C,className:"flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700",children:[e.jsx(Re,{size:16})," Add Text"]}),e.jsxs("button",{onClick:h,className:"flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700",children:[e.jsx(Fe,{size:16})," Add Module"]}),e.jsxs("button",{onClick:_,className:"flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700",children:[e.jsx(Me,{size:16})," Add Styled Text"]})]}),o!==null&&e.jsx(Na,{segment:s[o],activeText:y,setActiveText:v,activeStyle:c,setActiveStyle:f,showIconBrowser:i,setShowIconBrowser:l,onSegmentChange:j=>u(o,j),onRemove:()=>p(o),availableModules:$})]})}function Ca(){const{currentTheme:a,updateConfig:t}=M(),[r,s]=m.useState(null),n=m.useRef(null);m.useEffect(()=>{function i(l){n.current&&!n.current.contains(l.target)&&r&&s(null)}return document.addEventListener("mousedown",i),()=>document.removeEventListener("mousedown",i)},[r]);const o=(i,l)=>{t({[i]:l})},d=(i,l)=>{o(i,l)};return e.jsxs("div",{className:"flex flex-col gap-6",children:[e.jsxs("h2",{className:"flex items-center gap-2 text-lg font-semibold text-white",children:[e.jsx(le,{size:20,className:"text-gray-400"})," Global Format Settings"]}),e.jsxs("div",{className:"space-y-3",children:[e.jsx("label",{className:"block text-sm font-medium text-gray-300",children:"Left Prompt Format"}),e.jsx($e,{formatString:a.config.format||"",onChange:i=>o("format",i)}),e.jsxs("div",{className:"flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200",children:[e.jsx(V,{className:"mt-0.5 h-4 w-4 shrink-0"}),e.jsx("p",{children:"Visually edit the main format string for your left prompt."})]})]}),e.jsxs("div",{className:"space-y-3",children:[e.jsx("label",{className:"block text-sm font-medium text-gray-300",children:"Right Prompt Format (optional)"}),e.jsx($e,{formatString:a.config.right_format||"",onChange:i=>o("right_format",i)}),e.jsxs("div",{className:"flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200",children:[e.jsx(V,{className:"mt-0.5 h-4 w-4 shrink-0"}),e.jsx("p",{children:"Define a separate format string for a right-aligned prompt."})]})]}),e.jsxs("div",{children:[e.jsxs("label",{className:"flex cursor-pointer select-none items-center gap-3 text-sm text-gray-300",children:[e.jsx("input",{type:"checkbox",checked:a.config.add_newline!==!1,onChange:i=>o("add_newline",i.target.checked),className:"h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"}),"Add Newline (before prompt)"]}),e.jsx("p",{className:"mt-1 text-xs text-gray-500",children:"Whether to add a newline before the prompt. Recommended."})]}),e.jsxs("div",{className:"relative space-y-3",children:[e.jsx("label",{className:"block text-sm font-medium text-gray-300",children:"Continuation Prompt"}),e.jsxs("div",{className:"flex gap-2",children:[e.jsx("input",{type:"text",value:a.config.continuation_prompt||"",onChange:i=>o("continuation_prompt",i.target.value),placeholder:`e.g. '[∙](bright-black) '
-`,className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),e.jsx("button",{onClick:()=>s(r==="continuation_prompt"?null:"continuation_prompt"),className:"shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",children:"Browse"})]}),r==="continuation_prompt"&&e.jsx("div",{ref:n,className:"absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]",children:e.jsx(de,{currentSymbol:a.config.continuation_prompt,onSelect:i=>{d("continuation_prompt",i),s(null)}})})]})]})}function $a(){const{updateConfig:a}=M(),{addToast:t}=q(),[r,s]=m.useState(""),[n,o]=m.useState(!1),d=async()=>{if(!r){t("Please enter an image URL.","info");return}o(!0);try{const i=new Worker(new URL("/assets/color-extraction.worker-DL7WZ-Gt.js",import.meta.url),{type:"module"});i.onmessage=l=>{l.data.type==="success"?(a({palette:"extracted",palettes:{extracted:l.data.payload}}),t("Palette extracted and applied!","success")):l.data.type==="error"&&t(l.data.error||"Failed to extract palette.","error"),o(!1),i.terminate()},i.onerror=l=>{console.error("Worker error:",l),t("Worker failed to extract palette.","error"),o(!1),i.terminate()},i.postMessage({imageUrl:r})}catch(i){t(i instanceof Error?i.message:"An unknown error occurred.","error"),o(!1)}};return e.jsxs("div",{className:"mt-4 flex flex-col gap-4 rounded-lg border border-gray-700 bg-gray-800/50 p-4 shadow-sm",children:[e.jsxs("h3",{className:"flex items-center gap-2 font-semibold text-gray-200",children:[e.jsx(Pt,{size:16})," Create Palette from Image"]}),e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("p",{className:"text-xs text-gray-400",children:"Enter the URL of an image to automatically generate a new color palette and apply it to your theme."}),e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsx(Qe,{size:16,className:"text-gray-500"}),e.jsx("input",{type:"text",value:r,onChange:i=>s(i.target.value),placeholder:"https://example.com/wallpaper.jpg",className:"flex-grow rounded-md border border-gray-600 bg-gray-900 px-3 py-1.5 text-sm text-gray-200 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",disabled:n})]})]}),e.jsx("button",{onClick:d,disabled:n,className:"w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-gray-600",children:n?"Extracting...":"Extract & Apply Palette"})]})}const gt=m.createContext(null),Ae=()=>{const a=m.useContext(gt);if(!a)throw new Error("useConfirmation must be used within a ConfirmationProvider");return a},ka=({children:a})=>{const[t,r]=m.useState(null),[s,n]=m.useState(null),o=m.useCallback(l=>new Promise(c=>{r(l),n(()=>c)}),[]),d=()=>{r(null),s&&(s(!1),n(null))},i=()=>{r(null),s&&(s(!0),n(null))};return e.jsxs(gt.Provider,{value:o,children:[a,t&&e.jsx(ct,{isOpen:!!t,onClose:d,title:t.title,footer:e.jsxs(e.Fragment,{children:[e.jsx("button",{onClick:d,className:"rounded-md border border-gray-600 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700",children:t.cancelText||"Cancel"}),e.jsx("button",{onClick:i,className:"rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500",children:t.confirmText||"Confirm"})]}),children:e.jsx("p",{className:"text-gray-400",children:t.message})})]})},te={clean:{name:"Clean State",description:"Clean git repository on main branch",values:{username:"jules",hostname:"macbook-pro",directory:"~/projects/starship-theme-creator",git_branch:"main",git_state:"",git_status:"",git_metrics:"",nodejs:"",rust:"",python:"",docker_context:"",kubernetes:"",package:"v1.0.0",cmd_duration:"2s",character:"❯",shell:"zsh",shlvl:"1",jobs:"0",memory_usage:"2.4GB",battery:"95%",time:"14:30:45",status:"0"}},dev:{name:"Development State",description:"Active development with modified files",values:{username:"jules",hostname:"dev-server",directory:"~/work/api-service",git_branch:"feature/auth-flow",git_state:"",git_status:"[3~](yellow) [+1](green)",git_metrics:"+120 -45",nodejs:"v18.16.0",rust:"",python:"",docker_context:"dev-context",kubernetes:"",package:"v0.5.2",cmd_duration:"500ms",character:"❯",shell:"bash",shlvl:"2",jobs:"1",memory_usage:"4.8GB",battery:"45%",time:"16:15:00",status:"0",golang:"v1.21.0",php:"v8.2.0"}},multilang:{name:"Multi-Language",description:"Project using multiple languages",values:{username:"jules",hostname:"polyglot",directory:"~/code/fullstack-app",git_branch:"develop",git_state:"",git_status:"⇡2 ⇣1",git_metrics:"",nodejs:"v20.2.0",rust:"v1.70.0",python:"v3.11.4",docker_context:"",kubernetes:"",package:"v2.0.0-beta",cmd_duration:"12s",character:"❯",shell:"fish",shlvl:"1",jobs:"0",memory_usage:"8.1GB",battery:"100%",time:"09:00:12",status:"0",java:"v17.0.7",ruby:"v3.2.2",elixir:"v1.14.5"}},devops:{name:"DevOps Context",description:"Cloud and container context",values:{username:"ops",hostname:"bastion",directory:"~/infra/k8s-prod",git_branch:"production",git_state:"",git_status:"",git_metrics:"",nodejs:"",rust:"",python:"",docker_context:"registry.example.com",kubernetes:"prod-cluster-us-east",aws:"us-west-2",gcloud:"my-project",azure:"subscription-1",package:"",cmd_duration:"",character:"#",shell:"zsh",shlvl:"1",jobs:"3",memory_usage:"12.4GB",battery:"80%",time:"23:45:01",status:"0",terraform:"v1.5.0",helm:"v3.12.0"}},error:{name:"Error State",description:"Failed command and git conflicts",values:{username:"jules",hostname:"macbook-pro",directory:"~/projects/broken-build",git_branch:"fix/urgent-bug",git_state:"MERGING",git_status:"x5 !2",git_metrics:"",nodejs:"v14.0.0",rust:"",python:"",docker_context:"",kubernetes:"",package:"v0.0.1",cmd_duration:"1m 30s",character:"✖",shell:"zsh",shlvl:"1",jobs:"0",memory_usage:"3.1GB",battery:"12%",time:"02:10:55",status:"1"}}};function Sa(a,t,r){const s=t.custom,o=!!s?.[a]?s?.[a]:t[a];if(!o||o.disabled||!r.values[a])return"";const d=r.values[a];if(a==="character"){const y=o,w=(r.name.toLowerCase().includes("error")?y.error_symbol??"[❯](bold red)":y.success_symbol??"[❯](bold green)").match(/\]\(([^)]+)\)$/),x=w?w[1]:o.style??"";return`[${d}](${x}) `}const i=o.format??"[$symbol$value]($style) ",l=o.symbol??"",c=o.style??"",f={symbol:l,value:d,style:c,output:d};for(const[y,v]of Object.entries(r.values))y in f||(f[y]=v);return i.replace(/\$([a-zA-Z0-9_]+)/g,(y,v)=>f[v]??"")}function bt(a,t,r=te.clean){if(!a)return[];let s=a.replace(/\\n/g,`
-`);s=s.replace(/\$([a-zA-Z0-9_]+)/g,(l,c)=>Sa(c,t,r));const n=[],o=s.length,d=[];let i="";for(let l=0;l<o;l++){const c=s[l];if(c==="\x1B"){let f=c;if(l++,l<o&&s[l]==="["){for(f+="[",l++;l<o&&/^[0-9;]$/.test(s[l]);)f+=s[l],l++;l<o&&s[l]==="m"?f+="m":l--}else l--;i+=f;continue}if(c==="[")d.push({text:i}),i="";else if(c==="]")if(l+1<o&&s[l+1]==="("){const f=s.indexOf(")",l+2);if(f!==-1){const y=s.substring(l+2,f);if(d.length>0){const v=d.pop();v.text&&n.push({text:v.text,style:""}),n.push({text:i,style:y}),i=""}else i+=`](${y})`;l=f}else d.length>0?i=d.pop().text+"["+i+"]":i+="]"}else d.length>0?i=d.pop().text+"["+i+"]":i+="]";else i+=c}for(;d.length>0;)i=d.pop().text+"["+i;return i&&n.push({text:i,style:""}),n}function Ta(a,t){if(!a)return{};const r={},s=t.palette||"global",n=t.palettes?.[s]||{};return a.split(/\s+/).forEach(d=>{if(d){if(d==="bold"){r.fontWeight="bold";return}if(d==="italic"){r.fontStyle="italic";return}if(d==="underline"){r.textDecoration="underline";return}if(d==="dimmed"){r.opacity=.5;return}if(d==="strikethrough"){r.textDecoration="line-through";return}if(d==="hidden"){r.visibility="hidden";return}if(d!=="inverted"){if(d.startsWith("bg:")){r.backgroundColor=k.resolveColor(d.substring(3),n);return}r.color=k.resolveColor(d,n)}}}),r}function Ea({moduleName:a,config:t}){const r=m.useMemo(()=>bt(`$${a}`,t,te.dev),[a,t]);return r.some(n=>n.text.trim())?e.jsxs("div",{className:"rounded-md border border-gray-700 bg-[#0d1117] px-4 py-2",children:[e.jsx("p",{className:"mb-1 text-[10px] font-medium uppercase tracking-wider text-gray-500",children:"Preview"}),e.jsx("pre",{className:"font-mono text-sm leading-relaxed",children:r.map((n,o)=>e.jsx("span",{style:Ta(n.style,t),children:n.text},o))})]}):null}function he({label:a,values:t,onChange:r,placeholder:s}){const[n,o]=m.useState(t.join(", "));m.useEffect(()=>{o(t.join(", "))},[t]);const d=()=>{const i=n.split(",").map(l=>l.trim()).filter(Boolean);r(i)};return e.jsxs("div",{className:"space-y-1",children:[e.jsx("label",{className:"block text-xs text-gray-500",children:a}),e.jsx("input",{type:"text",value:n,onChange:i=>o(i.target.value),onBlur:d,placeholder:s,className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]})}function Aa(){const{currentTheme:a,selectedModule:t,updateConfig:r}=M(),[s,n]=m.useState(null),o=m.useRef(null),d=Ae(),i=async()=>{if(!t)return;if(await d({title:`Reset ${t}?`,message:"Are you sure you want to reset this module to its default settings? All your customizations for this module will be lost.",confirmText:"Reset Module"})){const w=J.find(u=>u.name===t),x={};w&&w.properties.forEach(u=>{x[u.name]=u.default}),r({[t]:x})}};if(m.useEffect(()=>{function g(w){o.current&&!o.current.contains(w.target)&&s&&n(null)}return document.addEventListener("mousedown",g),()=>document.removeEventListener("mousedown",g)},[s]),!t)return e.jsxs("div",{className:"flex h-full flex-col items-center justify-center rounded-lg border border-dashed border-gray-700 bg-gray-900/20 p-8 text-center",children:[e.jsx(V,{className:"mb-3 h-10 w-10 text-gray-500"}),e.jsx("h3",{className:"text-lg font-medium text-gray-300",children:"No Module Selected"}),e.jsx("p",{className:"mt-1 text-sm text-gray-500",children:"Select a module from the list to edit its configuration."})]});const l=a.config[t]||{},c=t in(a.config.custom??{}),f=c?a.config.custom?.[t]??{}:null,y=(g,w)=>{r({[t]:{...l,[g]:w}})},v=(g,w)=>{c&&r({custom:{...a.config.custom,[t]:{...f,[g]:w}}})};return e.jsxs("div",{className:"flex flex-col gap-6 rounded-lg border border-gray-700 bg-[#1e1e1e] p-6 shadow-xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-700 pb-4",children:[e.jsxs("div",{children:[e.jsx("h2",{className:"text-xl font-bold capitalize text-gray-100",children:t.replace(/_/g," ")}),e.jsx("p",{className:"text-sm text-gray-500",children:"Module Configuration"})]}),e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsx("button",{onClick:i,className:"rounded bg-red-900/50 px-3 py-1 text-xs font-medium text-red-300 hover:bg-red-800/50",children:"Reset to Default"}),e.jsxs("label",{className:"flex cursor-pointer select-none items-center gap-2 text-sm text-gray-400",children:[e.jsx("input",{type:"checkbox",checked:l.disabled===!0,onChange:g=>y("disabled",g.target.checked),className:"h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"}),"Disabled"]})]})]}),e.jsx(Ea,{moduleName:t,config:a.config}),e.jsxs("div",{className:"grid gap-6 md:grid-cols-2",children:[e.jsxs("div",{className:"space-y-3",children:[e.jsx("label",{className:"block text-sm font-medium text-gray-300",children:"Style"}),e.jsx(yt,{value:l.style||"",onChange:g=>y("style",g)})]}),e.jsxs("div",{className:"relative space-y-3",children:[e.jsx("label",{className:"block text-sm font-medium text-gray-300",children:"Symbol"}),e.jsxs("div",{className:"flex gap-2",children:[e.jsx("input",{type:"text",value:l.symbol||"",onChange:g=>y("symbol",g.target.value),placeholder:"e.g. ❯ ",className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),e.jsx("button",{onClick:()=>n(s==="symbol"?null:"symbol"),className:"shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",children:"Browse"})]}),s==="symbol"&&e.jsx("div",{ref:o,className:"absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]",children:e.jsx(de,{currentSymbol:l.symbol,onSelect:g=>{y("symbol",g),n(null)}})})]}),e.jsxs("div",{className:"col-span-2 space-y-3",children:[e.jsx("label",{className:"block text-sm font-medium text-gray-300",children:"Format String"}),e.jsx($e,{formatString:l.format||"",onChange:g=>y("format",g)}),e.jsxs("div",{className:"flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200",children:[e.jsx(V,{className:"mt-0.5 h-4 w-4 shrink-0"}),e.jsx("p",{children:"Visually edit your module's format string. Click on segments to edit or add new ones."})]})]}),c&&f&&e.jsxs("div",{className:"col-span-2 space-y-4 border-t border-gray-700 pt-4",children:[e.jsx("h3",{className:"text-sm font-medium text-gray-400",children:"Custom Module Settings"}),e.jsxs("div",{className:"grid gap-4 md:grid-cols-2",children:[e.jsxs("div",{className:"space-y-1",children:[e.jsx("label",{className:"block text-xs text-gray-500",children:"Command"}),e.jsx("input",{type:"text",value:f.command||"",onChange:g=>v("command",g.target.value),placeholder:"echo hello",className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),e.jsxs("div",{className:"space-y-1",children:[e.jsx("label",{className:"block text-xs text-gray-500",children:"When (shell condition)"}),e.jsx("input",{type:"text",value:f.when||"",onChange:g=>v("when",g.target.value),placeholder:"test -f .env",className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),e.jsx(he,{label:"Detect Files (comma-separated)",values:f.detect_files||[],onChange:g=>v("detect_files",g),placeholder:".env, .envrc"}),e.jsx(he,{label:"Detect Extensions (comma-separated)",values:f.detect_extensions||[],onChange:g=>v("detect_extensions",g),placeholder:"py, js, ts"}),e.jsx(he,{label:"Detect Folders (comma-separated)",values:f.detect_folders||[],onChange:g=>v("detect_folders",g),placeholder:".git, node_modules"}),e.jsxs("div",{className:"space-y-1",children:[e.jsx("label",{className:"block text-xs text-gray-500",children:"Shell"}),e.jsx("input",{type:"text",value:(f.shell||[]).join(", "),onChange:g=>v("shell",g.target.value.split(",").map(w=>w.trim()).filter(Boolean)),placeholder:"bash, zsh",className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]})]})]}),t==="directory"&&e.jsxs("div",{className:"col-span-2 space-y-4 border-t border-gray-700 pt-4",children:[e.jsx("h3",{className:"text-sm font-medium text-gray-400",children:"Directory Options"}),e.jsxs("div",{className:"grid gap-4 md:grid-cols-2",children:[e.jsxs("div",{className:"space-y-1",children:[e.jsx("label",{className:"block text-xs text-gray-500",children:"Truncation Length"}),e.jsx("input",{type:"number",value:l.truncation_length??3,onChange:g=>y("truncation_length",parseInt(g.target.value)),className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),e.jsx("div",{className:"flex h-full items-center pt-4",children:e.jsxs("label",{className:"flex cursor-pointer select-none items-center gap-2 text-sm text-gray-300",children:[e.jsx("input",{type:"checkbox",checked:l.truncate_to_repo===!0,onChange:g=>y("truncate_to_repo",g.target.checked),className:"h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"}),"Truncate to Repo Root"]})})]})]}),t==="git_status"&&e.jsxs("div",{className:"col-span-2 space-y-4 border-t border-gray-700 pt-4",children:[e.jsx("h3",{className:"text-sm font-medium text-gray-400",children:"Git Status Symbols"}),e.jsx("div",{className:"grid gap-4 md:grid-cols-2 lg:grid-cols-3",children:["conflicted","ahead","behind","diverged","untracked","stashed","modified","staged","renamed","deleted"].map(g=>e.jsxs("div",{className:"relative space-y-1",children:[e.jsxs("label",{className:"block text-xs capitalize text-gray-500",children:[g.replace("_"," ")," Symbol"]}),e.jsxs("div",{className:"flex gap-2",children:[e.jsx("input",{type:"text",value:l[g]||"",onChange:w=>y(g,w.target.value),placeholder:"e.g. ✖ ",className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),e.jsx("button",{onClick:()=>n(s===g?null:g),className:"shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",children:"Browse"})]}),s===g&&e.jsx("div",{className:"absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]",children:e.jsx(de,{currentSymbol:l[g],onSelect:w=>{y(g,w),n(null)}})})]},g))})]})]})]})}function Ia({item:a,isSelected:t,onSelect:r,onToggle:s}){const{attributes:n,listeners:o,setNodeRef:d,transform:i,transition:l,isDragging:c}=Xt({id:a.id}),f={transform:Zt.Transform.toString(i),transition:l,touchAction:"none"};return e.jsxs("div",{ref:d,style:f,onClick:()=>r(a.name),className:T("group flex cursor-pointer items-center gap-3 rounded-md border p-3 shadow-sm transition-colors",t?"border-blue-500 bg-gray-800 ring-1 ring-blue-500":"border-gray-700 bg-gray-800 hover:border-gray-600",c&&"z-50 bg-gray-700 opacity-50 ring-2 ring-blue-500"),children:[e.jsx("button",{...o,...n,className:"cursor-grab text-gray-500 hover:text-gray-300 focus:outline-none active:cursor-grabbing","aria-label":"Drag handle",onClick:y=>y.stopPropagation(),children:e.jsx(tt,{size:18})}),e.jsx("input",{type:"checkbox",checked:!0,onChange:y=>{y.stopPropagation(),s(a.name,y.target.checked)},className:"h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500"}),e.jsxs("span",{className:T("select-none font-mono text-sm",t?"text-blue-400":"text-gray-200"),children:[a.name,a.isCustom&&e.jsx("span",{className:"ml-2 rounded-full bg-purple-900/30 px-2 py-0.5 text-[10px] font-semibold text-purple-300",children:"CUSTOM"})]}),e.jsx("div",{className:"ml-auto",children:e.jsx("button",{onClick:y=>{y.stopPropagation(),r(a.name)},className:"text-xs text-gray-400 hover:text-blue-400",children:"Configure"})})]})}function Ra({className:a}){const{currentTheme:t,updateConfig:r,selectedModule:s,setSelectedModule:n}=M(),o=M(Wr),[d,i]=m.useState(null),[l,c]=m.useState(""),f=m.useMemo(()=>{const p=Object.keys(t.config.custom||{}).map(h=>({id:h,name:h,isCustom:!0}));return[...J.map(h=>({id:h.name,name:h.name})),...p]},[t.config.custom]),y=m.useMemo(()=>{if(!l)return o;const p=l.toLowerCase();return o.filter(C=>{const h=J.find(_=>_.name===C.id);return C.name.toLowerCase().includes(p)||h?.title.toLowerCase().includes(p)||h?.description.toLowerCase().includes(p)})},[o,l]),v=m.useMemo(()=>{const p=new Set(o.map(_=>_.name)),C=f.filter(_=>!p.has(_.id));if(!l)return C;const h=l.toLowerCase();return C.filter(_=>{const $=J.find(j=>j.name===_.id);return _.name.toLowerCase().includes(h)||$?.title.toLowerCase().includes(h)||$?.description.toLowerCase().includes(h)})},[o,f,l]),g=(p,C)=>{c("");let h=t.config.format||"";if(C)h+=`$${p}`;else{const $=new RegExp(`\\$${p}\\b`,"g");h=h.replace($,"")}const _=t.config[p]||{};r({format:h,[p]:{..._,disabled:!C}})},w=Ut(De(Yt),De(Vt,{coordinateGetter:Jt})),x=p=>{i(String(p.active.id))},u=p=>{const{active:C,over:h}=p;if(i(null),h&&C.id!==h.id){const _=o.findIndex(j=>j.id===C.id),$=o.findIndex(j=>j.id===h.id);if(_!==-1&&$!==-1){const N=Kt(o,_,$).map(I=>`$${I.name}`).join("");r({format:N})}}},b=m.useMemo(()=>o.find(p=>p.id===d),[d,o]);return e.jsxs("div",{className:T("flex flex-col gap-6",a),children:[e.jsxs("div",{className:"relative",children:[e.jsx(Se,{size:14,className:"pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"}),e.jsx("input",{type:"search",placeholder:"Search modules...",value:l,onChange:p=>c(p.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800/50 py-2 pl-9 pr-9 text-sm text-gray-100 placeholder-gray-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),l&&e.jsx("button",{onClick:()=>c(""),"aria-label":"Clear search",className:"absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300",children:e.jsx(P,{size:14})})]}),e.jsxs("div",{className:"flex flex-col gap-3",children:[e.jsxs("div",{className:"flex items-center justify-between",children:[e.jsx("h2",{className:"text-xs font-semibold uppercase tracking-wider text-gray-400",children:"Active Modules"}),e.jsxs("span",{className:"text-xs text-gray-500",children:[y.length," ",l?"matching":"enabled"]})]}),e.jsxs(Bt,{sensors:w,collisionDetection:Gt,onDragStart:x,onDragEnd:u,children:[e.jsx(Wt,{items:o.map(p=>p.id),strategy:qt,children:e.jsxs("div",{className:"flex flex-col gap-2",children:[y.map(p=>e.jsx(Ia,{item:p,isSelected:s===p.name,onSelect:n,onToggle:g},p.id)),y.length===0&&e.jsx("div",{className:"rounded-lg border border-dashed border-gray-700 py-8 text-center text-gray-500",children:l?"No matching active modules":"No modules active"})]})}),e.jsx(Ht,{children:b?e.jsxs("div",{className:"group flex items-center gap-3 rounded-md border border-blue-500 bg-gray-700 p-3 opacity-90 shadow-lg",children:[e.jsx("button",{className:"cursor-grabbing text-gray-300",children:e.jsx(tt,{size:18})}),e.jsx("span",{className:"font-medium text-white",children:b.name})]}):null})]})]}),(v.length>0||l)&&e.jsxs("div",{className:"flex flex-col gap-3 border-t border-gray-800 pt-4",children:[e.jsxs("div",{className:"flex items-center justify-between",children:[e.jsx("h2",{className:"text-xs font-semibold uppercase tracking-wider text-gray-500",children:"Disabled Modules"}),e.jsxs("span",{className:"text-xs text-gray-600",children:[v.length," ",l?"matching":"disabled"]})]}),e.jsxs("div",{className:"flex flex-col gap-2",children:[v.map(p=>e.jsxs("div",{onClick:()=>n(p.name),className:T("group flex cursor-pointer items-center gap-3 rounded-md border p-3 opacity-60 shadow-sm transition-colors hover:opacity-100",s===p.name?"border-gray-500 bg-gray-800":"border-gray-700 bg-gray-800/50 hover:border-gray-600"),children:[e.jsx("div",{className:"w-[18px]"}),e.jsx("input",{type:"checkbox",checked:!1,onChange:C=>{C.stopPropagation(),g(p.name,C.target.checked)},className:"h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500"}),e.jsx("span",{className:"select-none font-mono text-sm text-gray-400",children:p.name}),e.jsx("div",{className:"ml-auto",children:e.jsx("button",{onClick:C=>{C.stopPropagation(),n(p.name)},className:"text-xs text-gray-500 hover:text-blue-400",children:"Configure"})})]},p.id)),v.length===0&&l&&e.jsx("div",{className:"py-4 text-center text-xs text-gray-500",children:"No matching disabled modules"})]})]}),l&&y.length===0&&v.length===0&&e.jsxs("div",{className:"py-6 text-center text-sm text-gray-500",children:['No modules found matching "',l,'"']})]})}function Fa({onClose:a}){const{loadTheme:t}=M(),{addToast:r}=q(),s=Ae(),[n,o]=m.useState([]),[d,i]=m.useState([]),[l,c]=m.useState(null),[f,y]=m.useState(""),[v,g]=m.useState(!1),[w,x]=m.useState(null);m.useEffect(()=>{u()},[]);const u=async()=>{try{const h=await fetch("/api/categories");if(!h.ok)throw new Error("Failed to fetch categories.");const _=await h.json();i(_)}catch(h){console.error("Error fetching categories:",h),x("Failed to load categories.")}},b=m.useCallback(async()=>{g(!0),x(null);try{const h=new URLSearchParams;l&&h.append("category",l);const _=await fetch(`/api/themes?${h.toString()}`);if(!_.ok)throw new Error("Failed to fetch themes.");let $=await _.json();f&&($=$.filter(j=>j.name.toLowerCase().includes(f.toLowerCase())||j.description&&j.description.toLowerCase().includes(f.toLowerCase()))),o($)}catch(h){console.error("Error fetching themes:",h),x("Failed to load themes.")}finally{g(!1)}},[l,f]);m.useEffect(()=>{b()},[b]);const p=async h=>{if(await s({title:`Download & Apply "${h.name}"?`,message:"This will replace your current theme. Ensure you have saved any unsaved changes.",confirmText:"Apply Theme"}))try{const $=JSON.parse(h.config_toml),j={metadata:{id:h.id.toString(),name:h.name,description:h.description,author:h.author_username,created:new Date(h.created_at),updated:new Date(h.updated_at),previewImage:h.preview_image,isPreset:!1},config:$};t(j),r(`Theme "${h.name}" applied!`,"success"),a()}catch($){console.error("Error applying theme:",$),r("Failed to apply theme.","error")}},C=n;return e.jsxs("div",{className:"flex h-[80vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsx("h2",{className:"text-lg font-bold text-white",children:"Solar System Themes"}),e.jsx("button",{onClick:a,className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white",children:e.jsx(P,{size:20})})]}),e.jsxs("div",{className:"flex flex-1 overflow-hidden",children:[e.jsxs("aside",{className:"w-56 shrink-0 border-r border-gray-800 bg-gray-800/30 p-4",children:[e.jsx("h3",{className:"mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400",children:"Categories"}),e.jsxs("ul",{className:"space-y-2",children:[e.jsx("li",{children:e.jsx("button",{onClick:()=>c(null),className:`w-full rounded px-2 py-1 text-left text-sm transition-colors ${l?"text-gray-300 hover:bg-gray-700":"bg-blue-600 text-white"}`,children:"All Themes"})}),d.map(h=>e.jsx("li",{children:e.jsx("button",{onClick:()=>c(h),className:`w-full rounded px-2 py-1 text-left text-sm transition-colors ${l===h?"bg-blue-600 text-white":"text-gray-300 hover:bg-gray-700"}`,children:h})},h))]})]}),e.jsxs("main",{className:"flex flex-1 flex-col p-4",children:[e.jsxs("div",{className:"mb-4 flex items-center gap-2",children:[e.jsx("input",{type:"text",placeholder:"Search themes...",value:f,onChange:h=>y(h.target.value),className:"flex-1 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),v&&e.jsx("span",{className:"text-gray-400",children:"Loading..."})]}),w&&e.jsxs("p",{className:"mb-4 text-sm text-red-500",children:["Error: ",w]}),e.jsx("div",{className:"scrollbar-thin scrollbar-thumb-gray-700 grid flex-1 grid-cols-1 gap-4 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3",children:C.length===0&&!v&&!w?e.jsx("p",{className:"col-span-full text-center text-gray-500",children:"No themes found for this criteria."}):C.map(h=>e.jsxs("div",{className:"group relative flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow-sm transition-all hover:border-blue-500 hover:shadow-lg",children:[e.jsx("div",{className:"flex h-32 items-center justify-center bg-gray-900",children:h.preview_image?e.jsx("img",{src:h.preview_image,alt:`Preview of ${h.name}`,className:"h-full w-full object-cover"}):e.jsx("span",{className:"text-xs text-gray-500",children:"No Preview"})}),e.jsxs("div",{className:"flex flex-col p-4",children:[e.jsx("h3",{className:"font-medium text-gray-200 group-hover:text-blue-400",children:h.name}),e.jsx("p",{className:"mt-1 line-clamp-2 text-xs text-gray-500",children:h.description||"No description provided."}),e.jsxs("div",{className:"mt-3 flex items-center justify-between text-xs text-gray-500",children:[e.jsxs("span",{className:"flex items-center gap-1",children:[e.jsx(Qt,{size:12,className:"text-yellow-500"})," ",h.downloads]}),e.jsxs("span",{children:["By ",h.author_username]})]}),e.jsxs("button",{onClick:()=>p(h),className:"mt-4 w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500",children:[e.jsx(ce,{size:14,className:"mr-2 inline-block"})," ","Download & Apply"]})]})]},h.id))})]})]})]})}class Je{static async detectEnvironment(){if(typeof navigator>"u")return{os:"unknown",shell:"unknown",terminal:"unknown",hasNerdFont:!0,installedTools:["git"]};const t=navigator.userAgent.toLowerCase();let r="unknown";t.includes("win")?r="windows":t.includes("mac")?r="macos":t.includes("linux")&&(r="linux");const s=["git"];return r!=="windows"&&s.push("bash"),{os:r,shell:"unknown",terminal:"unknown",hasNerdFont:!0,installedTools:s}}static suggestModules(t){const r=["directory","character","line_break"];return t.installedTools.includes("git")&&r.push("git_branch","git_status"),t.installedTools.includes("docker")&&r.push("docker_context"),t.installedTools.includes("node")&&r.push("nodejs"),t.os==="macos"&&r.push("battery"),r}static suggestOptimizations(t,r){const s=[],o=["git_status","kubernetes","aws","gcloud"].filter(d=>{const i=t[d];return i&&i.disabled!==!0});return o.length>2&&s.push({type:"performance",priority:"medium",title:"Optimize Render Speed",description:`You have ${o.length} slow modules enabled. Consider disabling some or increasing scan timeout.`}),r.hasNerdFont||s.push({type:"compatibility",priority:"high",title:"Nerd Font Required",description:"Your theme uses symbols that require a Nerd Font. Install one to see icons correctly."}),s}static suggestColorScheme(){return k.presets}}function Ma(){const{currentTheme:a}=M(),[t,r]=m.useState([]),[s,n]=m.useState(new Set);m.useEffect(()=>{(async()=>{const l=await Je.detectEnvironment(),c=Je.suggestOptimizations(a.config,l);r(c)})()},[a.config]);const o=i=>{n(l=>new Set(l).add(i))},d=t.filter(i=>!s.has(i.title));return d.length===0?null:e.jsxs("div",{className:"mt-4 flex flex-col gap-3 rounded-lg border border-blue-900/30 bg-blue-900/10 p-4",children:[e.jsxs("h3",{className:"flex items-center gap-2 text-sm font-semibold text-blue-400",children:[e.jsx(er,{size:16}),"Suggestions"]}),e.jsx("div",{className:"flex flex-col gap-2",children:d.map((i,l)=>{const c=i.type==="performance"?tr:i.type==="visual"?rr:i.type==="compatibility"?ar:V,f=i.priority==="high"?"text-red-400":i.priority==="medium"?"text-yellow-400":"text-blue-400";return e.jsxs("div",{className:"group relative flex flex-col gap-1 rounded border border-gray-700 bg-gray-800 p-3 pr-8 shadow-sm",children:[e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsx(c,{size:14,className:f}),e.jsx("span",{className:"text-xs font-semibold text-gray-200",children:i.title})]}),e.jsx("p",{className:"text-[11px] leading-snug text-gray-400",children:i.description}),e.jsx("button",{onClick:()=>o(i.title),className:"absolute right-2 top-2 text-gray-500 opacity-0 transition-opacity hover:text-white group-hover:opacity-100",children:e.jsx(P,{size:14})})]},l)})})]})}var Da=jr(),za=_r();function Ve(a){const t={background:"#1e1e1e",foreground:"#ffffff",cursor:"#ffffff",selectionBackground:"rgba(255, 255, 255, 0.3)"},r=a.palette||"global",s=a.palettes?.[r]||{},n=(o,d)=>s[o]?k.resolveColor(s[o],s):d;return t.background=n("bg","#1e1e1e"),t.foreground=n("fg","#ffffff"),t.black=n("color0","#2e3440"),t.red=n("color1","#bf616a"),t.green=n("color2","#a3be8c"),t.yellow=n("color3","#ebcb8b"),t.blue=n("color4","#81a1c1"),t.magenta=n("color5","#b48ead"),t.cyan=n("color6","#88c0d0"),t.white=n("color7","#e5e9f0"),t.brightBlack=n("color8","#4c566a"),t.brightRed=n("color9","#bf616a"),t.brightGreen=n("color10","#a3be8c"),t.brightYellow=n("color11","#ebcb8b"),t.brightBlue=n("color12","#81a1c1"),t.brightMagenta=n("color13","#b48ead"),t.brightCyan=n("color14","#88c0d0"),t.brightWhite=n("color15","#eceff4"),t}const ie="starship-font-settings";function La(a,t){if(!a)return"";const r=t.palette||"global",s=t.palettes?.[r]||{},n=a.split(/\s+/),o=[];return n.forEach(d=>{if(d==="bold")o.push("1");else if(d==="italic")o.push("3");else if(d==="underline")o.push("4");else if(d==="dimmed")o.push("2");else if(d.startsWith("bg:")){const i=k.resolveColor(d.substring(3),s),l=k.hexToRgb(i);l&&o.push(`48;2;${l.r};${l.g};${l.b}`)}else{const i=k.resolveColor(d,s),l=k.hexToRgb(i);l&&o.push(`38;2;${l.r};${l.g};${l.b}`)}}),o.length===0?"":`\x1B[${o.join(";")}m`}const Oa=({className:a,fontFamily:t,id:r})=>{const s=m.useRef(null),n=m.useRef(null),o=m.useRef(null),d=m.useRef(null),i=m.useRef(null),{currentTheme:l}=M(),{addToast:c}=q(),[f,y]=m.useState(0),[v,g]=m.useState(!1),[w,x]=m.useState(""),[u,b]=m.useState(""),[p,C]=m.useState(!1),[h,_]=m.useState(()=>{try{const S=localStorage.getItem(ie);if(S)return JSON.parse(S).family||""}catch{}return""});m.useEffect(()=>{try{const S=localStorage.getItem(ie);if(S){const{url:A,family:R}=JSON.parse(S);A&&R&&(x(A),b(R),new FontFace(R,`url(${A})`).load().then(se=>{document.fonts.add(se)}).catch(()=>{}))}}catch{}},[]);const $=h||t||'"FiraCode NF", Menlo, Monaco, "Courier New", monospace',j=Object.keys(te);m.useEffect(()=>{const S=setInterval(()=>{y(A=>(A+1)%j.length)},5e3);return()=>clearInterval(S)},[j.length]),m.useEffect(()=>{if(!n.current||o.current)return;const S=new Da.Terminal({fontFamily:$,fontSize:14,lineHeight:1.2,cursorBlink:!0,allowProposedApi:!0,convertEol:!0}),A=new za.FitAddon;S.loadAddon(A),S.open(n.current);try{A.fit()}catch(K){console.warn("Initial fit failed:",K)}o.current=S,d.current=A;const R=new ResizeObserver(()=>{try{A.fit()}catch{}});return R.observe(n.current),i.current=R,()=>{R.disconnect(),S.dispose(),o.current=null}},[$]);const N=m.useMemo(()=>{const S=l.config.format||"",A=j[f],R=te[A];return bt(S,l.config,R)},[l.config,f,j]);m.useEffect(()=>{const S=o.current;if(!S)return;const A=Ve(l.config);S.options.theme=A,S.reset(),N.forEach(R=>{const K=La(R.style,l.config);S.write(K+R.text+(K?"\x1B[0m":""))})},[N,l.config]);const I=m.useMemo(()=>Ve(l.config).background||"#1e1e1e",[l.config]),L=m.useCallback(async()=>s.current?Te(s.current,{backgroundColor:I,scale:2,useCORS:!0,logging:!1}):null,[I]),B=m.useCallback(async()=>{try{const S=await L();if(!S)return;const A=document.createElement("a");A.href=S.toDataURL("image/png"),A.download=`${l.metadata.name||"theme"}-preview.png`,A.click(),c("Screenshot downloaded!","success")}catch{c("Failed to capture screenshot","error")}},[L,l.metadata.name,c]),U=m.useCallback(async()=>{try{const S=await L();if(!S)return;S.toBlob(async A=>{if(A)try{await navigator.clipboard.write([new ClipboardItem({"image/png":A})]),c("Screenshot copied to clipboard!","success")}catch{c("Clipboard write failed — try Download instead","error")}})}catch{c("Failed to capture screenshot","error")}},[L,c]),E=m.useCallback(async()=>{if(!w.trim()||!u.trim()){c("Please enter both a font URL and family name","error");return}C(!0);try{const A=await new FontFace(u.trim(),`url(${w.trim()})`).load();document.fonts.add(A);const R=u.trim();_(R),localStorage.setItem(ie,JSON.stringify({url:w.trim(),family:R})),c(`Font "${R}" applied!`,"success"),g(!1)}catch{c("Failed to load font. Check the URL and try again.","error")}finally{C(!1)}},[w,u,c]),X=m.useCallback(()=>{_(""),localStorage.removeItem(ie),x(""),b(""),c("Font reset to default","info")},[c]);return e.jsxs("div",{id:r,ref:s,className:T("flex flex-col overflow-hidden rounded-lg border border-gray-700 shadow-2xl",a),style:{backgroundColor:I},children:[e.jsxs("div",{className:"flex shrink-0 items-center gap-2 border-b border-gray-700 bg-gray-800/50 px-4 py-2",children:[e.jsx("div",{className:"h-3 w-3 rounded-full bg-[#ff5f56]"}),e.jsx("div",{className:"h-3 w-3 rounded-full bg-[#ffbd2e]"}),e.jsx("div",{className:"h-3 w-3 rounded-full bg-[#27c93f]"}),e.jsxs("div",{className:"ml-4 flex-1 select-none text-xs font-medium text-gray-400",children:["Terminal Preview (",te[j[f]].name,")"]}),e.jsxs("div",{className:"flex items-center gap-1",children:[e.jsx("button",{onClick:()=>g(S=>!S),title:"Font settings",className:"rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300",children:v?e.jsx(sr,{size:14}):e.jsx(nr,{size:14})}),e.jsx("button",{onClick:U,title:"Copy screenshot to clipboard",className:"rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300",children:e.jsx(Xe,{size:14})}),e.jsx("button",{onClick:B,title:"Download PNG",className:"rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300",children:e.jsx(ce,{size:14})})]})]}),v&&e.jsxs("div",{className:"shrink-0 border-b border-gray-700 bg-gray-900/80 px-4 py-3",children:[e.jsx("p",{className:"mb-2 text-xs font-medium text-gray-400",children:"Custom Nerd Font"}),e.jsxs("div",{className:"flex flex-col gap-2",children:[e.jsx("input",{type:"url",value:w,onChange:S=>x(S.target.value),placeholder:"Font URL (.woff2 or .ttf)…",className:"w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),e.jsx("input",{type:"text",value:u,onChange:S=>b(S.target.value),placeholder:"Font family name (e.g. JetBrainsMono Nerd Font)…",className:"w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}),e.jsxs("div",{className:"flex gap-2",children:[e.jsx("button",{onClick:E,disabled:p,className:"rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50",children:p?"Loading…":"Apply Font"}),h&&e.jsx("button",{onClick:X,className:"rounded bg-gray-700 px-3 py-1.5 text-xs text-gray-300 hover:bg-gray-600",children:"Reset to Default"})]}),h&&e.jsxs("p",{className:"text-xs text-green-400",children:["Active: ",e.jsx("span",{className:"font-mono",children:h})]})]})]}),e.jsx("div",{className:"relative min-h-[200px] flex-1 p-1",children:e.jsx("div",{ref:n,className:"absolute inset-0"})})]})};class Pa{level="error";log(t,r,...s){const n=["debug","info","warn","error"];if(n.indexOf(t)<n.indexOf(this.level))return;const d=`[${new Date().toISOString()}] [${t.toUpperCase()}] ${r}`;switch(t){case"debug":console.debug(d,...s);break;case"info":console.info(d,...s);break;case"warn":console.warn(d,...s);break;case"error":console.error(d,...s);break}}debug(t,...r){this.log("debug",t,...r)}info(t,...r){this.log("info",t,...r)}warn(t,...r){this.log("warn",t,...r)}error(t,...r){this.log("error",t,...r)}}const Ua=new Pa;function Ba({className:a,onSelect:t}){const{loadTheme:r,savedThemes:s,deleteTheme:n}=M(),{addToast:o}=q(),d=Ae(),i=async c=>{const{currentTheme:f,savedThemes:y,past:v}=M.getState(),g=y.find(u=>u.metadata.id===f.metadata.id);let w=!1;g?new Date(f.metadata.updated)>new Date(g.metadata.updated)&&(w=!0):w=!0;const x=v.length>0;if(!(w&&x&&!await d({title:"Unsaved Changes",message:"You have unsaved changes that will be lost. Are you sure you want to load a new theme?",confirmText:"Load Anyway"})))try{r(c),t&&t(),o("Theme loaded successfully!","success")}catch(u){Ua.error("Failed to load theme:",u),o("Failed to load theme.","error")}},l=async c=>{await d({title:"Delete Theme",message:`Are you sure you want to permanently delete "${c.metadata.name}"? This action cannot be undone.`,confirmText:"Delete"})&&(n(c.metadata.id),o(`Theme "${c.metadata.name}" deleted.`,"info"))};return e.jsxs("div",{className:T("grid h-full gap-8 overflow-y-auto p-6",a),children:[e.jsxs("section",{children:[e.jsxs("h2",{className:"mb-4 flex items-center gap-2 text-lg font-semibold text-white",children:[e.jsx(or,{className:"h-5 w-5 text-blue-500"}),"Preset Themes"]}),e.jsx("div",{className:"grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3",children:Y.map(c=>e.jsxs("button",{type:"button",className:"group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 text-left transition-all hover:border-gray-600 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",onClick:()=>i(c),"aria-label":`Load preset theme: ${c.metadata.name}`,children:[e.jsx("div",{className:"flex h-32 items-center justify-center bg-gray-900",children:c.metadata.previewImage?e.jsx("img",{src:c.metadata.previewImage,alt:`Preview of ${c.metadata.name}`,className:"h-full w-full object-cover"}):e.jsx("span",{className:"text-xs text-gray-500",children:"No Preview"})}),e.jsxs("div",{className:"p-4",children:[e.jsx("h3",{className:"font-medium text-gray-200 group-hover:text-blue-400",children:c.metadata.name}),e.jsx("p",{className:"mt-1 line-clamp-2 text-xs text-gray-500",children:c.metadata.description})]})]},c.metadata.id))})]}),e.jsxs("section",{children:[e.jsxs("h2",{className:"mb-4 flex items-center gap-2 text-lg font-semibold text-white",children:[e.jsx(ir,{className:"h-5 w-5 text-purple-500"}),"Saved Themes"]}),s.length===0?e.jsxs("div",{className:"flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-700 bg-gray-900/30 py-12 text-center",children:[e.jsx("p",{className:"text-gray-500",children:"No saved themes yet."}),e.jsx("p",{className:"mt-1 text-xs text-gray-600",children:"Save your current customization to see it here."})]}):e.jsx("div",{className:"grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3",children:s.map(c=>e.jsxs("div",{className:"group relative flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-all hover:border-gray-600 hover:shadow-lg",children:[e.jsxs("button",{type:"button",className:"w-full flex-1 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500",onClick:()=>i(c),"aria-label":`Load saved theme: ${c.metadata.name}`,children:[e.jsx("div",{className:"flex h-32 items-center justify-center bg-gray-900",children:c.metadata.previewImage?e.jsx("img",{src:c.metadata.previewImage,alt:`Preview of ${c.metadata.name}`,className:"h-full w-full object-cover"}):e.jsx("span",{className:"text-xs text-gray-500",children:"No Preview Available"})}),e.jsx("div",{className:"p-4",children:e.jsx("h3",{className:"font-medium text-gray-200 group-hover:text-purple-400",children:c.metadata.name})})]}),e.jsx("button",{onClick:f=>{f.stopPropagation(),l(c)},className:"absolute right-2 top-2 rounded p-1.5 text-gray-500 opacity-0 transition-opacity hover:bg-red-900/20 hover:text-red-400 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 group-hover:opacity-100",title:"Delete theme","aria-label":`Delete theme ${c.metadata.name}`,children:e.jsx(lr,{size:14})})]},c.metadata.id))})]})]})}function Ga({onClose:a,userId:t}){const{currentTheme:r,exportToml:s}=M(),{addToast:n}=q(),[o,d]=m.useState(r.metadata.name||""),[i,l]=m.useState(r.metadata.description||""),[c,f]=m.useState(""),[y,v]=m.useState([]),[g,w]=m.useState(!1);m.useEffect(()=>{(async()=>{try{const b=await fetch("/api/categories");if(b.ok){const p=await b.json();v(p),p.length>0&&f(p[0])}}catch(b){console.error("Failed to load categories",b)}})()},[]);const x=async u=>{u.preventDefault(),w(!0);try{const b=s(),p={name:o,description:i,category:c,config_toml:b,author_id:t,preview_image:r.metadata.previewImage||null},C=await fetch("/api/themes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)}),h=await C.json();if(!C.ok)throw new Error(h.error||"Failed to upload theme");n("Theme uploaded successfully to Community Gallery!","success"),a()}catch(b){n(b instanceof Error?b.message:"Upload failed","error")}finally{w(!1)}};return e.jsxs("div",{className:"flex w-full max-w-lg flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsx("h2",{className:"text-lg font-bold text-white",children:"Upload to Community"}),e.jsx("button",{onClick:a,className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white",children:e.jsx(P,{size:20})})]}),e.jsxs("form",{onSubmit:x,className:"flex flex-col gap-4 p-6",children:[e.jsxs("div",{children:[e.jsx("label",{className:"mb-1 block text-sm font-medium text-gray-300",children:"Theme Name"}),e.jsx("input",{type:"text",required:!0,value:o,onChange:u=>d(u.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-1 block text-sm font-medium text-gray-300",children:"Description"}),e.jsx("textarea",{value:i,onChange:u=>l(u.target.value),className:"h-24 w-full resize-none rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",placeholder:"Tell us about this theme..."})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-1 block text-sm font-medium text-gray-300",children:"Category"}),e.jsx("select",{value:c,onChange:u=>f(u.target.value),className:"w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",children:y.map(u=>e.jsx("option",{value:u,children:u},u))})]}),e.jsx("button",{type:"submit",disabled:g,className:"mt-4 w-full rounded bg-indigo-600 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-50",children:g?"Uploading...":"Publish Theme"})]})]})}const ht=at()(dt(a=>({activeView:"welcome",setActiveView:t=>a({activeView:t}),layoutMode:"auto",setLayoutMode:t=>a({layoutMode:t}),showExportImport:null,setShowExportImport:t=>a({showExportImport:t}),showGallery:!1,setShowGallery:t=>a({showGallery:t}),showComparison:!1,setShowComparison:t=>a({showComparison:t}),showCommandPalette:!1,setShowCommandPalette:t=>a({showCommandPalette:t}),showDynamicThemeSettings:!1,setShowDynamicThemeSettings:t=>a({showDynamicThemeSettings:t}),showWelcomeWizard:localStorage.getItem("starship_wizard_completed")!=="true",setShowWelcomeWizard:t=>a({showWelcomeWizard:t}),showSolarSystem:!1,setShowSolarSystem:t=>a({showSolarSystem:t})}),{name:"starship-ui-storage",partialize:a=>({activeView:a.activeView,layoutMode:a.layoutMode})}));function xe({stepNumber:a,currentStep:t,label:r}){const s=t>=a;return e.jsxs("div",{className:T("flex items-center gap-3",s?"text-blue-400":"text-gray-600"),children:[e.jsx("div",{className:T("flex h-8 w-8 items-center justify-center rounded-full border",s?"border-blue-400 bg-blue-900/20":"border-gray-700"),children:a}),e.jsx("span",{className:"font-medium",children:r})]})}function Wa(){const{showWelcomeWizard:a,setShowWelcomeWizard:t}=ht(),[r,s]=m.useState(1),{loadTheme:n}=M();m.useEffect(()=>{const i=localStorage.getItem("starship_wizard_completed");a&&i&&t(!1)},[a,t]);const o=()=>{localStorage.setItem("starship_wizard_completed","true"),t(!1)},d=i=>{n(i),s(3)};return a?e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm",children:e.jsxs("div",{className:"flex h-[600px] w-full max-w-4xl overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex w-64 flex-col border-r border-gray-800 bg-gray-900/50 p-6",children:[e.jsxs("div",{className:"mb-8 flex items-center gap-2 font-bold text-white",children:[e.jsx("span",{className:"text-2xl",children:"🚀"})," Starship"]}),e.jsxs("div",{className:"flex flex-col gap-6",children:[e.jsx(xe,{stepNumber:1,currentStep:r,label:"Welcome"}),e.jsx(xe,{stepNumber:2,currentStep:r,label:"Choose Starting Point"}),e.jsx(xe,{stepNumber:3,currentStep:r,label:"Ready"})]}),e.jsx("div",{className:"mt-auto",children:e.jsx("button",{onClick:o,className:"text-xs text-gray-500 underline underline-offset-2 hover:text-gray-300",children:"Skip Wizard"})})]}),e.jsxs("div",{className:"relative flex flex-1 flex-col p-8",children:[e.jsx("button",{onClick:o,className:"absolute right-4 top-4 text-gray-500 hover:text-white","aria-label":"Close Wizard",children:e.jsx(P,{size:20})}),r===1&&e.jsxs("div",{className:"animate-in fade-in slide-in-from-right-4 flex flex-1 flex-col justify-center duration-500",children:[e.jsx("h2",{className:"mb-4 text-3xl font-bold text-white",children:"Create Your Perfect Terminal"}),e.jsx("p",{className:"mb-8 max-w-lg text-lg leading-relaxed text-gray-400",children:"Welcome to the visual theme creator for Starship. Build, customize, and preview cross-shell prompts without touching a single TOML file manually."}),e.jsxs("div",{className:"mb-8 grid grid-cols-2 gap-4",children:[e.jsxs("div",{className:"rounded-lg border border-gray-700 bg-gray-800/50 p-4",children:[e.jsx(Ze,{className:"mb-2 text-blue-400",size:24}),e.jsx("h3",{className:"font-semibold text-gray-200",children:"Live Preview"}),e.jsx("p",{className:"text-sm text-gray-500",children:"See your prompt exactly as it will appear in your terminal."})]}),e.jsxs("div",{className:"rounded-lg border border-gray-700 bg-gray-800/50 p-4",children:[e.jsx(le,{className:"mb-2 text-purple-400",size:24}),e.jsx("h3",{className:"font-semibold text-gray-200",children:"Drag & Drop"}),e.jsx("p",{className:"text-sm text-gray-500",children:"Reorder modules visually and customize their behavior."})]})]}),e.jsxs("button",{onClick:()=>s(2),className:"flex items-center gap-2 self-start rounded bg-blue-600 px-6 py-3 font-medium text-white transition-all hover:bg-blue-500",children:["Get Started ",e.jsx(dr,{size:18})]})]}),r===2&&e.jsxs("div",{className:"animate-in fade-in slide-in-from-right-4 flex flex-1 flex-col duration-500",children:[e.jsx("h2",{className:"mb-2 text-2xl font-bold text-white",children:"Choose a Starting Point"}),e.jsx("p",{className:"mb-6 text-gray-400",children:"Select a preset to customize, or start from scratch."}),e.jsx("div",{className:"scrollbar-thin scrollbar-thumb-gray-700 grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2",children:Y.slice(0,6).map(i=>e.jsxs("div",{onClick:()=>d(i),className:"group cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all hover:border-blue-500 hover:shadow-lg hover:shadow-blue-900/20",children:[e.jsx("h3",{className:"font-semibold text-gray-200 group-hover:text-blue-400",children:i.metadata.name}),e.jsx("p",{className:"mt-1 line-clamp-2 text-xs text-gray-500",children:i.metadata.description})]},i.metadata.id))})]}),r===3&&e.jsxs("div",{className:"animate-in fade-in slide-in-from-right-4 flex flex-1 flex-col items-center justify-center text-center duration-500",children:[e.jsx("div",{className:"mb-6 rounded-full bg-green-900/30 p-4",children:e.jsx(cr,{className:"text-green-500",size:48})}),e.jsx("h2",{className:"mb-4 text-3xl font-bold text-white",children:"You're All Set!"}),e.jsx("p",{className:"mb-8 max-w-md text-gray-400",children:"Your workspace is ready. You can now use the drag-and-drop builder, pick colors, and preview your changes in real-time."}),e.jsx("button",{onClick:o,className:"rounded bg-blue-600 px-8 py-3 font-bold text-white shadow-lg shadow-blue-900/20 transition-all hover:bg-blue-500",children:"Go to Editor"})]})]})]})}):null}const qa=m.createContext(void 0);function Ha({children:a}){const[t,r]=m.useState(()=>localStorage.getItem("a11y_high_contrast")==="true"),[s,n]=m.useState(()=>localStorage.getItem("a11y_reduced_motion")==="true"||window.matchMedia("(prefers-reduced-motion: reduce)").matches);return m.useEffect(()=>{localStorage.setItem("a11y_high_contrast",t.toString()),t?document.documentElement.classList.add("high-contrast"):document.documentElement.classList.remove("high-contrast")},[t]),m.useEffect(()=>{localStorage.setItem("a11y_reduced_motion",s.toString()),s?document.documentElement.classList.add("reduced-motion"):document.documentElement.classList.remove("reduced-motion")},[s]),e.jsx(qa.Provider,{value:{highContrast:t,setHighContrast:r,reducedMotion:s,setReducedMotion:n},children:a})}function Ka(){const{loadTheme:a,savedThemes:t,currentTheme:r,dynamicSettings:s}=M();m.useEffect(()=>{if(!s.enabled)return;const n=()=>{const d=new Date,i=d.getHours(),l=d.getMinutes(),c=i*60+l,[f,y]=s.dayStartTime.split(":").map(Number),v=f*60+y,[g,w]=s.nightStartTime.split(":").map(Number),x=g*60+w;let u="";if(c>=v&&c<x?u=s.dayThemeId:u=s.nightThemeId,r.metadata.id!==u){const b=[...t,...Y].find(p=>p.metadata.id===u);b&&a(b)}};n();const o=setInterval(n,60*1e3);return()=>clearInterval(o)},[a,t,r.metadata.id,s.enabled,s.dayThemeId,s.nightThemeId,s.dayStartTime,s.nightStartTime])}function Ja(a){const t=m.useRef(a);m.useEffect(()=>{t.current=a},[a]),m.useEffect(()=>{const r=s=>{const n=s.target;(["INPUT","TEXTAREA","SELECT"].includes(n.tagName)||n.isContentEditable)&&!((s.metaKey||s.ctrlKey)&&s.key.toLowerCase()==="s")||t.current.forEach(d=>{const i=d.keys.toLowerCase().split("+"),l=i.includes("meta")||i.includes("cmd"),c=i.includes("ctrl"),f=i.includes("shift"),y=i.includes("alt"),v=i[i.length-1],g=(l?s.metaKey:!s.metaKey)&&(c?s.ctrlKey:!s.ctrlKey)&&(f?s.shiftKey:!s.shiftKey)&&(y?s.altKey:!s.altKey)&&s.key.toLowerCase()===v,w=i.includes("mod"),x=s.metaKey||s.ctrlKey,u=w&&x&&(f?s.shiftKey:!s.shiftKey)&&(y?s.altKey:!s.altKey)&&s.key.toLowerCase()===v;(g||u)&&(s.preventDefault(),d.handler(s))})};return window.addEventListener("keydown",r),()=>window.removeEventListener("keydown",r)},[])}function Va(){const{currentTheme:a,selectedModule:t,updateMetadata:r,saveTheme:s,resetTheme:n,undo:o,redo:d,canUndo:i,canRedo:l}=M(),c=i(),f=l(),{showExportImport:y,setShowExportImport:v,showGallery:g,setShowGallery:w,showComparison:x,setShowComparison:u,showCommandPalette:b,setShowCommandPalette:p,showDynamicThemeSettings:C,setShowDynamicThemeSettings:h,showSolarSystem:_,setShowSolarSystem:$,layoutMode:j,setLayoutMode:N}=ht(),{addToast:I}=q(),[L,B]=m.useState(a.metadata.name||"My Awesome Theme"),U=j==="mobile"||j==="auto"&&window.innerWidth<=1024,E=j==="desktop"||j==="auto"&&window.innerWidth>1024,[X,S]=m.useState(E),[A,R]=m.useState(E&&window.innerWidth>1280);m.useEffect(()=>{j==="desktop"?(S(!0),R(window.innerWidth>1280)):j==="mobile"&&(S(!1),R(!1))},[j]);const[K,se]=m.useState(!1),[xt,vt]=m.useState(!1),[Ie,wt]=m.useState(null);Ka(),m.useEffect(()=>{B(a.metadata.name||"My Awesome Theme")},[a.metadata.id,a.metadata.name]);const jt=W=>{const Z=W.target.value;B(Z),r({name:Z})},ue=async()=>{try{const W=document.getElementById("terminal-preview-capture-source");if(W){const Ct=(await Te(W,{scale:.8,logging:!1,useCORS:!0})).toDataURL("image/jpeg",.5);s(Ct),I("Theme saved successfully!","success")}else s(),I("Theme saved (no preview).","info")}catch(W){console.error("Failed to capture theme preview:",W),s(),I("Theme saved, but failed to generate preview.","info")}},_t=()=>{confirm("Create a new theme? Any unsaved changes will be lost.")&&(n(),B("Untitled Theme"),I("Started a new theme.","info"))};Ja([{keys:"mod+s",description:"Save current theme",handler:ue},{keys:"mod+z",description:"Undo",handler:o},{keys:"mod+shift+z",description:"Redo",handler:d},{keys:"mod+k",description:"Open Command Palette",handler:()=>p(!0)},{keys:"mod+o",description:"Open Theme Gallery",handler:()=>w(!0)},{keys:"mod+e",description:"Export Theme",handler:()=>v("export")},{keys:"mod+i",description:"Import Theme",handler:()=>v("import")}]);const Nt=[{id:"save",title:"Save Theme",shortcut:"Cmd+S",perform:ue},{id:"undo",title:"Undo",shortcut:"Cmd+Z",perform:o},{id:"redo",title:"Redo",shortcut:"Cmd+Shift+Z",perform:d},{id:"new",title:"New Theme",perform:_t},{id:"gallery",title:"Open Theme Gallery",shortcut:"Cmd+O",perform:()=>w(!0)},{id:"export",title:"Export Config",shortcut:"Cmd+E",perform:()=>v("export")},{id:"import",title:"Import Config",shortcut:"Cmd+I",perform:()=>v("import")},{id:"compare",title:"Compare Themes",perform:()=>u(!0)}];return e.jsxs("div",{className:"flex h-screen flex-col overflow-hidden bg-[#0d1117] font-sans text-gray-100",children:[e.jsx(Wa,{}),e.jsx(Ir,{isOpen:b,onClose:()=>p(!1),actions:Nt}),e.jsxs("header",{className:"flex h-auto min-h-[4rem] shrink-0 flex-col border-b border-gray-800 bg-[#161b22] px-4 py-2 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-0",children:[e.jsxs("div",{className:"flex items-center justify-between gap-3 sm:justify-start",children:[e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsx("button",{onClick:()=>S(!X),className:T("rounded p-2 text-gray-400 hover:bg-gray-800",!U&&E&&"lg:hidden"),children:e.jsx(mr,{size:20})}),e.jsx("span",{className:"text-xl",children:"🚀"}),e.jsx("h1",{className:"hidden text-lg font-bold text-gray-200 sm:block",children:"Starship"})]}),e.jsx("input",{type:"text",value:L,onChange:jt,placeholder:"Theme Name",className:"w-full max-w-[200px] rounded border border-gray-700 bg-[#0d1117] px-3 py-1.5 text-sm text-gray-300 focus:border-blue-500 focus:outline-none"}),e.jsxs("div",{className:"flex items-center gap-1 xl:hidden",children:[e.jsx("button",{onClick:()=>p(!0),className:"rounded p-2 text-gray-400 hover:bg-gray-800",children:e.jsx(ur,{size:18})}),e.jsx("button",{onClick:()=>R(!A),className:T("rounded p-2 text-gray-400 hover:bg-gray-800",E&&"xl:hidden"),children:e.jsx(le,{size:20})})]})]}),e.jsxs("div",{className:"mt-2 flex flex-wrap items-center justify-center gap-2 sm:mt-0 sm:justify-end",children:[e.jsxs("div",{className:"flex items-center rounded-lg bg-gray-800 p-1",children:[e.jsx("button",{onClick:()=>N("mobile"),className:T("rounded px-2 py-1 transition-colors",j==="mobile"?"bg-blue-600 text-white":"text-gray-400 hover:text-gray-200"),title:"Mobile Mode",children:e.jsx(pr,{size:16})}),e.jsx("button",{onClick:()=>N("auto"),className:T("rounded px-2 py-1 text-[10px] font-bold transition-colors",j==="auto"?"bg-blue-600 text-white":"text-gray-400 hover:text-gray-200"),title:"Auto Layout",children:"AUTO"}),e.jsx("button",{onClick:()=>N("desktop"),className:T("rounded px-2 py-1 transition-colors",j==="desktop"?"bg-blue-600 text-white":"text-gray-400 hover:text-gray-200"),title:"Desktop Mode",children:e.jsx(fr,{size:16})})]}),e.jsxs("div",{className:"flex items-center gap-1 border-r border-gray-700 pr-2",children:[e.jsx("button",{onClick:o,disabled:!c,className:"rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30",children:e.jsx(yr,{size:16})}),e.jsx("button",{onClick:d,disabled:!f,className:"rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30",children:e.jsx(gr,{size:16})})]}),e.jsxs("button",{onClick:ue,className:"flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500",children:[e.jsx(br,{size:14,className:"xs:block hidden"})," Save"]}),e.jsx("button",{onClick:()=>w(!0),className:"rounded bg-gray-800 px-3 py-1.5 text-xs font-medium hover:bg-gray-700",children:"Gallery"}),e.jsxs("div",{className:"hidden gap-2 md:flex",children:[e.jsxs("button",{onClick:()=>$(!0),className:"flex items-center gap-2 rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium hover:bg-indigo-500",children:[e.jsx(hr,{size:14})," Community"]}),e.jsxs("button",{onClick:()=>u(!0),className:"flex items-center gap-2 rounded bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700",children:[e.jsx(we,{size:14})," Compare"]})]}),e.jsx("button",{onClick:()=>h(!0),className:"hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 xl:block",children:e.jsx(le,{size:18})})]})]}),e.jsxs("div",{className:"relative flex flex-1 overflow-hidden",children:[e.jsxs("aside",{className:T("absolute inset-y-0 left-0 z-40 w-72 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22] transition-transform duration-300",E?"relative translate-x-0":X?"translate-x-0":"-translate-x-full"),children:[e.jsxs("div",{className:"p-4",children:[e.jsx("h2",{className:"mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500",children:"Modules"}),e.jsx(O,{children:e.jsx(Ra,{})})]}),e.jsxs("div",{className:"border-t border-gray-800 p-4",children:[e.jsx("h2",{className:"mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500",children:"Colors"}),e.jsx(O,{children:e.jsx($a,{})})]}),e.jsxs("div",{className:"border-t border-gray-800 p-4",children:[e.jsx("h2",{className:"mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500",children:"Font"}),e.jsx(O,{children:e.jsx(aa,{currentFont:a.metadata.fontFamily||"FiraCode NF",onSelectFont:W=>r({fontFamily:W})})})]})]}),e.jsxs("main",{className:"relative flex flex-1 flex-col overflow-y-auto bg-[#0d1117] p-4 sm:p-8",children:[e.jsx("div",{className:"bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10"}),e.jsx("div",{className:"mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center",children:e.jsx(O,{children:e.jsx(Oa,{id:"terminal-preview-capture-source",className:"w-full shadow-2xl",fontFamily:a.metadata.fontFamily})})})]}),e.jsx("aside",{className:T("absolute inset-y-0 right-0 z-40 w-80 shrink-0 flex-col overflow-y-auto border-l border-gray-800 bg-[#161b22] transition-transform duration-300",E&&window.innerWidth>1280?"relative translate-x-0":A?"translate-x-0":"-translate-x-full"),children:e.jsxs("div",{className:"p-4",children:[e.jsx(O,{children:t?e.jsx(Aa,{}):e.jsxs("div",{className:"flex flex-col items-center justify-center rounded border border-dashed border-gray-700 py-12 text-center text-sm text-gray-500",children:[e.jsx("span",{className:"mb-2 text-2xl",children:"⚙️"}),"Select a module to configure"]})}),e.jsx("div",{className:"mt-6 border-t border-gray-800 pt-6",children:e.jsx(O,{children:e.jsx(Ca,{})})}),e.jsx(O,{children:e.jsx(Ma,{})})]})}),(X||A)&&!E&&e.jsx("div",{className:"absolute inset-0 z-30 bg-black/50",onClick:()=>{S(!1),R(!1)}})]}),y&&e.jsx(O,{children:e.jsx(ea,{initialTab:y,onClose:()=>v(null)})}),x&&e.jsx(O,{children:e.jsx(qr,{onClose:()=>u(!1)})}),C&&e.jsx(O,{children:e.jsx(Hr,{onClose:()=>h(!1)})}),_&&e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm",children:e.jsx(O,{children:e.jsx(Fa,{onClose:()=>$(!1)})})}),K&&e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm",children:e.jsx(O,{children:e.jsx(Ar,{onClose:()=>se(!1),onLoginSuccess:(W,Z)=>{wt({id:W,username:Z}),se(!1)}})})}),xt&&Ie&&e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm",children:e.jsx(O,{children:e.jsx(Ga,{onClose:()=>vt(!1),userId:Ie.id})})}),g&&e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm",children:e.jsxs("div",{className:"flex h-[80vh] w-full max-w-5xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl",children:[e.jsxs("div",{className:"flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4",children:[e.jsx("h2",{className:"text-lg font-bold text-white",children:"Theme Gallery"}),e.jsx("button",{onClick:()=>w(!1),className:"rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white",children:e.jsx(P,{size:20})})]}),e.jsx("div",{className:"flex-1 overflow-hidden",children:e.jsx(O,{children:e.jsx(Ba,{onSelect:()=>w(!1)})})})]})})]})}function Ya(){return e.jsx(O,{children:e.jsx(Ha,{children:e.jsx(Er,{children:e.jsx(ka,{children:e.jsx(Va,{})})})})})}Sr.createRoot(document.getElementById("root")).render(e.jsx(D.StrictMode,{children:e.jsx(Ya,{})}));
+import {
+  r as $t,
+  b as kt,
+  a as ke,
+  C as St,
+  A as ve,
+  I as V,
+  X as P,
+  c as m,
+  S as Se,
+  F as Tt,
+  d as we,
+  e as Et,
+  f as Ye,
+  D as ce,
+  h as Xe,
+  i as At,
+  T as Ze,
+  L as It,
+  U as Rt,
+  j as Qe,
+  k as Ft,
+  l as Mt,
+  m as et,
+  R as D,
+  P as Dt,
+  B as zt,
+  n as Lt,
+  o as Ot,
+  p as Re,
+  q as Fe,
+  s as Me,
+  t as le,
+  u as Pt,
+  v as Ut,
+  w as De,
+  x as Bt,
+  y as Gt,
+  z as Wt,
+  E as qt,
+  G as Ht,
+  H as tt,
+  J as Kt,
+  K as Jt,
+  M as Vt,
+  N as Yt,
+  O as Xt,
+  Q as Zt,
+  V as Qt,
+  W as er,
+  Z as tr,
+  Y as rr,
+  _ as ar,
+  $ as sr,
+  a0 as nr,
+  a1 as or,
+  a2 as ir,
+  a3 as lr,
+  a4 as dr,
+  a5 as cr,
+  a6 as mr,
+  a7 as ur,
+  a8 as pr,
+  a9 as fr,
+  aa as yr,
+  ab as gr,
+  ac as br,
+  ad as hr,
+} from './vendor-ui-w59QX4Dl.js';
+import { k as rt, w as H, r as xr, h as Te } from './vendor-utils-DEXV5Djj.js';
+import { t as vr, c as wr, a as at } from './vendor-core-reBk8YMH.js';
+import { r as jr, a as _r } from './vendor-terminal-DyMPUPMx.js';
+(function () {
+  const t = document.createElement('link').relList;
+  if (t && t.supports && t.supports('modulepreload')) return;
+  for (const n of document.querySelectorAll('link[rel="modulepreload"]')) s(n);
+  new MutationObserver((n) => {
+    for (const o of n)
+      if (o.type === 'childList')
+        for (const d of o.addedNodes)
+          d.tagName === 'LINK' && d.rel === 'modulepreload' && s(d);
+  }).observe(document, { childList: !0, subtree: !0 });
+  function r(n) {
+    const o = {};
+    return (
+      n.integrity && (o.integrity = n.integrity),
+      n.referrerPolicy && (o.referrerPolicy = n.referrerPolicy),
+      n.crossOrigin === 'use-credentials'
+        ? (o.credentials = 'include')
+        : n.crossOrigin === 'anonymous'
+          ? (o.credentials = 'omit')
+          : (o.credentials = 'same-origin'),
+      o
+    );
+  }
+  function s(n) {
+    if (n.ep) return;
+    n.ep = !0;
+    const o = r(n);
+    fetch(n.href, o);
+  }
+})();
+var pe = { exports: {} },
+  Q = {};
+var ze;
+function Nr() {
+  if (ze) return Q;
+  ze = 1;
+  var a = $t(),
+    t = Symbol.for('react.element'),
+    r = Symbol.for('react.fragment'),
+    s = Object.prototype.hasOwnProperty,
+    n = a.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+    o = { key: !0, ref: !0, __self: !0, __source: !0 };
+  function d(i, l, c) {
+    var f,
+      y = {},
+      v = null,
+      g = null;
+    (c !== void 0 && (v = '' + c),
+      l.key !== void 0 && (v = '' + l.key),
+      l.ref !== void 0 && (g = l.ref));
+    for (f in l) s.call(l, f) && !o.hasOwnProperty(f) && (y[f] = l[f]);
+    if (i && i.defaultProps)
+      for (f in ((l = i.defaultProps), l)) y[f] === void 0 && (y[f] = l[f]);
+    return {
+      $$typeof: t,
+      type: i,
+      key: v,
+      ref: g,
+      props: y,
+      _owner: n.current,
+    };
+  }
+  return ((Q.Fragment = r), (Q.jsx = d), (Q.jsxs = d), Q);
+}
+var Le;
+function Cr() {
+  return (Le || ((Le = 1), (pe.exports = Nr())), pe.exports);
+}
+var e = Cr(),
+  ne = {},
+  Oe;
+function $r() {
+  if (Oe) return ne;
+  Oe = 1;
+  var a = kt();
+  return ((ne.createRoot = a.createRoot), (ne.hydrateRoot = a.hydrateRoot), ne);
+}
+var kr = $r();
+const Sr = ke(kr);
+function T(...a) {
+  return vr(wr(a));
+}
+function st() {
+  return crypto.randomUUID();
+}
+function Tr({ toasts: a, onRemove: t }) {
+  return e.jsx('div', {
+    className: 'fixed bottom-4 right-4 z-50 flex flex-col gap-2',
+    children: a.map((r) =>
+      e.jsxs(
+        'div',
+        {
+          className: T(
+            'animate-in slide-in-from-bottom-5 flex min-w-[300px] items-center gap-3 rounded-lg border p-4 shadow-lg transition-all',
+            r.type === 'success' &&
+              'border-green-800 bg-green-900/90 text-green-100',
+            r.type === 'error' && 'border-red-800 bg-red-900/90 text-red-100',
+            r.type === 'info' && 'border-blue-800 bg-blue-900/90 text-blue-100',
+          ),
+          children: [
+            r.type === 'success' &&
+              e.jsx(St, { size: 18, className: 'shrink-0' }),
+            r.type === 'error' &&
+              e.jsx(ve, { size: 18, className: 'shrink-0' }),
+            r.type === 'info' && e.jsx(V, { size: 18, className: 'shrink-0' }),
+            e.jsx('p', {
+              className: 'flex-1 text-sm font-medium',
+              children: r.message,
+            }),
+            e.jsx('button', {
+              onClick: () => t(r.id),
+              className:
+                'rounded p-1 opacity-70 hover:bg-black/20 hover:opacity-100',
+              'aria-label': 'Close notification',
+              children: e.jsx(P, { size: 14 }),
+            }),
+          ],
+        },
+        r.id,
+      ),
+    ),
+  });
+}
+const nt = m.createContext(void 0);
+function Er({ children: a }) {
+  const [t, r] = m.useState([]),
+    s = m.useCallback((o) => {
+      r((d) => d.filter((i) => i.id !== o));
+    }, []),
+    n = m.useCallback(
+      (o, d = 'info') => {
+        const i = st();
+        (r((l) => [...l, { id: i, message: o, type: d }]),
+          setTimeout(() => {
+            s(i);
+          }, 3e3));
+      },
+      [s],
+    );
+  return e.jsxs(nt.Provider, {
+    value: { addToast: n, removeToast: s },
+    children: [a, e.jsx(Tr, { toasts: t, onRemove: s })],
+  });
+}
+function q() {
+  const a = m.useContext(nt);
+  if (a === void 0)
+    throw new Error('useToast must be used within a ToastProvider');
+  return a;
+}
+function Ar({ onClose: a, onLoginSuccess: t }) {
+  const [r, s] = m.useState(!0),
+    [n, o] = m.useState(''),
+    [d, i] = m.useState(''),
+    [l, c] = m.useState(''),
+    [f, y] = m.useState(!1),
+    { addToast: v } = q(),
+    g = async (w) => {
+      (w.preventDefault(), y(!0));
+      const x = r ? '/api/login' : '/api/register',
+        u = r
+          ? { username: n, password: l }
+          : { username: n, email: d, password: l };
+      try {
+        const b = await fetch(x, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(u),
+          }),
+          p = await b.json();
+        if (!b.ok) throw new Error(p.error || 'Authentication failed');
+        r
+          ? (v('Logged in successfully', 'success'), t(p.user_id, n))
+          : (v('Registered successfully. Please log in.', 'success'), s(!0));
+      } catch (b) {
+        v(b instanceof Error ? b.message : 'An error occurred', 'error');
+      } finally {
+        y(!1);
+      }
+    };
+  return e.jsxs('div', {
+    className:
+      'flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+    children: [
+      e.jsxs('div', {
+        className:
+          'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+        children: [
+          e.jsx('h2', {
+            className: 'text-lg font-bold text-white',
+            children: r ? 'Log In' : 'Register',
+          }),
+          e.jsx('button', {
+            onClick: a,
+            className:
+              'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+            children: e.jsx(P, { size: 20 }),
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'p-6',
+        children: [
+          e.jsxs('form', {
+            onSubmit: g,
+            className: 'flex flex-col gap-4',
+            children: [
+              e.jsxs('div', {
+                children: [
+                  e.jsx('label', {
+                    className: 'mb-1 block text-sm font-medium text-gray-300',
+                    children: 'Username',
+                  }),
+                  e.jsx('input', {
+                    type: 'text',
+                    required: !0,
+                    value: n,
+                    onChange: (w) => o(w.target.value),
+                    className:
+                      'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                  }),
+                ],
+              }),
+              !r &&
+                e.jsxs('div', {
+                  children: [
+                    e.jsx('label', {
+                      className: 'mb-1 block text-sm font-medium text-gray-300',
+                      children: 'Email',
+                    }),
+                    e.jsx('input', {
+                      type: 'email',
+                      required: !0,
+                      value: d,
+                      onChange: (w) => i(w.target.value),
+                      className:
+                        'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                    }),
+                  ],
+                }),
+              e.jsxs('div', {
+                children: [
+                  e.jsx('label', {
+                    className: 'mb-1 block text-sm font-medium text-gray-300',
+                    children: 'Password',
+                  }),
+                  e.jsx('input', {
+                    type: 'password',
+                    required: !0,
+                    value: l,
+                    onChange: (w) => c(w.target.value),
+                    className:
+                      'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                  }),
+                ],
+              }),
+              e.jsx('button', {
+                type: 'submit',
+                disabled: f,
+                className:
+                  'mt-2 w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50',
+                children: f ? 'Processing...' : r ? 'Log In' : 'Register',
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            className: 'mt-4 text-center text-sm text-gray-400',
+            children: [
+              r ? "Don't have an account? " : 'Already have an account? ',
+              e.jsx('button', {
+                type: 'button',
+                onClick: () => s(!r),
+                className: 'text-blue-500 hover:underline',
+                children: r ? 'Register' : 'Log In',
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+function Ir({ isOpen: a, onClose: t, actions: r }) {
+  const [s, n] = m.useState('');
+  if (!a) return null;
+  const o = r.filter((d) => d.title.toLowerCase().includes(s.toLowerCase()));
+  return e.jsx('div', {
+    className:
+      'fixed inset-0 z-[100] flex items-start justify-center bg-black/50 p-4 pt-[15vh] backdrop-blur-sm',
+    children: e.jsxs('div', {
+      className:
+        'animate-in fade-in zoom-in-95 flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl duration-200',
+      children: [
+        e.jsxs('div', {
+          className: 'flex items-center gap-3 border-b border-gray-800 p-4',
+          children: [
+            e.jsx(Se, { className: 'text-gray-400', size: 20 }),
+            e.jsx('input', {
+              autoFocus: !0,
+              type: 'text',
+              placeholder: 'Type a command or search...',
+              value: s,
+              onChange: (d) => n(d.target.value),
+              onKeyDown: (d) => {
+                (d.key === 'Escape' && t(),
+                  d.key === 'Enter' && o.length > 0 && (o[0].perform(), t()));
+              },
+              className:
+                'flex-1 bg-transparent text-lg text-white placeholder-gray-500 focus:outline-none',
+            }),
+            e.jsx('button', {
+              onClick: t,
+              className:
+                'rounded bg-gray-800 p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+              'aria-label': 'Close command palette',
+              children: e.jsx(P, { size: 16 }),
+            }),
+          ],
+        }),
+        e.jsx('div', {
+          className:
+            'scrollbar-thin scrollbar-thumb-gray-700 flex max-h-[300px] flex-col overflow-y-auto p-2',
+          children:
+            o.length === 0
+              ? e.jsx('div', {
+                  className: 'py-8 text-center text-gray-500',
+                  children: 'No matching commands found.',
+                })
+              : o.map((d, i) =>
+                  e.jsxs(
+                    'button',
+                    {
+                      onClick: () => {
+                        (d.perform(), t());
+                      },
+                      className: T(
+                        'flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors hover:bg-gray-800 hover:text-white',
+                        i === 0 && s && 'bg-gray-800 text-white',
+                      ),
+                      children: [
+                        e.jsx('div', {
+                          className: 'text-gray-400',
+                          children: d.icon || e.jsx(Tt, { size: 18 }),
+                        }),
+                        e.jsx('span', {
+                          className: 'flex-1 text-gray-300',
+                          children: d.title,
+                        }),
+                        d.shortcut &&
+                          e.jsx('span', {
+                            className:
+                              'rounded border border-gray-700 bg-gray-800 px-2 py-1 font-mono text-xs tracking-widest text-gray-500',
+                            children: d.shortcut,
+                          }),
+                      ],
+                    },
+                    d.id,
+                  ),
+                ),
+        }),
+      ],
+    }),
+  });
+}
+var fe = function (a) {
+    var t = a / 255;
+    return t < 0.04045 ? t / 12.92 : Math.pow((t + 0.055) / 1.055, 2.4);
+  },
+  ye = function (a) {
+    return 0.2126 * fe(a.r) + 0.7152 * fe(a.g) + 0.0722 * fe(a.b);
+  };
+function ot(a) {
+  ((a.prototype.luminance = function () {
+    return (
+      (t = ye(this.rgba)),
+      (r = 2) === void 0 && (r = 0),
+      s === void 0 && (s = Math.pow(10, r)),
+      Math.round(s * t) / s + 0
+    );
+    var t, r, s;
+  }),
+    (a.prototype.contrast = function (t) {
+      t === void 0 && (t = '#FFF');
+      var r,
+        s,
+        n,
+        o,
+        d,
+        i,
+        l,
+        c = t instanceof a ? t : new a(t);
+      return (
+        (o = this.rgba),
+        (d = c.toRgb()),
+        (i = ye(o)),
+        (l = ye(d)),
+        (r = i > l ? (i + 0.05) / (l + 0.05) : (l + 0.05) / (i + 0.05)),
+        (s = 2) === void 0 && (s = 0),
+        n === void 0 && (n = Math.pow(10, s)),
+        Math.floor(n * r) / n + 0
+      );
+    }),
+    (a.prototype.isReadable = function (t, r) {
+      return (
+        t === void 0 && (t = '#FFF'),
+        r === void 0 && (r = {}),
+        this.contrast(t) >=
+          ((i = (d = (s = r).size) === void 0 ? 'normal' : d),
+          (o = (n = s.level) === void 0 ? 'AA' : n) === 'AAA' && i === 'normal'
+            ? 7
+            : o === 'AA' && i === 'large'
+              ? 3
+              : 4.5)
+      );
+      var s, n, o, d, i;
+    }));
+}
+function Rr(a) {
+  var t = {
+    analogous: [-30, 0, 30],
+    complementary: [0, 180],
+    'double-split-complementary': [-30, 0, 30, 150, 210],
+    rectangle: [0, 60, 180, 240],
+    tetradic: [0, 90, 180, 270],
+    triadic: [0, 120, 240],
+    'split-complementary': [0, 150, 210],
+  };
+  a.prototype.harmonies = function (r) {
+    var s = this;
+    return (
+      r === void 0 && (r = 'complementary'),
+      t[r].map(function (n) {
+        return s.rotate(n);
+      })
+    );
+  };
+}
+function it(a, t) {
+  var r = {
+      white: '#ffffff',
+      bisque: '#ffe4c4',
+      blue: '#0000ff',
+      cadetblue: '#5f9ea0',
+      chartreuse: '#7fff00',
+      chocolate: '#d2691e',
+      coral: '#ff7f50',
+      antiquewhite: '#faebd7',
+      aqua: '#00ffff',
+      azure: '#f0ffff',
+      whitesmoke: '#f5f5f5',
+      papayawhip: '#ffefd5',
+      plum: '#dda0dd',
+      blanchedalmond: '#ffebcd',
+      black: '#000000',
+      gold: '#ffd700',
+      goldenrod: '#daa520',
+      gainsboro: '#dcdcdc',
+      cornsilk: '#fff8dc',
+      cornflowerblue: '#6495ed',
+      burlywood: '#deb887',
+      aquamarine: '#7fffd4',
+      beige: '#f5f5dc',
+      crimson: '#dc143c',
+      cyan: '#00ffff',
+      darkblue: '#00008b',
+      darkcyan: '#008b8b',
+      darkgoldenrod: '#b8860b',
+      darkkhaki: '#bdb76b',
+      darkgray: '#a9a9a9',
+      darkgreen: '#006400',
+      darkgrey: '#a9a9a9',
+      peachpuff: '#ffdab9',
+      darkmagenta: '#8b008b',
+      darkred: '#8b0000',
+      darkorchid: '#9932cc',
+      darkorange: '#ff8c00',
+      darkslateblue: '#483d8b',
+      gray: '#808080',
+      darkslategray: '#2f4f4f',
+      darkslategrey: '#2f4f4f',
+      deeppink: '#ff1493',
+      deepskyblue: '#00bfff',
+      wheat: '#f5deb3',
+      firebrick: '#b22222',
+      floralwhite: '#fffaf0',
+      ghostwhite: '#f8f8ff',
+      darkviolet: '#9400d3',
+      magenta: '#ff00ff',
+      green: '#008000',
+      dodgerblue: '#1e90ff',
+      grey: '#808080',
+      honeydew: '#f0fff0',
+      hotpink: '#ff69b4',
+      blueviolet: '#8a2be2',
+      forestgreen: '#228b22',
+      lawngreen: '#7cfc00',
+      indianred: '#cd5c5c',
+      indigo: '#4b0082',
+      fuchsia: '#ff00ff',
+      brown: '#a52a2a',
+      maroon: '#800000',
+      mediumblue: '#0000cd',
+      lightcoral: '#f08080',
+      darkturquoise: '#00ced1',
+      lightcyan: '#e0ffff',
+      ivory: '#fffff0',
+      lightyellow: '#ffffe0',
+      lightsalmon: '#ffa07a',
+      lightseagreen: '#20b2aa',
+      linen: '#faf0e6',
+      mediumaquamarine: '#66cdaa',
+      lemonchiffon: '#fffacd',
+      lime: '#00ff00',
+      khaki: '#f0e68c',
+      mediumseagreen: '#3cb371',
+      limegreen: '#32cd32',
+      mediumspringgreen: '#00fa9a',
+      lightskyblue: '#87cefa',
+      lightblue: '#add8e6',
+      midnightblue: '#191970',
+      lightpink: '#ffb6c1',
+      mistyrose: '#ffe4e1',
+      moccasin: '#ffe4b5',
+      mintcream: '#f5fffa',
+      lightslategray: '#778899',
+      lightslategrey: '#778899',
+      navajowhite: '#ffdead',
+      navy: '#000080',
+      mediumvioletred: '#c71585',
+      powderblue: '#b0e0e6',
+      palegoldenrod: '#eee8aa',
+      oldlace: '#fdf5e6',
+      paleturquoise: '#afeeee',
+      mediumturquoise: '#48d1cc',
+      mediumorchid: '#ba55d3',
+      rebeccapurple: '#663399',
+      lightsteelblue: '#b0c4de',
+      mediumslateblue: '#7b68ee',
+      thistle: '#d8bfd8',
+      tan: '#d2b48c',
+      orchid: '#da70d6',
+      mediumpurple: '#9370db',
+      purple: '#800080',
+      pink: '#ffc0cb',
+      skyblue: '#87ceeb',
+      springgreen: '#00ff7f',
+      palegreen: '#98fb98',
+      red: '#ff0000',
+      yellow: '#ffff00',
+      slateblue: '#6a5acd',
+      lavenderblush: '#fff0f5',
+      peru: '#cd853f',
+      palevioletred: '#db7093',
+      violet: '#ee82ee',
+      teal: '#008080',
+      slategray: '#708090',
+      slategrey: '#708090',
+      aliceblue: '#f0f8ff',
+      darkseagreen: '#8fbc8f',
+      darkolivegreen: '#556b2f',
+      greenyellow: '#adff2f',
+      seagreen: '#2e8b57',
+      seashell: '#fff5ee',
+      tomato: '#ff6347',
+      silver: '#c0c0c0',
+      sienna: '#a0522d',
+      lavender: '#e6e6fa',
+      lightgreen: '#90ee90',
+      orange: '#ffa500',
+      orangered: '#ff4500',
+      steelblue: '#4682b4',
+      royalblue: '#4169e1',
+      turquoise: '#40e0d0',
+      yellowgreen: '#9acd32',
+      salmon: '#fa8072',
+      saddlebrown: '#8b4513',
+      sandybrown: '#f4a460',
+      rosybrown: '#bc8f8f',
+      darksalmon: '#e9967a',
+      lightgoldenrodyellow: '#fafad2',
+      snow: '#fffafa',
+      lightgrey: '#d3d3d3',
+      lightgray: '#d3d3d3',
+      dimgray: '#696969',
+      dimgrey: '#696969',
+      olivedrab: '#6b8e23',
+      olive: '#808000',
+    },
+    s = {};
+  for (var n in r) s[r[n]] = n;
+  var o = {};
+  ((a.prototype.toName = function (d) {
+    if (!(this.rgba.a || this.rgba.r || this.rgba.g || this.rgba.b))
+      return 'transparent';
+    var i,
+      l,
+      c = s[this.toHex()];
+    if (c) return c;
+    if (d?.closest) {
+      var f = this.toRgb(),
+        y = 1 / 0,
+        v = 'black';
+      if (!o.length) for (var g in r) o[g] = new a(r[g]).toRgb();
+      for (var w in r) {
+        var x =
+          ((i = f),
+          (l = o[w]),
+          Math.pow(i.r - l.r, 2) +
+            Math.pow(i.g - l.g, 2) +
+            Math.pow(i.b - l.b, 2));
+        x < y && ((y = x), (v = w));
+      }
+      return v;
+    }
+  }),
+    t.string.push([
+      function (d) {
+        var i = d.toLowerCase(),
+          l = i === 'transparent' ? '#0000' : r[i];
+        return l ? new a(l).toRgb() : null;
+      },
+      'name',
+    ]));
+}
+rt([ot, Rr, it]);
+class k {
+  static resolveColor(t, r) {
+    return r[t] ? r[t] : H(t).isValid() ? H(t).toHex() : '#ffffff';
+  }
+  static hexToRgb(t) {
+    const r = H(t);
+    return r.isValid() ? r.toRgb() : null;
+  }
+  static generateComplementary(t) {
+    return H(t)
+      .harmonies('complementary')
+      .map((r) => r.toHex());
+  }
+  static generateAnalogous(t) {
+    return H(t)
+      .harmonies('analogous')
+      .map((r) => r.toHex());
+  }
+  static generateTriadic(t) {
+    return H(t)
+      .harmonies('triadic')
+      .map((r) => r.toHex());
+  }
+  static checkContrast(t, r) {
+    const s = H(r).contrast(t);
+    return { ratio: s, AA: s >= 4.5, AAA: s >= 7 };
+  }
+  static toAnsiStyle(t, r = {}) {
+    const s = [];
+    return (
+      r.bold && s.push('bold'),
+      r.italic && s.push('italic'),
+      r.dimmed && s.push('dimmed'),
+      r.inverted && s.push('inverted'),
+      r.underline && s.push('underline'),
+      r.bg && s.push(`bg:${r.bg}`),
+      t && s.push(t),
+      s.join(' ')
+    );
+  }
+  static presets = {
+    Nord: {
+      primary: '#88C0D0',
+      secondary: '#81A1C1',
+      accent: '#5E81AC',
+      background: '#2E3440',
+      foreground: '#D8DEE9',
+      success: '#A3BE8C',
+      warning: '#EBCB8B',
+      error: '#BF616A',
+    },
+    Dracula: {
+      primary: '#BD93F9',
+      secondary: '#6272A4',
+      accent: '#FF79C6',
+      background: '#282A36',
+      foreground: '#F8F8F2',
+      success: '#50FA7B',
+      warning: '#F1FA8C',
+      error: '#FF5555',
+    },
+    Gruvbox: {
+      primary: '#d79921',
+      secondary: '#458588',
+      accent: '#b16286',
+      background: '#282828',
+      foreground: '#ebdbb2',
+      success: '#98971a',
+      warning: '#fabd2f',
+      error: '#cc241d',
+    },
+    Catppuccin: {
+      primary: '#cba6f7',
+      secondary: '#89b4fa',
+      accent: '#f5c2e7',
+      background: '#1e1e2e',
+      foreground: '#cdd6f4',
+      success: '#a6e3a1',
+      warning: '#f9e2af',
+      error: '#f38ba8',
+    },
+    TokyoNight: {
+      primary: '#7aa2f7',
+      secondary: '#7dcfff',
+      accent: '#bb9af7',
+      background: '#1a1b26',
+      foreground: '#c0caf5',
+      success: '#9ece6a',
+      warning: '#e0af68',
+      error: '#f7768e',
+    },
+    OneDark: {
+      primary: '#61afef',
+      secondary: '#c678dd',
+      accent: '#98c379',
+      background: '#282c34',
+      foreground: '#abb2bf',
+      success: '#98c379',
+      warning: '#e5c07b',
+      error: '#e06c75',
+    },
+    Monokai: {
+      primary: '#fd971f',
+      secondary: '#66d9ef',
+      accent: '#ae81ff',
+      background: '#272822',
+      foreground: '#f8f8f2',
+      success: '#a6e22e',
+      warning: '#f4bf75',
+      error: '#f92672',
+    },
+    Solarized: {
+      primary: '#268bd2',
+      secondary: '#2aa198',
+      accent: '#d33682',
+      background: '#002b36',
+      foreground: '#839496',
+      success: '#859900',
+      warning: '#b58900',
+      error: '#dc322f',
+    },
+  };
+}
+var Fr = xr();
+const Pe = ke(Fr),
+  J = JSON.parse(
+    '[{"name":"aws","title":"AWS","description":"The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.\\nThe output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\\n\\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.\\nIf the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\\n\\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile\\nis read from the `AWS_VAULT` env var and the credentials expiration date\\nis read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`\\nvar.\\n\\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile\\nis read from the `AWSU_PROFILE` env var.\\n\\nWhen using [`AWSume`](https://awsu.me) the profile\\nis read from the `AWSUME_PROFILE` env var and the credentials expiration\\ndate is read from the `AWSUME_EXPIRATION` env var.\\n\\nWhen using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile\\nis read from the `AWS_SSO_PROFILE` env var.","properties":[{"name":"format","description":"The format for the module.","type":"string","default":"on [$symbol($profile )(\\\\($region\\\\) )(\\\\[$duration\\\\] )]($style)"},{"name":"symbol","description":"The symbol used before displaying the current AWS profile.","type":"string","default":"☁️  "},{"name":"style","description":"The style for the module.","type":"string","default":"bold yellow"},{"name":"disabled","description":"Disables the AWS module.","type":"boolean","default":false},{"name":"region_aliases","description":"Table of region aliases to display in addition to the AWS name.","type":"object","default":{}},{"name":"profile_aliases","description":"Table of profile aliases to display in addition to the AWS name.","type":"object","default":{}},{"name":"expiration_symbol","description":"The symbol displayed when the temporary credentials have expired.","type":"string","default":"X"},{"name":"force_display","description":"If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.","type":"boolean","default":false}]},{"name":"azure","title":"azure","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol($subscription)]($style) "},{"name":"symbol","description":"","type":"string","default":"󰠅 "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"subscription_aliases","description":"","type":"object","default":{}}]},{"name":"battery","title":"battery","description":"","properties":[{"name":"full_symbol","description":"","type":"string","default":"󰁹 "},{"name":"charging_symbol","description":"","type":"string","default":"󰂄 "},{"name":"discharging_symbol","description":"","type":"string","default":"󰂃 "},{"name":"unknown_symbol","description":"","type":"string","default":"󰁽 "},{"name":"empty_symbol","description":"","type":"string","default":"󰂎 "},{"name":"display","description":"","type":"array","default":[{"threshold":10,"style":"red bold","charging_symbol":null,"discharging_symbol":null}]},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"format","description":"","type":"string","default":"[$symbol$percentage]($style) "}]},{"name":"buf","title":"buf","description":"","properties":[{"name":"format","description":"","type":"string","default":"with [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐃 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["buf.yaml","buf.gen.yaml","buf.work.yaml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"bun","title":"bun","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🥟 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["bun.lock","bun.lockb","bunfig.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"c","title":"c","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version(-$name) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"symbol","description":"","type":"string","default":"C "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["c","h"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"commands","description":"","type":"array","default":[["cc","--version"],["gcc","--version"],["clang","--version"]]}]},{"name":"character","title":"character","description":"","properties":[{"name":"format","description":"","type":"string","default":"$symbol "},{"name":"success_symbol","description":"","type":"string","default":"[❯](bold green)"},{"name":"error_symbol","description":"","type":"string","default":"[❯](bold red)"},{"name":"vimcmd_symbol","description":"","type":"string","default":"[❮](bold green)"},{"name":"vimcmd_visual_symbol","description":"","type":"string","default":"[❮](bold yellow)"},{"name":"vimcmd_replace_symbol","description":"","type":"string","default":"[❮](bold purple)"},{"name":"vimcmd_replace_one_symbol","description":"","type":"string","default":"[❮](bold purple)"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"cmake","title":"cmake","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"△ "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["CMakeLists.txt","CMakeCache.txt"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"cmd_duration","title":"cmd_duration","description":"","properties":[{"name":"min_time","description":"","type":"integer","default":2000},{"name":"format","description":"","type":"string","default":"took [$duration]($style) "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"show_milliseconds","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"show_notifications","description":"","type":"boolean","default":false},{"name":"min_time_to_notify","description":"","type":"integer","default":45000},{"name":"notification_timeout","description":"","type":["integer","null"]}]},{"name":"cobol","title":"cobol","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⚙️ "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["cbl","cob","CBL","COB"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"conda","title":"conda","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":1},{"name":"format","description":"","type":"string","default":"via [$symbol$environment]($style) "},{"name":"symbol","description":"","type":"string","default":"🅒 "},{"name":"style","description":"","type":"string","default":"green bold"},{"name":"ignore_base","description":"","type":"boolean","default":true},{"name":"detect_env_vars","description":"","type":"array","default":["!PIXI_ENVIRONMENT_NAME"]},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"container","title":"container","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol \\\\[$name\\\\]]($style) "},{"name":"symbol","description":"","type":"string","default":"⬢"},{"name":"style","description":"","type":"string","default":"red bold dimmed"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"cpp","title":"cpp","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version(-$name) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"symbol","description":"","type":"string","default":"C "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["c","h"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"commands","description":"","type":"array","default":[["cc","--version"],["gcc","--version"],["clang","--version"]]}]},{"name":"crystal","title":"crystal","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🔮 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["cr"]},{"name":"detect_files","description":"","type":"array","default":["shard.yml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"daml","title":"daml","description":"","properties":[{"name":"symbol","description":"","type":"string","default":"Λ "},{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"bold cyan"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["daml.yaml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"dart","title":"dart","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🎯 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["dart"]},{"name":"detect_files","description":"","type":"array","default":["pubspec.yaml","pubspec.yml","pubspec.lock"]},{"name":"detect_folders","description":"","type":"array","default":[".dart_tool"]}]},{"name":"deno","title":"deno","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🦕 "},{"name":"style","description":"","type":"string","default":"green bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["deno.json","deno.jsonc","deno.lock","mod.ts","deps.ts","mod.js","deps.js"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"directory","title":"directory","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":3},{"name":"truncate_to_repo","description":"","type":"boolean","default":true},{"name":"substitutions","description":"","type":"object","default":{}},{"name":"fish_style_pwd_dir_length","description":"","type":"integer","default":0},{"name":"use_logical_path","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"[$path]($style)[$read_only]($read_only_style) "},{"name":"repo_root_format","description":"","type":"string","default":"[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"repo_root_style","description":"","type":["string","null"],"default":null},{"name":"before_repo_root_style","description":"","type":["string","null"],"default":null},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"read_only","description":"","type":"string","default":"🔒"},{"name":"read_only_style","description":"","type":"string","default":"red"},{"name":"truncation_symbol","description":"","type":"string","default":""},{"name":"home_symbol","description":"","type":"string","default":"~"},{"name":"use_os_path_sep","description":"","type":"boolean","default":true}]},{"name":"direnv","title":"direnv","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol$loaded/$allowed]($style) "},{"name":"symbol","description":"","type":"string","default":"direnv "},{"name":"style","description":"","type":"string","default":"bold bright-yellow"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_env_vars","description":"","type":"array","default":["DIRENV_FILE"]},{"name":"detect_files","description":"","type":"array","default":[".envrc"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"allowed_msg","description":"","type":"string","default":"allowed"},{"name":"not_allowed_msg","description":"","type":"string","default":"not allowed"},{"name":"denied_msg","description":"","type":"string","default":"denied"},{"name":"loaded_msg","description":"","type":"string","default":"loaded"},{"name":"unloaded_msg","description":"","type":"string","default":"not loaded"}]},{"name":"docker_context","title":"docker_context","description":"","properties":[{"name":"symbol","description":"","type":"string","default":"🐳 "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"format","description":"","type":"string","default":"via [$symbol$context]($style) "},{"name":"only_with_files","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["compose.yml","compose.yaml","docker-compose.yml","docker-compose.yaml","Dockerfile"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"dotnet","title":"dotnet","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )(🎯 $tfm )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":".NET "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"heuristic","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["csproj","fsproj","xproj"]},{"name":"detect_files","description":"","type":"array","default":["global.json","project.json","Directory.Build.props","Directory.Build.targets","Packages.props"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"elixir","title":"elixir","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version \\\\(OTP $otp_version\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"💧 "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["mix.exs"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"elm","title":"elm","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🌳 "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["elm"]},{"name":"detect_files","description":"","type":"array","default":["elm.json","elm-package.json",".elm-version"]},{"name":"detect_folders","description":"","type":"array","default":["elm-stuff"]}]},{"name":"erlang","title":"erlang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["rebar.config","erlang.mk"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"fennel","title":"fennel","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🧅 "},{"name":"style","description":"","type":"string","default":"bold green"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"detect_extensions","description":"","type":"array","default":["fnl"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"fill","title":"fill","description":"","properties":[{"name":"style","description":"","type":"string","default":"bold black"},{"name":"symbol","description":"","type":"string","default":"."},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"fortran","title":"fortran","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version(-$name) )]($style)"},{"name":"version_format","description":"","type":"string","default":"${raw}"},{"name":"symbol","description":"","type":"string","default":"🅵  "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["f","F","for","FOR","ftn","FTN","f77","F77","f90","F90","f95","F95","f03","F03","f08","F08","f18","F18"]},{"name":"detect_files","description":"","type":"array","default":["fpm.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"commands","description":"","type":"array","default":[["gfortran","--version"],["flang","--version"],["flang-new","--version"]]}]},{"name":"fossil_branch","title":"fossil_branch","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$branch]($style) "},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"fossil_metrics","title":"fossil_metrics","description":"","properties":[{"name":"format","description":"","type":"string","default":"([+$added]($added_style) )([-$deleted]($deleted_style) )"},{"name":"added_style","description":"","type":"string","default":"bold green"},{"name":"deleted_style","description":"","type":"string","default":"bold red"},{"name":"only_nonzero_diffs","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"gcloud","title":"gcloud","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$account(@$domain)(\\\\($region\\\\))]($style) "},{"name":"symbol","description":"","type":"string","default":"☁️  "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"region_aliases","description":"","type":"object","default":{}},{"name":"project_aliases","description":"","type":"object","default":{}},{"name":"detect_env_vars","description":"","type":"array","default":[]}]},{"name":"git_branch","title":"git_branch","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$branch(:$remote_branch)]($style) "},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"only_attached","description":"","type":"boolean","default":false},{"name":"always_show_remote","description":"","type":"boolean","default":false},{"name":"ignore_branches","description":"","type":"array","default":[]},{"name":"ignore_bare_repo","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"git_commit","title":"git_commit","description":"","properties":[{"name":"commit_hash_length","description":"","type":"integer","default":7},{"name":"format","description":"","type":"string","default":"[\\\\($hash$tag\\\\)]($style) "},{"name":"style","description":"","type":"string","default":"green bold"},{"name":"only_detached","description":"","type":"boolean","default":true},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"tag_symbol","description":"","type":"string","default":" 🏷  "},{"name":"tag_disabled","description":"","type":"boolean","default":true},{"name":"tag_max_candidates","description":"","type":"integer","default":0}]},{"name":"git_metrics","title":"git_metrics","description":"","properties":[{"name":"added_style","description":"","type":"string","default":"bold green"},{"name":"deleted_style","description":"","type":"string","default":"bold red"},{"name":"only_nonzero_diffs","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"([+$added]($added_style) )([-$deleted]($deleted_style) )"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"ignore_submodules","description":"","type":"boolean","default":false}]},{"name":"git_state","title":"git_state","description":"","properties":[{"name":"rebase","description":"","type":"string","default":"REBASING"},{"name":"merge","description":"","type":"string","default":"MERGING"},{"name":"revert","description":"","type":"string","default":"REVERTING"},{"name":"cherry_pick","description":"","type":"string","default":"CHERRY-PICKING"},{"name":"bisect","description":"","type":"string","default":"BISECTING"},{"name":"am","description":"","type":"string","default":"AM"},{"name":"am_or_rebase","description":"","type":"string","default":"AM/REBASE"},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"format","description":"","type":"string","default":"\\\\([$state( $progress_current/$progress_total)]($style)\\\\) "},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"git_status","title":"git_status","description":"","properties":[{"name":"format","description":"","type":"string","default":"([\\\\[$all_status$ahead_behind\\\\]]($style) )"},{"name":"style","description":"","type":"string","default":"red bold"},{"name":"stashed","description":"","type":"string","default":"\\\\$"},{"name":"ahead","description":"","type":"string","default":"⇡"},{"name":"behind","description":"","type":"string","default":"⇣"},{"name":"up_to_date","description":"","type":"string","default":""},{"name":"diverged","description":"","type":"string","default":"⇕"},{"name":"conflicted","description":"","type":"string","default":"="},{"name":"deleted","description":"","type":"string","default":"✘"},{"name":"renamed","description":"","type":"string","default":"»"},{"name":"modified","description":"","type":"string","default":"!"},{"name":"staged","description":"","type":"string","default":"+"},{"name":"untracked","description":"","type":"string","default":"?"},{"name":"typechanged","description":"","type":"string","default":""},{"name":"ignore_submodules","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"use_git_executable","description":"","type":"boolean","default":false},{"name":"windows_starship","description":"","type":["string","null"]}]},{"name":"gleam","title":"gleam","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⭐ "},{"name":"style","description":"","type":"string","default":"bold #FFAFF3"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["gleam"]},{"name":"detect_files","description":"","type":"array","default":["gleam.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"golang","title":"golang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐹 "},{"name":"style","description":"","type":"string","default":"bold cyan"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"not_capable_style","description":"","type":"string","default":"bold red"},{"name":"detect_extensions","description":"","type":"array","default":["go"]},{"name":"detect_files","description":"","type":"array","default":["go.mod","go.sum","go.work","glide.yaml","Gopkg.yml","Gopkg.lock",".go-version"]},{"name":"detect_folders","description":"","type":"array","default":["Godeps"]}]},{"name":"gradle","title":"gradle","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🅶 "},{"name":"style","description":"","type":"string","default":"bold bright-cyan"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"recursive","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["gradle","gradle.kts"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":["gradle"]}]},{"name":"guix_shell","title":"guix_shell","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol]($style) "},{"name":"symbol","description":"","type":"string","default":"🐃 "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"haskell","title":"haskell","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"λ "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["hs","cabal","hs-boot"]},{"name":"detect_files","description":"","type":"array","default":["stack.yaml","cabal.project"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"haxe","title":"haxe","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⌘ "},{"name":"style","description":"","type":"string","default":"bold fg:202"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["hx","hxml"]},{"name":"detect_files","description":"","type":"array","default":["haxelib.json","hxformat.json",".haxerc"]},{"name":"detect_folders","description":"","type":"array","default":[".haxelib","haxe_libraries"]}]},{"name":"helm","title":"helm","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⎈ "},{"name":"style","description":"","type":"string","default":"bold white"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["helmfile.yaml","Chart.yaml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"hg_branch","title":"hg_branch","description":"","properties":[{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"format","description":"","type":"string","default":"on [$symbol$branch(:$topic)]($style) "},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"hg_state","title":"hg_state","description":"","properties":[{"name":"merge","description":"","type":"string","default":"MERGING"},{"name":"rebase","description":"","type":"string","default":"REBASING"},{"name":"update","description":"","type":"string","default":"UPDATING"},{"name":"bisect","description":"","type":"string","default":"BISECTING"},{"name":"shelve","description":"","type":"string","default":"SHELVING"},{"name":"graft","description":"","type":"string","default":"GRAFTING"},{"name":"transplant","description":"","type":"string","default":"TRANSPLANTING"},{"name":"histedit","description":"","type":"string","default":"HISTEDITING"},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"format","description":"","type":"string","default":"\\\\([$state]($style)\\\\) "},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"hostname","title":"hostname","description":"","properties":[{"name":"ssh_only","description":"","type":"boolean","default":true},{"name":"ssh_symbol","description":"","type":"string","default":"🌐 "},{"name":"trim_at","description":"","type":"string","default":"."},{"name":"detect_env_vars","description":"","type":"array","default":[]},{"name":"format","description":"","type":"string","default":"[$ssh_symbol$hostname]($style) in "},{"name":"style","description":"","type":"string","default":"green dimmed bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"aliases","description":"","type":"object","default":{}}]},{"name":"java","title":"java","description":"","properties":[{"name":"disabled","description":"","type":"boolean","default":false},{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"red dimmed"},{"name":"symbol","description":"","type":"string","default":"☕ "},{"name":"detect_extensions","description":"","type":"array","default":["java","class","jar","gradle","clj","cljc"]},{"name":"detect_files","description":"","type":"array","default":["pom.xml","build.gradle.kts","build.sbt",".java-version","deps.edn","project.clj","build.boot",".sdkmanrc"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"jobs","title":"jobs","description":"","properties":[{"name":"threshold","description":"","type":"integer","default":1},{"name":"symbol_threshold","description":"","type":"integer","default":1},{"name":"number_threshold","description":"","type":"integer","default":2},{"name":"format","description":"","type":"string","default":"[$symbol$number]($style) "},{"name":"symbol","description":"","type":"string","default":"✦"},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"julia","title":"julia","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"ஃ "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["jl"]},{"name":"detect_files","description":"","type":"array","default":["Project.toml","Manifest.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"kotlin","title":"kotlin","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🅺 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"kotlin_binary","description":"","type":"string","default":"kotlin"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["kt","kts"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"kubernetes","title":"kubernetes","description":"","properties":[{"name":"symbol","description":"","type":"string","default":"☸ "},{"name":"format","description":"","type":"string","default":"[$symbol$context( \\\\($namespace\\\\))]($style) in "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"context_aliases","description":"","type":"object","default":{}},{"name":"user_aliases","description":"","type":"object","default":{}},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"detect_env_vars","description":"","type":"array","default":[]},{"name":"contexts","description":"","type":"array","default":[]}]},{"name":"line_break","title":"line_break","description":"","properties":[{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"localip","title":"localip","description":"","properties":[{"name":"ssh_only","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"[$localipv4]($style) "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"lua","title":"lua","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🌙 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"lua_binary","description":"","type":"string","default":"lua"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["lua"]},{"name":"detect_files","description":"","type":"array","default":[".lua-version"]},{"name":"detect_folders","description":"","type":"array","default":["lua"]}]},{"name":"memory_usage","title":"memory_usage","description":"","properties":[{"name":"threshold","description":"","type":"integer","default":75},{"name":"format","description":"","type":"string","default":"via $symbol[$ram( | $swap)]($style) "},{"name":"style","description":"","type":"string","default":"white bold dimmed"},{"name":"symbol","description":"","type":"string","default":"🐏 "},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"meson","title":"meson","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":4294967295},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"format","description":"","type":"string","default":"via [$symbol$project]($style) "},{"name":"symbol","description":"","type":"string","default":"⬢ "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"mise","title":"mise","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$health]($style) "},{"name":"symbol","description":"","type":"string","default":"mise "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["mise.toml","mise.local.toml",".mise.toml",".mise.local.toml"]},{"name":"detect_folders","description":"","type":"array","default":[".mise"]},{"name":"healthy_symbol","description":"","type":"string","default":"healthy"},{"name":"unhealthy_symbol","description":"","type":"string","default":"unhealthy"}]},{"name":"mojo","title":"mojo","description":"","properties":[{"name":"format","description":"","type":"string","default":"with [$symbol($version )]($style)"},{"name":"symbol","description":"","type":"string","default":"🔥 "},{"name":"style","description":"","type":"string","default":"bold 208"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["mojo","🔥"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"nats","title":"nats","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol($name )]($style)"},{"name":"symbol","description":"","type":"string","default":"✉️ "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"netns","title":"netns","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol \\\\[$name\\\\]]($style) "},{"name":"symbol","description":"","type":"string","default":"🛜"},{"name":"style","description":"","type":"string","default":"blue bold dimmed"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"nim","title":"nim","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"👑 "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["nim","nims","nimble"]},{"name":"detect_files","description":"","type":"array","default":["nim.cfg"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"nix_shell","title":"nix_shell","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol$state( \\\\($name\\\\))]($style) "},{"name":"symbol","description":"","type":"string","default":"❄️  "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"impure_msg","description":"","type":"string","default":"impure"},{"name":"pure_msg","description":"","type":"string","default":"pure"},{"name":"unknown_msg","description":"","type":"string","default":""},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"heuristic","description":"","type":"boolean","default":false}]},{"name":"nodejs","title":"nodejs","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold green"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"not_capable_style","description":"","type":"string","default":"bold red"},{"name":"detect_extensions","description":"","type":"array","default":["js","mjs","cjs","ts","mts","cts"]},{"name":"detect_files","description":"","type":"array","default":["package.json",".node-version",".nvmrc","!bunfig.toml","!bun.lock","!bun.lockb"]},{"name":"detect_folders","description":"","type":"array","default":["node_modules"]}]},{"name":"ocaml","title":"ocaml","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )(\\\\($switch_indicator$switch_name\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"global_switch_indicator","description":"","type":"string","default":""},{"name":"local_switch_indicator","description":"","type":"string","default":"*"},{"name":"symbol","description":"","type":"string","default":"🐫 "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["opam","ml","mli","re","rei"]},{"name":"detect_files","description":"","type":"array","default":["dune","dune-project","jbuild","jbuild-ignore",".merlin"]},{"name":"detect_folders","description":"","type":"array","default":["_opam","esy.lock"]}]},{"name":"odin","title":"odin","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"show_commit","description":"","type":"boolean","default":false},{"name":"symbol","description":"","type":"string","default":"Ø "},{"name":"style","description":"","type":"string","default":"bold bright-blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["odin"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"opa","title":"opa","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🪖 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["rego"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"openstack","title":"openstack","description":"","properties":[{"name":"format","description":"","type":"string","default":"on [$symbol$cloud(\\\\($project\\\\))]($style) "},{"name":"symbol","description":"","type":"string","default":"☁️  "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"os","title":"os","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol]($style)"},{"name":"style","description":"","type":"string","default":"bold white"},{"name":"symbols","description":"","type":"object","default":{"AIX":"➿ ","Alpaquita":"🔔 ","AlmaLinux":"💠 ","Alpine":"🏔️ ","ALTLinux":"Ⓐ ","Amazon":"🙂 ","Android":"🤖 ","AOSC":"🐱 ","Arch":"🎗️ ","Artix":"🎗️ ","Bluefin":"🐟 ","CachyOS":"🎗️ ","CentOS":"💠 ","Debian":"🌀 ","Elementary":"🍏 ","DragonFly":"🐉 ","Emscripten":"🔗 ","EndeavourOS":"🚀 ","Fedora":"🎩 ","FreeBSD":"😈 ","Garuda":"🦅 ","Gentoo":"🗜️ ","HardenedBSD":"🛡️ ","Illumos":"🐦 ","Ios":"📱 ","InstantOS":"⏲️ ","Kali":"🐉 ","Linux":"🐧 ","Mabox":"📦 ","Macos":"🍎 ","Manjaro":"🥭 ","Mariner":"🌊 ","MidnightBSD":"🌘 ","Mint":"🌿 ","NetBSD":"🚩 ","NixOS":"❄️ ","Nobara":"🎩 ","OpenBSD":"🐡 ","OpenCloudOS":"☁️ ","openEuler":"🦉 ","openSUSE":"🦎 ","OracleLinux":"🦴 ","PikaOS":"🐤 ","Pop":"🍭 ","Raspbian":"🍓 ","Redhat":"🎩 ","RedHatEnterprise":"🎩 ","RockyLinux":"💠 ","Redox":"🧪 ","Solus":"⛵ ","SUSE":"🦎 ","Ubuntu":"🎯 ","Ultramarine":"🔷 ","Unknown":"❓ ","Uos":"🐲 ","Void":" ","Windows":"🪟 ","Zorin":"🔹 "}},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"package","title":"package","description":"","properties":[{"name":"format","description":"","type":"string","default":"is [$symbol$version]($style) "},{"name":"symbol","description":"","type":"string","default":"📦 "},{"name":"style","description":"","type":"string","default":"208 bold"},{"name":"display_private","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"version_format","description":"","type":"string","default":"v${raw}"}]},{"name":"perl","title":"perl","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐪 "},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["pl","pm","pod"]},{"name":"detect_files","description":"","type":"array","default":["Makefile.PL","Build.PL","cpanfile","cpanfile.snapshot","META.json","META.yml",".perl-version"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"php","title":"php","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐘 "},{"name":"style","description":"","type":"string","default":"147 bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["php"]},{"name":"detect_files","description":"","type":"array","default":["composer.json",".php-version"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"pijul_channel","title":"pijul_channel","description":"","properties":[{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold purple"},{"name":"format","description":"","type":"string","default":"on [$symbol$channel]($style) "},{"name":"truncation_length","description":"","type":"integer","default":9223372036854776000},{"name":"truncation_symbol","description":"","type":"string","default":"…"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"pixi","title":"pixi","description":"","properties":[{"name":"pixi_binary","description":"","default":["pixi"]},{"name":"show_default_environment","description":"","type":"boolean","default":true},{"name":"format","description":"","type":"string","default":"via [$symbol($version )(\\\\($environment\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🧚 "},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["pixi.toml","pixi.lock"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"pulumi","title":"pulumi","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($username@)$stack]($style) "},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":" "},{"name":"style","description":"","type":"string","default":"bold 5"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"search_upwards","description":"","type":"boolean","default":true}]},{"name":"purescript","title":"purescript","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"<=> "},{"name":"style","description":"","type":"string","default":"bold white"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["purs"]},{"name":"detect_files","description":"","type":"array","default":["spago.dhall","spago.yaml","spago.lock"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"python","title":"python","description":"","properties":[{"name":"pyenv_version_name","description":"","type":"boolean","default":false},{"name":"pyenv_prefix","description":"","type":"string","default":"pyenv "},{"name":"python_binary","description":"","default":[["python"],["python3"],["python2"]]},{"name":"format","description":"","type":"string","default":"via [${symbol}${pyenv_prefix}(${version} )(\\\\($virtualenv\\\\) )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"yellow bold"},{"name":"symbol","description":"","type":"string","default":"🐍 "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["py","ipynb"]},{"name":"detect_files","description":"","type":"array","default":["requirements.txt",".python-version","pyproject.toml","Pipfile","tox.ini","setup.py","__init__.py"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"detect_env_vars","description":"","type":"array","default":["VIRTUAL_ENV"]}]},{"name":"quarto","title":"quarto","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⨁ "},{"name":"style","description":"","type":"string","default":"bold #75AADB"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["qmd"]},{"name":"detect_files","description":"","type":"array","default":["_quarto.yml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"raku","title":"raku","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version-$vm_version )]($style)"},{"name":"version_format","description":"","type":"string","default":"${raw}"},{"name":"symbol","description":"","type":"string","default":"🦋 "},{"name":"style","description":"","type":"string","default":"149 bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["p6","pm6","pod6","raku","rakumod"]},{"name":"detect_files","description":"","type":"array","default":["META6.json"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"red","title":"red","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🔺 "},{"name":"style","description":"","type":"string","default":"red bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["red","reds"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"rlang","title":"rlang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"symbol","description":"","type":"string","default":"📐 "},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["R","Rd","Rmd","Rproj","Rsx"]},{"name":"detect_files","description":"","type":"array","default":["DESCRIPTION"]},{"name":"detect_folders","description":"","type":"array","default":[".Rproj.user"]}]},{"name":"ruby","title":"ruby","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"💎 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["rb"]},{"name":"detect_files","description":"","type":"array","default":["Gemfile",".ruby-version"]},{"name":"detect_folders","description":"","type":"array","default":[]},{"name":"detect_variables","description":"","type":"array","default":["RUBY_VERSION","RBENV_VERSION"]}]},{"name":"rust","title":"rust","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🦀 "},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["rs"]},{"name":"detect_files","description":"","type":"array","default":["Cargo.toml"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"scala","title":"scala","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"style","description":"","type":"string","default":"red bold"},{"name":"symbol","description":"","type":"string","default":"🆂 "},{"name":"detect_extensions","description":"","type":"array","default":["sbt","scala"]},{"name":"detect_files","description":"","type":"array","default":[".scalaenv",".sbtenv","build.sbt"]},{"name":"detect_folders","description":"","type":"array","default":[".metals"]}]},{"name":"shell","title":"shell","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$indicator]($style) "},{"name":"bash_indicator","description":"","type":"string","default":"bsh"},{"name":"fish_indicator","description":"","type":"string","default":"fsh"},{"name":"zsh_indicator","description":"","type":"string","default":"zsh"},{"name":"powershell_indicator","description":"","type":"string","default":"psh"},{"name":"pwsh_indicator","description":"","type":["string","null"]},{"name":"ion_indicator","description":"","type":"string","default":"ion"},{"name":"elvish_indicator","description":"","type":"string","default":"esh"},{"name":"tcsh_indicator","description":"","type":"string","default":"tsh"},{"name":"nu_indicator","description":"","type":"string","default":"nu"},{"name":"xonsh_indicator","description":"","type":"string","default":"xsh"},{"name":"cmd_indicator","description":"","type":"string","default":"cmd"},{"name":"unknown_indicator","description":"","type":"string","default":""},{"name":"style","description":"","type":"string","default":"white bold"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"shlvl","title":"shlvl","description":"","properties":[{"name":"threshold","description":"","type":"integer","default":2},{"name":"format","description":"","type":"string","default":"[$symbol$shlvl]($style) "},{"name":"symbol","description":"","type":"string","default":"↕️  "},{"name":"repeat","description":"","type":"boolean","default":false},{"name":"repeat_offset","description":"","type":"integer","default":0},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"singularity","title":"singularity","description":"","properties":[{"name":"symbol","description":"","type":"string","default":""},{"name":"format","description":"","type":"string","default":"[$symbol\\\\[$env\\\\]]($style) "},{"name":"style","description":"","type":"string","default":"blue bold dimmed"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"solidity","title":"solidity","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version)]($style)"},{"name":"version_format","description":"","type":"string","default":"v${major}.${minor}.${patch}"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"symbol","description":"","type":"string","default":"S "},{"name":"compiler","description":"","default":["solc"]},{"name":"detect_extensions","description":"","type":"array","default":["sol"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"spack","title":"spack","description":"","properties":[{"name":"truncation_length","description":"","type":"integer","default":1},{"name":"format","description":"","type":"string","default":"via [$symbol$environment]($style) "},{"name":"symbol","description":"","type":"string","default":"🅢 "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"status","title":"status","description":"","properties":[{"name":"format","description":"","type":"string","default":"[$symbol$status]($style) "},{"name":"symbol","description":"","type":"string","default":"❌"},{"name":"success_symbol","description":"","type":"string","default":""},{"name":"not_executable_symbol","description":"","type":"string","default":"🚫"},{"name":"not_found_symbol","description":"","type":"string","default":"🔍"},{"name":"sigint_symbol","description":"","type":"string","default":"🧱"},{"name":"signal_symbol","description":"","type":"string","default":"⚡"},{"name":"style","description":"","type":"string","default":"bold red"},{"name":"success_style","description":"","type":["string","null"]},{"name":"failure_style","description":"","type":["string","null"]},{"name":"map_symbol","description":"","type":"boolean","default":false},{"name":"recognize_signal_code","description":"","type":"boolean","default":true},{"name":"pipestatus","description":"","type":"boolean","default":false},{"name":"pipestatus_separator","description":"","type":"string","default":"|"},{"name":"pipestatus_format","description":"","type":"string","default":"\\\\[$pipestatus\\\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) "},{"name":"pipestatus_segment_format","description":"","type":["string","null"]},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"sudo","title":"sudo","description":"","properties":[{"name":"format","description":"","type":"string","default":"[as $symbol]($style)"},{"name":"symbol","description":"","type":"string","default":"🧙 "},{"name":"style","description":"","type":"string","default":"bold blue"},{"name":"allow_windows","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":true}]},{"name":"swift","title":"swift","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"🐦 "},{"name":"style","description":"","type":"string","default":"bold 202"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["swift"]},{"name":"detect_files","description":"","type":"array","default":["Package.swift"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"terraform","title":"terraform","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol$workspace]($style) "},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"💠 "},{"name":"style","description":"","type":"string","default":"bold 105"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["tf","tfplan","tfstate"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[".terraform"]},{"name":"commands","description":"","type":"array","default":[["terraform","version"],["tofu","version"]]}]},{"name":"time","title":"time","description":"","properties":[{"name":"format","description":"","type":"string","default":"at [$time]($style) "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"use_12hr","description":"","type":"boolean","default":false},{"name":"time_format","description":"","type":["string","null"]},{"name":"disabled","description":"","type":"boolean","default":true},{"name":"utc_time_offset","description":"","type":"string","default":"local"},{"name":"time_range","description":"","type":"string","default":"-"}]},{"name":"config","title":"Top-Level Config","description":"Global configuration settings for Starship.","properties":[{"name":"$schema","description":"","type":"string","default":"https://starship.rs/config-schema.json"},{"name":"format","description":"","type":"string","default":"$all"},{"name":"right_format","description":"","type":"string","default":""},{"name":"continuation_prompt","description":"","type":"string","default":"[∙](bright-black) "},{"name":"scan_timeout","description":"","type":"integer","default":30},{"name":"command_timeout","description":"","type":"integer","default":500},{"name":"add_newline","description":"","type":"boolean","default":true},{"name":"follow_symlinks","description":"","type":"boolean","default":true},{"name":"palette","description":"","type":["string","null"]},{"name":"palettes","description":"","type":"object","default":{}},{"name":"profiles","description":"","type":"object","default":{}},{"name":"env_var","description":"","type":"object","default":{}},{"name":"custom","description":"","type":"object","default":{}}]},{"name":"typst","title":"typst","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"t "},{"name":"style","description":"","type":"string","default":"bold #0093A7"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["typ"]},{"name":"detect_files","description":"","type":"array","default":["template.typ"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"username","title":"username","description":"","properties":[{"name":"detect_env_vars","description":"","type":"array","default":[]},{"name":"format","description":"","type":"string","default":"[$user]($style) in "},{"name":"style_root","description":"","type":"string","default":"red bold"},{"name":"style_user","description":"","type":"string","default":"yellow bold"},{"name":"show_always","description":"","type":"boolean","default":false},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"aliases","description":"","type":"object","default":{}}]},{"name":"vagrant","title":"vagrant","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"⍱ "},{"name":"style","description":"","type":"string","default":"cyan bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["Vagrantfile"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"vcsh","title":"vcsh","description":"","properties":[{"name":"symbol","description":"","type":"string","default":""},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"format","description":"","type":"string","default":"vcsh [$symbol$repo]($style) "},{"name":"disabled","description":"","type":"boolean","default":false}]},{"name":"vlang","title":"vlang","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"V "},{"name":"style","description":"","type":"string","default":"blue bold"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["v"]},{"name":"detect_files","description":"","type":"array","default":["v.mod","vpkg.json",".vpkg-lock.json"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"xmake","title":"xmake","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"△ "},{"name":"style","description":"","type":"string","default":"bold green"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":[]},{"name":"detect_files","description":"","type":"array","default":["xmake.lua"]},{"name":"detect_folders","description":"","type":"array","default":[]}]},{"name":"zig","title":"zig","description":"","properties":[{"name":"format","description":"","type":"string","default":"via [$symbol($version )]($style)"},{"name":"version_format","description":"","type":"string","default":"v${raw}"},{"name":"symbol","description":"","type":"string","default":"↯ "},{"name":"style","description":"","type":"string","default":"bold yellow"},{"name":"disabled","description":"","type":"boolean","default":false},{"name":"detect_extensions","description":"","type":"array","default":["zig"]},{"name":"detect_files","description":"","type":"array","default":[]},{"name":"detect_folders","description":"","type":"array","default":[]}]}]',
+  );
+class F {
+  static parse(t) {
+    try {
+      const r = Pe.parse(t);
+      if (typeof r != 'object' || r === null)
+        throw new Error('Parsed TOML result is not an object');
+      return r;
+    } catch (r) {
+      throw (
+        console.error('Failed to parse TOML:', r),
+        new Error(
+          `Invalid TOML syntax: ${r instanceof Error ? r.message : String(r)}`,
+        )
+      );
+    }
+  }
+  static stringify(t) {
+    try {
+      const r = JSON.parse(JSON.stringify(t));
+      return Pe.stringify(r);
+    } catch (r) {
+      throw (
+        console.error('Failed to stringify config:', r),
+        new Error('Failed to generate TOML')
+      );
+    }
+  }
+  static getDefaultConfig() {
+    return {
+      add_newline: !0,
+      format:
+        '$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character',
+      character: {
+        success_symbol: '[➜](bold green)',
+        error_symbol: '[➜](bold red)',
+      },
+      directory: { truncation_length: 3, truncate_to_repo: !1 },
+      git_branch: {
+        symbol: '🌱 ',
+        format: '[$symbol$branch]($style) ',
+        truncation_length: 24,
+      },
+      git_status: {
+        format: '([$all_status$ahead_behind]($style) )',
+        conflicted: '🏳',
+        ahead: '🏎💨',
+        behind: '😰',
+        diverged: '😵',
+        up_to_date: '✓',
+        untracked: '🤷',
+        stashed: '📦',
+        modified: '📝',
+        staged: '[++()](green)',
+        renamed: '👅',
+        deleted: '🗑',
+      },
+      nodejs: { format: 'via [⬢ $version](bold green) ' },
+    };
+  }
+  static validate(t) {
+    const r = [],
+      s = [];
+    if (typeof t != 'object' || t === null)
+      return {
+        valid: !1,
+        errors: ['Configuration must be an object'],
+        warnings: [],
+      };
+    const n = [
+      'format',
+      'right_format',
+      'continuation_prompt',
+      'add_newline',
+      'scan_timeout',
+      'command_timeout',
+      'palette',
+      'palettes',
+      'custom',
+    ];
+    (t.format !== void 0 &&
+      typeof t.format != 'string' &&
+      r.push('Format must be a string'),
+      t.add_newline !== void 0 &&
+        typeof t.add_newline != 'boolean' &&
+        r.push('add_newline must be a boolean'),
+      t.scan_timeout !== void 0 &&
+        typeof t.scan_timeout != 'number' &&
+        r.push('scan_timeout must be a number'),
+      t.command_timeout !== void 0 &&
+        typeof t.command_timeout != 'number' &&
+        r.push('command_timeout must be a number'),
+      t.palette !== void 0 &&
+        typeof t.palette != 'string' &&
+        r.push('palette must be a string'),
+      t.palettes !== void 0 &&
+        (typeof t.palettes != 'object' || Array.isArray(t.palettes)) &&
+        r.push('palettes must be a table'),
+      t.custom !== void 0 &&
+        (typeof t.custom != 'object' || Array.isArray(t.custom)) &&
+        r.push('custom must be a table'));
+    const o = new Set(J.map((d) => d.name));
+    return (
+      Object.keys(t).forEach((d) => {
+        if (!n.includes(d))
+          if (o.has(d)) {
+            const i = t[d];
+            if (typeof i != 'object' && i !== void 0)
+              r.push(`Module '${d}' must be a table (object)`);
+            else if (i && typeof i == 'object' && !Array.isArray(i)) {
+              const l = i;
+              l.disabled !== void 0 &&
+                typeof l.disabled != 'boolean' &&
+                r.push(`Module '${d}': 'disabled' must be a boolean`);
+            }
+          } else
+            s.push(
+              `Unknown module or setting: '${d}'. It may be supported by Starship but not yet by this editor.`,
+            );
+      }),
+      { valid: r.length === 0, errors: r, warnings: s }
+    );
+  }
+  static merge(t, r) {
+    if (!r) return t;
+    if (!t) return r;
+    const s = { ...t };
+    return (
+      Object.keys(r).forEach((n) => {
+        n === '__proto__' ||
+          n === 'constructor' ||
+          n === 'prototype' ||
+          (typeof r[n] == 'object' &&
+          r[n] !== null &&
+          !Array.isArray(r[n]) &&
+          typeof s[n] == 'object' &&
+          s[n] !== null &&
+          !Array.isArray(s[n])
+            ? (s[n] = F.merge(s[n], r[n]))
+            : (s[n] = r[n]));
+      }),
+      s
+    );
+  }
+}
+const Y = [
+  {
+    metadata: {
+      id: 'preset-clean',
+      name: 'Clean',
+      description: 'Minimalist theme with just the essentials',
+      author: 'Starship Team',
+      tags: ['minimal', 'clean'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      format: '$directory$git_branch$character',
+      directory: { truncation_length: 3, style: 'bold cyan' },
+      git_branch: { style: 'bold purple', symbol: '🌱 ' },
+      character: {
+        success_symbol: '[❯](bold green)',
+        error_symbol: '[❯](bold red)',
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-oneline',
+      name: 'One Line',
+      description: 'Compact single-line prompt',
+      author: 'Starship Team',
+      tags: ['minimal', 'compact'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      add_newline: !1,
+      format: '$username@$hostname $directory $git_branch $character',
+      username: { style_user: 'white bold', show_always: !0 },
+      hostname: { ssh_only: !1, style: 'white dimmed' },
+      directory: { style: 'blue' },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-dev',
+      name: 'Full Stack',
+      description: 'Shows all language versions',
+      author: 'Dev Community',
+      tags: ['developer', 'languages'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      nodejs: { disabled: !1 },
+      rust: { disabled: !1 },
+      python: { disabled: !1 },
+      golang: { disabled: !1 },
+      java: { disabled: !1 },
+      php: { disabled: !1 },
+      docker_context: { disabled: !1 },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-nord',
+      name: 'Nord',
+      description: 'Nord color scheme based theme',
+      author: 'Arctic Ice Studio',
+      tags: ['aesthetic', 'dark'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.Nord.primary },
+      git_branch: { style: k.presets.Nord.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.Nord.success})`,
+        error_symbol: `[➜](${k.presets.Nord.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-dracula',
+      name: 'Dracula',
+      description: 'Dracula color scheme',
+      author: 'Dracula Theme',
+      tags: ['aesthetic', 'dark', 'vampire'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.Dracula.primary },
+      git_branch: { style: k.presets.Dracula.secondary },
+      character: {
+        success_symbol: `[⚡](${k.presets.Dracula.success})`,
+        error_symbol: `[⚡](${k.presets.Dracula.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-gruvbox',
+      name: 'Gruvbox',
+      description: 'Retro groove color scheme',
+      author: 'morhetz',
+      tags: ['retro', 'warm', 'dark'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.Gruvbox.primary },
+      git_branch: { style: k.presets.Gruvbox.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.Gruvbox.success})`,
+        error_symbol: `[➜](${k.presets.Gruvbox.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-catppuccin',
+      name: 'Catppuccin',
+      description: 'Soothing pastel theme',
+      author: 'Catppuccin',
+      tags: ['pastel', 'aesthetic'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.Catppuccin.primary },
+      git_branch: { style: k.presets.Catppuccin.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.Catppuccin.success})`,
+        error_symbol: `[➜](${k.presets.Catppuccin.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-tokyonight',
+      name: 'Tokyo Night',
+      description: 'A clean, dark Visual Studio Code theme',
+      author: 'enkia',
+      tags: ['night', 'dark', 'vscode'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.TokyoNight.primary },
+      git_branch: { style: k.presets.TokyoNight.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.TokyoNight.success})`,
+        error_symbol: `[➜](${k.presets.TokyoNight.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-onedark',
+      name: 'One Dark',
+      description: 'Atom One Dark theme',
+      author: 'Atom',
+      tags: ['dark', 'atom'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.OneDark.primary },
+      git_branch: { style: k.presets.OneDark.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.OneDark.success})`,
+        error_symbol: `[➜](${k.presets.OneDark.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-monokai',
+      name: 'Monokai',
+      description: 'The classic Monokai theme',
+      author: 'Monokai',
+      tags: ['classic', 'high-contrast'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.Monokai.primary },
+      git_branch: { style: k.presets.Monokai.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.Monokai.success})`,
+        error_symbol: `[➜](${k.presets.Monokai.error})`,
+      },
+    },
+  },
+  {
+    metadata: {
+      id: 'preset-solarized',
+      name: 'Solarized Dark',
+      description: 'Precision colors for machines and people',
+      author: 'Ethan Schoonover',
+      tags: ['classic', 'solarized'],
+      created: new Date('2024-01-01'),
+      updated: new Date('2024-01-01'),
+      isPreset: !0,
+    },
+    config: {
+      ...F.getDefaultConfig(),
+      directory: { style: k.presets.Solarized.primary },
+      git_branch: { style: k.presets.Solarized.secondary },
+      character: {
+        success_symbol: `[➜](${k.presets.Solarized.success})`,
+        error_symbol: `[➜](${k.presets.Solarized.error})`,
+      },
+    },
+  },
+];
+var ge, Ue;
+function Mr() {
+  return (
+    Ue ||
+      ((Ue = 1),
+      (ge = function a(t, r) {
+        if (t === r) return !0;
+        if (t && r && typeof t == 'object' && typeof r == 'object') {
+          if (t.constructor !== r.constructor) return !1;
+          var s, n, o;
+          if (Array.isArray(t)) {
+            if (((s = t.length), s != r.length)) return !1;
+            for (n = s; n-- !== 0; ) if (!a(t[n], r[n])) return !1;
+            return !0;
+          }
+          if (t.constructor === RegExp)
+            return t.source === r.source && t.flags === r.flags;
+          if (t.valueOf !== Object.prototype.valueOf)
+            return t.valueOf() === r.valueOf();
+          if (t.toString !== Object.prototype.toString)
+            return t.toString() === r.toString();
+          if (
+            ((o = Object.keys(t)), (s = o.length), s !== Object.keys(r).length)
+          )
+            return !1;
+          for (n = s; n-- !== 0; )
+            if (!Object.prototype.hasOwnProperty.call(r, o[n])) return !1;
+          for (n = s; n-- !== 0; ) {
+            var d = o[n];
+            if (!a(t[d], r[d])) return !1;
+          }
+          return !0;
+        }
+        return t !== t && r !== r;
+      })),
+    ge
+  );
+}
+var Dr = Mr();
+const zr = ke(Dr),
+  Lr = {};
+function lt(a, t) {
+  let r;
+  try {
+    r = a();
+  } catch {
+    return;
+  }
+  return {
+    getItem: (n) => {
+      var o;
+      const d = (l) => (l === null ? null : JSON.parse(l, void 0)),
+        i = (o = r.getItem(n)) != null ? o : null;
+      return i instanceof Promise ? i.then(d) : d(i);
+    },
+    setItem: (n, o) => r.setItem(n, JSON.stringify(o, void 0)),
+    removeItem: (n) => r.removeItem(n),
+  };
+}
+const re = (a) => (t) => {
+    try {
+      const r = a(t);
+      return r instanceof Promise
+        ? r
+        : {
+            then(s) {
+              return re(s)(r);
+            },
+            catch(s) {
+              return this;
+            },
+          };
+    } catch (r) {
+      return {
+        then(s) {
+          return this;
+        },
+        catch(s) {
+          return re(s)(r);
+        },
+      };
+    }
+  },
+  Or = (a, t) => (r, s, n) => {
+    let o = {
+        getStorage: () => localStorage,
+        serialize: JSON.stringify,
+        deserialize: JSON.parse,
+        partialize: (u) => u,
+        version: 0,
+        merge: (u, b) => ({ ...b, ...u }),
+        ...t,
+      },
+      d = !1;
+    const i = new Set(),
+      l = new Set();
+    let c;
+    try {
+      c = o.getStorage();
+    } catch {}
+    if (!c)
+      return a(
+        (...u) => {
+          (console.warn(
+            `[zustand persist middleware] Unable to update item '${o.name}', the given storage is currently unavailable.`,
+          ),
+            r(...u));
+        },
+        s,
+        n,
+      );
+    const f = re(o.serialize),
+      y = () => {
+        const u = o.partialize({ ...s() });
+        let b;
+        const p = f({ state: u, version: o.version })
+          .then((C) => c.setItem(o.name, C))
+          .catch((C) => {
+            b = C;
+          });
+        if (b) throw b;
+        return p;
+      },
+      v = n.setState;
+    n.setState = (u, b) => {
+      (v(u, b), y());
+    };
+    const g = a(
+      (...u) => {
+        (r(...u), y());
+      },
+      s,
+      n,
+    );
+    let w;
+    const x = () => {
+      var u;
+      if (!c) return;
+      ((d = !1), i.forEach((p) => p(s())));
+      const b =
+        ((u = o.onRehydrateStorage) == null ? void 0 : u.call(o, s())) ||
+        void 0;
+      return re(c.getItem.bind(c))(o.name)
+        .then((p) => {
+          if (p) return o.deserialize(p);
+        })
+        .then((p) => {
+          if (p)
+            if (typeof p.version == 'number' && p.version !== o.version) {
+              if (o.migrate) return o.migrate(p.state, p.version);
+              console.error(
+                "State loaded from storage couldn't be migrated since no migrate function was provided",
+              );
+            } else return p.state;
+        })
+        .then((p) => {
+          var C;
+          return ((w = o.merge(p, (C = s()) != null ? C : g)), r(w, !0), y());
+        })
+        .then(() => {
+          (b?.(w, void 0), (d = !0), l.forEach((p) => p(w)));
+        })
+        .catch((p) => {
+          b?.(void 0, p);
+        });
+    };
+    return (
+      (n.persist = {
+        setOptions: (u) => {
+          ((o = { ...o, ...u }), u.getStorage && (c = u.getStorage()));
+        },
+        clearStorage: () => {
+          c?.removeItem(o.name);
+        },
+        getOptions: () => o,
+        rehydrate: () => x(),
+        hasHydrated: () => d,
+        onHydrate: (u) => (
+          i.add(u),
+          () => {
+            i.delete(u);
+          }
+        ),
+        onFinishHydration: (u) => (
+          l.add(u),
+          () => {
+            l.delete(u);
+          }
+        ),
+      }),
+      x(),
+      w || g
+    );
+  },
+  Pr = (a, t) => (r, s, n) => {
+    let o = {
+        storage: lt(() => localStorage),
+        partialize: (x) => x,
+        version: 0,
+        merge: (x, u) => ({ ...u, ...x }),
+        ...t,
+      },
+      d = !1;
+    const i = new Set(),
+      l = new Set();
+    let c = o.storage;
+    if (!c)
+      return a(
+        (...x) => {
+          (console.warn(
+            `[zustand persist middleware] Unable to update item '${o.name}', the given storage is currently unavailable.`,
+          ),
+            r(...x));
+        },
+        s,
+        n,
+      );
+    const f = () => {
+        const x = o.partialize({ ...s() });
+        return c.setItem(o.name, { state: x, version: o.version });
+      },
+      y = n.setState;
+    n.setState = (x, u) => {
+      (y(x, u), f());
+    };
+    const v = a(
+      (...x) => {
+        (r(...x), f());
+      },
+      s,
+      n,
+    );
+    n.getInitialState = () => v;
+    let g;
+    const w = () => {
+      var x, u;
+      if (!c) return;
+      ((d = !1),
+        i.forEach((p) => {
+          var C;
+          return p((C = s()) != null ? C : v);
+        }));
+      const b =
+        ((u = o.onRehydrateStorage) == null
+          ? void 0
+          : u.call(o, (x = s()) != null ? x : v)) || void 0;
+      return re(c.getItem.bind(c))(o.name)
+        .then((p) => {
+          if (p)
+            if (typeof p.version == 'number' && p.version !== o.version) {
+              if (o.migrate) return [!0, o.migrate(p.state, p.version)];
+              console.error(
+                "State loaded from storage couldn't be migrated since no migrate function was provided",
+              );
+            } else return [!1, p.state];
+          return [!1, void 0];
+        })
+        .then((p) => {
+          var C;
+          const [h, _] = p;
+          if (((g = o.merge(_, (C = s()) != null ? C : v)), r(g, !0), h))
+            return f();
+        })
+        .then(() => {
+          (b?.(g, void 0), (g = s()), (d = !0), l.forEach((p) => p(g)));
+        })
+        .catch((p) => {
+          b?.(void 0, p);
+        });
+    };
+    return (
+      (n.persist = {
+        setOptions: (x) => {
+          ((o = { ...o, ...x }), x.storage && (c = x.storage));
+        },
+        clearStorage: () => {
+          c?.removeItem(o.name);
+        },
+        getOptions: () => o,
+        rehydrate: () => w(),
+        hasHydrated: () => d,
+        onHydrate: (x) => (
+          i.add(x),
+          () => {
+            i.delete(x);
+          }
+        ),
+        onFinishHydration: (x) => (
+          l.add(x),
+          () => {
+            l.delete(x);
+          }
+        ),
+      }),
+      o.skipHydration || w(),
+      g || v
+    );
+  },
+  Ur = (a, t) =>
+    'getStorage' in t || 'serialize' in t || 'deserialize' in t
+      ? ((Lr ? 'production' : void 0) !== 'production' &&
+          console.warn(
+            '[DEPRECATED] `getStorage`, `serialize` and `deserialize` options are deprecated. Use `storage` option instead.',
+          ),
+        Or(a, t))
+      : Pr(a, t),
+  dt = Ur;
+function Br(a, t) {
+  const r = lt(a);
+  if (!r) return;
+  const s = 1e3,
+    n = {};
+  return {
+    ...r,
+    setItem: (o, d) => {
+      (n[o] && clearTimeout(n[o]),
+        (n[o] = setTimeout(() => {
+          (r.setItem(o, d), delete n[o]);
+        }, s)));
+    },
+  };
+}
+const Gr = () => ({
+    enabled: !1,
+    dayThemeId: 'preset-clean',
+    nightThemeId: 'preset-dracula',
+    dayStartTime: '07:00',
+    nightStartTime: '19:00',
+  }),
+  Be = () => ({
+    metadata: {
+      id: st(),
+      name: 'Untitled Theme',
+      created: new Date(),
+      updated: new Date(),
+    },
+    config: F.getDefaultConfig(),
+  }),
+  G = (a) =>
+    typeof structuredClone == 'function'
+      ? structuredClone(a)
+      : JSON.parse(JSON.stringify(a)),
+  M = at()(
+    dt(
+      (a, t) => ({
+        currentTheme: Be(),
+        savedThemes: [],
+        selectedModule: null,
+        dynamicSettings: Gr(),
+        past: [],
+        future: [],
+        undo: () => {
+          a((r) => {
+            if (r.past.length === 0) return {};
+            const s = G(r.past[r.past.length - 1]);
+            return {
+              past: r.past.slice(0, -1),
+              currentTheme: s,
+              future: [G(r.currentTheme), ...r.future],
+            };
+          });
+        },
+        redo: () => {
+          a((r) => {
+            if (r.future.length === 0) return {};
+            const s = G(r.future[0]),
+              n = r.future.slice(1);
+            return {
+              past: [...r.past, G(r.currentTheme)],
+              currentTheme: s,
+              future: n,
+            };
+          });
+        },
+        canUndo: () => t().past.length > 0,
+        canRedo: () => t().future.length > 0,
+        updateConfig: (r) => {
+          a((s) => {
+            const n = {
+              ...s.currentTheme,
+              config: {
+                ...s.currentTheme.config,
+                palettes: {
+                  ...s.currentTheme.config.palettes,
+                  global: {
+                    ...s.currentTheme.config.palettes?.global,
+                    ...r.palettes?.global,
+                  },
+                },
+                ...Object.fromEntries(
+                  Object.entries(r).filter(([o]) => o !== 'palettes'),
+                ),
+              },
+              metadata: { ...s.currentTheme.metadata, updated: new Date() },
+            };
+            return zr(s.currentTheme.config, n.config)
+              ? {}
+              : {
+                  past: [...s.past, G(s.currentTheme)].slice(-50),
+                  currentTheme: n,
+                  future: [],
+                };
+          });
+        },
+        updateMetadata: (r) => {
+          a((s) => {
+            const n = {
+              ...s.currentTheme,
+              metadata: {
+                ...s.currentTheme.metadata,
+                ...r,
+                updated: new Date(),
+              },
+            };
+            return {
+              past: [...s.past, G(s.currentTheme)].slice(-50),
+              currentTheme: n,
+              future: [],
+            };
+          });
+        },
+        setSelectedModule: (r) => {
+          a({ selectedModule: r });
+        },
+        loadTheme: (r) => {
+          a((s) => ({
+            past: [...s.past, G(s.currentTheme)].slice(-50),
+            currentTheme: G(r),
+            selectedModule: null,
+            future: [],
+          }));
+        },
+        saveTheme: (r) => {
+          const { currentTheme: s, savedThemes: n } = t(),
+            o = G(s);
+          r && (o.metadata.previewImage = r);
+          const d = n.findIndex((l) => l.metadata.id === o.metadata.id),
+            i = [...n];
+          (d >= 0 ? (i[d] = o) : i.push(o), a({ savedThemes: i }));
+        },
+        deleteTheme: (r) => {
+          a((s) => ({
+            savedThemes: s.savedThemes.filter((n) => n.metadata.id !== r),
+          }));
+        },
+        resetTheme: () => {
+          a((r) => ({
+            past: [...r.past, G(r.currentTheme)].slice(-50),
+            currentTheme: Be(),
+            selectedModule: null,
+            future: [],
+          }));
+        },
+        exportToml: () => {
+          const { currentTheme: r } = t();
+          return F.stringify(r.config);
+        },
+        importToml: (r) => {
+          const s = F.parse(r);
+          a((n) => ({
+            past: [...n.past, G(n.currentTheme)].slice(-50),
+            currentTheme: {
+              ...n.currentTheme,
+              config: s,
+              metadata: { ...n.currentTheme.metadata, updated: new Date() },
+            },
+            selectedModule: null,
+            future: [],
+          }));
+        },
+        updateDynamicSettings: (r) => {
+          a((s) => ({ dynamicSettings: { ...s.dynamicSettings, ...r } }));
+        },
+      }),
+      {
+        name: 'starship-theme-storage',
+        storage: Br(() => localStorage),
+        partialize: (a) => ({
+          savedThemes: a.savedThemes,
+          currentTheme: a.currentTheme,
+          dynamicSettings: a.dynamicSettings,
+        }),
+      },
+    ),
+  ),
+  Wr = (a) => {
+    const t = Object.keys(a.currentTheme.config.custom || {}).map((l) => ({
+        id: l,
+        name: l,
+        isCustom: !0,
+      })),
+      s = [...J.map((l) => ({ id: l.name, name: l.name, isCustom: !1 })), ...t],
+      o =
+        (a.currentTheme.config.format || '').match(/\$([a-zA-Z0-9_]+)/g) || [],
+      d = new Set(s.map((l) => l.name));
+    return o
+      .map((l, c) => {
+        const f = l.substring(1);
+        return {
+          id: `${f}-${c}`,
+          name: f,
+          isCustom: s.find((y) => y.name === f)?.isCustom || !1,
+        };
+      })
+      .filter((l) => d.has(l.name));
+  };
+function qr({ onClose: a }) {
+  const { currentTheme: t, savedThemes: r } = M(),
+    { addToast: s } = q(),
+    n = [t, ...r, ...Y],
+    [o, d] = m.useState(t),
+    [i, l] = m.useState(r[0] || Y[0]),
+    c = m.useRef(null),
+    f = () => {
+      (d(i), l(o));
+    },
+    y = async () => {
+      if (c.current)
+        try {
+          const u = (
+              await Te(c.current, { backgroundColor: '#0d1117', scale: 2 })
+            ).toDataURL('image/png'),
+            b = document.createElement('a');
+          ((b.href = u),
+            (b.download = `comparison-${o.metadata.name}-vs-${i.metadata.name}.png`),
+            b.click(),
+            s('Comparison image downloaded!', 'success'));
+        } catch {
+          s('Failed to generate image', 'error');
+        }
+    },
+    v = (x) =>
+      Object.keys(x.config).filter((u) => {
+        if (u === 'format') return !1;
+        const b = x.config[u];
+        return typeof b == 'object' && b !== null && 'disabled' in b
+          ? b.disabled !== !0
+          : !0;
+      }).length,
+    g = v(o),
+    w = v(i);
+  return e.jsx('div', {
+    className:
+      'fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm',
+    children: e.jsxs('div', {
+      className:
+        'flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+      children: [
+        e.jsxs('div', {
+          className:
+            'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+          children: [
+            e.jsxs('h2', {
+              className: 'flex items-center gap-2 text-lg font-bold text-white',
+              children: [
+                e.jsx(we, { size: 20, className: 'text-blue-500' }),
+                'Theme Comparison',
+              ],
+            }),
+            e.jsxs('div', {
+              className: 'flex items-center gap-3',
+              children: [
+                e.jsxs('button', {
+                  onClick: y,
+                  className:
+                    'flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-gray-200 hover:bg-gray-600',
+                  children: [e.jsx(Et, { size: 16 }), ' Screenshot'],
+                }),
+                e.jsx('button', {
+                  onClick: a,
+                  className:
+                    'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+                  'aria-label': 'Close',
+                  children: e.jsx(P, { size: 20 }),
+                }),
+              ],
+            }),
+          ],
+        }),
+        e.jsxs('div', {
+          className: 'flex flex-1 flex-col overflow-y-auto p-6',
+          ref: c,
+          children: [
+            e.jsxs('div', {
+              className: 'mb-6 flex items-center justify-center gap-4',
+              children: [
+                e.jsx('div', {
+                  className: 'flex-1',
+                  children: e.jsx('select', {
+                    value: o.metadata.id,
+                    onChange: (x) =>
+                      d(n.find((u) => u.metadata.id === x.target.value) || o),
+                    className:
+                      'w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none',
+                    children: n.map((x) =>
+                      e.jsx(
+                        'option',
+                        { value: x.metadata.id, children: x.metadata.name },
+                        `a-${x.metadata.id}`,
+                      ),
+                    ),
+                  }),
+                }),
+                e.jsx('button', {
+                  onClick: f,
+                  className:
+                    'rounded-full bg-gray-800 p-3 text-gray-400 transition-transform hover:bg-gray-700 hover:text-white active:scale-95',
+                  'aria-label': 'Swap themes',
+                  children: e.jsx(we, { size: 20 }),
+                }),
+                e.jsx('div', {
+                  className: 'flex-1',
+                  children: e.jsx('select', {
+                    value: i.metadata.id,
+                    onChange: (x) =>
+                      l(n.find((u) => u.metadata.id === x.target.value) || i),
+                    className:
+                      'w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none',
+                    children: n.map((x) =>
+                      e.jsx(
+                        'option',
+                        { value: x.metadata.id, children: x.metadata.name },
+                        `b-${x.metadata.id}`,
+                      ),
+                    ),
+                  }),
+                }),
+              ],
+            }),
+            e.jsxs('div', {
+              className: 'grid flex-1 grid-cols-2 gap-6',
+              children: [
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-4',
+                  children: [
+                    e.jsxs('div', {
+                      className:
+                        'flex flex-col gap-1 rounded-lg border border-gray-800 bg-gray-900/50 p-4',
+                      children: [
+                        e.jsx('h3', {
+                          className: 'font-semibold text-gray-200',
+                          children: o.metadata.name,
+                        }),
+                        e.jsxs('p', {
+                          className: 'text-xs text-gray-500',
+                          children: ['Active Modules: ', g],
+                        }),
+                      ],
+                    }),
+                    e.jsx('div', {
+                      className: 'pointer-events-none relative flex-1',
+                      children: e.jsx('div', {
+                        className:
+                          'h-full overflow-y-auto whitespace-pre rounded-lg border border-gray-700 bg-[#1e1e1e] p-4 font-mono text-xs text-gray-300',
+                        children: F.stringify(o.config),
+                      }),
+                    }),
+                  ],
+                }),
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-4',
+                  children: [
+                    e.jsxs('div', {
+                      className:
+                        'flex flex-col gap-1 rounded-lg border border-gray-800 bg-gray-900/50 p-4',
+                      children: [
+                        e.jsx('h3', {
+                          className: 'font-semibold text-gray-200',
+                          children: i.metadata.name,
+                        }),
+                        e.jsxs('p', {
+                          className: 'text-xs text-gray-500',
+                          children: ['Active Modules: ', w],
+                        }),
+                      ],
+                    }),
+                    e.jsx('div', {
+                      className: 'pointer-events-none relative flex-1',
+                      children: e.jsx('div', {
+                        className:
+                          'h-full overflow-y-auto whitespace-pre rounded-lg border border-gray-700 bg-[#1e1e1e] p-4 font-mono text-xs text-gray-300',
+                        children: F.stringify(i.config),
+                      }),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+  });
+}
+function Hr({ onClose: a }) {
+  const { dynamicSettings: t, updateDynamicSettings: r, savedThemes: s } = M(),
+    n = [...s, ...Y],
+    o = () => {
+      r({ enabled: !t.enabled });
+    },
+    d = (i) => {
+      const { name: l, value: c } = i.target;
+      r({ [l]: c });
+    };
+  return e.jsx('div', {
+    className:
+      'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm',
+    children: e.jsxs('div', {
+      className:
+        'flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+      children: [
+        e.jsxs('div', {
+          className:
+            'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+          children: [
+            e.jsx('h2', {
+              className: 'text-lg font-bold text-white',
+              children: 'Dynamic Theme Settings',
+            }),
+            e.jsx('button', {
+              onClick: a,
+              className:
+                'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+              'aria-label': 'Close',
+              children: e.jsx(P, { size: 20 }),
+            }),
+          ],
+        }),
+        e.jsxs('div', {
+          className: 'flex flex-col gap-6 p-6',
+          children: [
+            e.jsxs('div', {
+              className: 'flex items-center justify-between',
+              children: [
+                e.jsxs('div', {
+                  children: [
+                    e.jsx('h3', {
+                      className: 'text-base font-medium text-white',
+                      children: 'Enable Dynamic Theme',
+                    }),
+                    e.jsx('p', {
+                      className: 'text-sm text-gray-400',
+                      children:
+                        'Automatically switch themes based on time of day.',
+                    }),
+                  ],
+                }),
+                e.jsx('button', {
+                  onClick: o,
+                  className: `relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${t.enabled ? 'bg-blue-600' : 'bg-gray-600'}`,
+                  'aria-label': 'Toggle dynamic theme',
+                  'aria-checked': t.enabled,
+                  role: 'switch',
+                  children: e.jsx('span', {
+                    className: `inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${t.enabled ? 'translate-x-6' : 'translate-x-1'}`,
+                  }),
+                }),
+              ],
+            }),
+            e.jsx('div', { className: 'h-px bg-gray-800' }),
+            e.jsxs('div', {
+              className: `flex flex-col gap-4 ${t.enabled ? '' : 'pointer-events-none opacity-50'}`,
+              children: [
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-2',
+                  children: [
+                    e.jsx('label', {
+                      className: 'text-sm font-medium text-gray-300',
+                      children: 'Day Theme',
+                    }),
+                    e.jsx('select', {
+                      name: 'dayThemeId',
+                      value: t.dayThemeId,
+                      onChange: d,
+                      className:
+                        'w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none',
+                      children: n.map((i) =>
+                        e.jsx(
+                          'option',
+                          { value: i.metadata.id, children: i.metadata.name },
+                          i.metadata.id,
+                        ),
+                      ),
+                    }),
+                  ],
+                }),
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-2',
+                  children: [
+                    e.jsx('label', {
+                      className: 'text-sm font-medium text-gray-300',
+                      children: 'Day Start Time',
+                    }),
+                    e.jsx('input', {
+                      type: 'time',
+                      name: 'dayStartTime',
+                      value: t.dayStartTime,
+                      onChange: d,
+                      className:
+                        'w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none',
+                    }),
+                  ],
+                }),
+                e.jsx('div', { className: 'my-2 h-px bg-gray-800' }),
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-2',
+                  children: [
+                    e.jsx('label', {
+                      className: 'text-sm font-medium text-gray-300',
+                      children: 'Night Theme',
+                    }),
+                    e.jsx('select', {
+                      name: 'nightThemeId',
+                      value: t.nightThemeId,
+                      onChange: d,
+                      className:
+                        'w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none',
+                      children: n.map((i) =>
+                        e.jsx(
+                          'option',
+                          { value: i.metadata.id, children: i.metadata.name },
+                          i.metadata.id,
+                        ),
+                      ),
+                    }),
+                  ],
+                }),
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-2',
+                  children: [
+                    e.jsx('label', {
+                      className: 'text-sm font-medium text-gray-300',
+                      children: 'Night Start Time',
+                    }),
+                    e.jsx('input', {
+                      type: 'time',
+                      name: 'nightStartTime',
+                      value: t.nightStartTime,
+                      onChange: d,
+                      className:
+                        'w-full rounded border border-gray-700 bg-[#0d1117] px-3 py-2 text-sm text-gray-300 focus:border-blue-500 focus:outline-none',
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+  });
+}
+const Kr = m.createContext(null),
+  be = { didCatch: !1, error: null };
+let Jr = class extends m.Component {
+  constructor(t) {
+    (super(t),
+      (this.resetErrorBoundary = this.resetErrorBoundary.bind(this)),
+      (this.state = be));
+  }
+  static getDerivedStateFromError(t) {
+    return { didCatch: !0, error: t };
+  }
+  resetErrorBoundary(...t) {
+    const { error: r } = this.state;
+    r !== null &&
+      (this.props.onReset?.({ args: t, reason: 'imperative-api' }),
+      this.setState(be));
+  }
+  componentDidCatch(t, r) {
+    this.props.onError?.(t, r);
+  }
+  componentDidUpdate(t, r) {
+    const { didCatch: s } = this.state,
+      { resetKeys: n } = this.props;
+    s &&
+      r.error !== null &&
+      Vr(t.resetKeys, n) &&
+      (this.props.onReset?.({ next: n, prev: t.resetKeys, reason: 'keys' }),
+      this.setState(be));
+  }
+  render() {
+    const {
+        children: t,
+        fallbackRender: r,
+        FallbackComponent: s,
+        fallback: n,
+      } = this.props,
+      { didCatch: o, error: d } = this.state;
+    let i = t;
+    if (o) {
+      const l = { error: d, resetErrorBoundary: this.resetErrorBoundary };
+      if (typeof r == 'function') i = r(l);
+      else if (s) i = m.createElement(s, l);
+      else if (n !== void 0) i = n;
+      else throw d;
+    }
+    return m.createElement(
+      Kr.Provider,
+      {
+        value: {
+          didCatch: o,
+          error: d,
+          resetErrorBoundary: this.resetErrorBoundary,
+        },
+      },
+      i,
+    );
+  }
+};
+function Vr(a = [], t = []) {
+  return a.length !== t.length || a.some((r, s) => !Object.is(r, t[s]));
+}
+function Yr({ error: a, resetErrorBoundary: t }) {
+  return e.jsx('div', {
+    className:
+      'flex h-screen w-full flex-col items-center justify-center bg-gray-900 text-white',
+    role: 'alert',
+    children: e.jsxs('div', {
+      className:
+        'flex flex-col items-center gap-4 rounded-lg border border-red-800 bg-red-900/20 p-8 text-center',
+      children: [
+        e.jsx(Ye, { className: 'h-12 w-12 text-red-500' }),
+        e.jsx('h2', {
+          className: 'text-2xl font-bold',
+          children: 'Something went wrong',
+        }),
+        e.jsx('p', {
+          className: 'max-w-md text-red-300',
+          children:
+            'An unexpected error occurred. You can try refreshing the application.',
+        }),
+        e.jsx('pre', {
+          className:
+            'mt-2 w-full max-w-md overflow-auto rounded bg-black/30 p-4 text-left text-xs text-red-200',
+          children: a.message,
+        }),
+        e.jsx('button', {
+          onClick: t,
+          className:
+            'mt-4 rounded bg-red-600 px-6 py-2 font-semibold text-white hover:bg-red-500',
+          children: 'Refresh Application',
+        }),
+      ],
+    }),
+  });
+}
+const O = ({ children: a }) =>
+  e.jsx(Jr, {
+    FallbackComponent: Yr,
+    onReset: () => window.location.reload(),
+    children: a,
+  });
+function Xr() {
+  const { currentTheme: a } = M(),
+    { addToast: t } = q(),
+    r = () => {
+      try {
+        const o = F.stringify(a.config),
+          d = new Blob([o], { type: 'text/plain;charset=utf-8' }),
+          i = URL.createObjectURL(d),
+          l = document.createElement('a');
+        ((l.href = i),
+          (l.download = 'starship.toml'),
+          document.body.appendChild(l),
+          l.click(),
+          document.body.removeChild(l),
+          URL.revokeObjectURL(i),
+          t('File downloaded successfully!', 'success'));
+      } catch {
+        t('Failed to generate file.', 'error');
+      }
+    },
+    s = async () => {
+      try {
+        const o = F.stringify(a.config);
+        (await navigator.clipboard.writeText(o),
+          t('Copied to clipboard!', 'success'));
+      } catch {
+        t('Failed to copy text.', 'error');
+      }
+    },
+    n = async () => {
+      try {
+        const o = F.stringify(a.config),
+          d = btoa(encodeURIComponent(o)),
+          i = `${window.location.origin}${window.location.pathname}?theme=${d}`;
+        (await navigator.clipboard.writeText(i),
+          t('Share URL copied to clipboard!', 'success'));
+      } catch {
+        t('Failed to create share URL.', 'error');
+      }
+    };
+  return e.jsxs('div', {
+    className: 'grid gap-6 md:grid-cols-2',
+    children: [
+      e.jsxs('div', {
+        className: 'flex flex-col gap-3',
+        children: [
+          e.jsxs('button', {
+            onClick: r,
+            className:
+              'group flex items-center gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-900/10',
+            children: [
+              e.jsx('div', {
+                className:
+                  'rounded-full bg-blue-900/30 p-2 text-blue-400 transition-colors group-hover:bg-blue-600 group-hover:text-white',
+                children: e.jsx(ce, { size: 20 }),
+              }),
+              e.jsxs('div', {
+                children: [
+                  e.jsx('div', {
+                    className: 'font-semibold text-gray-200',
+                    children: 'Download .toml',
+                  }),
+                  e.jsx('div', {
+                    className: 'text-xs text-gray-500',
+                    children: 'Save directly to your computer',
+                  }),
+                ],
+              }),
+            ],
+          }),
+          e.jsxs('button', {
+            onClick: s,
+            className:
+              'group flex items-center gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-colors hover:border-green-500 hover:bg-green-900/10',
+            children: [
+              e.jsx('div', {
+                className:
+                  'rounded-full bg-green-900/30 p-2 text-green-400 transition-colors group-hover:bg-green-600 group-hover:text-white',
+                children: e.jsx(Xe, { size: 20 }),
+              }),
+              e.jsxs('div', {
+                children: [
+                  e.jsx('div', {
+                    className: 'font-semibold text-gray-200',
+                    children: 'Copy to Clipboard',
+                  }),
+                  e.jsx('div', {
+                    className: 'text-xs text-gray-500',
+                    children: 'Paste into your starship.toml',
+                  }),
+                ],
+              }),
+            ],
+          }),
+          e.jsxs('button', {
+            onClick: n,
+            className:
+              'group flex items-center gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-colors hover:border-purple-500 hover:bg-purple-900/10',
+            children: [
+              e.jsx('div', {
+                className:
+                  'rounded-full bg-purple-900/30 p-2 text-purple-400 transition-colors group-hover:bg-purple-600 group-hover:text-white',
+                children: e.jsx(At, { size: 20 }),
+              }),
+              e.jsxs('div', {
+                children: [
+                  e.jsx('div', {
+                    className: 'font-semibold text-gray-200',
+                    children: 'Share Link',
+                  }),
+                  e.jsx('div', {
+                    className: 'text-xs text-gray-500',
+                    children: 'Generate a URL to this theme',
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        className:
+          'flex flex-col gap-2 rounded-lg border border-gray-700 bg-black/50 p-4',
+        children: [
+          e.jsxs('div', {
+            className:
+              'flex items-center gap-2 text-sm font-medium text-gray-400',
+            children: [e.jsx(Ze, { size: 16 }), ' Install Command'],
+          }),
+          e.jsxs('div', {
+            className:
+              'flex-1 rounded border border-gray-800 bg-[#0d1117] p-3 font-mono text-xs text-gray-300',
+            children: [
+              'mkdir -p ~/.config && touch ~/.config/starship.toml',
+              e.jsx('br', {}),
+              e.jsx('br', {}),
+              '# Paste the clipboard contents into ~/.config/starship.toml',
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+function Zr({ className: a }) {
+  return e.jsx(It, { className: T('animate-spin text-blue-500', a) });
+}
+function Qr({ onClose: a }) {
+  const { importToml: t } = M(),
+    { addToast: r } = q(),
+    [s, n] = m.useState(''),
+    [o, d] = m.useState(''),
+    [i, l] = m.useState(null),
+    [c, f] = m.useState([]),
+    [y, v] = m.useState(null),
+    [g, w] = m.useState(!1),
+    x = (h) => {
+      try {
+        (t(h), r('Theme imported successfully!', 'success'), a());
+      } catch (_) {
+        l(`Failed to import: ${_ instanceof Error ? _.message : String(_)}`);
+      }
+    },
+    u = (h) => {
+      try {
+        (l(null), f([]), v(null));
+        const _ = F.parse(h),
+          { valid: $, errors: j, warnings: N } = F.validate(_);
+        return $
+          ? N.length > 0
+            ? (f(N), v(h), !1)
+            : confirm('This will overwrite your current theme. Are you sure?')
+              ? (x(h), !0)
+              : !1
+          : (l(`Invalid config: ${j.join(', ') || 'Unknown error'}`), !1);
+      } catch (_) {
+        return (
+          l(
+            `Invalid TOML syntax: ${_ instanceof Error ? _.message : String(_)}`,
+          ),
+          !1
+        );
+      }
+    },
+    b = (h) => {
+      const _ = h.target.files?.[0];
+      if (_)
+        try {
+          const $ = new FileReader();
+          (($.onload = (j) => {
+            try {
+              const N = j.target?.result;
+              u(N);
+            } catch (N) {
+              l(
+                `Failed to process file: ${N instanceof Error ? N.message : String(N)}`,
+              );
+            }
+          }),
+            ($.onerror = () => {
+              l('Failed to read file.');
+            }),
+            $.readAsText(_));
+        } catch ($) {
+          l(
+            `Failed to load file: ${$ instanceof Error ? $.message : String($)}`,
+          );
+        } finally {
+          h.target.value = '';
+        }
+    },
+    p = () => {
+      if (!s.trim()) {
+        l('Please paste TOML configuration first.');
+        return;
+      }
+      try {
+        u(s);
+      } catch (h) {
+        l(`Failed to import: ${h instanceof Error ? h.message : String(h)}`);
+      }
+    },
+    C = async () => {
+      if (!o.trim()) {
+        l('Please enter a URL.');
+        return;
+      }
+      (w(!0), l(null));
+      try {
+        const h = await fetch(o);
+        if (!h.ok) throw new Error('Failed to fetch from URL');
+        const _ = await h.text();
+        u(_);
+      } catch {
+        l('Failed to fetch from URL. Make sure it points to a raw text file.');
+      } finally {
+        w(!1);
+      }
+    };
+  return e.jsxs('div', {
+    className: 'flex flex-col gap-6',
+    children: [
+      i &&
+        e.jsxs('div', {
+          className:
+            'flex items-start gap-2 rounded-md border border-red-800 bg-red-900/20 p-3 text-sm text-red-200',
+          children: [
+            e.jsx(ve, { size: 16, className: 'mt-0.5 shrink-0' }),
+            e.jsx('p', { children: i }),
+          ],
+        }),
+      c.length > 0 &&
+        y &&
+        e.jsxs('div', {
+          className:
+            'flex flex-col gap-3 rounded-md border border-yellow-800 bg-yellow-900/20 p-4 text-sm text-yellow-200',
+          children: [
+            e.jsxs('div', {
+              className: 'flex items-start gap-2 font-semibold',
+              children: [
+                e.jsx(ve, { size: 18, className: 'shrink-0' }),
+                e.jsx('p', { children: 'Import Warnings' }),
+              ],
+            }),
+            e.jsxs('ul', {
+              className: 'ml-6 list-disc space-y-1 opacity-90',
+              children: [
+                c.slice(0, 5).map((h, _) => e.jsx('li', { children: h }, _)),
+                c.length > 5 &&
+                  e.jsxs('li', {
+                    children: ['...and ', c.length - 5, ' more warnings'],
+                  }),
+              ],
+            }),
+            e.jsx('p', {
+              className: 'mt-2 text-yellow-100 opacity-90',
+              children:
+                'This will overwrite your current theme. Do you still want to proceed?',
+            }),
+            e.jsxs('div', {
+              className: 'mt-3 flex gap-3',
+              children: [
+                e.jsx('button', {
+                  onClick: () => x(y),
+                  className:
+                    'rounded bg-yellow-600 px-4 py-2 font-medium text-white hover:bg-yellow-500',
+                  children: 'Import Anyway',
+                }),
+                e.jsx('button', {
+                  onClick: () => {
+                    (f([]), v(null));
+                  },
+                  className:
+                    'rounded border border-yellow-700 bg-transparent px-4 py-2 font-medium text-yellow-200 hover:bg-yellow-900/40',
+                  children: 'Cancel',
+                }),
+              ],
+            }),
+          ],
+        }),
+      e.jsxs('div', {
+        className: 'grid gap-6 md:grid-cols-2',
+        children: [
+          e.jsxs('div', {
+            className: 'flex flex-col gap-4',
+            children: [
+              e.jsxs('div', {
+                className:
+                  'relative overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-colors hover:border-blue-500',
+                children: [
+                  e.jsx('input', {
+                    type: 'file',
+                    accept: '.toml,.txt',
+                    onChange: b,
+                    className: 'absolute inset-0 z-10 cursor-pointer opacity-0',
+                  }),
+                  e.jsxs('div', {
+                    className:
+                      'flex flex-col items-center justify-center p-6 text-center',
+                    children: [
+                      e.jsx(Rt, { className: 'mb-2 text-gray-400', size: 24 }),
+                      e.jsx('div', {
+                        className: 'font-semibold text-gray-200',
+                        children: 'Upload File',
+                      }),
+                      e.jsx('div', {
+                        className: 'text-xs text-gray-500',
+                        children: 'Drop your starship.toml here',
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              e.jsxs('div', {
+                className:
+                  'flex flex-col gap-2 rounded-lg border border-gray-700 bg-gray-800 p-4',
+                children: [
+                  e.jsxs('div', {
+                    className:
+                      'flex items-center gap-2 text-sm font-medium text-gray-300',
+                    children: [e.jsx(Qe, { size: 16 }), ' From URL / Gist'],
+                  }),
+                  e.jsxs('div', {
+                    className: 'flex gap-2',
+                    children: [
+                      e.jsx('input', {
+                        type: 'url',
+                        value: o,
+                        onChange: (h) => d(h.target.value),
+                        placeholder: 'https://raw.githubusercontent.com/...',
+                        disabled: g,
+                        className:
+                          'flex-1 rounded border border-gray-700 bg-gray-900 px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+                      }),
+                      e.jsxs('button', {
+                        onClick: C,
+                        disabled: g,
+                        className:
+                          'flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50',
+                        children: [
+                          g && e.jsx(Zr, { className: 'h-4 w-4 text-white' }),
+                          g ? 'Loading...' : 'Fetch',
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            className:
+              'flex flex-col gap-2 rounded-lg border border-gray-700 bg-gray-800 p-4',
+            children: [
+              e.jsxs('div', {
+                className: 'flex items-center justify-between',
+                children: [
+                  e.jsxs('div', {
+                    className:
+                      'flex items-center gap-2 text-sm font-medium text-gray-300',
+                    children: [e.jsx(Ft, { size: 16 }), ' Paste TOML'],
+                  }),
+                  e.jsx('button', {
+                    onClick: p,
+                    className:
+                      'rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-500',
+                    children: 'Import',
+                  }),
+                ],
+              }),
+              e.jsx('textarea', {
+                value: s,
+                onChange: (h) => n(h.target.value),
+                placeholder: "[character]\\nsuccess_symbol = '❯'\\n...",
+                className:
+                  'flex-1 resize-none rounded border border-gray-700 bg-gray-900 p-3 font-mono text-xs text-gray-300 focus:border-blue-500 focus:outline-none',
+                rows: 8,
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+function ea({ onClose: a, initialTab: t = 'export' }) {
+  const [r, s] = m.useState(t);
+  return e.jsx('div', {
+    className:
+      'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm',
+    children: e.jsxs('div', {
+      className:
+        'flex w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+      children: [
+        e.jsxs('div', {
+          className:
+            'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+          children: [
+            e.jsxs('div', {
+              className: 'flex items-center gap-4',
+              children: [
+                e.jsx('button', {
+                  onClick: () => s('export'),
+                  className: T(
+                    'text-lg font-bold transition-colors',
+                    r === 'export'
+                      ? 'text-white'
+                      : 'text-gray-500 hover:text-gray-300',
+                  ),
+                  children: 'Export',
+                }),
+                e.jsx('span', { className: 'text-gray-600', children: '/' }),
+                e.jsx('button', {
+                  onClick: () => s('import'),
+                  className: T(
+                    'text-lg font-bold transition-colors',
+                    r === 'import'
+                      ? 'text-white'
+                      : 'text-gray-500 hover:text-gray-300',
+                  ),
+                  children: 'Import',
+                }),
+              ],
+            }),
+            e.jsx('button', {
+              onClick: a,
+              className:
+                'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+              'aria-label': 'Close',
+              children: e.jsx(P, { size: 20 }),
+            }),
+          ],
+        }),
+        e.jsx('div', {
+          className: 'p-6',
+          children: r === 'export' ? e.jsx(Xr, {}) : e.jsx(Qr, { onClose: a }),
+        }),
+      ],
+    }),
+  });
+}
+function ct({
+  isOpen: a,
+  onClose: t,
+  title: r,
+  children: s,
+  className: n,
+  footer: o,
+}) {
+  return a
+    ? e.jsx('div', {
+        className:
+          'fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm',
+        'aria-labelledby': 'modal-title',
+        role: 'dialog',
+        'aria-modal': 'true',
+        onClick: t,
+        children: e.jsxs('div', {
+          className: T(
+            'relative w-full max-w-lg rounded-xl border border-gray-700 bg-gray-800 text-gray-200 shadow-2xl',
+            n,
+          ),
+          onClick: (d) => d.stopPropagation(),
+          children: [
+            e.jsxs('div', {
+              className:
+                'flex items-center justify-between border-b border-gray-700 px-6 py-4',
+              children: [
+                e.jsx('h3', {
+                  id: 'modal-title',
+                  className: 'text-lg font-semibold',
+                  children: r,
+                }),
+                e.jsx('button', {
+                  onClick: t,
+                  className:
+                    'rounded-full p-1.5 text-gray-400 transition-colors hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500',
+                  'aria-label': 'Close modal',
+                  children: e.jsx(P, { size: 20 }),
+                }),
+              ],
+            }),
+            e.jsx('div', { className: 'px-6 py-5', children: s }),
+            o &&
+              e.jsx('div', {
+                className:
+                  'flex justify-end gap-3 border-t border-gray-700 px-6 py-4',
+                children: o,
+              }),
+          ],
+        }),
+      })
+    : null;
+}
+const ta = [
+    'FiraCode NF',
+    'JetBrainsMono NF',
+    'Hack NF',
+    'RobotoMono NF',
+    'MesloLGS NF',
+  ],
+  ra = {
+    'FiraCode NF':
+      'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip',
+    'JetBrainsMono NF':
+      'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip',
+    'Hack NF':
+      'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip',
+    'RobotoMono NF':
+      'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip',
+    'MesloLGS NF':
+      'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip',
+  },
+  Ge = {
+    'FiraCode NF':
+      'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf',
+    'JetBrainsMono NF':
+      'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Nerd%20Font%20Complete.ttf',
+    'Hack NF':
+      'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Hack/Regular/complete/Hack%20Nerd%20Font%20Complete.ttf',
+    'RobotoMono NF':
+      'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/RobotoMono/Regular/complete/Roboto%20Mono%20Nerd%20Font%20Complete.ttf',
+    'MesloLGS NF':
+      'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Meslo/M/Regular/complete/Meslo%20LGS%20NF%20Regular.ttf',
+  };
+function aa({ currentFont: a, onSelectFont: t }) {
+  const [r, s] = m.useState(!1),
+    [n, o] = m.useState(!1);
+  m.useEffect(() => {
+    (async () => {
+      if (a && Ge[a]) {
+        const l = new FontFace(a, `url(${Ge[a]})`);
+        (await l.load(),
+          document.fonts.add(l),
+          console.warn(`Font ${a} loaded.`));
+      }
+    })();
+  }, [a]);
+  const d = m.useCallback(() => {
+    const i = ra[a];
+    if (i) {
+      const l = document.createElement('a');
+      ((l.href = i),
+        (l.download = `${a.replace(/ /g, '')}.zip`),
+        document.body.appendChild(l),
+        l.click(),
+        document.body.removeChild(l),
+        o(!0));
+    } else console.error('No download URL found for this font.');
+  }, [a]);
+  return e.jsxs('div', {
+    className: 'relative',
+    children: [
+      e.jsxs('button', {
+        type: 'button',
+        className:
+          'flex w-full items-center justify-between rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 shadow-sm transition-colors hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+        onClick: () => s(!r),
+        'aria-haspopup': 'listbox',
+        'aria-expanded': r,
+        children: [
+          e.jsx('span', { style: { fontFamily: a }, children: a }),
+          e.jsx(Mt, {
+            size: 16,
+            className: T(
+              'transform transition-transform',
+              r ? 'rotate-180' : 'rotate-0',
+            ),
+          }),
+        ],
+      }),
+      r &&
+        e.jsxs('ul', {
+          className:
+            'absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-md border border-gray-700 bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+          children: [
+            ta.map((i) =>
+              e.jsx(
+                'li',
+                {
+                  className:
+                    'cursor-pointer select-none px-3 py-2 text-sm text-gray-200 hover:bg-gray-700',
+                  onClick: () => {
+                    (t(i), s(!1));
+                  },
+                  style: { fontFamily: i },
+                  children: i,
+                },
+                i,
+              ),
+            ),
+            e.jsx('li', {
+              className: 'mt-1 border-t border-gray-700 pt-1',
+              children: e.jsxs('button', {
+                onClick: d,
+                className:
+                  'flex w-full items-center gap-2 px-3 py-2 text-sm text-blue-400 hover:bg-gray-700',
+                children: [
+                  e.jsx(ce, { size: 16 }),
+                  ' Download & Install "',
+                  a,
+                  '"',
+                ],
+              }),
+            }),
+          ],
+        }),
+      e.jsx(ct, {
+        isOpen: n,
+        onClose: () => o(!1),
+        title: `Install ${a}`,
+        children: e.jsxs('div', {
+          className: 'space-y-4 text-gray-300',
+          children: [
+            e.jsx('p', {
+              children:
+                'Your font has been downloaded! Now, follow these steps to install it:',
+            }),
+            e.jsxs('ul', {
+              className: 'list-inside list-disc space-y-2',
+              children: [
+                e.jsxs('li', {
+                  children: [
+                    e.jsx('strong', {
+                      children: '1. Locate the downloaded .zip file:',
+                    }),
+                    " Check your browser's downloads (e.g., `~/Downloads/$",
+                    a.replace(/ /g, ''),
+                    '.zip`).',
+                  ],
+                }),
+                e.jsxs('li', {
+                  children: [
+                    e.jsx('strong', { children: '2. Extract the fonts:' }),
+                    " Unzip the downloaded file. You'll find several `.ttf` or `.otf` font files inside.",
+                  ],
+                }),
+                e.jsxs('li', {
+                  children: [
+                    e.jsx('strong', { children: '3. Install the fonts:' }),
+                    e.jsxs('ul', {
+                      className:
+                        'ml-4 list-inside list-disc space-y-1 text-sm text-gray-400',
+                      children: [
+                        e.jsxs('li', {
+                          children: [
+                            e.jsx('strong', { children: 'Windows:' }),
+                            ' Select all font files, right-click, and choose "Install" or "Install for all users."',
+                          ],
+                        }),
+                        e.jsxs('li', {
+                          children: [
+                            e.jsx('strong', { children: 'macOS:' }),
+                            ' Select all font files, double-click, and in the Font Book window, click "Install Font."',
+                          ],
+                        }),
+                        e.jsxs('li', {
+                          children: [
+                            e.jsx('strong', { children: 'Linux:' }),
+                            ' Copy the font files to `~/.local/share/fonts/` (for your user) or `/usr/share/fonts/` (system-wide) and then run `fc-cache -fv` in your terminal.',
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                e.jsxs('li', {
+                  children: [
+                    e.jsx('strong', {
+                      children: '4. Configure your terminal:',
+                    }),
+                    " Open your terminal's settings (e.g., Alacritty, iTerm2, Konsole, GNOME Terminal) and set the font family to `",
+                    a,
+                    '`.',
+                  ],
+                }),
+                e.jsxs('li', {
+                  children: [
+                    e.jsx('strong', { children: '5. Restart your terminal:' }),
+                    ' Close and reopen your terminal application to apply the new font.',
+                  ],
+                }),
+              ],
+            }),
+            e.jsxs('div', {
+              className:
+                'flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200',
+              children: [
+                e.jsx(V, { size: 16, className: 'mt-0.5 shrink-0' }),
+                e.jsxs('p', {
+                  children: [
+                    e.jsx('strong', { children: 'Note:' }),
+                    ' Starship itself does not install fonts. This action helps you get the font onto your system, but you must configure your terminal emulator to use it.',
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+const sa = ['All', 'Arrows', 'Git', 'Languages', 'Cloud', 'Containers', 'Misc'],
+  na = [
+    { icon: '', name: 'Powerline Arrow Right', category: 'Arrows' },
+    { icon: '', name: 'Powerline Arrow Left', category: 'Arrows' },
+    { icon: '', name: 'Powerline Arrow Right Thin', category: 'Arrows' },
+    { icon: '', name: 'Powerline Arrow Left Thin', category: 'Arrows' },
+    { icon: '', name: 'Flame Right', category: 'Arrows' },
+    { icon: '', name: 'Rounded Right', category: 'Arrows' },
+    { icon: '', name: 'Rounded Right Thin', category: 'Arrows' },
+    { icon: '', name: 'Rounded Left', category: 'Arrows' },
+    { icon: '', name: 'Rounded Left Thin', category: 'Arrows' },
+    { icon: '', name: 'Slant Right', category: 'Arrows' },
+    { icon: '', name: 'Slant Left', category: 'Arrows' },
+    { icon: '', name: 'Pixelated Right', category: 'Arrows' },
+    { icon: '', name: 'Pixelated Left', category: 'Arrows' },
+    { icon: '', name: 'Ice Right', category: 'Arrows' },
+    { icon: '', name: 'Ice Left', category: 'Arrows' },
+    { icon: '→', name: 'Right Arrow', category: 'Arrows' },
+    { icon: '⇒', name: 'Right Double Arrow', category: 'Arrows' },
+    { icon: '➔', name: 'Heavy Right Arrow', category: 'Arrows' },
+    { icon: '➜', name: 'Heavy Round Right Arrow', category: 'Arrows' },
+    { icon: '❯', name: 'Heavy Right Angle Bracket', category: 'Arrows' },
+    { icon: '⚡', name: 'Lightning Zap', category: 'Arrows' },
+    { icon: '', name: 'Branch (Powerline)', category: 'Git' },
+    { icon: '', name: 'Branch (FontAwesome)', category: 'Git' },
+    { icon: '', name: 'Git Repo', category: 'Git' },
+    { icon: '', name: 'Pull Request', category: 'Git' },
+    { icon: '', name: 'Commit', category: 'Git' },
+    { icon: '±', name: 'Plus-Minus (Status)', category: 'Git' },
+    { icon: '⇡', name: 'Upwards Dashed Arrow (Ahead)', category: 'Git' },
+    { icon: '⇣', name: 'Downwards Dashed Arrow (Behind)', category: 'Git' },
+    { icon: '⇕', name: 'Up Down Arrow (Diverged)', category: 'Git' },
+    { icon: 'x', name: 'Cross (Conflicted)', category: 'Git' },
+    { icon: '!', name: 'Exclamation (Modified)', category: 'Git' },
+    { icon: '+', name: 'Plus (Added)', category: 'Git' },
+    { icon: '?', name: 'Question (Untracked)', category: 'Git' },
+    { icon: '', name: 'Node.js (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'React', category: 'Languages' },
+    { icon: '', name: 'Python (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'Rust (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'Go (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'Java (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'PHP (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'Ruby (NerdFont)', category: 'Languages' },
+    { icon: '', name: 'C++', category: 'Languages' },
+    { icon: '', name: 'C#', category: 'Languages' },
+    { icon: '', name: 'Cloud (FontAwesome)', category: 'Cloud' },
+    { icon: '', name: 'AWS (NerdFont)', category: 'Cloud' },
+    { icon: '', name: 'Azure (NerdFont)', category: 'Cloud' },
+    { icon: '☁️', name: 'Cloud Emoji', category: 'Cloud' },
+    { icon: '', name: 'Docker (FontAwesome)', category: 'Containers' },
+    { icon: '󱃾', name: 'Kubernetes (Material)', category: 'Containers' },
+    { icon: '📦', name: 'Package', category: 'Containers' },
+    { icon: '󰏗', name: 'Box (Material)', category: 'Containers' },
+    { icon: '', name: 'Folder (Solid)', category: 'Misc' },
+    { icon: '', name: 'Folder (Open)', category: 'Misc' },
+    { icon: '', name: 'Home', category: 'Misc' },
+    { icon: '', name: 'Arch Linux', category: 'Misc' },
+    { icon: '', name: 'Apple', category: 'Misc' },
+    { icon: '', name: 'Windows', category: 'Misc' },
+    { icon: '🚀', name: 'Rocket', category: 'Misc' },
+    { icon: '✓', name: 'Check', category: 'Misc' },
+    { icon: '✗', name: 'Cross', category: 'Misc' },
+    { icon: '', name: 'Clock (FontAwesome)', category: 'Misc' },
+    { icon: '', name: 'Battery (Half)', category: 'Misc' },
+  ];
+function de({ onSelect: a, currentSymbol: t }) {
+  const [r, s] = m.useState(''),
+    [n, o] = m.useState('All'),
+    d = na.filter((i) => {
+      const l = n === 'All' || i.category === n,
+        c =
+          i.name.toLowerCase().includes(r.toLowerCase()) || i.icon.includes(r);
+      return l && c;
+    });
+  return e.jsxs('div', {
+    className:
+      'flex h-full max-h-[400px] flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 shadow-xl',
+    children: [
+      e.jsxs('div', {
+        className: 'flex flex-col gap-3 border-b border-gray-800 p-4',
+        children: [
+          e.jsxs('div', {
+            className: 'relative',
+            children: [
+              e.jsx(Se, {
+                className:
+                  'absolute left-3 top-1/2 -translate-y-1/2 text-gray-500',
+                size: 16,
+              }),
+              e.jsx('input', {
+                type: 'text',
+                placeholder: 'Search symbols...',
+                value: r,
+                onChange: (i) => s(i.target.value),
+                className:
+                  'w-full rounded-md border border-gray-700 bg-gray-800 py-2 pl-9 pr-8 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+              }),
+              r &&
+                e.jsx('button', {
+                  onClick: () => s(''),
+                  className:
+                    'absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 hover:bg-gray-700 hover:text-white',
+                  'aria-label': 'Clear search',
+                  children: e.jsx(P, { size: 14 }),
+                }),
+            ],
+          }),
+          e.jsx('div', {
+            className: 'scrollbar-none flex gap-2 overflow-x-auto pb-1',
+            children: sa.map((i) =>
+              e.jsx(
+                'button',
+                {
+                  onClick: () => o(i),
+                  className: T(
+                    'whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition-colors',
+                    n === i
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white',
+                  ),
+                  children: i,
+                },
+                i,
+              ),
+            ),
+          }),
+        ],
+      }),
+      e.jsx('div', {
+        className:
+          'scrollbar-thin scrollbar-thumb-gray-700 flex-1 overflow-y-auto p-4',
+        children:
+          d.length === 0
+            ? e.jsxs('div', {
+                className:
+                  'flex h-32 items-center justify-center text-sm text-gray-500',
+                children: ['No symbols found matching "', r, '"'],
+              })
+            : e.jsx('div', {
+                className: 'grid grid-cols-6 gap-2 sm:grid-cols-8',
+                children: d.map((i, l) => {
+                  const c = t?.includes(i.icon);
+                  return e.jsxs(
+                    'button',
+                    {
+                      onClick: () => a(i.icon),
+                      className: T(
+                        'group relative flex aspect-square flex-col items-center justify-center rounded-md border transition-all',
+                        c
+                          ? 'border-blue-500 bg-blue-900/20'
+                          : 'border-gray-800 bg-gray-800 hover:border-gray-600 hover:bg-gray-700',
+                      ),
+                      title: i.name,
+                      children: [
+                        e.jsx('span', {
+                          className: T(
+                            'text-xl',
+                            c
+                              ? 'text-blue-400'
+                              : 'text-gray-200 group-hover:text-white',
+                          ),
+                          children: i.icon,
+                        }),
+                        c &&
+                          e.jsx('div', {
+                            className:
+                              'absolute -right-1 -top-1 rounded-full bg-blue-500 p-0.5 text-white',
+                            children: e.jsx(et, { size: 10 }),
+                          }),
+                      ],
+                    },
+                    `${i.icon}-${l}`,
+                  );
+                }),
+              }),
+      }),
+    ],
+  });
+}
+function me() {
+  return (me =
+    Object.assign ||
+    function (a) {
+      for (var t = 1; t < arguments.length; t++) {
+        var r = arguments[t];
+        for (var s in r)
+          Object.prototype.hasOwnProperty.call(r, s) && (a[s] = r[s]);
+      }
+      return a;
+    }).apply(this, arguments);
+}
+function mt(a, t) {
+  if (a == null) return {};
+  var r,
+    s,
+    n = {},
+    o = Object.keys(a);
+  for (s = 0; s < o.length; s++) t.indexOf((r = o[s])) >= 0 || (n[r] = a[r]);
+  return n;
+}
+function je(a) {
+  var t = m.useRef(a),
+    r = m.useRef(function (s) {
+      t.current && t.current(s);
+    });
+  return ((t.current = a), r.current);
+}
+var ae = function (a, t, r) {
+    return (
+      t === void 0 && (t = 0),
+      r === void 0 && (r = 1),
+      a > r ? r : a < t ? t : a
+    );
+  },
+  ee = function (a) {
+    return 'touches' in a;
+  },
+  _e = function (a) {
+    return (a && a.ownerDocument.defaultView) || self;
+  },
+  We = function (a, t, r) {
+    var s = a.getBoundingClientRect(),
+      n = ee(t)
+        ? (function (o, d) {
+            for (var i = 0; i < o.length; i++)
+              if (o[i].identifier === d) return o[i];
+            return o[0];
+          })(t.touches, r)
+        : t;
+    return {
+      left: ae((n.pageX - (s.left + _e(a).pageXOffset)) / s.width),
+      top: ae((n.pageY - (s.top + _e(a).pageYOffset)) / s.height),
+    };
+  },
+  qe = function (a) {
+    !ee(a) && a.preventDefault();
+  },
+  ut = D.memo(function (a) {
+    var t = a.onMove,
+      r = a.onKey,
+      s = mt(a, ['onMove', 'onKey']),
+      n = m.useRef(null),
+      o = je(t),
+      d = je(r),
+      i = m.useRef(null),
+      l = m.useRef(!1),
+      c = m.useMemo(
+        function () {
+          var g = function (u) {
+              (qe(u),
+                (ee(u) ? u.touches.length > 0 : u.buttons > 0) && n.current
+                  ? o(We(n.current, u, i.current))
+                  : x(!1));
+            },
+            w = function () {
+              return x(!1);
+            };
+          function x(u) {
+            var b = l.current,
+              p = _e(n.current),
+              C = u ? p.addEventListener : p.removeEventListener;
+            (C(b ? 'touchmove' : 'mousemove', g),
+              C(b ? 'touchend' : 'mouseup', w));
+          }
+          return [
+            function (u) {
+              var b = u.nativeEvent,
+                p = n.current;
+              if (
+                p &&
+                (qe(b),
+                !(function (h, _) {
+                  return _ && !ee(h);
+                })(b, l.current) && p)
+              ) {
+                if (ee(b)) {
+                  l.current = !0;
+                  var C = b.changedTouches || [];
+                  C.length && (i.current = C[0].identifier);
+                }
+                (p.focus(), o(We(p, b, i.current)), x(!0));
+              }
+            },
+            function (u) {
+              var b = u.which || u.keyCode;
+              b < 37 ||
+                b > 40 ||
+                (u.preventDefault(),
+                d({
+                  left: b === 39 ? 0.05 : b === 37 ? -0.05 : 0,
+                  top: b === 40 ? 0.05 : b === 38 ? -0.05 : 0,
+                }));
+            },
+            x,
+          ];
+        },
+        [d, o],
+      ),
+      f = c[0],
+      y = c[1],
+      v = c[2];
+    return (
+      m.useEffect(
+        function () {
+          return v;
+        },
+        [v],
+      ),
+      D.createElement(
+        'div',
+        me({}, s, {
+          onTouchStart: f,
+          onMouseDown: f,
+          className: 'react-colorful__interactive',
+          ref: n,
+          onKeyDown: y,
+          tabIndex: 0,
+          role: 'slider',
+        }),
+      )
+    );
+  }),
+  Ee = function (a) {
+    return a.filter(Boolean).join(' ');
+  },
+  pt = function (a) {
+    var t = a.color,
+      r = a.left,
+      s = a.top,
+      n = s === void 0 ? 0.5 : s,
+      o = Ee(['react-colorful__pointer', a.className]);
+    return D.createElement(
+      'div',
+      { className: o, style: { top: 100 * n + '%', left: 100 * r + '%' } },
+      D.createElement('div', {
+        className: 'react-colorful__pointer-fill',
+        style: { backgroundColor: t },
+      }),
+    );
+  },
+  z = function (a, t, r) {
+    return (
+      t === void 0 && (t = 0),
+      r === void 0 && (r = Math.pow(10, t)),
+      Math.round(r * a) / r
+    );
+  },
+  oa = function (a) {
+    return ma(Ne(a));
+  },
+  Ne = function (a) {
+    return (
+      a[0] === '#' && (a = a.substring(1)),
+      a.length < 6
+        ? {
+            r: parseInt(a[0] + a[0], 16),
+            g: parseInt(a[1] + a[1], 16),
+            b: parseInt(a[2] + a[2], 16),
+            a: a.length === 4 ? z(parseInt(a[3] + a[3], 16) / 255, 2) : 1,
+          }
+        : {
+            r: parseInt(a.substring(0, 2), 16),
+            g: parseInt(a.substring(2, 4), 16),
+            b: parseInt(a.substring(4, 6), 16),
+            a: a.length === 8 ? z(parseInt(a.substring(6, 8), 16) / 255, 2) : 1,
+          }
+    );
+  },
+  ia = function (a) {
+    return ca(da(a));
+  },
+  la = function (a) {
+    var t = a.s,
+      r = a.v,
+      s = a.a,
+      n = ((200 - t) * r) / 100;
+    return {
+      h: z(a.h),
+      s: z(
+        n > 0 && n < 200 ? ((t * r) / 100 / (n <= 100 ? n : 200 - n)) * 100 : 0,
+      ),
+      l: z(n / 2),
+      a: z(s, 2),
+    };
+  },
+  Ce = function (a) {
+    var t = la(a);
+    return 'hsl(' + t.h + ', ' + t.s + '%, ' + t.l + '%)';
+  },
+  da = function (a) {
+    var t = a.h,
+      r = a.s,
+      s = a.v,
+      n = a.a;
+    ((t = (t / 360) * 6), (r /= 100), (s /= 100));
+    var o = Math.floor(t),
+      d = s * (1 - r),
+      i = s * (1 - (t - o) * r),
+      l = s * (1 - (1 - t + o) * r),
+      c = o % 6;
+    return {
+      r: z(255 * [s, i, d, d, l, s][c]),
+      g: z(255 * [l, s, s, i, d, d][c]),
+      b: z(255 * [d, d, l, s, s, i][c]),
+      a: z(n, 2),
+    };
+  },
+  oe = function (a) {
+    var t = a.toString(16);
+    return t.length < 2 ? '0' + t : t;
+  },
+  ca = function (a) {
+    var t = a.r,
+      r = a.g,
+      s = a.b,
+      n = a.a,
+      o = n < 1 ? oe(z(255 * n)) : '';
+    return '#' + oe(t) + oe(r) + oe(s) + o;
+  },
+  ma = function (a) {
+    var t = a.r,
+      r = a.g,
+      s = a.b,
+      n = a.a,
+      o = Math.max(t, r, s),
+      d = o - Math.min(t, r, s),
+      i = d
+        ? o === t
+          ? (r - s) / d
+          : o === r
+            ? 2 + (s - t) / d
+            : 4 + (t - r) / d
+        : 0;
+    return {
+      h: z(60 * (i < 0 ? i + 6 : i)),
+      s: z(o ? (d / o) * 100 : 0),
+      v: z((o / 255) * 100),
+      a: n,
+    };
+  },
+  ua = D.memo(function (a) {
+    var t = a.hue,
+      r = a.onChange,
+      s = Ee(['react-colorful__hue', a.className]);
+    return D.createElement(
+      'div',
+      { className: s },
+      D.createElement(
+        ut,
+        {
+          onMove: function (n) {
+            r({ h: 360 * n.left });
+          },
+          onKey: function (n) {
+            r({ h: ae(t + 360 * n.left, 0, 360) });
+          },
+          'aria-label': 'Hue',
+          'aria-valuenow': z(t),
+          'aria-valuemax': '360',
+          'aria-valuemin': '0',
+        },
+        D.createElement(pt, {
+          className: 'react-colorful__hue-pointer',
+          left: t / 360,
+          color: Ce({ h: t, s: 100, v: 100, a: 1 }),
+        }),
+      ),
+    );
+  }),
+  pa = D.memo(function (a) {
+    var t = a.hsva,
+      r = a.onChange,
+      s = { backgroundColor: Ce({ h: t.h, s: 100, v: 100, a: 1 }) };
+    return D.createElement(
+      'div',
+      { className: 'react-colorful__saturation', style: s },
+      D.createElement(
+        ut,
+        {
+          onMove: function (n) {
+            r({ s: 100 * n.left, v: 100 - 100 * n.top });
+          },
+          onKey: function (n) {
+            r({
+              s: ae(t.s + 100 * n.left, 0, 100),
+              v: ae(t.v - 100 * n.top, 0, 100),
+            });
+          },
+          'aria-label': 'Color',
+          'aria-valuetext':
+            'Saturation ' + z(t.s) + '%, Brightness ' + z(t.v) + '%',
+        },
+        D.createElement(pt, {
+          className: 'react-colorful__saturation-pointer',
+          top: 1 - t.v / 100,
+          left: t.s / 100,
+          color: Ce(t),
+        }),
+      ),
+    );
+  }),
+  ft = function (a, t) {
+    if (a === t) return !0;
+    for (var r in a) if (a[r] !== t[r]) return !1;
+    return !0;
+  },
+  fa = function (a, t) {
+    return a.toLowerCase() === t.toLowerCase() || ft(Ne(a), Ne(t));
+  };
+function ya(a, t, r) {
+  var s = je(r),
+    n = m.useState(function () {
+      return a.toHsva(t);
+    }),
+    o = n[0],
+    d = n[1],
+    i = m.useRef({ color: t, hsva: o });
+  (m.useEffect(
+    function () {
+      if (!a.equal(t, i.current.color)) {
+        var c = a.toHsva(t);
+        ((i.current = { hsva: c, color: t }), d(c));
+      }
+    },
+    [t, a],
+  ),
+    m.useEffect(
+      function () {
+        var c;
+        ft(o, i.current.hsva) ||
+          a.equal((c = a.fromHsva(o)), i.current.color) ||
+          ((i.current = { hsva: o, color: c }), s(c));
+      },
+      [o, a, s],
+    ));
+  var l = m.useCallback(function (c) {
+    d(function (f) {
+      return Object.assign({}, f, c);
+    });
+  }, []);
+  return [o, l];
+}
+var ga = typeof window < 'u' ? m.useLayoutEffect : m.useEffect,
+  ba = function () {
+    return typeof __webpack_nonce__ < 'u' ? __webpack_nonce__ : void 0;
+  },
+  He = new Map(),
+  ha = function (a) {
+    ga(function () {
+      var t = a.current ? a.current.ownerDocument : document;
+      if (t !== void 0 && !He.has(t)) {
+        var r = t.createElement('style');
+        ((r.innerHTML = `.react-colorful{position:relative;display:flex;flex-direction:column;width:200px;height:200px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default}.react-colorful__saturation{position:relative;flex-grow:1;border-color:transparent;border-bottom:12px solid #000;border-radius:8px 8px 0 0;background-image:linear-gradient(0deg,#000,transparent),linear-gradient(90deg,#fff,hsla(0,0%,100%,0))}.react-colorful__alpha-gradient,.react-colorful__pointer-fill{content:"";position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;border-radius:inherit}.react-colorful__alpha-gradient,.react-colorful__saturation{box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}.react-colorful__alpha,.react-colorful__hue{position:relative;height:24px}.react-colorful__hue{background:linear-gradient(90deg,red 0,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,red)}.react-colorful__last-control{border-radius:0 0 8px 8px}.react-colorful__interactive{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:inherit;outline:none;touch-action:none}.react-colorful__pointer{position:absolute;z-index:1;box-sizing:border-box;width:28px;height:28px;transform:translate(-50%,-50%);background-color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,.2)}.react-colorful__interactive:focus .react-colorful__pointer{transform:translate(-50%,-50%) scale(1.1)}.react-colorful__alpha,.react-colorful__alpha-pointer{background-color:#fff;background-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>')}.react-colorful__saturation-pointer{z-index:3}.react-colorful__hue-pointer{z-index:2}`),
+          He.set(t, r));
+        var s = ba();
+        (s && r.setAttribute('nonce', s), t.head.appendChild(r));
+      }
+    }, []);
+  },
+  xa = function (a) {
+    var t = a.className,
+      r = a.colorModel,
+      s = a.color,
+      n = s === void 0 ? r.defaultColor : s,
+      o = a.onChange,
+      d = mt(a, ['className', 'colorModel', 'color', 'onChange']),
+      i = m.useRef(null);
+    ha(i);
+    var l = ya(r, n, o),
+      c = l[0],
+      f = l[1],
+      y = Ee(['react-colorful', t]);
+    return D.createElement(
+      'div',
+      me({}, d, { ref: i, className: y }),
+      D.createElement(pa, { hsva: c, onChange: f }),
+      D.createElement(ua, {
+        hue: c.h,
+        onChange: f,
+        className: 'react-colorful__last-control',
+      }),
+    );
+  },
+  va = {
+    defaultColor: '000',
+    toHsva: oa,
+    fromHsva: function (a) {
+      return ia({ h: a.h, s: a.s, v: a.v, a: 1 });
+    },
+    equal: fa,
+  },
+  wa = function (a) {
+    return D.createElement(xa, me({}, a, { colorModel: va }));
+  };
+rt([it, ot]);
+const ja = [
+    '#000000',
+    '#FF0000',
+    '#00FF00',
+    '#FFFF00',
+    '#0000FF',
+    '#FF00FF',
+    '#00FFFF',
+    '#FFFFFF',
+    '#808080',
+    '#C0C0C0',
+  ],
+  _a = D.memo(function ({ color: t, onClick: r, title: s, ariaLabel: n }) {
+    const o = m.useRef(null);
+    return (
+      m.useEffect(() => {
+        o.current && (o.current.style.backgroundColor = t);
+      }, [t]),
+      e.jsx('button', {
+        type: 'button',
+        ref: o,
+        'data-color': t,
+        className:
+          'h-6 w-6 rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:ring-offset-gray-800',
+        onClick: r,
+        title: s,
+        'aria-label': n,
+      })
+    );
+  });
+function Ke({ color: a, onChange: t, label: r, className: s }) {
+  const [n, o] = m.useState(!1),
+    [d, i] = m.useState(a),
+    l = m.useRef(null),
+    c = m.useRef(null),
+    { currentTheme: f } = M(),
+    y = m.useMemo(() => {
+      const b = f.config.palettes?.[f.config.palette || 'global'] || {},
+        p = Object.values(b);
+      return [...new Set([...p, ...ja])];
+    }, [f.config.palette, f.config.palettes]);
+  (m.useEffect(() => {
+    i(a);
+  }, [a]),
+    m.useEffect(() => {
+      function b(p) {
+        l.current && !l.current.contains(p.target) && o(!1);
+      }
+      return (
+        document.addEventListener('mousedown', b),
+        () => document.removeEventListener('mousedown', b)
+      );
+    }, []));
+  const v = m.useCallback(
+      (b) => {
+        (i(b), t(b));
+      },
+      [t],
+    ),
+    g = (b) => {
+      (i(b.target.value), H(b.target.value).isValid() && t(b.target.value));
+    },
+    w = m.useCallback(
+      (b) => {
+        const p = b.currentTarget.getAttribute('data-color');
+        p && v(p);
+      },
+      [v],
+    );
+  m.useEffect(() => {
+    c.current && (c.current.style.backgroundColor = d);
+  }, [d]);
+  const x = k.checkContrast(d, '#000000'),
+    u = x.ratio >= 4.5;
+  return e.jsxs('div', {
+    className: T('relative', s),
+    ref: l,
+    children: [
+      r &&
+        e.jsx('label', {
+          className: 'mb-1.5 block text-xs font-medium text-gray-400',
+          children: r,
+        }),
+      e.jsxs('div', {
+        className: 'flex gap-2',
+        children: [
+          e.jsx('button', {
+            type: 'button',
+            ref: c,
+            className:
+              'h-9 w-9 shrink-0 cursor-pointer rounded-md border border-gray-700 shadow-sm transition-transform active:scale-95',
+            onClick: () => o(!n),
+            'aria-label': `Toggle color picker, current color is ${d}`,
+            'aria-expanded': n,
+          }),
+          e.jsxs('div', {
+            className: 'relative flex-1',
+            children: [
+              e.jsx('input', {
+                type: 'text',
+                value: d,
+                onChange: g,
+                className:
+                  'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 font-mono text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                placeholder: '#000000 or red',
+              }),
+              n
+                ? e.jsx('button', {
+                    onClick: () => o(!1),
+                    className:
+                      'absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white',
+                    'aria-label': 'Confirm color',
+                    children: e.jsx(et, { size: 14 }),
+                  })
+                : e.jsx('button', {
+                    onClick: () => o(!0),
+                    className:
+                      'absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300',
+                    'aria-label': 'Pick color',
+                    'aria-expanded': n,
+                    children: e.jsx(Dt, { size: 14 }),
+                  }),
+            ],
+          }),
+        ],
+      }),
+      !u &&
+        d &&
+        e.jsxs('div', {
+          className: 'mt-1 flex items-center gap-1.5 text-xs text-yellow-500',
+          children: [
+            e.jsx(Ye, { size: 12 }),
+            e.jsxs('span', {
+              children: ['Low contrast (', x.ratio.toFixed(1), ':1)'],
+            }),
+          ],
+        }),
+      n &&
+        e.jsxs('div', {
+          className:
+            'absolute left-0 top-full z-50 mt-2 w-64 rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-xl',
+          children: [
+            e.jsx('div', {
+              className: 'mb-3',
+              children: e.jsx(wa, {
+                color: d.startsWith('#') ? d : '#ffffff',
+                onChange: v,
+              }),
+            }),
+            e.jsx('div', {
+              className: 'grid grid-cols-5 gap-2',
+              children: y.map((b) =>
+                e.jsx(
+                  _a,
+                  {
+                    color: b,
+                    onClick: w,
+                    title: b,
+                    ariaLabel: `Select color ${b}`,
+                  },
+                  b,
+                ),
+              ),
+            }),
+          ],
+        }),
+    ],
+  });
+}
+function yt({ value: a, onChange: t, className: r }) {
+  const [s, n] = m.useState(''),
+    [o, d] = m.useState(''),
+    [i, l] = m.useState(!1),
+    [c, f] = m.useState(!1),
+    [y, v] = m.useState(!1),
+    [g, w] = m.useState(!1),
+    [x, u] = m.useState(!1);
+  m.useEffect(() => {
+    if (!a) {
+      (n(''), d(''), l(!1), f(!1), v(!1), w(!1), u(!1));
+      return;
+    }
+    const _ = a.split(/\s+/);
+    let $ = '',
+      j = '',
+      N = !1,
+      I = !1,
+      L = !1,
+      B = !1,
+      U = !1;
+    (_.forEach((E) => {
+      E === 'bold'
+        ? (N = !0)
+        : E === 'italic'
+          ? (I = !0)
+          : E === 'underline'
+            ? (L = !0)
+            : E === 'dimmed'
+              ? (B = !0)
+              : E === 'inverted'
+                ? (U = !0)
+                : E.startsWith('bg:')
+                  ? (j = E.substring(3))
+                  : ($ = E);
+    }),
+      n($),
+      d(j),
+      l(N),
+      f(I),
+      v(L),
+      w(B),
+      u(U));
+  }, [a]);
+  const b = (_, $, j) => {
+      const N = [];
+      (j.bold && N.push('bold'),
+        j.italic && N.push('italic'),
+        j.underline && N.push('underline'),
+        j.dimmed && N.push('dimmed'),
+        j.inverted && N.push('inverted'),
+        $ && N.push(`bg:${$}`),
+        _ && N.push(_),
+        t(N.join(' ')));
+    },
+    p = (_) => {
+      const $ = { bold: i, italic: c, underline: y, dimmed: g, inverted: x };
+      (($[_] = !$[_]),
+        _ === 'bold' && l(!i),
+        _ === 'italic' && f(!c),
+        _ === 'underline' && v(!y),
+        _ === 'dimmed' && w(!g),
+        _ === 'inverted' && u(!x),
+        b(s, o, $));
+    },
+    C = (_) => {
+      (n(_),
+        b(_, o, { bold: i, italic: c, underline: y, dimmed: g, inverted: x }));
+    },
+    h = (_) => {
+      (d(_),
+        b(s, _, { bold: i, italic: c, underline: y, dimmed: g, inverted: x }));
+    };
+  return e.jsxs('div', {
+    className: T(
+      'flex flex-col gap-4 rounded-md border border-gray-700 bg-gray-800 p-4',
+      r,
+    ),
+    children: [
+      e.jsxs('div', {
+        className: 'flex gap-4',
+        children: [
+          e.jsxs('div', {
+            className: 'flex-1',
+            children: [
+              e.jsx('label', {
+                className: 'mb-2 block text-xs font-medium text-gray-400',
+                children: 'Foreground',
+              }),
+              e.jsx(Ke, { color: s, onChange: C }),
+            ],
+          }),
+          e.jsxs('div', {
+            className: 'flex-1',
+            children: [
+              e.jsx('label', {
+                className: 'mb-2 block text-xs font-medium text-gray-400',
+                children: 'Background',
+              }),
+              e.jsx(Ke, { color: o, onChange: h }),
+            ],
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        children: [
+          e.jsx('label', {
+            className: 'mb-2 block text-xs font-medium text-gray-400',
+            children: 'Modifiers',
+          }),
+          e.jsxs('div', {
+            className: 'flex flex-wrap gap-2',
+            children: [
+              e.jsx('button', {
+                onClick: () => p('bold'),
+                className: T(
+                  'flex items-center justify-center rounded border border-transparent p-2 transition-colors',
+                  i
+                    ? 'border-blue-500 bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200',
+                ),
+                title: 'Bold',
+                'aria-label': 'Toggle Bold',
+                'aria-pressed': i,
+                children: e.jsx(zt, { size: 16 }),
+              }),
+              e.jsx('button', {
+                onClick: () => p('italic'),
+                className: T(
+                  'flex items-center justify-center rounded border border-transparent p-2 transition-colors',
+                  c
+                    ? 'border-blue-500 bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200',
+                ),
+                title: 'Italic',
+                'aria-label': 'Toggle Italic',
+                'aria-pressed': c,
+                children: e.jsx(Lt, { size: 16 }),
+              }),
+              e.jsx('button', {
+                onClick: () => p('underline'),
+                className: T(
+                  'flex items-center justify-center rounded border border-transparent p-2 transition-colors',
+                  y
+                    ? 'border-blue-500 bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200',
+                ),
+                title: 'Underline',
+                'aria-label': 'Toggle Underline',
+                'aria-pressed': y,
+                children: e.jsx(Ot, { size: 16 }),
+              }),
+              e.jsx('button', {
+                onClick: () => p('dimmed'),
+                className: T(
+                  'flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors',
+                  g
+                    ? 'border-blue-500 bg-blue-600 text-white'
+                    : 'bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200',
+                ),
+                'aria-pressed': g,
+                children: 'Dim',
+              }),
+              e.jsx('button', {
+                onClick: () => p('inverted'),
+                className: T(
+                  'flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors',
+                  x
+                    ? 'border-blue-500 bg-blue-600 text-white'
+                    : 'bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200',
+                ),
+                'aria-pressed': x,
+                children: 'Inverted',
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+function Na({
+  segment: a,
+  activeText: t,
+  setActiveText: r,
+  activeStyle: s,
+  setActiveStyle: n,
+  showIconBrowser: o,
+  setShowIconBrowser: d,
+  onSegmentChange: i,
+  onRemove: l,
+  availableModules: c,
+}) {
+  const { currentTheme: f } = M();
+  return e.jsxs('div', {
+    className:
+      'mt-4 flex flex-col gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-inner',
+    children: [
+      e.jsxs('h4', {
+        className: 'text-sm font-semibold capitalize text-gray-200',
+        children: ['Edit ', a.type.replace('Text', ' Text'), ' Segment'],
+      }),
+      (a.type === 'text' || a.type === 'styledText') &&
+        e.jsx('input', {
+          type: 'text',
+          value: t,
+          onChange: (y) => {
+            (r(y.target.value),
+              i({ value: y.target.value }),
+              a.type === 'styledText' && i({ text: y.target.value }));
+          },
+          className:
+            'w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+          placeholder: 'Segment text',
+        }),
+      a.type === 'module' &&
+        e.jsx('select', {
+          value: a.value,
+          onChange: (y) => i({ value: y.target.value }),
+          className:
+            'w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+          children: c.map((y) =>
+            e.jsx('option', { value: y, children: y.replace(/_/g, ' ') }, y),
+          ),
+        }),
+      (a.type === 'styledText' || a.type === 'module') &&
+        e.jsxs('div', {
+          className: 'flex flex-col gap-2',
+          children: [
+            e.jsx('label', {
+              className: 'text-xs font-medium text-gray-400',
+              children: 'Style',
+            }),
+            e.jsx(yt, {
+              value: s,
+              onChange: (y) => {
+                (n(y), i({ style: y }));
+              },
+            }),
+          ],
+        }),
+      (a.type === 'module' || a.type === 'styledText') &&
+        e.jsxs('div', {
+          className: 'relative flex flex-col gap-2',
+          children: [
+            e.jsx('label', {
+              className: 'text-xs font-medium text-gray-400',
+              children: 'Symbol (via Icon Browser)',
+            }),
+            e.jsx('button', {
+              onClick: () => d(!o),
+              className:
+                'rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700',
+              children: 'Browse Icons',
+            }),
+            o &&
+              e.jsx('div', {
+                className:
+                  'absolute left-0 top-full z-50 mt-1 w-full sm:w-[300px]',
+                children: e.jsx(de, {
+                  currentSymbol:
+                    a.type === 'module'
+                      ? f.config[a.value]?.symbol || ''
+                      : a.text,
+                  onSelect: (y) => {
+                    (a.type === 'styledText' && (i({ text: y }), r(y)), d(!1));
+                  },
+                }),
+              }),
+          ],
+        }),
+      e.jsx('button', {
+        onClick: l,
+        className:
+          'mt-2 self-end rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-500',
+        children: 'Remove Segment',
+      }),
+    ],
+  });
+}
+function $e({ formatString: a, onChange: t }) {
+  const { currentTheme: r } = M(),
+    [s, n] = m.useState([]),
+    [o, d] = m.useState(null),
+    [i, l] = m.useState(!1),
+    [c, f] = m.useState(''),
+    [y, v] = m.useState(''),
+    g = m.useRef(null);
+  m.useEffect(() => {
+    n(
+      ((N) => {
+        const I = [],
+          L = N,
+          B = /(\[([^\]]+)\]\(([^)]+)\)|\$([a-zA-Z0-9_]+))/g;
+        let U = 0,
+          E;
+        for (; (E = B.exec(L)) !== null; )
+          (E.index > U &&
+            I.push({ type: 'text', value: L.substring(U, E.index) }),
+            E[1].startsWith('[')
+              ? I.push({ type: 'styledText', text: E[2], style: E[3] })
+              : E[4] &&
+                I.push({
+                  type: 'module',
+                  value: E[4],
+                  style: r.config[E[4]]?.style,
+                }),
+            (U = B.lastIndex));
+        return (
+          L.length > U && I.push({ type: 'text', value: L.substring(U) }),
+          I
+        );
+      })(a),
+    );
+  }, [a, r.config]);
+  const w = m.useCallback(
+      (j) =>
+        j
+          .map((N) =>
+            N.type === 'text'
+              ? N.value
+              : N.type === 'module'
+                ? `$${N.value}`
+                : N.type === 'styledText'
+                  ? `[${N.text}](${N.style})`
+                  : '',
+          )
+          .join(''),
+      [],
+    ),
+    x = (j) => {
+      d(j);
+      const N = s[j];
+      (N.type === 'text'
+        ? v(N.value)
+        : N.type === 'styledText'
+          ? v(N.text)
+          : v(''),
+        f(s[j].type === 'styledText' ? s[j].style : ''),
+        l(!1));
+    },
+    u = (j, N) => {
+      const I = [...s];
+      ((I[j] = { ...I[j], ...N }), n(I), t(w(I)));
+    },
+    b = (j) => {
+      const N = [...s];
+      (j === 'text' && N.push({ type: 'text', value: 'New Text' }),
+        j === 'module' && N.push({ type: 'module', value: 'directory' }),
+        j === 'styledText' &&
+          N.push({ type: 'styledText', text: 'Styled Text', style: 'white' }),
+        n(N),
+        t(w(N)),
+        d(N.length - 1));
+    },
+    p = (j) => {
+      const N = s.filter((I, L) => L !== j);
+      (n(N), t(w(N)), d(null));
+    },
+    C = () => b('text'),
+    h = () => b('module'),
+    _ = () => b('styledText'),
+    $ = J.map((j) => j.name);
+  return e.jsxs('div', {
+    className: 'flex flex-col gap-3',
+    children: [
+      e.jsxs('div', {
+        className:
+          'flex min-h-[40px] flex-wrap items-center gap-2 rounded-md border border-gray-700 bg-gray-800 p-2',
+        ref: g,
+        children: [
+          s.map((j, N) =>
+            e.jsxs(
+              'button',
+              {
+                onClick: () => x(N),
+                className: T(
+                  'flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium',
+                  o === N
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600',
+                ),
+                children: [
+                  j.type === 'text' &&
+                    e.jsx(Re, { size: 12, className: 'text-gray-400' }),
+                  j.type === 'module' &&
+                    e.jsx(Fe, { size: 12, className: 'text-purple-400' }),
+                  j.type === 'styledText' &&
+                    e.jsx(Me, { size: 12, className: 'text-green-400' }),
+                  e.jsxs('span', {
+                    children: [
+                      j.type === 'text' && j.value,
+                      j.type === 'module' && `$${j.value}`,
+                      j.type === 'styledText' && `[${j.text}]`,
+                    ],
+                  }),
+                  o === N && e.jsx(P, { size: 10, className: 'ml-1' }),
+                ],
+              },
+              N,
+            ),
+          ),
+          s.length === 0 &&
+            e.jsx('span', {
+              className: 'p-1 text-sm italic text-gray-500',
+              children: 'Click + to add segments',
+            }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'flex gap-2',
+        children: [
+          e.jsxs('button', {
+            onClick: C,
+            className:
+              'flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700',
+            children: [e.jsx(Re, { size: 16 }), ' Add Text'],
+          }),
+          e.jsxs('button', {
+            onClick: h,
+            className:
+              'flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700',
+            children: [e.jsx(Fe, { size: 16 }), ' Add Module'],
+          }),
+          e.jsxs('button', {
+            onClick: _,
+            className:
+              'flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700',
+            children: [e.jsx(Me, { size: 16 }), ' Add Styled Text'],
+          }),
+        ],
+      }),
+      o !== null &&
+        e.jsx(Na, {
+          segment: s[o],
+          activeText: y,
+          setActiveText: v,
+          activeStyle: c,
+          setActiveStyle: f,
+          showIconBrowser: i,
+          setShowIconBrowser: l,
+          onSegmentChange: (j) => u(o, j),
+          onRemove: () => p(o),
+          availableModules: $,
+        }),
+    ],
+  });
+}
+function Ca() {
+  const { currentTheme: a, updateConfig: t } = M(),
+    [r, s] = m.useState(null),
+    n = m.useRef(null);
+  m.useEffect(() => {
+    function i(l) {
+      n.current && !n.current.contains(l.target) && r && s(null);
+    }
+    return (
+      document.addEventListener('mousedown', i),
+      () => document.removeEventListener('mousedown', i)
+    );
+  }, [r]);
+  const o = (i, l) => {
+      t({ [i]: l });
+    },
+    d = (i, l) => {
+      o(i, l);
+    };
+  return e.jsxs('div', {
+    className: 'flex flex-col gap-6',
+    children: [
+      e.jsxs('h2', {
+        className: 'flex items-center gap-2 text-lg font-semibold text-white',
+        children: [
+          e.jsx(le, { size: 20, className: 'text-gray-400' }),
+          ' Global Format Settings',
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'space-y-3',
+        children: [
+          e.jsx('label', {
+            className: 'block text-sm font-medium text-gray-300',
+            children: 'Left Prompt Format',
+          }),
+          e.jsx($e, {
+            formatString: a.config.format || '',
+            onChange: (i) => o('format', i),
+          }),
+          e.jsxs('div', {
+            className:
+              'flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200',
+            children: [
+              e.jsx(V, { className: 'mt-0.5 h-4 w-4 shrink-0' }),
+              e.jsx('p', {
+                children:
+                  'Visually edit the main format string for your left prompt.',
+              }),
+            ],
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'space-y-3',
+        children: [
+          e.jsx('label', {
+            className: 'block text-sm font-medium text-gray-300',
+            children: 'Right Prompt Format (optional)',
+          }),
+          e.jsx($e, {
+            formatString: a.config.right_format || '',
+            onChange: (i) => o('right_format', i),
+          }),
+          e.jsxs('div', {
+            className:
+              'flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200',
+            children: [
+              e.jsx(V, { className: 'mt-0.5 h-4 w-4 shrink-0' }),
+              e.jsx('p', {
+                children:
+                  'Define a separate format string for a right-aligned prompt.',
+              }),
+            ],
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        children: [
+          e.jsxs('label', {
+            className:
+              'flex cursor-pointer select-none items-center gap-3 text-sm text-gray-300',
+            children: [
+              e.jsx('input', {
+                type: 'checkbox',
+                checked: a.config.add_newline !== !1,
+                onChange: (i) => o('add_newline', i.target.checked),
+                className:
+                  'h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900',
+              }),
+              'Add Newline (before prompt)',
+            ],
+          }),
+          e.jsx('p', {
+            className: 'mt-1 text-xs text-gray-500',
+            children:
+              'Whether to add a newline before the prompt. Recommended.',
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'relative space-y-3',
+        children: [
+          e.jsx('label', {
+            className: 'block text-sm font-medium text-gray-300',
+            children: 'Continuation Prompt',
+          }),
+          e.jsxs('div', {
+            className: 'flex gap-2',
+            children: [
+              e.jsx('input', {
+                type: 'text',
+                value: a.config.continuation_prompt || '',
+                onChange: (i) => o('continuation_prompt', i.target.value),
+                placeholder: `e.g. '[∙](bright-black) '
+`,
+                className:
+                  'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+              }),
+              e.jsx('button', {
+                onClick: () =>
+                  s(r === 'continuation_prompt' ? null : 'continuation_prompt'),
+                className:
+                  'shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                children: 'Browse',
+              }),
+            ],
+          }),
+          r === 'continuation_prompt' &&
+            e.jsx('div', {
+              ref: n,
+              className:
+                'absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]',
+              children: e.jsx(de, {
+                currentSymbol: a.config.continuation_prompt,
+                onSelect: (i) => {
+                  (d('continuation_prompt', i), s(null));
+                },
+              }),
+            }),
+        ],
+      }),
+    ],
+  });
+}
+function $a() {
+  const { updateConfig: a } = M(),
+    { addToast: t } = q(),
+    [r, s] = m.useState(''),
+    [n, o] = m.useState(!1),
+    d = async () => {
+      if (!r) {
+        t('Please enter an image URL.', 'info');
+        return;
+      }
+      o(!0);
+      try {
+        const i = new Worker(
+          new URL(
+            '/assets/color-extraction.worker-DL7WZ-Gt.js',
+            import.meta.url,
+          ),
+          { type: 'module' },
+        );
+        ((i.onmessage = (l) => {
+          (l.data.type === 'success'
+            ? (a({
+                palette: 'extracted',
+                palettes: { extracted: l.data.payload },
+              }),
+              t('Palette extracted and applied!', 'success'))
+            : l.data.type === 'error' &&
+              t(l.data.error || 'Failed to extract palette.', 'error'),
+            o(!1),
+            i.terminate());
+        }),
+          (i.onerror = (l) => {
+            (console.error('Worker error:', l),
+              t('Worker failed to extract palette.', 'error'),
+              o(!1),
+              i.terminate());
+          }),
+          i.postMessage({ imageUrl: r }));
+      } catch (i) {
+        (t(
+          i instanceof Error ? i.message : 'An unknown error occurred.',
+          'error',
+        ),
+          o(!1));
+      }
+    };
+  return e.jsxs('div', {
+    className:
+      'mt-4 flex flex-col gap-4 rounded-lg border border-gray-700 bg-gray-800/50 p-4 shadow-sm',
+    children: [
+      e.jsxs('h3', {
+        className: 'flex items-center gap-2 font-semibold text-gray-200',
+        children: [e.jsx(Pt, { size: 16 }), ' Create Palette from Image'],
+      }),
+      e.jsxs('div', {
+        className: 'flex flex-col gap-2',
+        children: [
+          e.jsx('p', {
+            className: 'text-xs text-gray-400',
+            children:
+              'Enter the URL of an image to automatically generate a new color palette and apply it to your theme.',
+          }),
+          e.jsxs('div', {
+            className: 'flex items-center gap-2',
+            children: [
+              e.jsx(Qe, { size: 16, className: 'text-gray-500' }),
+              e.jsx('input', {
+                type: 'text',
+                value: r,
+                onChange: (i) => s(i.target.value),
+                placeholder: 'https://example.com/wallpaper.jpg',
+                className:
+                  'flex-grow rounded-md border border-gray-600 bg-gray-900 px-3 py-1.5 text-sm text-gray-200 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                disabled: n,
+              }),
+            ],
+          }),
+        ],
+      }),
+      e.jsx('button', {
+        onClick: d,
+        disabled: n,
+        className:
+          'w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-gray-600',
+        children: n ? 'Extracting...' : 'Extract & Apply Palette',
+      }),
+    ],
+  });
+}
+const gt = m.createContext(null),
+  Ae = () => {
+    const a = m.useContext(gt);
+    if (!a)
+      throw new Error(
+        'useConfirmation must be used within a ConfirmationProvider',
+      );
+    return a;
+  },
+  ka = ({ children: a }) => {
+    const [t, r] = m.useState(null),
+      [s, n] = m.useState(null),
+      o = m.useCallback(
+        (l) =>
+          new Promise((c) => {
+            (r(l), n(() => c));
+          }),
+        [],
+      ),
+      d = () => {
+        (r(null), s && (s(!1), n(null)));
+      },
+      i = () => {
+        (r(null), s && (s(!0), n(null)));
+      };
+    return e.jsxs(gt.Provider, {
+      value: o,
+      children: [
+        a,
+        t &&
+          e.jsx(ct, {
+            isOpen: !!t,
+            onClose: d,
+            title: t.title,
+            footer: e.jsxs(e.Fragment, {
+              children: [
+                e.jsx('button', {
+                  onClick: d,
+                  className:
+                    'rounded-md border border-gray-600 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700',
+                  children: t.cancelText || 'Cancel',
+                }),
+                e.jsx('button', {
+                  onClick: i,
+                  className:
+                    'rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500',
+                  children: t.confirmText || 'Confirm',
+                }),
+              ],
+            }),
+            children: e.jsx('p', {
+              className: 'text-gray-400',
+              children: t.message,
+            }),
+          }),
+      ],
+    });
+  },
+  te = {
+    clean: {
+      name: 'Clean State',
+      description: 'Clean git repository on main branch',
+      values: {
+        username: 'jules',
+        hostname: 'macbook-pro',
+        directory: '~/projects/starship-theme-creator',
+        git_branch: 'main',
+        git_state: '',
+        git_status: '',
+        git_metrics: '',
+        nodejs: '',
+        rust: '',
+        python: '',
+        docker_context: '',
+        kubernetes: '',
+        package: 'v1.0.0',
+        cmd_duration: '2s',
+        character: '❯',
+        shell: 'zsh',
+        shlvl: '1',
+        jobs: '0',
+        memory_usage: '2.4GB',
+        battery: '95%',
+        time: '14:30:45',
+        status: '0',
+      },
+    },
+    dev: {
+      name: 'Development State',
+      description: 'Active development with modified files',
+      values: {
+        username: 'jules',
+        hostname: 'dev-server',
+        directory: '~/work/api-service',
+        git_branch: 'feature/auth-flow',
+        git_state: '',
+        git_status: '[3~](yellow) [+1](green)',
+        git_metrics: '+120 -45',
+        nodejs: 'v18.16.0',
+        rust: '',
+        python: '',
+        docker_context: 'dev-context',
+        kubernetes: '',
+        package: 'v0.5.2',
+        cmd_duration: '500ms',
+        character: '❯',
+        shell: 'bash',
+        shlvl: '2',
+        jobs: '1',
+        memory_usage: '4.8GB',
+        battery: '45%',
+        time: '16:15:00',
+        status: '0',
+        golang: 'v1.21.0',
+        php: 'v8.2.0',
+      },
+    },
+    multilang: {
+      name: 'Multi-Language',
+      description: 'Project using multiple languages',
+      values: {
+        username: 'jules',
+        hostname: 'polyglot',
+        directory: '~/code/fullstack-app',
+        git_branch: 'develop',
+        git_state: '',
+        git_status: '⇡2 ⇣1',
+        git_metrics: '',
+        nodejs: 'v20.2.0',
+        rust: 'v1.70.0',
+        python: 'v3.11.4',
+        docker_context: '',
+        kubernetes: '',
+        package: 'v2.0.0-beta',
+        cmd_duration: '12s',
+        character: '❯',
+        shell: 'fish',
+        shlvl: '1',
+        jobs: '0',
+        memory_usage: '8.1GB',
+        battery: '100%',
+        time: '09:00:12',
+        status: '0',
+        java: 'v17.0.7',
+        ruby: 'v3.2.2',
+        elixir: 'v1.14.5',
+      },
+    },
+    devops: {
+      name: 'DevOps Context',
+      description: 'Cloud and container context',
+      values: {
+        username: 'ops',
+        hostname: 'bastion',
+        directory: '~/infra/k8s-prod',
+        git_branch: 'production',
+        git_state: '',
+        git_status: '',
+        git_metrics: '',
+        nodejs: '',
+        rust: '',
+        python: '',
+        docker_context: 'registry.example.com',
+        kubernetes: 'prod-cluster-us-east',
+        aws: 'us-west-2',
+        gcloud: 'my-project',
+        azure: 'subscription-1',
+        package: '',
+        cmd_duration: '',
+        character: '#',
+        shell: 'zsh',
+        shlvl: '1',
+        jobs: '3',
+        memory_usage: '12.4GB',
+        battery: '80%',
+        time: '23:45:01',
+        status: '0',
+        terraform: 'v1.5.0',
+        helm: 'v3.12.0',
+      },
+    },
+    error: {
+      name: 'Error State',
+      description: 'Failed command and git conflicts',
+      values: {
+        username: 'jules',
+        hostname: 'macbook-pro',
+        directory: '~/projects/broken-build',
+        git_branch: 'fix/urgent-bug',
+        git_state: 'MERGING',
+        git_status: 'x5 !2',
+        git_metrics: '',
+        nodejs: 'v14.0.0',
+        rust: '',
+        python: '',
+        docker_context: '',
+        kubernetes: '',
+        package: 'v0.0.1',
+        cmd_duration: '1m 30s',
+        character: '✖',
+        shell: 'zsh',
+        shlvl: '1',
+        jobs: '0',
+        memory_usage: '3.1GB',
+        battery: '12%',
+        time: '02:10:55',
+        status: '1',
+      },
+    },
+  };
+function Sa(a, t, r) {
+  const s = t.custom,
+    o = !!s?.[a] ? s?.[a] : t[a];
+  if (!o || o.disabled || !r.values[a]) return '';
+  const d = r.values[a];
+  if (a === 'character') {
+    const y = o,
+      w = (
+        r.name.toLowerCase().includes('error')
+          ? (y.error_symbol ?? '[❯](bold red)')
+          : (y.success_symbol ?? '[❯](bold green)')
+      ).match(/\]\(([^)]+)\)$/),
+      x = w ? w[1] : (o.style ?? '');
+    return `[${d}](${x}) `;
+  }
+  const i = o.format ?? '[$symbol$value]($style) ',
+    l = o.symbol ?? '',
+    c = o.style ?? '',
+    f = { symbol: l, value: d, style: c, output: d };
+  for (const [y, v] of Object.entries(r.values)) y in f || (f[y] = v);
+  return i.replace(/\$([a-zA-Z0-9_]+)/g, (y, v) => f[v] ?? '');
+}
+function bt(a, t, r = te.clean) {
+  if (!a) return [];
+  let s = a.replace(
+    /\\n/g,
+    `
+`,
+  );
+  s = s.replace(/\$([a-zA-Z0-9_]+)/g, (l, c) => Sa(c, t, r));
+  const n = [],
+    o = s.length,
+    d = [];
+  let i = '';
+  for (let l = 0; l < o; l++) {
+    const c = s[l];
+    if (c === '\x1B') {
+      let f = c;
+      if ((l++, l < o && s[l] === '[')) {
+        for (f += '[', l++; l < o && /^[0-9;]$/.test(s[l]); )
+          ((f += s[l]), l++);
+        l < o && s[l] === 'm' ? (f += 'm') : l--;
+      } else l--;
+      i += f;
+      continue;
+    }
+    if (c === '[') (d.push({ text: i }), (i = ''));
+    else if (c === ']')
+      if (l + 1 < o && s[l + 1] === '(') {
+        const f = s.indexOf(')', l + 2);
+        if (f !== -1) {
+          const y = s.substring(l + 2, f);
+          if (d.length > 0) {
+            const v = d.pop();
+            (v.text && n.push({ text: v.text, style: '' }),
+              n.push({ text: i, style: y }),
+              (i = ''));
+          } else i += `](${y})`;
+          l = f;
+        } else d.length > 0 ? (i = d.pop().text + '[' + i + ']') : (i += ']');
+      } else d.length > 0 ? (i = d.pop().text + '[' + i + ']') : (i += ']');
+    else i += c;
+  }
+  for (; d.length > 0; ) i = d.pop().text + '[' + i;
+  return (i && n.push({ text: i, style: '' }), n);
+}
+function Ta(a, t) {
+  if (!a) return {};
+  const r = {},
+    s = t.palette || 'global',
+    n = t.palettes?.[s] || {};
+  return (
+    a.split(/\s+/).forEach((d) => {
+      if (d) {
+        if (d === 'bold') {
+          r.fontWeight = 'bold';
+          return;
+        }
+        if (d === 'italic') {
+          r.fontStyle = 'italic';
+          return;
+        }
+        if (d === 'underline') {
+          r.textDecoration = 'underline';
+          return;
+        }
+        if (d === 'dimmed') {
+          r.opacity = 0.5;
+          return;
+        }
+        if (d === 'strikethrough') {
+          r.textDecoration = 'line-through';
+          return;
+        }
+        if (d === 'hidden') {
+          r.visibility = 'hidden';
+          return;
+        }
+        if (d !== 'inverted') {
+          if (d.startsWith('bg:')) {
+            r.backgroundColor = k.resolveColor(d.substring(3), n);
+            return;
+          }
+          r.color = k.resolveColor(d, n);
+        }
+      }
+    }),
+    r
+  );
+}
+function Ea({ moduleName: a, config: t }) {
+  const r = m.useMemo(() => bt(`$${a}`, t, te.dev), [a, t]);
+  return r.some((n) => n.text.trim())
+    ? e.jsxs('div', {
+        className: 'rounded-md border border-gray-700 bg-[#0d1117] px-4 py-2',
+        children: [
+          e.jsx('p', {
+            className:
+              'mb-1 text-[10px] font-medium uppercase tracking-wider text-gray-500',
+            children: 'Preview',
+          }),
+          e.jsx('pre', {
+            className: 'font-mono text-sm leading-relaxed',
+            children: r.map((n, o) =>
+              e.jsx('span', { style: Ta(n.style, t), children: n.text }, o),
+            ),
+          }),
+        ],
+      })
+    : null;
+}
+function he({ label: a, values: t, onChange: r, placeholder: s }) {
+  const [n, o] = m.useState(t.join(', '));
+  m.useEffect(() => {
+    o(t.join(', '));
+  }, [t]);
+  const d = () => {
+    const i = n
+      .split(',')
+      .map((l) => l.trim())
+      .filter(Boolean);
+    r(i);
+  };
+  return e.jsxs('div', {
+    className: 'space-y-1',
+    children: [
+      e.jsx('label', { className: 'block text-xs text-gray-500', children: a }),
+      e.jsx('input', {
+        type: 'text',
+        value: n,
+        onChange: (i) => o(i.target.value),
+        onBlur: d,
+        placeholder: s,
+        className:
+          'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+      }),
+    ],
+  });
+}
+function Aa() {
+  const { currentTheme: a, selectedModule: t, updateConfig: r } = M(),
+    [s, n] = m.useState(null),
+    o = m.useRef(null),
+    d = Ae(),
+    i = async () => {
+      if (!t) return;
+      if (
+        await d({
+          title: `Reset ${t}?`,
+          message:
+            'Are you sure you want to reset this module to its default settings? All your customizations for this module will be lost.',
+          confirmText: 'Reset Module',
+        })
+      ) {
+        const w = J.find((u) => u.name === t),
+          x = {};
+        (w &&
+          w.properties.forEach((u) => {
+            x[u.name] = u.default;
+          }),
+          r({ [t]: x }));
+      }
+    };
+  if (
+    (m.useEffect(() => {
+      function g(w) {
+        o.current && !o.current.contains(w.target) && s && n(null);
+      }
+      return (
+        document.addEventListener('mousedown', g),
+        () => document.removeEventListener('mousedown', g)
+      );
+    }, [s]),
+    !t)
+  )
+    return e.jsxs('div', {
+      className:
+        'flex h-full flex-col items-center justify-center rounded-lg border border-dashed border-gray-700 bg-gray-900/20 p-8 text-center',
+      children: [
+        e.jsx(V, { className: 'mb-3 h-10 w-10 text-gray-500' }),
+        e.jsx('h3', {
+          className: 'text-lg font-medium text-gray-300',
+          children: 'No Module Selected',
+        }),
+        e.jsx('p', {
+          className: 'mt-1 text-sm text-gray-500',
+          children: 'Select a module from the list to edit its configuration.',
+        }),
+      ],
+    });
+  const l = a.config[t] || {},
+    c = t in (a.config.custom ?? {}),
+    f = c ? (a.config.custom?.[t] ?? {}) : null,
+    y = (g, w) => {
+      r({ [t]: { ...l, [g]: w } });
+    },
+    v = (g, w) => {
+      c && r({ custom: { ...a.config.custom, [t]: { ...f, [g]: w } } });
+    };
+  return e.jsxs('div', {
+    className:
+      'flex flex-col gap-6 rounded-lg border border-gray-700 bg-[#1e1e1e] p-6 shadow-xl',
+    children: [
+      e.jsxs('div', {
+        className:
+          'flex items-center justify-between border-b border-gray-700 pb-4',
+        children: [
+          e.jsxs('div', {
+            children: [
+              e.jsx('h2', {
+                className: 'text-xl font-bold capitalize text-gray-100',
+                children: t.replace(/_/g, ' '),
+              }),
+              e.jsx('p', {
+                className: 'text-sm text-gray-500',
+                children: 'Module Configuration',
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            className: 'flex items-center gap-2',
+            children: [
+              e.jsx('button', {
+                onClick: i,
+                className:
+                  'rounded bg-red-900/50 px-3 py-1 text-xs font-medium text-red-300 hover:bg-red-800/50',
+                children: 'Reset to Default',
+              }),
+              e.jsxs('label', {
+                className:
+                  'flex cursor-pointer select-none items-center gap-2 text-sm text-gray-400',
+                children: [
+                  e.jsx('input', {
+                    type: 'checkbox',
+                    checked: l.disabled === !0,
+                    onChange: (g) => y('disabled', g.target.checked),
+                    className:
+                      'h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900',
+                  }),
+                  'Disabled',
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+      e.jsx(Ea, { moduleName: t, config: a.config }),
+      e.jsxs('div', {
+        className: 'grid gap-6 md:grid-cols-2',
+        children: [
+          e.jsxs('div', {
+            className: 'space-y-3',
+            children: [
+              e.jsx('label', {
+                className: 'block text-sm font-medium text-gray-300',
+                children: 'Style',
+              }),
+              e.jsx(yt, {
+                value: l.style || '',
+                onChange: (g) => y('style', g),
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            className: 'relative space-y-3',
+            children: [
+              e.jsx('label', {
+                className: 'block text-sm font-medium text-gray-300',
+                children: 'Symbol',
+              }),
+              e.jsxs('div', {
+                className: 'flex gap-2',
+                children: [
+                  e.jsx('input', {
+                    type: 'text',
+                    value: l.symbol || '',
+                    onChange: (g) => y('symbol', g.target.value),
+                    placeholder: 'e.g. ❯ ',
+                    className:
+                      'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                  }),
+                  e.jsx('button', {
+                    onClick: () => n(s === 'symbol' ? null : 'symbol'),
+                    className:
+                      'shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                    children: 'Browse',
+                  }),
+                ],
+              }),
+              s === 'symbol' &&
+                e.jsx('div', {
+                  ref: o,
+                  className:
+                    'absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]',
+                  children: e.jsx(de, {
+                    currentSymbol: l.symbol,
+                    onSelect: (g) => {
+                      (y('symbol', g), n(null));
+                    },
+                  }),
+                }),
+            ],
+          }),
+          e.jsxs('div', {
+            className: 'col-span-2 space-y-3',
+            children: [
+              e.jsx('label', {
+                className: 'block text-sm font-medium text-gray-300',
+                children: 'Format String',
+              }),
+              e.jsx($e, {
+                formatString: l.format || '',
+                onChange: (g) => y('format', g),
+              }),
+              e.jsxs('div', {
+                className:
+                  'flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200',
+                children: [
+                  e.jsx(V, { className: 'mt-0.5 h-4 w-4 shrink-0' }),
+                  e.jsx('p', {
+                    children:
+                      "Visually edit your module's format string. Click on segments to edit or add new ones.",
+                  }),
+                ],
+              }),
+            ],
+          }),
+          c &&
+            f &&
+            e.jsxs('div', {
+              className: 'col-span-2 space-y-4 border-t border-gray-700 pt-4',
+              children: [
+                e.jsx('h3', {
+                  className: 'text-sm font-medium text-gray-400',
+                  children: 'Custom Module Settings',
+                }),
+                e.jsxs('div', {
+                  className: 'grid gap-4 md:grid-cols-2',
+                  children: [
+                    e.jsxs('div', {
+                      className: 'space-y-1',
+                      children: [
+                        e.jsx('label', {
+                          className: 'block text-xs text-gray-500',
+                          children: 'Command',
+                        }),
+                        e.jsx('input', {
+                          type: 'text',
+                          value: f.command || '',
+                          onChange: (g) => v('command', g.target.value),
+                          placeholder: 'echo hello',
+                          className:
+                            'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                        }),
+                      ],
+                    }),
+                    e.jsxs('div', {
+                      className: 'space-y-1',
+                      children: [
+                        e.jsx('label', {
+                          className: 'block text-xs text-gray-500',
+                          children: 'When (shell condition)',
+                        }),
+                        e.jsx('input', {
+                          type: 'text',
+                          value: f.when || '',
+                          onChange: (g) => v('when', g.target.value),
+                          placeholder: 'test -f .env',
+                          className:
+                            'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                        }),
+                      ],
+                    }),
+                    e.jsx(he, {
+                      label: 'Detect Files (comma-separated)',
+                      values: f.detect_files || [],
+                      onChange: (g) => v('detect_files', g),
+                      placeholder: '.env, .envrc',
+                    }),
+                    e.jsx(he, {
+                      label: 'Detect Extensions (comma-separated)',
+                      values: f.detect_extensions || [],
+                      onChange: (g) => v('detect_extensions', g),
+                      placeholder: 'py, js, ts',
+                    }),
+                    e.jsx(he, {
+                      label: 'Detect Folders (comma-separated)',
+                      values: f.detect_folders || [],
+                      onChange: (g) => v('detect_folders', g),
+                      placeholder: '.git, node_modules',
+                    }),
+                    e.jsxs('div', {
+                      className: 'space-y-1',
+                      children: [
+                        e.jsx('label', {
+                          className: 'block text-xs text-gray-500',
+                          children: 'Shell',
+                        }),
+                        e.jsx('input', {
+                          type: 'text',
+                          value: (f.shell || []).join(', '),
+                          onChange: (g) =>
+                            v(
+                              'shell',
+                              g.target.value
+                                .split(',')
+                                .map((w) => w.trim())
+                                .filter(Boolean),
+                            ),
+                          placeholder: 'bash, zsh',
+                          className:
+                            'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          t === 'directory' &&
+            e.jsxs('div', {
+              className: 'col-span-2 space-y-4 border-t border-gray-700 pt-4',
+              children: [
+                e.jsx('h3', {
+                  className: 'text-sm font-medium text-gray-400',
+                  children: 'Directory Options',
+                }),
+                e.jsxs('div', {
+                  className: 'grid gap-4 md:grid-cols-2',
+                  children: [
+                    e.jsxs('div', {
+                      className: 'space-y-1',
+                      children: [
+                        e.jsx('label', {
+                          className: 'block text-xs text-gray-500',
+                          children: 'Truncation Length',
+                        }),
+                        e.jsx('input', {
+                          type: 'number',
+                          value: l.truncation_length ?? 3,
+                          onChange: (g) =>
+                            y('truncation_length', parseInt(g.target.value)),
+                          className:
+                            'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                        }),
+                      ],
+                    }),
+                    e.jsx('div', {
+                      className: 'flex h-full items-center pt-4',
+                      children: e.jsxs('label', {
+                        className:
+                          'flex cursor-pointer select-none items-center gap-2 text-sm text-gray-300',
+                        children: [
+                          e.jsx('input', {
+                            type: 'checkbox',
+                            checked: l.truncate_to_repo === !0,
+                            onChange: (g) =>
+                              y('truncate_to_repo', g.target.checked),
+                            className:
+                              'h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900',
+                          }),
+                          'Truncate to Repo Root',
+                        ],
+                      }),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          t === 'git_status' &&
+            e.jsxs('div', {
+              className: 'col-span-2 space-y-4 border-t border-gray-700 pt-4',
+              children: [
+                e.jsx('h3', {
+                  className: 'text-sm font-medium text-gray-400',
+                  children: 'Git Status Symbols',
+                }),
+                e.jsx('div', {
+                  className: 'grid gap-4 md:grid-cols-2 lg:grid-cols-3',
+                  children: [
+                    'conflicted',
+                    'ahead',
+                    'behind',
+                    'diverged',
+                    'untracked',
+                    'stashed',
+                    'modified',
+                    'staged',
+                    'renamed',
+                    'deleted',
+                  ].map((g) =>
+                    e.jsxs(
+                      'div',
+                      {
+                        className: 'relative space-y-1',
+                        children: [
+                          e.jsxs('label', {
+                            className: 'block text-xs capitalize text-gray-500',
+                            children: [g.replace('_', ' '), ' Symbol'],
+                          }),
+                          e.jsxs('div', {
+                            className: 'flex gap-2',
+                            children: [
+                              e.jsx('input', {
+                                type: 'text',
+                                value: l[g] || '',
+                                onChange: (w) => y(g, w.target.value),
+                                placeholder: 'e.g. ✖ ',
+                                className:
+                                  'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                              }),
+                              e.jsx('button', {
+                                onClick: () => n(s === g ? null : g),
+                                className:
+                                  'shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                                children: 'Browse',
+                              }),
+                            ],
+                          }),
+                          s === g &&
+                            e.jsx('div', {
+                              className:
+                                'absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]',
+                              children: e.jsx(de, {
+                                currentSymbol: l[g],
+                                onSelect: (w) => {
+                                  (y(g, w), n(null));
+                                },
+                              }),
+                            }),
+                        ],
+                      },
+                      g,
+                    ),
+                  ),
+                }),
+              ],
+            }),
+        ],
+      }),
+    ],
+  });
+}
+function Ia({ item: a, isSelected: t, onSelect: r, onToggle: s }) {
+  const {
+      attributes: n,
+      listeners: o,
+      setNodeRef: d,
+      transform: i,
+      transition: l,
+      isDragging: c,
+    } = Xt({ id: a.id }),
+    f = {
+      transform: Zt.Transform.toString(i),
+      transition: l,
+      touchAction: 'none',
+    };
+  return e.jsxs('div', {
+    ref: d,
+    style: f,
+    onClick: () => r(a.name),
+    className: T(
+      'group flex cursor-pointer items-center gap-3 rounded-md border p-3 shadow-sm transition-colors',
+      t
+        ? 'border-blue-500 bg-gray-800 ring-1 ring-blue-500'
+        : 'border-gray-700 bg-gray-800 hover:border-gray-600',
+      c && 'z-50 bg-gray-700 opacity-50 ring-2 ring-blue-500',
+    ),
+    children: [
+      e.jsx('button', {
+        ...o,
+        ...n,
+        className:
+          'cursor-grab text-gray-500 hover:text-gray-300 focus:outline-none active:cursor-grabbing',
+        'aria-label': 'Drag handle',
+        onClick: (y) => y.stopPropagation(),
+        children: e.jsx(tt, { size: 18 }),
+      }),
+      e.jsx('input', {
+        type: 'checkbox',
+        checked: !0,
+        onChange: (y) => {
+          (y.stopPropagation(), s(a.name, y.target.checked));
+        },
+        className: 'h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500',
+      }),
+      e.jsxs('span', {
+        className: T(
+          'select-none font-mono text-sm',
+          t ? 'text-blue-400' : 'text-gray-200',
+        ),
+        children: [
+          a.name,
+          a.isCustom &&
+            e.jsx('span', {
+              className:
+                'ml-2 rounded-full bg-purple-900/30 px-2 py-0.5 text-[10px] font-semibold text-purple-300',
+              children: 'CUSTOM',
+            }),
+        ],
+      }),
+      e.jsx('div', {
+        className: 'ml-auto',
+        children: e.jsx('button', {
+          onClick: (y) => {
+            (y.stopPropagation(), r(a.name));
+          },
+          className: 'text-xs text-gray-400 hover:text-blue-400',
+          children: 'Configure',
+        }),
+      }),
+    ],
+  });
+}
+function Ra({ className: a }) {
+  const {
+      currentTheme: t,
+      updateConfig: r,
+      selectedModule: s,
+      setSelectedModule: n,
+    } = M(),
+    o = M(Wr),
+    [d, i] = m.useState(null),
+    [l, c] = m.useState(''),
+    f = m.useMemo(() => {
+      const p = Object.keys(t.config.custom || {}).map((h) => ({
+        id: h,
+        name: h,
+        isCustom: !0,
+      }));
+      return [...J.map((h) => ({ id: h.name, name: h.name })), ...p];
+    }, [t.config.custom]),
+    y = m.useMemo(() => {
+      if (!l) return o;
+      const p = l.toLowerCase();
+      return o.filter((C) => {
+        const h = J.find((_) => _.name === C.id);
+        return (
+          C.name.toLowerCase().includes(p) ||
+          h?.title.toLowerCase().includes(p) ||
+          h?.description.toLowerCase().includes(p)
+        );
+      });
+    }, [o, l]),
+    v = m.useMemo(() => {
+      const p = new Set(o.map((_) => _.name)),
+        C = f.filter((_) => !p.has(_.id));
+      if (!l) return C;
+      const h = l.toLowerCase();
+      return C.filter((_) => {
+        const $ = J.find((j) => j.name === _.id);
+        return (
+          _.name.toLowerCase().includes(h) ||
+          $?.title.toLowerCase().includes(h) ||
+          $?.description.toLowerCase().includes(h)
+        );
+      });
+    }, [o, f, l]),
+    g = (p, C) => {
+      c('');
+      let h = t.config.format || '';
+      if (C) h += `$${p}`;
+      else {
+        const $ = new RegExp(`\\$${p}\\b`, 'g');
+        h = h.replace($, '');
+      }
+      const _ = t.config[p] || {};
+      r({ format: h, [p]: { ..._, disabled: !C } });
+    },
+    w = Ut(De(Yt), De(Vt, { coordinateGetter: Jt })),
+    x = (p) => {
+      i(String(p.active.id));
+    },
+    u = (p) => {
+      const { active: C, over: h } = p;
+      if ((i(null), h && C.id !== h.id)) {
+        const _ = o.findIndex((j) => j.id === C.id),
+          $ = o.findIndex((j) => j.id === h.id);
+        if (_ !== -1 && $ !== -1) {
+          const N = Kt(o, _, $)
+            .map((I) => `$${I.name}`)
+            .join('');
+          r({ format: N });
+        }
+      }
+    },
+    b = m.useMemo(() => o.find((p) => p.id === d), [d, o]);
+  return e.jsxs('div', {
+    className: T('flex flex-col gap-6', a),
+    children: [
+      e.jsxs('div', {
+        className: 'relative',
+        children: [
+          e.jsx(Se, {
+            size: 14,
+            className:
+              'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500',
+          }),
+          e.jsx('input', {
+            type: 'search',
+            placeholder: 'Search modules...',
+            value: l,
+            onChange: (p) => c(p.target.value),
+            className:
+              'w-full rounded-md border border-gray-700 bg-gray-800/50 py-2 pl-9 pr-9 text-sm text-gray-100 placeholder-gray-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+          }),
+          l &&
+            e.jsx('button', {
+              onClick: () => c(''),
+              'aria-label': 'Clear search',
+              className:
+                'absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300',
+              children: e.jsx(P, { size: 14 }),
+            }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'flex flex-col gap-3',
+        children: [
+          e.jsxs('div', {
+            className: 'flex items-center justify-between',
+            children: [
+              e.jsx('h2', {
+                className:
+                  'text-xs font-semibold uppercase tracking-wider text-gray-400',
+                children: 'Active Modules',
+              }),
+              e.jsxs('span', {
+                className: 'text-xs text-gray-500',
+                children: [y.length, ' ', l ? 'matching' : 'enabled'],
+              }),
+            ],
+          }),
+          e.jsxs(Bt, {
+            sensors: w,
+            collisionDetection: Gt,
+            onDragStart: x,
+            onDragEnd: u,
+            children: [
+              e.jsx(Wt, {
+                items: o.map((p) => p.id),
+                strategy: qt,
+                children: e.jsxs('div', {
+                  className: 'flex flex-col gap-2',
+                  children: [
+                    y.map((p) =>
+                      e.jsx(
+                        Ia,
+                        {
+                          item: p,
+                          isSelected: s === p.name,
+                          onSelect: n,
+                          onToggle: g,
+                        },
+                        p.id,
+                      ),
+                    ),
+                    y.length === 0 &&
+                      e.jsx('div', {
+                        className:
+                          'rounded-lg border border-dashed border-gray-700 py-8 text-center text-gray-500',
+                        children: l
+                          ? 'No matching active modules'
+                          : 'No modules active',
+                      }),
+                  ],
+                }),
+              }),
+              e.jsx(Ht, {
+                children: b
+                  ? e.jsxs('div', {
+                      className:
+                        'group flex items-center gap-3 rounded-md border border-blue-500 bg-gray-700 p-3 opacity-90 shadow-lg',
+                      children: [
+                        e.jsx('button', {
+                          className: 'cursor-grabbing text-gray-300',
+                          children: e.jsx(tt, { size: 18 }),
+                        }),
+                        e.jsx('span', {
+                          className: 'font-medium text-white',
+                          children: b.name,
+                        }),
+                      ],
+                    })
+                  : null,
+              }),
+            ],
+          }),
+        ],
+      }),
+      (v.length > 0 || l) &&
+        e.jsxs('div', {
+          className: 'flex flex-col gap-3 border-t border-gray-800 pt-4',
+          children: [
+            e.jsxs('div', {
+              className: 'flex items-center justify-between',
+              children: [
+                e.jsx('h2', {
+                  className:
+                    'text-xs font-semibold uppercase tracking-wider text-gray-500',
+                  children: 'Disabled Modules',
+                }),
+                e.jsxs('span', {
+                  className: 'text-xs text-gray-600',
+                  children: [v.length, ' ', l ? 'matching' : 'disabled'],
+                }),
+              ],
+            }),
+            e.jsxs('div', {
+              className: 'flex flex-col gap-2',
+              children: [
+                v.map((p) =>
+                  e.jsxs(
+                    'div',
+                    {
+                      onClick: () => n(p.name),
+                      className: T(
+                        'group flex cursor-pointer items-center gap-3 rounded-md border p-3 opacity-60 shadow-sm transition-colors hover:opacity-100',
+                        s === p.name
+                          ? 'border-gray-500 bg-gray-800'
+                          : 'border-gray-700 bg-gray-800/50 hover:border-gray-600',
+                      ),
+                      children: [
+                        e.jsx('div', { className: 'w-[18px]' }),
+                        e.jsx('input', {
+                          type: 'checkbox',
+                          checked: !1,
+                          onChange: (C) => {
+                            (C.stopPropagation(), g(p.name, C.target.checked));
+                          },
+                          className:
+                            'h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500',
+                        }),
+                        e.jsx('span', {
+                          className:
+                            'select-none font-mono text-sm text-gray-400',
+                          children: p.name,
+                        }),
+                        e.jsx('div', {
+                          className: 'ml-auto',
+                          children: e.jsx('button', {
+                            onClick: (C) => {
+                              (C.stopPropagation(), n(p.name));
+                            },
+                            className:
+                              'text-xs text-gray-500 hover:text-blue-400',
+                            children: 'Configure',
+                          }),
+                        }),
+                      ],
+                    },
+                    p.id,
+                  ),
+                ),
+                v.length === 0 &&
+                  l &&
+                  e.jsx('div', {
+                    className: 'py-4 text-center text-xs text-gray-500',
+                    children: 'No matching disabled modules',
+                  }),
+              ],
+            }),
+          ],
+        }),
+      l &&
+        y.length === 0 &&
+        v.length === 0 &&
+        e.jsxs('div', {
+          className: 'py-6 text-center text-sm text-gray-500',
+          children: ['No modules found matching "', l, '"'],
+        }),
+    ],
+  });
+}
+function Fa({ onClose: a }) {
+  const { loadTheme: t } = M(),
+    { addToast: r } = q(),
+    s = Ae(),
+    [n, o] = m.useState([]),
+    [d, i] = m.useState([]),
+    [l, c] = m.useState(null),
+    [f, y] = m.useState(''),
+    [v, g] = m.useState(!1),
+    [w, x] = m.useState(null);
+  m.useEffect(() => {
+    u();
+  }, []);
+  const u = async () => {
+      try {
+        const h = await fetch('/api/categories');
+        if (!h.ok) throw new Error('Failed to fetch categories.');
+        const _ = await h.json();
+        i(_);
+      } catch (h) {
+        (console.error('Error fetching categories:', h),
+          x('Failed to load categories.'));
+      }
+    },
+    b = m.useCallback(async () => {
+      (g(!0), x(null));
+      try {
+        const h = new URLSearchParams();
+        l && h.append('category', l);
+        const _ = await fetch(`/api/themes?${h.toString()}`);
+        if (!_.ok) throw new Error('Failed to fetch themes.');
+        let $ = await _.json();
+        (f &&
+          ($ = $.filter(
+            (j) =>
+              j.name.toLowerCase().includes(f.toLowerCase()) ||
+              (j.description &&
+                j.description.toLowerCase().includes(f.toLowerCase())),
+          )),
+          o($));
+      } catch (h) {
+        (console.error('Error fetching themes:', h),
+          x('Failed to load themes.'));
+      } finally {
+        g(!1);
+      }
+    }, [l, f]);
+  m.useEffect(() => {
+    b();
+  }, [b]);
+  const p = async (h) => {
+      if (
+        await s({
+          title: `Download & Apply "${h.name}"?`,
+          message:
+            'This will replace your current theme. Ensure you have saved any unsaved changes.',
+          confirmText: 'Apply Theme',
+        })
+      )
+        try {
+          const $ = JSON.parse(h.config_toml),
+            j = {
+              metadata: {
+                id: h.id.toString(),
+                name: h.name,
+                description: h.description,
+                author: h.author_username,
+                created: new Date(h.created_at),
+                updated: new Date(h.updated_at),
+                previewImage: h.preview_image,
+                isPreset: !1,
+              },
+              config: $,
+            };
+          (t(j), r(`Theme "${h.name}" applied!`, 'success'), a());
+        } catch ($) {
+          (console.error('Error applying theme:', $),
+            r('Failed to apply theme.', 'error'));
+        }
+    },
+    C = n;
+  return e.jsxs('div', {
+    className:
+      'flex h-[80vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+    children: [
+      e.jsxs('div', {
+        className:
+          'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+        children: [
+          e.jsx('h2', {
+            className: 'text-lg font-bold text-white',
+            children: 'Solar System Themes',
+          }),
+          e.jsx('button', {
+            onClick: a,
+            className:
+              'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+            children: e.jsx(P, { size: 20 }),
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'flex flex-1 overflow-hidden',
+        children: [
+          e.jsxs('aside', {
+            className:
+              'w-56 shrink-0 border-r border-gray-800 bg-gray-800/30 p-4',
+            children: [
+              e.jsx('h3', {
+                className:
+                  'mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400',
+                children: 'Categories',
+              }),
+              e.jsxs('ul', {
+                className: 'space-y-2',
+                children: [
+                  e.jsx('li', {
+                    children: e.jsx('button', {
+                      onClick: () => c(null),
+                      className: `w-full rounded px-2 py-1 text-left text-sm transition-colors ${l ? 'text-gray-300 hover:bg-gray-700' : 'bg-blue-600 text-white'}`,
+                      children: 'All Themes',
+                    }),
+                  }),
+                  d.map((h) =>
+                    e.jsx(
+                      'li',
+                      {
+                        children: e.jsx('button', {
+                          onClick: () => c(h),
+                          className: `w-full rounded px-2 py-1 text-left text-sm transition-colors ${l === h ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`,
+                          children: h,
+                        }),
+                      },
+                      h,
+                    ),
+                  ),
+                ],
+              }),
+            ],
+          }),
+          e.jsxs('main', {
+            className: 'flex flex-1 flex-col p-4',
+            children: [
+              e.jsxs('div', {
+                className: 'mb-4 flex items-center gap-2',
+                children: [
+                  e.jsx('input', {
+                    type: 'text',
+                    placeholder: 'Search themes...',
+                    value: f,
+                    onChange: (h) => y(h.target.value),
+                    className:
+                      'flex-1 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                  }),
+                  v &&
+                    e.jsx('span', {
+                      className: 'text-gray-400',
+                      children: 'Loading...',
+                    }),
+                ],
+              }),
+              w &&
+                e.jsxs('p', {
+                  className: 'mb-4 text-sm text-red-500',
+                  children: ['Error: ', w],
+                }),
+              e.jsx('div', {
+                className:
+                  'scrollbar-thin scrollbar-thumb-gray-700 grid flex-1 grid-cols-1 gap-4 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3',
+                children:
+                  C.length === 0 && !v && !w
+                    ? e.jsx('p', {
+                        className: 'col-span-full text-center text-gray-500',
+                        children: 'No themes found for this criteria.',
+                      })
+                    : C.map((h) =>
+                        e.jsxs(
+                          'div',
+                          {
+                            className:
+                              'group relative flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow-sm transition-all hover:border-blue-500 hover:shadow-lg',
+                            children: [
+                              e.jsx('div', {
+                                className:
+                                  'flex h-32 items-center justify-center bg-gray-900',
+                                children: h.preview_image
+                                  ? e.jsx('img', {
+                                      src: h.preview_image,
+                                      alt: `Preview of ${h.name}`,
+                                      className: 'h-full w-full object-cover',
+                                    })
+                                  : e.jsx('span', {
+                                      className: 'text-xs text-gray-500',
+                                      children: 'No Preview',
+                                    }),
+                              }),
+                              e.jsxs('div', {
+                                className: 'flex flex-col p-4',
+                                children: [
+                                  e.jsx('h3', {
+                                    className:
+                                      'font-medium text-gray-200 group-hover:text-blue-400',
+                                    children: h.name,
+                                  }),
+                                  e.jsx('p', {
+                                    className:
+                                      'mt-1 line-clamp-2 text-xs text-gray-500',
+                                    children:
+                                      h.description ||
+                                      'No description provided.',
+                                  }),
+                                  e.jsxs('div', {
+                                    className:
+                                      'mt-3 flex items-center justify-between text-xs text-gray-500',
+                                    children: [
+                                      e.jsxs('span', {
+                                        className: 'flex items-center gap-1',
+                                        children: [
+                                          e.jsx(Qt, {
+                                            size: 12,
+                                            className: 'text-yellow-500',
+                                          }),
+                                          ' ',
+                                          h.downloads,
+                                        ],
+                                      }),
+                                      e.jsxs('span', {
+                                        children: ['By ', h.author_username],
+                                      }),
+                                    ],
+                                  }),
+                                  e.jsxs('button', {
+                                    onClick: () => p(h),
+                                    className:
+                                      'mt-4 w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500',
+                                    children: [
+                                      e.jsx(ce, {
+                                        size: 14,
+                                        className: 'mr-2 inline-block',
+                                      }),
+                                      ' ',
+                                      'Download & Apply',
+                                    ],
+                                  }),
+                                ],
+                              }),
+                            ],
+                          },
+                          h.id,
+                        ),
+                      ),
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+class Je {
+  static async detectEnvironment() {
+    if (typeof navigator > 'u')
+      return {
+        os: 'unknown',
+        shell: 'unknown',
+        terminal: 'unknown',
+        hasNerdFont: !0,
+        installedTools: ['git'],
+      };
+    const t = navigator.userAgent.toLowerCase();
+    let r = 'unknown';
+    t.includes('win')
+      ? (r = 'windows')
+      : t.includes('mac')
+        ? (r = 'macos')
+        : t.includes('linux') && (r = 'linux');
+    const s = ['git'];
+    return (
+      r !== 'windows' && s.push('bash'),
+      {
+        os: r,
+        shell: 'unknown',
+        terminal: 'unknown',
+        hasNerdFont: !0,
+        installedTools: s,
+      }
+    );
+  }
+  static suggestModules(t) {
+    const r = ['directory', 'character', 'line_break'];
+    return (
+      t.installedTools.includes('git') && r.push('git_branch', 'git_status'),
+      t.installedTools.includes('docker') && r.push('docker_context'),
+      t.installedTools.includes('node') && r.push('nodejs'),
+      t.os === 'macos' && r.push('battery'),
+      r
+    );
+  }
+  static suggestOptimizations(t, r) {
+    const s = [],
+      o = ['git_status', 'kubernetes', 'aws', 'gcloud'].filter((d) => {
+        const i = t[d];
+        return i && i.disabled !== !0;
+      });
+    return (
+      o.length > 2 &&
+        s.push({
+          type: 'performance',
+          priority: 'medium',
+          title: 'Optimize Render Speed',
+          description: `You have ${o.length} slow modules enabled. Consider disabling some or increasing scan timeout.`,
+        }),
+      r.hasNerdFont ||
+        s.push({
+          type: 'compatibility',
+          priority: 'high',
+          title: 'Nerd Font Required',
+          description:
+            'Your theme uses symbols that require a Nerd Font. Install one to see icons correctly.',
+        }),
+      s
+    );
+  }
+  static suggestColorScheme() {
+    return k.presets;
+  }
+}
+function Ma() {
+  const { currentTheme: a } = M(),
+    [t, r] = m.useState([]),
+    [s, n] = m.useState(new Set());
+  m.useEffect(() => {
+    (async () => {
+      const l = await Je.detectEnvironment(),
+        c = Je.suggestOptimizations(a.config, l);
+      r(c);
+    })();
+  }, [a.config]);
+  const o = (i) => {
+      n((l) => new Set(l).add(i));
+    },
+    d = t.filter((i) => !s.has(i.title));
+  return d.length === 0
+    ? null
+    : e.jsxs('div', {
+        className:
+          'mt-4 flex flex-col gap-3 rounded-lg border border-blue-900/30 bg-blue-900/10 p-4',
+        children: [
+          e.jsxs('h3', {
+            className:
+              'flex items-center gap-2 text-sm font-semibold text-blue-400',
+            children: [e.jsx(er, { size: 16 }), 'Suggestions'],
+          }),
+          e.jsx('div', {
+            className: 'flex flex-col gap-2',
+            children: d.map((i, l) => {
+              const c =
+                  i.type === 'performance'
+                    ? tr
+                    : i.type === 'visual'
+                      ? rr
+                      : i.type === 'compatibility'
+                        ? ar
+                        : V,
+                f =
+                  i.priority === 'high'
+                    ? 'text-red-400'
+                    : i.priority === 'medium'
+                      ? 'text-yellow-400'
+                      : 'text-blue-400';
+              return e.jsxs(
+                'div',
+                {
+                  className:
+                    'group relative flex flex-col gap-1 rounded border border-gray-700 bg-gray-800 p-3 pr-8 shadow-sm',
+                  children: [
+                    e.jsxs('div', {
+                      className: 'flex items-center gap-2',
+                      children: [
+                        e.jsx(c, { size: 14, className: f }),
+                        e.jsx('span', {
+                          className: 'text-xs font-semibold text-gray-200',
+                          children: i.title,
+                        }),
+                      ],
+                    }),
+                    e.jsx('p', {
+                      className: 'text-[11px] leading-snug text-gray-400',
+                      children: i.description,
+                    }),
+                    e.jsx('button', {
+                      onClick: () => o(i.title),
+                      className:
+                        'absolute right-2 top-2 text-gray-500 opacity-0 transition-opacity hover:text-white group-hover:opacity-100',
+                      children: e.jsx(P, { size: 14 }),
+                    }),
+                  ],
+                },
+                l,
+              );
+            }),
+          }),
+        ],
+      });
+}
+var Da = jr(),
+  za = _r();
+function Ve(a) {
+  const t = {
+      background: '#1e1e1e',
+      foreground: '#ffffff',
+      cursor: '#ffffff',
+      selectionBackground: 'rgba(255, 255, 255, 0.3)',
+    },
+    r = a.palette || 'global',
+    s = a.palettes?.[r] || {},
+    n = (o, d) => (s[o] ? k.resolveColor(s[o], s) : d);
+  return (
+    (t.background = n('bg', '#1e1e1e')),
+    (t.foreground = n('fg', '#ffffff')),
+    (t.black = n('color0', '#2e3440')),
+    (t.red = n('color1', '#bf616a')),
+    (t.green = n('color2', '#a3be8c')),
+    (t.yellow = n('color3', '#ebcb8b')),
+    (t.blue = n('color4', '#81a1c1')),
+    (t.magenta = n('color5', '#b48ead')),
+    (t.cyan = n('color6', '#88c0d0')),
+    (t.white = n('color7', '#e5e9f0')),
+    (t.brightBlack = n('color8', '#4c566a')),
+    (t.brightRed = n('color9', '#bf616a')),
+    (t.brightGreen = n('color10', '#a3be8c')),
+    (t.brightYellow = n('color11', '#ebcb8b')),
+    (t.brightBlue = n('color12', '#81a1c1')),
+    (t.brightMagenta = n('color13', '#b48ead')),
+    (t.brightCyan = n('color14', '#88c0d0')),
+    (t.brightWhite = n('color15', '#eceff4')),
+    t
+  );
+}
+const ie = 'starship-font-settings';
+function La(a, t) {
+  if (!a) return '';
+  const r = t.palette || 'global',
+    s = t.palettes?.[r] || {},
+    n = a.split(/\s+/),
+    o = [];
+  return (
+    n.forEach((d) => {
+      if (d === 'bold') o.push('1');
+      else if (d === 'italic') o.push('3');
+      else if (d === 'underline') o.push('4');
+      else if (d === 'dimmed') o.push('2');
+      else if (d.startsWith('bg:')) {
+        const i = k.resolveColor(d.substring(3), s),
+          l = k.hexToRgb(i);
+        l && o.push(`48;2;${l.r};${l.g};${l.b}`);
+      } else {
+        const i = k.resolveColor(d, s),
+          l = k.hexToRgb(i);
+        l && o.push(`38;2;${l.r};${l.g};${l.b}`);
+      }
+    }),
+    o.length === 0 ? '' : `\x1B[${o.join(';')}m`
+  );
+}
+const Oa = ({ className: a, fontFamily: t, id: r }) => {
+  const s = m.useRef(null),
+    n = m.useRef(null),
+    o = m.useRef(null),
+    d = m.useRef(null),
+    i = m.useRef(null),
+    { currentTheme: l } = M(),
+    { addToast: c } = q(),
+    [f, y] = m.useState(0),
+    [v, g] = m.useState(!1),
+    [w, x] = m.useState(''),
+    [u, b] = m.useState(''),
+    [p, C] = m.useState(!1),
+    [h, _] = m.useState(() => {
+      try {
+        const S = localStorage.getItem(ie);
+        if (S) return JSON.parse(S).family || '';
+      } catch {}
+      return '';
+    });
+  m.useEffect(() => {
+    try {
+      const S = localStorage.getItem(ie);
+      if (S) {
+        const { url: A, family: R } = JSON.parse(S);
+        A &&
+          R &&
+          (x(A),
+          b(R),
+          new FontFace(R, `url(${A})`)
+            .load()
+            .then((se) => {
+              document.fonts.add(se);
+            })
+            .catch(() => {}));
+      }
+    } catch {}
+  }, []);
+  const $ = h || t || '"FiraCode NF", Menlo, Monaco, "Courier New", monospace',
+    j = Object.keys(te);
+  (m.useEffect(() => {
+    const S = setInterval(() => {
+      y((A) => (A + 1) % j.length);
+    }, 5e3);
+    return () => clearInterval(S);
+  }, [j.length]),
+    m.useEffect(() => {
+      if (!n.current || o.current) return;
+      const S = new Da.Terminal({
+          fontFamily: $,
+          fontSize: 14,
+          lineHeight: 1.2,
+          cursorBlink: !0,
+          allowProposedApi: !0,
+          convertEol: !0,
+        }),
+        A = new za.FitAddon();
+      (S.loadAddon(A), S.open(n.current));
+      try {
+        A.fit();
+      } catch (K) {
+        console.warn('Initial fit failed:', K);
+      }
+      ((o.current = S), (d.current = A));
+      const R = new ResizeObserver(() => {
+        try {
+          A.fit();
+        } catch {}
+      });
+      return (
+        R.observe(n.current),
+        (i.current = R),
+        () => {
+          (R.disconnect(), S.dispose(), (o.current = null));
+        }
+      );
+    }, [$]));
+  const N = m.useMemo(() => {
+    const S = l.config.format || '',
+      A = j[f],
+      R = te[A];
+    return bt(S, l.config, R);
+  }, [l.config, f, j]);
+  m.useEffect(() => {
+    const S = o.current;
+    if (!S) return;
+    const A = Ve(l.config);
+    ((S.options.theme = A),
+      S.reset(),
+      N.forEach((R) => {
+        const K = La(R.style, l.config);
+        S.write(K + R.text + (K ? '\x1B[0m' : ''));
+      }));
+  }, [N, l.config]);
+  const I = m.useMemo(() => Ve(l.config).background || '#1e1e1e', [l.config]),
+    L = m.useCallback(
+      async () =>
+        s.current
+          ? Te(s.current, {
+              backgroundColor: I,
+              scale: 2,
+              useCORS: !0,
+              logging: !1,
+            })
+          : null,
+      [I],
+    ),
+    B = m.useCallback(async () => {
+      try {
+        const S = await L();
+        if (!S) return;
+        const A = document.createElement('a');
+        ((A.href = S.toDataURL('image/png')),
+          (A.download = `${l.metadata.name || 'theme'}-preview.png`),
+          A.click(),
+          c('Screenshot downloaded!', 'success'));
+      } catch {
+        c('Failed to capture screenshot', 'error');
+      }
+    }, [L, l.metadata.name, c]),
+    U = m.useCallback(async () => {
+      try {
+        const S = await L();
+        if (!S) return;
+        S.toBlob(async (A) => {
+          if (A)
+            try {
+              (await navigator.clipboard.write([
+                new ClipboardItem({ 'image/png': A }),
+              ]),
+                c('Screenshot copied to clipboard!', 'success'));
+            } catch {
+              c('Clipboard write failed — try Download instead', 'error');
+            }
+        });
+      } catch {
+        c('Failed to capture screenshot', 'error');
+      }
+    }, [L, c]),
+    E = m.useCallback(async () => {
+      if (!w.trim() || !u.trim()) {
+        c('Please enter both a font URL and family name', 'error');
+        return;
+      }
+      C(!0);
+      try {
+        const A = await new FontFace(u.trim(), `url(${w.trim()})`).load();
+        document.fonts.add(A);
+        const R = u.trim();
+        (_(R),
+          localStorage.setItem(
+            ie,
+            JSON.stringify({ url: w.trim(), family: R }),
+          ),
+          c(`Font "${R}" applied!`, 'success'),
+          g(!1));
+      } catch {
+        c('Failed to load font. Check the URL and try again.', 'error');
+      } finally {
+        C(!1);
+      }
+    }, [w, u, c]),
+    X = m.useCallback(() => {
+      (_(''),
+        localStorage.removeItem(ie),
+        x(''),
+        b(''),
+        c('Font reset to default', 'info'));
+    }, [c]);
+  return e.jsxs('div', {
+    id: r,
+    ref: s,
+    className: T(
+      'flex flex-col overflow-hidden rounded-lg border border-gray-700 shadow-2xl',
+      a,
+    ),
+    style: { backgroundColor: I },
+    children: [
+      e.jsxs('div', {
+        className:
+          'flex shrink-0 items-center gap-2 border-b border-gray-700 bg-gray-800/50 px-4 py-2',
+        children: [
+          e.jsx('div', { className: 'h-3 w-3 rounded-full bg-[#ff5f56]' }),
+          e.jsx('div', { className: 'h-3 w-3 rounded-full bg-[#ffbd2e]' }),
+          e.jsx('div', { className: 'h-3 w-3 rounded-full bg-[#27c93f]' }),
+          e.jsxs('div', {
+            className:
+              'ml-4 flex-1 select-none text-xs font-medium text-gray-400',
+            children: ['Terminal Preview (', te[j[f]].name, ')'],
+          }),
+          e.jsxs('div', {
+            className: 'flex items-center gap-1',
+            children: [
+              e.jsx('button', {
+                onClick: () => g((S) => !S),
+                title: 'Font settings',
+                className:
+                  'rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300',
+                children: v ? e.jsx(sr, { size: 14 }) : e.jsx(nr, { size: 14 }),
+              }),
+              e.jsx('button', {
+                onClick: U,
+                title: 'Copy screenshot to clipboard',
+                className:
+                  'rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300',
+                children: e.jsx(Xe, { size: 14 }),
+              }),
+              e.jsx('button', {
+                onClick: B,
+                title: 'Download PNG',
+                className:
+                  'rounded p-1.5 text-gray-500 hover:bg-gray-700 hover:text-gray-300',
+                children: e.jsx(ce, { size: 14 }),
+              }),
+            ],
+          }),
+        ],
+      }),
+      v &&
+        e.jsxs('div', {
+          className:
+            'shrink-0 border-b border-gray-700 bg-gray-900/80 px-4 py-3',
+          children: [
+            e.jsx('p', {
+              className: 'mb-2 text-xs font-medium text-gray-400',
+              children: 'Custom Nerd Font',
+            }),
+            e.jsxs('div', {
+              className: 'flex flex-col gap-2',
+              children: [
+                e.jsx('input', {
+                  type: 'url',
+                  value: w,
+                  onChange: (S) => x(S.target.value),
+                  placeholder: 'Font URL (.woff2 or .ttf)…',
+                  className:
+                    'w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                }),
+                e.jsx('input', {
+                  type: 'text',
+                  value: u,
+                  onChange: (S) => b(S.target.value),
+                  placeholder:
+                    'Font family name (e.g. JetBrainsMono Nerd Font)…',
+                  className:
+                    'w-full rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                }),
+                e.jsxs('div', {
+                  className: 'flex gap-2',
+                  children: [
+                    e.jsx('button', {
+                      onClick: E,
+                      disabled: p,
+                      className:
+                        'rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50',
+                      children: p ? 'Loading…' : 'Apply Font',
+                    }),
+                    h &&
+                      e.jsx('button', {
+                        onClick: X,
+                        className:
+                          'rounded bg-gray-700 px-3 py-1.5 text-xs text-gray-300 hover:bg-gray-600',
+                        children: 'Reset to Default',
+                      }),
+                  ],
+                }),
+                h &&
+                  e.jsxs('p', {
+                    className: 'text-xs text-green-400',
+                    children: [
+                      'Active: ',
+                      e.jsx('span', { className: 'font-mono', children: h }),
+                    ],
+                  }),
+              ],
+            }),
+          ],
+        }),
+      e.jsx('div', {
+        className: 'relative min-h-[200px] flex-1 p-1',
+        children: e.jsx('div', { ref: n, className: 'absolute inset-0' }),
+      }),
+    ],
+  });
+};
+class Pa {
+  level = 'error';
+  log(t, r, ...s) {
+    const n = ['debug', 'info', 'warn', 'error'];
+    if (n.indexOf(t) < n.indexOf(this.level)) return;
+    const d = `[${new Date().toISOString()}] [${t.toUpperCase()}] ${r}`;
+    switch (t) {
+      case 'debug':
+        console.debug(d, ...s);
+        break;
+      case 'info':
+        console.info(d, ...s);
+        break;
+      case 'warn':
+        console.warn(d, ...s);
+        break;
+      case 'error':
+        console.error(d, ...s);
+        break;
+    }
+  }
+  debug(t, ...r) {
+    this.log('debug', t, ...r);
+  }
+  info(t, ...r) {
+    this.log('info', t, ...r);
+  }
+  warn(t, ...r) {
+    this.log('warn', t, ...r);
+  }
+  error(t, ...r) {
+    this.log('error', t, ...r);
+  }
+}
+const Ua = new Pa();
+function Ba({ className: a, onSelect: t }) {
+  const { loadTheme: r, savedThemes: s, deleteTheme: n } = M(),
+    { addToast: o } = q(),
+    d = Ae(),
+    i = async (c) => {
+      const { currentTheme: f, savedThemes: y, past: v } = M.getState(),
+        g = y.find((u) => u.metadata.id === f.metadata.id);
+      let w = !1;
+      g
+        ? new Date(f.metadata.updated) > new Date(g.metadata.updated) &&
+          (w = !0)
+        : (w = !0);
+      const x = v.length > 0;
+      if (
+        !(
+          w &&
+          x &&
+          !(await d({
+            title: 'Unsaved Changes',
+            message:
+              'You have unsaved changes that will be lost. Are you sure you want to load a new theme?',
+            confirmText: 'Load Anyway',
+          }))
+        )
+      )
+        try {
+          (r(c), t && t(), o('Theme loaded successfully!', 'success'));
+        } catch (u) {
+          (Ua.error('Failed to load theme:', u),
+            o('Failed to load theme.', 'error'));
+        }
+    },
+    l = async (c) => {
+      (await d({
+        title: 'Delete Theme',
+        message: `Are you sure you want to permanently delete "${c.metadata.name}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+      })) &&
+        (n(c.metadata.id), o(`Theme "${c.metadata.name}" deleted.`, 'info'));
+    };
+  return e.jsxs('div', {
+    className: T('grid h-full gap-8 overflow-y-auto p-6', a),
+    children: [
+      e.jsxs('section', {
+        children: [
+          e.jsxs('h2', {
+            className:
+              'mb-4 flex items-center gap-2 text-lg font-semibold text-white',
+            children: [
+              e.jsx(or, { className: 'h-5 w-5 text-blue-500' }),
+              'Preset Themes',
+            ],
+          }),
+          e.jsx('div', {
+            className: 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3',
+            children: Y.map((c) =>
+              e.jsxs(
+                'button',
+                {
+                  type: 'button',
+                  className:
+                    'group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 text-left transition-all hover:border-gray-600 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
+                  onClick: () => i(c),
+                  'aria-label': `Load preset theme: ${c.metadata.name}`,
+                  children: [
+                    e.jsx('div', {
+                      className:
+                        'flex h-32 items-center justify-center bg-gray-900',
+                      children: c.metadata.previewImage
+                        ? e.jsx('img', {
+                            src: c.metadata.previewImage,
+                            alt: `Preview of ${c.metadata.name}`,
+                            className: 'h-full w-full object-cover',
+                          })
+                        : e.jsx('span', {
+                            className: 'text-xs text-gray-500',
+                            children: 'No Preview',
+                          }),
+                    }),
+                    e.jsxs('div', {
+                      className: 'p-4',
+                      children: [
+                        e.jsx('h3', {
+                          className:
+                            'font-medium text-gray-200 group-hover:text-blue-400',
+                          children: c.metadata.name,
+                        }),
+                        e.jsx('p', {
+                          className: 'mt-1 line-clamp-2 text-xs text-gray-500',
+                          children: c.metadata.description,
+                        }),
+                      ],
+                    }),
+                  ],
+                },
+                c.metadata.id,
+              ),
+            ),
+          }),
+        ],
+      }),
+      e.jsxs('section', {
+        children: [
+          e.jsxs('h2', {
+            className:
+              'mb-4 flex items-center gap-2 text-lg font-semibold text-white',
+            children: [
+              e.jsx(ir, { className: 'h-5 w-5 text-purple-500' }),
+              'Saved Themes',
+            ],
+          }),
+          s.length === 0
+            ? e.jsxs('div', {
+                className:
+                  'flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-700 bg-gray-900/30 py-12 text-center',
+                children: [
+                  e.jsx('p', {
+                    className: 'text-gray-500',
+                    children: 'No saved themes yet.',
+                  }),
+                  e.jsx('p', {
+                    className: 'mt-1 text-xs text-gray-600',
+                    children: 'Save your current customization to see it here.',
+                  }),
+                ],
+              })
+            : e.jsx('div', {
+                className:
+                  'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3',
+                children: s.map((c) =>
+                  e.jsxs(
+                    'div',
+                    {
+                      className:
+                        'group relative flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-all hover:border-gray-600 hover:shadow-lg',
+                      children: [
+                        e.jsxs('button', {
+                          type: 'button',
+                          className:
+                            'w-full flex-1 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500',
+                          onClick: () => i(c),
+                          'aria-label': `Load saved theme: ${c.metadata.name}`,
+                          children: [
+                            e.jsx('div', {
+                              className:
+                                'flex h-32 items-center justify-center bg-gray-900',
+                              children: c.metadata.previewImage
+                                ? e.jsx('img', {
+                                    src: c.metadata.previewImage,
+                                    alt: `Preview of ${c.metadata.name}`,
+                                    className: 'h-full w-full object-cover',
+                                  })
+                                : e.jsx('span', {
+                                    className: 'text-xs text-gray-500',
+                                    children: 'No Preview Available',
+                                  }),
+                            }),
+                            e.jsx('div', {
+                              className: 'p-4',
+                              children: e.jsx('h3', {
+                                className:
+                                  'font-medium text-gray-200 group-hover:text-purple-400',
+                                children: c.metadata.name,
+                              }),
+                            }),
+                          ],
+                        }),
+                        e.jsx('button', {
+                          onClick: (f) => {
+                            (f.stopPropagation(), l(c));
+                          },
+                          className:
+                            'absolute right-2 top-2 rounded p-1.5 text-gray-500 opacity-0 transition-opacity hover:bg-red-900/20 hover:text-red-400 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 group-hover:opacity-100',
+                          title: 'Delete theme',
+                          'aria-label': `Delete theme ${c.metadata.name}`,
+                          children: e.jsx(lr, { size: 14 }),
+                        }),
+                      ],
+                    },
+                    c.metadata.id,
+                  ),
+                ),
+              }),
+        ],
+      }),
+    ],
+  });
+}
+function Ga({ onClose: a, userId: t }) {
+  const { currentTheme: r, exportToml: s } = M(),
+    { addToast: n } = q(),
+    [o, d] = m.useState(r.metadata.name || ''),
+    [i, l] = m.useState(r.metadata.description || ''),
+    [c, f] = m.useState(''),
+    [y, v] = m.useState([]),
+    [g, w] = m.useState(!1);
+  m.useEffect(() => {
+    (async () => {
+      try {
+        const b = await fetch('/api/categories');
+        if (b.ok) {
+          const p = await b.json();
+          (v(p), p.length > 0 && f(p[0]));
+        }
+      } catch (b) {
+        console.error('Failed to load categories', b);
+      }
+    })();
+  }, []);
+  const x = async (u) => {
+    (u.preventDefault(), w(!0));
+    try {
+      const b = s(),
+        p = {
+          name: o,
+          description: i,
+          category: c,
+          config_toml: b,
+          author_id: t,
+          preview_image: r.metadata.previewImage || null,
+        },
+        C = await fetch('/api/themes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(p),
+        }),
+        h = await C.json();
+      if (!C.ok) throw new Error(h.error || 'Failed to upload theme');
+      (n('Theme uploaded successfully to Community Gallery!', 'success'), a());
+    } catch (b) {
+      n(b instanceof Error ? b.message : 'Upload failed', 'error');
+    } finally {
+      w(!1);
+    }
+  };
+  return e.jsxs('div', {
+    className:
+      'flex w-full max-w-lg flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+    children: [
+      e.jsxs('div', {
+        className:
+          'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+        children: [
+          e.jsx('h2', {
+            className: 'text-lg font-bold text-white',
+            children: 'Upload to Community',
+          }),
+          e.jsx('button', {
+            onClick: a,
+            className:
+              'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+            children: e.jsx(P, { size: 20 }),
+          }),
+        ],
+      }),
+      e.jsxs('form', {
+        onSubmit: x,
+        className: 'flex flex-col gap-4 p-6',
+        children: [
+          e.jsxs('div', {
+            children: [
+              e.jsx('label', {
+                className: 'mb-1 block text-sm font-medium text-gray-300',
+                children: 'Theme Name',
+              }),
+              e.jsx('input', {
+                type: 'text',
+                required: !0,
+                value: o,
+                onChange: (u) => d(u.target.value),
+                className:
+                  'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            children: [
+              e.jsx('label', {
+                className: 'mb-1 block text-sm font-medium text-gray-300',
+                children: 'Description',
+              }),
+              e.jsx('textarea', {
+                value: i,
+                onChange: (u) => l(u.target.value),
+                className:
+                  'h-24 w-full resize-none rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                placeholder: 'Tell us about this theme...',
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            children: [
+              e.jsx('label', {
+                className: 'mb-1 block text-sm font-medium text-gray-300',
+                children: 'Category',
+              }),
+              e.jsx('select', {
+                value: c,
+                onChange: (u) => f(u.target.value),
+                className:
+                  'w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+                children: y.map((u) =>
+                  e.jsx('option', { value: u, children: u }, u),
+                ),
+              }),
+            ],
+          }),
+          e.jsx('button', {
+            type: 'submit',
+            disabled: g,
+            className:
+              'mt-4 w-full rounded bg-indigo-600 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-50',
+            children: g ? 'Uploading...' : 'Publish Theme',
+          }),
+        ],
+      }),
+    ],
+  });
+}
+const ht = at()(
+  dt(
+    (a) => ({
+      activeView: 'welcome',
+      setActiveView: (t) => a({ activeView: t }),
+      layoutMode: 'auto',
+      setLayoutMode: (t) => a({ layoutMode: t }),
+      showExportImport: null,
+      setShowExportImport: (t) => a({ showExportImport: t }),
+      showGallery: !1,
+      setShowGallery: (t) => a({ showGallery: t }),
+      showComparison: !1,
+      setShowComparison: (t) => a({ showComparison: t }),
+      showCommandPalette: !1,
+      setShowCommandPalette: (t) => a({ showCommandPalette: t }),
+      showDynamicThemeSettings: !1,
+      setShowDynamicThemeSettings: (t) => a({ showDynamicThemeSettings: t }),
+      showWelcomeWizard:
+        localStorage.getItem('starship_wizard_completed') !== 'true',
+      setShowWelcomeWizard: (t) => a({ showWelcomeWizard: t }),
+      showSolarSystem: !1,
+      setShowSolarSystem: (t) => a({ showSolarSystem: t }),
+    }),
+    {
+      name: 'starship-ui-storage',
+      partialize: (a) => ({
+        activeView: a.activeView,
+        layoutMode: a.layoutMode,
+      }),
+    },
+  ),
+);
+function xe({ stepNumber: a, currentStep: t, label: r }) {
+  const s = t >= a;
+  return e.jsxs('div', {
+    className: T(
+      'flex items-center gap-3',
+      s ? 'text-blue-400' : 'text-gray-600',
+    ),
+    children: [
+      e.jsx('div', {
+        className: T(
+          'flex h-8 w-8 items-center justify-center rounded-full border',
+          s ? 'border-blue-400 bg-blue-900/20' : 'border-gray-700',
+        ),
+        children: a,
+      }),
+      e.jsx('span', { className: 'font-medium', children: r }),
+    ],
+  });
+}
+function Wa() {
+  const { showWelcomeWizard: a, setShowWelcomeWizard: t } = ht(),
+    [r, s] = m.useState(1),
+    { loadTheme: n } = M();
+  m.useEffect(() => {
+    const i = localStorage.getItem('starship_wizard_completed');
+    a && i && t(!1);
+  }, [a, t]);
+  const o = () => {
+      (localStorage.setItem('starship_wizard_completed', 'true'), t(!1));
+    },
+    d = (i) => {
+      (n(i), s(3));
+    };
+  return a
+    ? e.jsx('div', {
+        className:
+          'fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm',
+        children: e.jsxs('div', {
+          className:
+            'flex h-[600px] w-full max-w-4xl overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+          children: [
+            e.jsxs('div', {
+              className:
+                'flex w-64 flex-col border-r border-gray-800 bg-gray-900/50 p-6',
+              children: [
+                e.jsxs('div', {
+                  className:
+                    'mb-8 flex items-center gap-2 font-bold text-white',
+                  children: [
+                    e.jsx('span', { className: 'text-2xl', children: '🚀' }),
+                    ' Starship',
+                  ],
+                }),
+                e.jsxs('div', {
+                  className: 'flex flex-col gap-6',
+                  children: [
+                    e.jsx(xe, {
+                      stepNumber: 1,
+                      currentStep: r,
+                      label: 'Welcome',
+                    }),
+                    e.jsx(xe, {
+                      stepNumber: 2,
+                      currentStep: r,
+                      label: 'Choose Starting Point',
+                    }),
+                    e.jsx(xe, {
+                      stepNumber: 3,
+                      currentStep: r,
+                      label: 'Ready',
+                    }),
+                  ],
+                }),
+                e.jsx('div', {
+                  className: 'mt-auto',
+                  children: e.jsx('button', {
+                    onClick: o,
+                    className:
+                      'text-xs text-gray-500 underline underline-offset-2 hover:text-gray-300',
+                    children: 'Skip Wizard',
+                  }),
+                }),
+              ],
+            }),
+            e.jsxs('div', {
+              className: 'relative flex flex-1 flex-col p-8',
+              children: [
+                e.jsx('button', {
+                  onClick: o,
+                  className:
+                    'absolute right-4 top-4 text-gray-500 hover:text-white',
+                  'aria-label': 'Close Wizard',
+                  children: e.jsx(P, { size: 20 }),
+                }),
+                r === 1 &&
+                  e.jsxs('div', {
+                    className:
+                      'animate-in fade-in slide-in-from-right-4 flex flex-1 flex-col justify-center duration-500',
+                    children: [
+                      e.jsx('h2', {
+                        className: 'mb-4 text-3xl font-bold text-white',
+                        children: 'Create Your Perfect Terminal',
+                      }),
+                      e.jsx('p', {
+                        className:
+                          'mb-8 max-w-lg text-lg leading-relaxed text-gray-400',
+                        children:
+                          'Welcome to the visual theme creator for Starship. Build, customize, and preview cross-shell prompts without touching a single TOML file manually.',
+                      }),
+                      e.jsxs('div', {
+                        className: 'mb-8 grid grid-cols-2 gap-4',
+                        children: [
+                          e.jsxs('div', {
+                            className:
+                              'rounded-lg border border-gray-700 bg-gray-800/50 p-4',
+                            children: [
+                              e.jsx(Ze, {
+                                className: 'mb-2 text-blue-400',
+                                size: 24,
+                              }),
+                              e.jsx('h3', {
+                                className: 'font-semibold text-gray-200',
+                                children: 'Live Preview',
+                              }),
+                              e.jsx('p', {
+                                className: 'text-sm text-gray-500',
+                                children:
+                                  'See your prompt exactly as it will appear in your terminal.',
+                              }),
+                            ],
+                          }),
+                          e.jsxs('div', {
+                            className:
+                              'rounded-lg border border-gray-700 bg-gray-800/50 p-4',
+                            children: [
+                              e.jsx(le, {
+                                className: 'mb-2 text-purple-400',
+                                size: 24,
+                              }),
+                              e.jsx('h3', {
+                                className: 'font-semibold text-gray-200',
+                                children: 'Drag & Drop',
+                              }),
+                              e.jsx('p', {
+                                className: 'text-sm text-gray-500',
+                                children:
+                                  'Reorder modules visually and customize their behavior.',
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      e.jsxs('button', {
+                        onClick: () => s(2),
+                        className:
+                          'flex items-center gap-2 self-start rounded bg-blue-600 px-6 py-3 font-medium text-white transition-all hover:bg-blue-500',
+                        children: ['Get Started ', e.jsx(dr, { size: 18 })],
+                      }),
+                    ],
+                  }),
+                r === 2 &&
+                  e.jsxs('div', {
+                    className:
+                      'animate-in fade-in slide-in-from-right-4 flex flex-1 flex-col duration-500',
+                    children: [
+                      e.jsx('h2', {
+                        className: 'mb-2 text-2xl font-bold text-white',
+                        children: 'Choose a Starting Point',
+                      }),
+                      e.jsx('p', {
+                        className: 'mb-6 text-gray-400',
+                        children:
+                          'Select a preset to customize, or start from scratch.',
+                      }),
+                      e.jsx('div', {
+                        className:
+                          'scrollbar-thin scrollbar-thumb-gray-700 grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2',
+                        children: Y.slice(0, 6).map((i) =>
+                          e.jsxs(
+                            'div',
+                            {
+                              onClick: () => d(i),
+                              className:
+                                'group cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all hover:border-blue-500 hover:shadow-lg hover:shadow-blue-900/20',
+                              children: [
+                                e.jsx('h3', {
+                                  className:
+                                    'font-semibold text-gray-200 group-hover:text-blue-400',
+                                  children: i.metadata.name,
+                                }),
+                                e.jsx('p', {
+                                  className:
+                                    'mt-1 line-clamp-2 text-xs text-gray-500',
+                                  children: i.metadata.description,
+                                }),
+                              ],
+                            },
+                            i.metadata.id,
+                          ),
+                        ),
+                      }),
+                    ],
+                  }),
+                r === 3 &&
+                  e.jsxs('div', {
+                    className:
+                      'animate-in fade-in slide-in-from-right-4 flex flex-1 flex-col items-center justify-center text-center duration-500',
+                    children: [
+                      e.jsx('div', {
+                        className: 'mb-6 rounded-full bg-green-900/30 p-4',
+                        children: e.jsx(cr, {
+                          className: 'text-green-500',
+                          size: 48,
+                        }),
+                      }),
+                      e.jsx('h2', {
+                        className: 'mb-4 text-3xl font-bold text-white',
+                        children: "You're All Set!",
+                      }),
+                      e.jsx('p', {
+                        className: 'mb-8 max-w-md text-gray-400',
+                        children:
+                          'Your workspace is ready. You can now use the drag-and-drop builder, pick colors, and preview your changes in real-time.',
+                      }),
+                      e.jsx('button', {
+                        onClick: o,
+                        className:
+                          'rounded bg-blue-600 px-8 py-3 font-bold text-white shadow-lg shadow-blue-900/20 transition-all hover:bg-blue-500',
+                        children: 'Go to Editor',
+                      }),
+                    ],
+                  }),
+              ],
+            }),
+          ],
+        }),
+      })
+    : null;
+}
+const qa = m.createContext(void 0);
+function Ha({ children: a }) {
+  const [t, r] = m.useState(
+      () => localStorage.getItem('a11y_high_contrast') === 'true',
+    ),
+    [s, n] = m.useState(
+      () =>
+        localStorage.getItem('a11y_reduced_motion') === 'true' ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    );
+  return (
+    m.useEffect(() => {
+      (localStorage.setItem('a11y_high_contrast', t.toString()),
+        t
+          ? document.documentElement.classList.add('high-contrast')
+          : document.documentElement.classList.remove('high-contrast'));
+    }, [t]),
+    m.useEffect(() => {
+      (localStorage.setItem('a11y_reduced_motion', s.toString()),
+        s
+          ? document.documentElement.classList.add('reduced-motion')
+          : document.documentElement.classList.remove('reduced-motion'));
+    }, [s]),
+    e.jsx(qa.Provider, {
+      value: {
+        highContrast: t,
+        setHighContrast: r,
+        reducedMotion: s,
+        setReducedMotion: n,
+      },
+      children: a,
+    })
+  );
+}
+function Ka() {
+  const {
+    loadTheme: a,
+    savedThemes: t,
+    currentTheme: r,
+    dynamicSettings: s,
+  } = M();
+  m.useEffect(() => {
+    if (!s.enabled) return;
+    const n = () => {
+      const d = new Date(),
+        i = d.getHours(),
+        l = d.getMinutes(),
+        c = i * 60 + l,
+        [f, y] = s.dayStartTime.split(':').map(Number),
+        v = f * 60 + y,
+        [g, w] = s.nightStartTime.split(':').map(Number),
+        x = g * 60 + w;
+      let u = '';
+      if (
+        (c >= v && c < x ? (u = s.dayThemeId) : (u = s.nightThemeId),
+        r.metadata.id !== u)
+      ) {
+        const b = [...t, ...Y].find((p) => p.metadata.id === u);
+        b && a(b);
+      }
+    };
+    n();
+    const o = setInterval(n, 60 * 1e3);
+    return () => clearInterval(o);
+  }, [
+    a,
+    t,
+    r.metadata.id,
+    s.enabled,
+    s.dayThemeId,
+    s.nightThemeId,
+    s.dayStartTime,
+    s.nightStartTime,
+  ]);
+}
+function Ja(a) {
+  const t = m.useRef(a);
+  (m.useEffect(() => {
+    t.current = a;
+  }, [a]),
+    m.useEffect(() => {
+      const r = (s) => {
+        const n = s.target;
+        ((['INPUT', 'TEXTAREA', 'SELECT'].includes(n.tagName) ||
+          n.isContentEditable) &&
+          !((s.metaKey || s.ctrlKey) && s.key.toLowerCase() === 's')) ||
+          t.current.forEach((d) => {
+            const i = d.keys.toLowerCase().split('+'),
+              l = i.includes('meta') || i.includes('cmd'),
+              c = i.includes('ctrl'),
+              f = i.includes('shift'),
+              y = i.includes('alt'),
+              v = i[i.length - 1],
+              g =
+                (l ? s.metaKey : !s.metaKey) &&
+                (c ? s.ctrlKey : !s.ctrlKey) &&
+                (f ? s.shiftKey : !s.shiftKey) &&
+                (y ? s.altKey : !s.altKey) &&
+                s.key.toLowerCase() === v,
+              w = i.includes('mod'),
+              x = s.metaKey || s.ctrlKey,
+              u =
+                w &&
+                x &&
+                (f ? s.shiftKey : !s.shiftKey) &&
+                (y ? s.altKey : !s.altKey) &&
+                s.key.toLowerCase() === v;
+            (g || u) && (s.preventDefault(), d.handler(s));
+          });
+      };
+      return (
+        window.addEventListener('keydown', r),
+        () => window.removeEventListener('keydown', r)
+      );
+    }, []));
+}
+function Va() {
+  const {
+      currentTheme: a,
+      selectedModule: t,
+      updateMetadata: r,
+      saveTheme: s,
+      resetTheme: n,
+      undo: o,
+      redo: d,
+      canUndo: i,
+      canRedo: l,
+    } = M(),
+    c = i(),
+    f = l(),
+    {
+      showExportImport: y,
+      setShowExportImport: v,
+      showGallery: g,
+      setShowGallery: w,
+      showComparison: x,
+      setShowComparison: u,
+      showCommandPalette: b,
+      setShowCommandPalette: p,
+      showDynamicThemeSettings: C,
+      setShowDynamicThemeSettings: h,
+      showSolarSystem: _,
+      setShowSolarSystem: $,
+      layoutMode: j,
+      setLayoutMode: N,
+    } = ht(),
+    { addToast: I } = q(),
+    [L, B] = m.useState(a.metadata.name || 'My Awesome Theme'),
+    U = j === 'mobile' || (j === 'auto' && window.innerWidth <= 1024),
+    E = j === 'desktop' || (j === 'auto' && window.innerWidth > 1024),
+    [X, S] = m.useState(E),
+    [A, R] = m.useState(E && window.innerWidth > 1280);
+  m.useEffect(() => {
+    j === 'desktop'
+      ? (S(!0), R(window.innerWidth > 1280))
+      : j === 'mobile' && (S(!1), R(!1));
+  }, [j]);
+  const [K, se] = m.useState(!1),
+    [xt, vt] = m.useState(!1),
+    [Ie, wt] = m.useState(null);
+  (Ka(),
+    m.useEffect(() => {
+      B(a.metadata.name || 'My Awesome Theme');
+    }, [a.metadata.id, a.metadata.name]));
+  const jt = (W) => {
+      const Z = W.target.value;
+      (B(Z), r({ name: Z }));
+    },
+    ue = async () => {
+      try {
+        const W = document.getElementById('terminal-preview-capture-source');
+        if (W) {
+          const Ct = (
+            await Te(W, { scale: 0.8, logging: !1, useCORS: !0 })
+          ).toDataURL('image/jpeg', 0.5);
+          (s(Ct), I('Theme saved successfully!', 'success'));
+        } else (s(), I('Theme saved (no preview).', 'info'));
+      } catch (W) {
+        (console.error('Failed to capture theme preview:', W),
+          s(),
+          I('Theme saved, but failed to generate preview.', 'info'));
+      }
+    },
+    _t = () => {
+      confirm('Create a new theme? Any unsaved changes will be lost.') &&
+        (n(), B('Untitled Theme'), I('Started a new theme.', 'info'));
+    };
+  Ja([
+    { keys: 'mod+s', description: 'Save current theme', handler: ue },
+    { keys: 'mod+z', description: 'Undo', handler: o },
+    { keys: 'mod+shift+z', description: 'Redo', handler: d },
+    {
+      keys: 'mod+k',
+      description: 'Open Command Palette',
+      handler: () => p(!0),
+    },
+    { keys: 'mod+o', description: 'Open Theme Gallery', handler: () => w(!0) },
+    { keys: 'mod+e', description: 'Export Theme', handler: () => v('export') },
+    { keys: 'mod+i', description: 'Import Theme', handler: () => v('import') },
+  ]);
+  const Nt = [
+    { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: ue },
+    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: o },
+    { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: d },
+    { id: 'new', title: 'New Theme', perform: _t },
+    {
+      id: 'gallery',
+      title: 'Open Theme Gallery',
+      shortcut: 'Cmd+O',
+      perform: () => w(!0),
+    },
+    {
+      id: 'export',
+      title: 'Export Config',
+      shortcut: 'Cmd+E',
+      perform: () => v('export'),
+    },
+    {
+      id: 'import',
+      title: 'Import Config',
+      shortcut: 'Cmd+I',
+      perform: () => v('import'),
+    },
+    { id: 'compare', title: 'Compare Themes', perform: () => u(!0) },
+  ];
+  return e.jsxs('div', {
+    className:
+      'flex h-screen flex-col overflow-hidden bg-[#0d1117] font-sans text-gray-100',
+    children: [
+      e.jsx(Wa, {}),
+      e.jsx(Ir, { isOpen: b, onClose: () => p(!1), actions: Nt }),
+      e.jsxs('header', {
+        className:
+          'flex h-auto min-h-[4rem] shrink-0 flex-col border-b border-gray-800 bg-[#161b22] px-4 py-2 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-0',
+        children: [
+          e.jsxs('div', {
+            className:
+              'flex items-center justify-between gap-3 sm:justify-start',
+            children: [
+              e.jsxs('div', {
+                className: 'flex items-center gap-2',
+                children: [
+                  e.jsx('button', {
+                    onClick: () => S(!X),
+                    className: T(
+                      'rounded p-2 text-gray-400 hover:bg-gray-800',
+                      !U && E && 'lg:hidden',
+                    ),
+                    children: e.jsx(mr, { size: 20 }),
+                  }),
+                  e.jsx('span', { className: 'text-xl', children: '🚀' }),
+                  e.jsx('h1', {
+                    className:
+                      'hidden text-lg font-bold text-gray-200 sm:block',
+                    children: 'Starship',
+                  }),
+                ],
+              }),
+              e.jsx('input', {
+                type: 'text',
+                value: L,
+                onChange: jt,
+                placeholder: 'Theme Name',
+                className:
+                  'w-full max-w-[200px] rounded border border-gray-700 bg-[#0d1117] px-3 py-1.5 text-sm text-gray-300 focus:border-blue-500 focus:outline-none',
+              }),
+              e.jsxs('div', {
+                className: 'flex items-center gap-1 xl:hidden',
+                children: [
+                  e.jsx('button', {
+                    onClick: () => p(!0),
+                    className: 'rounded p-2 text-gray-400 hover:bg-gray-800',
+                    children: e.jsx(ur, { size: 18 }),
+                  }),
+                  e.jsx('button', {
+                    onClick: () => R(!A),
+                    className: T(
+                      'rounded p-2 text-gray-400 hover:bg-gray-800',
+                      E && 'xl:hidden',
+                    ),
+                    children: e.jsx(le, { size: 20 }),
+                  }),
+                ],
+              }),
+            ],
+          }),
+          e.jsxs('div', {
+            className:
+              'mt-2 flex flex-wrap items-center justify-center gap-2 sm:mt-0 sm:justify-end',
+            children: [
+              e.jsxs('div', {
+                className: 'flex items-center rounded-lg bg-gray-800 p-1',
+                children: [
+                  e.jsx('button', {
+                    onClick: () => N('mobile'),
+                    className: T(
+                      'rounded px-2 py-1 transition-colors',
+                      j === 'mobile'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-400 hover:text-gray-200',
+                    ),
+                    title: 'Mobile Mode',
+                    children: e.jsx(pr, { size: 16 }),
+                  }),
+                  e.jsx('button', {
+                    onClick: () => N('auto'),
+                    className: T(
+                      'rounded px-2 py-1 text-[10px] font-bold transition-colors',
+                      j === 'auto'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-400 hover:text-gray-200',
+                    ),
+                    title: 'Auto Layout',
+                    children: 'AUTO',
+                  }),
+                  e.jsx('button', {
+                    onClick: () => N('desktop'),
+                    className: T(
+                      'rounded px-2 py-1 transition-colors',
+                      j === 'desktop'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-400 hover:text-gray-200',
+                    ),
+                    title: 'Desktop Mode',
+                    children: e.jsx(fr, { size: 16 }),
+                  }),
+                ],
+              }),
+              e.jsxs('div', {
+                className:
+                  'flex items-center gap-1 border-r border-gray-700 pr-2',
+                children: [
+                  e.jsx('button', {
+                    onClick: o,
+                    disabled: !c,
+                    className:
+                      'rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30',
+                    children: e.jsx(yr, { size: 16 }),
+                  }),
+                  e.jsx('button', {
+                    onClick: d,
+                    disabled: !f,
+                    className:
+                      'rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30',
+                    children: e.jsx(gr, { size: 16 }),
+                  }),
+                ],
+              }),
+              e.jsxs('button', {
+                onClick: ue,
+                className:
+                  'flex items-center gap-2 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500',
+                children: [
+                  e.jsx(br, { size: 14, className: 'xs:block hidden' }),
+                  ' Save',
+                ],
+              }),
+              e.jsx('button', {
+                onClick: () => w(!0),
+                className:
+                  'rounded bg-gray-800 px-3 py-1.5 text-xs font-medium hover:bg-gray-700',
+                children: 'Gallery',
+              }),
+              e.jsxs('div', {
+                className: 'hidden gap-2 md:flex',
+                children: [
+                  e.jsxs('button', {
+                    onClick: () => $(!0),
+                    className:
+                      'flex items-center gap-2 rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium hover:bg-indigo-500',
+                    children: [e.jsx(hr, { size: 14 }), ' Community'],
+                  }),
+                  e.jsxs('button', {
+                    onClick: () => u(!0),
+                    className:
+                      'flex items-center gap-2 rounded bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700',
+                    children: [e.jsx(we, { size: 14 }), ' Compare'],
+                  }),
+                ],
+              }),
+              e.jsx('button', {
+                onClick: () => h(!0),
+                className:
+                  'hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 xl:block',
+                children: e.jsx(le, { size: 18 }),
+              }),
+            ],
+          }),
+        ],
+      }),
+      e.jsxs('div', {
+        className: 'relative flex flex-1 overflow-hidden',
+        children: [
+          e.jsxs('aside', {
+            className: T(
+              'absolute inset-y-0 left-0 z-40 w-72 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22] transition-transform duration-300',
+              E
+                ? 'relative translate-x-0'
+                : X
+                  ? 'translate-x-0'
+                  : '-translate-x-full',
+            ),
+            children: [
+              e.jsxs('div', {
+                className: 'p-4',
+                children: [
+                  e.jsx('h2', {
+                    className:
+                      'mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500',
+                    children: 'Modules',
+                  }),
+                  e.jsx(O, { children: e.jsx(Ra, {}) }),
+                ],
+              }),
+              e.jsxs('div', {
+                className: 'border-t border-gray-800 p-4',
+                children: [
+                  e.jsx('h2', {
+                    className:
+                      'mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500',
+                    children: 'Colors',
+                  }),
+                  e.jsx(O, { children: e.jsx($a, {}) }),
+                ],
+              }),
+              e.jsxs('div', {
+                className: 'border-t border-gray-800 p-4',
+                children: [
+                  e.jsx('h2', {
+                    className:
+                      'mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500',
+                    children: 'Font',
+                  }),
+                  e.jsx(O, {
+                    children: e.jsx(aa, {
+                      currentFont: a.metadata.fontFamily || 'FiraCode NF',
+                      onSelectFont: (W) => r({ fontFamily: W }),
+                    }),
+                  }),
+                ],
+              }),
+            ],
+          }),
+          e.jsxs('main', {
+            className:
+              'relative flex flex-1 flex-col overflow-y-auto bg-[#0d1117] p-4 sm:p-8',
+            children: [
+              e.jsx('div', {
+                className:
+                  'bg-grid-white/[0.02] pointer-events-none absolute inset-0 -z-10',
+              }),
+              e.jsx('div', {
+                className:
+                  'mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center',
+                children: e.jsx(O, {
+                  children: e.jsx(Oa, {
+                    id: 'terminal-preview-capture-source',
+                    className: 'w-full shadow-2xl',
+                    fontFamily: a.metadata.fontFamily,
+                  }),
+                }),
+              }),
+            ],
+          }),
+          e.jsx('aside', {
+            className: T(
+              'absolute inset-y-0 right-0 z-40 w-80 shrink-0 flex-col overflow-y-auto border-l border-gray-800 bg-[#161b22] transition-transform duration-300',
+              E && window.innerWidth > 1280
+                ? 'relative translate-x-0'
+                : A
+                  ? 'translate-x-0'
+                  : '-translate-x-full',
+            ),
+            children: e.jsxs('div', {
+              className: 'p-4',
+              children: [
+                e.jsx(O, {
+                  children: t
+                    ? e.jsx(Aa, {})
+                    : e.jsxs('div', {
+                        className:
+                          'flex flex-col items-center justify-center rounded border border-dashed border-gray-700 py-12 text-center text-sm text-gray-500',
+                        children: [
+                          e.jsx('span', {
+                            className: 'mb-2 text-2xl',
+                            children: '⚙️',
+                          }),
+                          'Select a module to configure',
+                        ],
+                      }),
+                }),
+                e.jsx('div', {
+                  className: 'mt-6 border-t border-gray-800 pt-6',
+                  children: e.jsx(O, { children: e.jsx(Ca, {}) }),
+                }),
+                e.jsx(O, { children: e.jsx(Ma, {}) }),
+              ],
+            }),
+          }),
+          (X || A) &&
+            !E &&
+            e.jsx('div', {
+              className: 'absolute inset-0 z-30 bg-black/50',
+              onClick: () => {
+                (S(!1), R(!1));
+              },
+            }),
+        ],
+      }),
+      y &&
+        e.jsx(O, {
+          children: e.jsx(ea, { initialTab: y, onClose: () => v(null) }),
+        }),
+      x && e.jsx(O, { children: e.jsx(qr, { onClose: () => u(!1) }) }),
+      C && e.jsx(O, { children: e.jsx(Hr, { onClose: () => h(!1) }) }),
+      _ &&
+        e.jsx('div', {
+          className:
+            'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm',
+          children: e.jsx(O, { children: e.jsx(Fa, { onClose: () => $(!1) }) }),
+        }),
+      K &&
+        e.jsx('div', {
+          className:
+            'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm',
+          children: e.jsx(O, {
+            children: e.jsx(Ar, {
+              onClose: () => se(!1),
+              onLoginSuccess: (W, Z) => {
+                (wt({ id: W, username: Z }), se(!1));
+              },
+            }),
+          }),
+        }),
+      xt &&
+        Ie &&
+        e.jsx('div', {
+          className:
+            'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm',
+          children: e.jsx(O, {
+            children: e.jsx(Ga, { onClose: () => vt(!1), userId: Ie.id }),
+          }),
+        }),
+      g &&
+        e.jsx('div', {
+          className:
+            'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm',
+          children: e.jsxs('div', {
+            className:
+              'flex h-[80vh] w-full max-w-5xl flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl',
+            children: [
+              e.jsxs('div', {
+                className:
+                  'flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4',
+                children: [
+                  e.jsx('h2', {
+                    className: 'text-lg font-bold text-white',
+                    children: 'Theme Gallery',
+                  }),
+                  e.jsx('button', {
+                    onClick: () => w(!1),
+                    className:
+                      'rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white',
+                    children: e.jsx(P, { size: 20 }),
+                  }),
+                ],
+              }),
+              e.jsx('div', {
+                className: 'flex-1 overflow-hidden',
+                children: e.jsx(O, {
+                  children: e.jsx(Ba, { onSelect: () => w(!1) }),
+                }),
+              }),
+            ],
+          }),
+        }),
+    ],
+  });
+}
+function Ya() {
+  return e.jsx(O, {
+    children: e.jsx(Ha, {
+      children: e.jsx(Er, { children: e.jsx(ka, { children: e.jsx(Va, {}) }) }),
+    }),
+  });
+}
+Sr.createRoot(document.getElementById('root')).render(
+  e.jsx(D.StrictMode, { children: e.jsx(Ya, {}) }),
+);
