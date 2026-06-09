@@ -208,6 +208,13 @@ export const useThemeStore = create<ThemeStore>()(
   ),
 );
 
+// Pre-compute static modules to avoid O(N) allocation on every selector run
+const PREDEFINED_MODULES = MODULE_DEFINITIONS.map((def) => ({
+  id: def.name,
+  name: def.name,
+  isCustom: false,
+}));
+
 // Selector for active modules
 export const selectActiveModules = (state: ThemeStore) => {
   const customModules = Object.keys(state.currentTheme.config.custom || {}).map(
@@ -218,13 +225,7 @@ export const selectActiveModules = (state: ThemeStore) => {
     }),
   );
 
-  const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
-    id: def.name,
-    name: def.name,
-    isCustom: false,
-  }));
-
-  const allModules = [...predefinedModules, ...customModules];
+  const allModules = [...PREDEFINED_MODULES, ...customModules];
 
   const format = state.currentTheme.config.format || '';
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
