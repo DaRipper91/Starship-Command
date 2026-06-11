@@ -1,7 +1,7 @@
 import TOML from '@iarna/toml';
 
 import MODULE_DEFINITIONS from '../generated/module-definitions.json';
-import { StarshipConfig } from '../types/starship.types';
+import { StarshipConfig } from '../starship.types';
 
 export interface ValidationResult {
   valid: boolean;

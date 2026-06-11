@@ -6,14 +6,14 @@ import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { ColorUtils } from '../lib/color-utils';
 import { parseFormattedString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
-import { useThemeStore } from '../stores/theme-store';
 import {
   BaseModuleConfig,
   CustomModuleConfig,
   DirectoryConfig,
   GitStatusConfig,
   StarshipConfig,
-} from '../types/starship.types';
+} from '../starship.types';
+import { useThemeStore } from '../stores/theme-store';
 import { FormatEditor } from './FormatEditor';
 import { IconBrowser } from './IconBrowser';
 import { StyleEditor } from './StyleEditor';

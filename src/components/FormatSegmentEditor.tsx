@@ -1,5 +1,5 @@
+import { BaseModuleConfig } from '../starship.types';
 import { useThemeStore } from '../stores/theme-store';
-import { BaseModuleConfig } from '../types/starship.types';
 import { FormatSegment, StyledTextSegment } from './FormatEditor';
 import { IconBrowser } from './IconBrowser';
 import { StyleEditor } from './StyleEditor';

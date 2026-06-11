@@ -1,6 +1,6 @@
 import { ITheme } from 'xterm';
 
-import { StarshipConfig } from '../types/starship.types';
+import { StarshipConfig } from '../starship.types';
 import { ColorUtils } from './color-utils';
 
 /**

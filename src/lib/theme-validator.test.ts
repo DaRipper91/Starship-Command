@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { StarshipConfig } from '../types/starship.types';
+import { StarshipConfig } from '../starship.types';
 import { ThemeValidator } from './theme-validator';
 
 describe('ThemeValidator', () => {

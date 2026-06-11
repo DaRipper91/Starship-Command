@@ -9,9 +9,9 @@ import { useEffect, useState } from 'react';
 
 import { PRESET_THEMES } from '../../lib/presets';
 import { cn } from '../../lib/utils';
+import { Theme } from '../../starship.types';
 import { useThemeStore } from '../../stores/theme-store';
 import { useUIStore } from '../../stores/ui-store';
-import { Theme } from '../../types/starship.types';
 
 //... (imports are the same)
 

@@ -20,8 +20,8 @@ import { parseFormattedString } from '../lib/format-parser';
 import { MOCK_SCENARIOS } from '../lib/mock-data';
 import { translateThemeToXterm } from '../lib/theme-to-xterm';
 import { cn } from '../lib/utils';
+import { StarshipConfig } from '../starship.types';
 import { useThemeStore } from '../stores/theme-store';
-import { StarshipConfig } from '../types/starship.types';
 
 const FONT_STORAGE_KEY = 'starship-font-settings';
 

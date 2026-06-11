@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0] - 2026-04-26
+
+### Audited and Verified
+- **Theme Import/Export Engine**: Verified full theme import/export system functionality and validations.
+- **Undo/Redo Stack**: Audited immutable history stack pattern and keyboard shortcuts.
+- **Theme Preset System**: Audited built-in theme presets and the preset selector component.
+- **Type Safety Audit**: Checked TypeScript files for strict mode and removed all explicit `any` usages. Created `src/types.ts` barrel file.
+- **State Management Refactor**: Confirmed centralized Zustand stores.
+- **Vite Build Optimization**: Verified manual chunk splitting and build size targets.
+- **Error Boundary & Runtime Resilience**: Checked React Error Boundaries and async error handling.
+- **Code Consistency & Linting Enforcement**: Confirmed ESLint rules and fixed zero violations.
+
 ## [1.7.0] - 2026-04-25
 
 ### Added

@@ -7,7 +7,7 @@ import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { createDebouncedStorage } from '../lib/storage-utils';
 import { TomlParser } from '../lib/toml-parser';
 import { generateId } from '../lib/utils';
-import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
+import { StarshipConfig, Theme, ThemeMetadata } from '../starship.types';
 
 export interface DynamicThemeSettings {
   enabled: boolean;
