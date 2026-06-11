@@ -1,4 +1,4 @@
-import { Theme } from '../types/starship.types';
+import { Theme } from '../starship.types';
 import { ColorUtils } from './color-utils';
 import { TomlParser } from './toml-parser';
 

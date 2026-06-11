@@ -1,4 +1,4 @@
-import { StarshipConfig, Theme } from '../types/starship.types';
+import { StarshipConfig, Theme } from '../starship.types';
 import { ColorUtils } from './color-utils';
 
 const HEX_COLOR_REGEX = /#[0-9a-fA-F]{6}/;

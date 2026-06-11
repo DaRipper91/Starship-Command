@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useConfirmation } from '../../contexts/ConfirmationContext';
 import { useToast } from '../../contexts/ToastContext';
+import { Theme } from '../../starship.types';
 import { useThemeStore } from '../../stores/theme-store';
-import { Theme } from '../../types/starship.types';
 
 interface CommunityTheme {
   id: number;

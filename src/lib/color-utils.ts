@@ -3,7 +3,7 @@ import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import namesPlugin from 'colord/plugins/names';
 
-import { ColorPalette } from '../types/starship.types';
+import { ColorPalette } from '../starship.types';
 
 // Extend colord with necessary plugins
 extend([a11yPlugin, harmoniesPlugin, namesPlugin]);

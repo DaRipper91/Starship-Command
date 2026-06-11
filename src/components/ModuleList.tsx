@@ -22,8 +22,8 @@ import { memo, useCallback, useMemo, useState } from 'react';
 
 import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
+import { BaseModuleConfig } from '../starship.types';
 import { selectActiveModules, useThemeStore } from '../stores/theme-store';
-import { BaseModuleConfig } from '../types/starship.types';
 
 interface ModuleItem {
   id: string;

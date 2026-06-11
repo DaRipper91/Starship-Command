@@ -5,8 +5,8 @@ import { useRef, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import { PRESET_THEMES } from '../../lib/presets';
 import { TomlParser } from '../../lib/toml-parser';
+import { Theme } from '../../starship.types';
 import { useThemeStore } from '../../stores/theme-store';
-import { Theme } from '../../types/starship.types';
 
 interface ComparisonViewProps {
   onClose: () => void;

@@ -1,4 +1,4 @@
-import { BaseModuleConfig, StarshipConfig } from '../types/starship.types';
+import { BaseModuleConfig, StarshipConfig } from '../starship.types';
 import { MOCK_SCENARIOS, MockScenario } from './mock-data';
 
 export interface FormatSegment {

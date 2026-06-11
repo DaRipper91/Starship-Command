@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { StarshipConfig } from '../types/starship.types';
+import { StarshipConfig } from '../starship.types';
 import { parseFormatString, renderModule, styleToAnsi } from './format-parser';
 import { MOCK_SCENARIOS } from './mock-data';
 

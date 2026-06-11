@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TomlParser } from '../lib/toml-parser';
-import { Theme } from '../types/starship.types';
+import { Theme } from '../starship.types';
 import { useThemeStore } from './theme-store';
 
 describe('ThemeStore', () => {

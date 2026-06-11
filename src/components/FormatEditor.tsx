@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import MODULE_DEFINITIONS from '../generated/module-definitions.json';
 import { cn } from '../lib/utils';
+import { BaseModuleConfig } from '../starship.types';
 import { useThemeStore } from '../stores/theme-store';
-import { BaseModuleConfig } from '../types/starship.types';
 import { FormatSegmentEditor } from './FormatSegmentEditor';
 
 // Define types for format segments

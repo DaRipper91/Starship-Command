@@ -6,8 +6,8 @@ import { useToast } from '../contexts/ToastContext';
 import { logger } from '../lib/logger';
 import { PRESET_THEMES } from '../lib/presets';
 import { cn } from '../lib/utils';
+import { Theme } from '../starship.types';
 import { useThemeStore } from '../stores/theme-store';
-import { Theme } from '../types/starship.types';
 
 interface ThemeGalleryProps {
   className?: string;
