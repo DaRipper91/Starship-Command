@@ -1,3 +1,6 @@
 ## 2026-04-13 - O(N²) Array.prototype.find in Component render loops
 **Learning:** React component render loops (like `.filter` or `.map`) that execute `Array.prototype.find()` against another array create a hidden O(N²) bottleneck. This becomes highly visible on lists with complex filtering logic, like the drag-and-drop `ModuleList` which compares `activeModulesStore` against `MODULE_DEFINITIONS`.
 **Action:** Always pre-compute a lookup `Map` or `Set` outside the `.map()` or `.filter()` loop using `useMemo` to enable O(1) lookups, dropping the algorithmic complexity to O(N). Ensure that you index by the correct ID field based on the collection's structure.
+## 2026-04-14 - Zustand Selector Static Mapping Allocation Overhead
+**Learning:** Zustand selectors that map over large static arrays (like ~900 `MODULE_DEFINITIONS`) on every state change to build intermediate arrays or maps cause significant allocation overhead, even if the end logic is sound.
+**Action:** Extract static array mapping and map initializations (e.g. `PREDEFINED_MODULE_NAMES`) entirely outside of the selector definition to ensure they are created only once per module load, preserving the O(1) lookup inside the selector without the repeated O(N) setup cost.
