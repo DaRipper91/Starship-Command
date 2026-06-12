@@ -217,7 +217,9 @@ const PREDEFINED_MODULE_NAMES = new Set(PREDEFINED_MODULES.map((m) => m.name));
 
 // Selector for active modules
 export const selectActiveModules = (state: ThemeStore) => {
-  const customModuleNames = new Set(Object.keys(state.currentTheme.config.custom || {}));
+  const customModuleNames = new Set(
+    Object.keys(state.currentTheme.config.custom || {}),
+  );
 
   const format = state.currentTheme.config.format || '';
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
@@ -231,7 +233,11 @@ export const selectActiveModules = (state: ThemeStore) => {
         isCustom: customModuleNames.has(name),
       };
     })
-    .filter((item) => PREDEFINED_MODULE_NAMES.has(item.name) || customModuleNames.has(item.name));
+    .filter(
+      (item) =>
+        PREDEFINED_MODULE_NAMES.has(item.name) ||
+        customModuleNames.has(item.name),
+    );
 
   return parsedModules;
 };
