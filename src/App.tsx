@@ -263,7 +263,7 @@ function AppContent() {
                 leftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'
               }
               className={cn(
-                'rounded p-2 text-gray-400 hover:bg-gray-800',
+                'rounded p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
                 !isMobileLayout && isDesktopLayout && 'lg:hidden',
               )}
             >
@@ -287,7 +287,7 @@ function AppContent() {
             <button
               onClick={() => setShowCommandPalette(true)}
               aria-label="Open command palette"
-              className="rounded p-2 text-gray-400 hover:bg-gray-800"
+              className="rounded p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               <Keyboard size={18} />
             </button>
@@ -297,7 +297,7 @@ function AppContent() {
                 rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
               }
               className={cn(
-                'rounded p-2 text-gray-400 hover:bg-gray-800',
+                'rounded p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
                 isDesktopLayout && 'xl:hidden',
               )}
             >
@@ -356,7 +356,7 @@ function AppContent() {
               disabled={!isUndoPossible}
               aria-label={!isUndoPossible ? 'Undo (disabled)' : 'Undo'}
               title={!isUndoPossible ? 'Nothing to undo' : 'Undo'}
-              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-30"
             >
               <Undo size={16} />
             </button>
@@ -365,7 +365,7 @@ function AppContent() {
               disabled={!isRedoPossible}
               aria-label={!isRedoPossible ? 'Redo (disabled)' : 'Redo'}
               title={!isRedoPossible ? 'Nothing to redo' : 'Redo'}
-              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
+              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-30"
             >
               <Redo size={16} />
             </button>
@@ -404,7 +404,7 @@ function AppContent() {
           <button
             onClick={() => setShowDynamicThemeSettings(true)}
             aria-label="Dynamic Theme Settings"
-            className="hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 xl:block"
+            className="hidden rounded-full p-2 text-gray-400 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 xl:block"
           >
             <Settings size={18} />
           </button>
@@ -614,7 +614,8 @@ function AppContent() {
               <h2 className="text-lg font-bold text-white">Theme Gallery</h2>
               <button
                 onClick={() => setShowGallery(false)}
-                className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+                aria-label="Close Theme Gallery"
+                className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 <X size={20} />
               </button>
