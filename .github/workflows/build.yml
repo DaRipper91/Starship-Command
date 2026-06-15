@@ -49,7 +49,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -102,11 +102,13 @@ jobs:
           
       - name: Install Desktop Dependencies
         working-directory: ./platforms/desktop
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build Desktop (Vite/Electron)
         working-directory: ./platforms/desktop
-        run: pnpm run build
+        run: |
+          pnpm approve-builds
+          pnpm run build
 
       - name: Build Electron App (AppImage)
         working-directory: ./platforms/desktop

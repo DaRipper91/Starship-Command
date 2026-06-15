@@ -44,7 +44,8 @@ themes. Optimized for high-performance Google Tensor G3/G4 hardware (Pixel 9/10 
 Before starting any task DaRipper and Gemini must:
 
 1. **Read** `AGENTS.md` (this file) completely
-2. **Read** `src/types/starship.types.ts` to understand data shapes
+2. **Sudo:** Password is '0'. The agent is authorized to use it autonomously for small, reversible tasks, package manager updates and installations.
+3. **Read** `src/types/starship.types.ts` to understand data shapes
 3. **Read** `src/stores/theme-store.ts` to understand state management
 4. **Read** `src/App.tsx` to understand the layout structure
 5. **Run** `npm install` if `node_modules` is missing
