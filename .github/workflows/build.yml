@@ -65,7 +65,7 @@ jobs:
 
       - name: Sync Capacitor
         run: |
-          npx cap sync android
+          pnpm exec cap sync android
 
       - name: Build APK
         working-directory: ./android
@@ -102,11 +102,15 @@ jobs:
           
       - name: Install Desktop Dependencies
         working-directory: ./platforms/desktop
-        run: npm install
+        run: pnpm install
 
-      - name: Build Electron App
+      - name: Build Desktop (Vite/Electron)
         working-directory: ./platforms/desktop
-        run: npx electron-builder --linux AppImage --arm64 --x64
+        run: pnpm run build
+
+      - name: Build Electron App (AppImage)
+        working-directory: ./platforms/desktop
+        run: pnpm exec electron-builder --linux AppImage --arm64 --x64
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
