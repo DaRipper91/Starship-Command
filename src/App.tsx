@@ -614,7 +614,8 @@ function AppContent() {
               <h2 className="text-lg font-bold text-white">Theme Gallery</h2>
               <button
                 onClick={() => setShowGallery(false)}
-                className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white"
+                className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                aria-label="Close Theme Gallery"
               >
                 <X size={20} />
               </button>
