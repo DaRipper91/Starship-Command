@@ -102,17 +102,15 @@ jobs:
           
       - name: Install Desktop Dependencies
         working-directory: ./platforms/desktop
-        run: pnpm install --no-frozen-lockfile
+        run: npm install
 
       - name: Build Desktop (Vite/Electron)
         working-directory: ./platforms/desktop
-        run: |
-          pnpm approve-builds
-          pnpm run build
+        run: npm run build
 
       - name: Build Electron App (AppImage)
         working-directory: ./platforms/desktop
-        run: pnpm exec electron-builder --linux AppImage --arm64 --x64
+        run: npx electron-builder --linux AppImage --arm64 --x64
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
