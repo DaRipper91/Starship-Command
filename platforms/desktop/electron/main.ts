@@ -1,7 +1,10 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import fs from 'node:fs'
 import os from 'node:os'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
 //

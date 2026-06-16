@@ -1,56 +1,71 @@
-# 🚀 Starship Command Enhanced: Fedora Asahi Remix
+<div align="center">
 
-**Starship Command Enhanced** is the definitive, cross-platform visual theme editor for the [Starship](https://starship.rs) shell prompt. 
+# 🚀 STARSHIP COMMAND // UNIFIED ENGINE
 
-This repository has been fully unified and modernized to provide a drag-and-drop, no-code editor that works flawlessly across the Web, Android devices, and Linux Desktop.
+> **PRIME DIRECTIVE:** VISUALIZE AND CONFIGURE.
 
-This specific edition has been heavily optimized for **Apple Silicon (ARM64)** running **Fedora Asahi Remix**, featuring hardware-accelerated terminal rendering and native binaries.
+[![Version](https://img.shields.io/badge/Version-2.0.0--beta-gold.svg?style=for-the-badge)](#)
+[![Python](https://img.shields.io/badge/Python-3.14+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](#)
+[![PySide6](https://img.shields.io/badge/PySide6-6.7+-green.svg?style=for-the-badge&logo=qt&logoColor=white)](#)
+[![Platform](https://img.shields.io/badge/Platform-Asahi%20%7C%20Tensor-red.svg?style=for-the-badge)](#)
 
-## 🌟 Key Features
+</div>
 
-*   **No-Code Visual Editor:** Drag and drop modules, pick colors visually, and construct complex format strings without touching a TOML file.
-*   **Live Terminal Preview:** High-fidelity, real-time preview powered by `@xterm/xterm` (v6+).
-*   **Image-to-Palette:** Upload an image or wallpaper to automatically extract a matching color palette using `node-vibrant`.
-*   **Dynamic Themes:** Configure day/night themes that switch automatically based on the time of day.
-*   **Asahi Linux Optimized:** The desktop Electron wrapper forces Mesa driver overrides and disables GPU sandboxing to run natively at 60fps+ on Apple Silicon (M1/M2/M3).
-*   **Cross-Platform:** Available as a web app, a native Android APK (via Capacitor), and a Linux AppImage (x64 and ARM64).
+**Starship Command Unified** is the definitive, cross-platform visual theme editor for the [Starship](https://starship.rs) shell prompt. This repository has transitioned to a **Full Python Architecture**, combining the high-fidelity rendering of **Aether** with the surgical configuration logic of **Aura**.
 
-## 🛠️ Platforms & Builds
+This edition is heavily optimized for **Apple Silicon (ARM64)** running **Fedora Asahi Remix** and high-performance **Google Tensor** hardware.
 
-### 1. Linux Desktop (Electron)
-The desktop version provides the most integrated experience. It includes a local Python backend (Flask + SQLAlchemy) to handle local theme saving and advanced native extraction logic.
+---
 
-*   **Arch Linux:** Install via the included `PKGBUILD`.
-*   **Fedora Asahi / AppImage:** Download the ARM64 AppImage from the [Releases](#) page.
+## 🏗️ THE HYBRID ARCHITECTURE (Aura + Aether)
 
-### 2. Android (Capacitor)
-A fully responsive, touch-optimized mobile experience.
-*   Download the `app-debug.apk` from the [Releases](#) page.
+By merging the best of both worlds, Starship Command provides a native, hardware-accelerated experience that surpasses traditional web-based editors.
 
-### 3. Web
-The frontend is built with React 18, Vite, and TailwindCSS. It can be hosted on any static site provider.
+<div align="center">
 
-## 🚀 Development Quick Start
+| Component | Stack | Provenance |
+| :--- | :--- | :--- |
+| **Language** | Python 3.14+ (Strictly Typed) | **Aether** |
+| **GUI Framework** | PySide6 (Qt 6.7+) | **Both** |
+| **Prompt Viewport** | High-Fidelity QPainter / Vector | **Aether** |
+| **Config Logic** | Pydantic / Async Daemon | **Aura** |
+| **Terminal Output** | Rich / ANSI Engine | **Aura** |
 
-### Web Frontend
+</div>
+
+---
+
+## 🌟 KEY FEATURES
+
+*   **Vortex Viewport:** A custom Aether-style renderer that draws Powerline glyphs and separators as actual geometric shapes with sub-pixel precision. No more font-rendering gaps.
+*   **Sovereign Editor:** A clean, sidebar-driven "Interchange" UI for dragging, dropping, and configuring modules in real-time.
+*   **Image-to-Palette:** Automatically extract theme colors from your desktop wallpaper using Python's Pillow and ColorThief libraries.
+*   **Contrast Guard:** Real-time WCAG AA/AAA contrast checking to ensure your prompt remains readable in all lighting conditions.
+*   **Self-Healing Sync:** An asynchronous file observer watches your `starship.toml` and updates the UI instantly if external changes are detected.
+
+---
+
+## 🛠️ INSTALLATION & USAGE
+
+### Prerequisites
+- Python 3.14+
+- PySide6 6.7+
+- Nerd Fonts (Recommended: FiraCode Nerd Font)
+
+### Running the Python Engine
 ```bash
-pnpm install
-pnpm dev
+# Clone the repository
+git clone https://github.com/DaRipper91/Starship-Command.git
+cd Starship-Command
+
+# Launch the unified application
+./starship-command-python.sh
 ```
 
-### Linux Desktop (Electron)
-```bash
-# Install frontend and desktop dependencies
-pnpm install
-cd platforms/desktop
-pnpm install
+---
 
-# Run the Electron app (Asahi/ARM64 Optimized)
-MESA_LOADER_DRIVER_OVERRIDE=asahi pnpm exec electron main.js --no-sandbox --disable-gpu-sandbox
-```
-
-## 📖 Documentation
-All developer guides, persona files, and historical milestones have been consolidated into the `project_docs/` directory. For a quick start on module creation or architecture, see `project_docs/MASTER_MANUAL.md`.
+## 📖 LEGACY SUPPORT
+The original React + TypeScript frontend is still available in the `src/` directory and can be built for Web and Android (Capacitor) using the legacy build scripts. However, the **Python Engine** is now the primary target for all future feature development.
 
 ---
 *Built for the community, optimized for the Tensor & Asahi hardware.*

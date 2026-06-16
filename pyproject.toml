@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "starship-command"
+version = "2.0.0"
+description = "Starship Command // Unified Theme Engine (Aura-Aether Hybrid)"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "PySide6>=6.7.0",
+    "rich>=13.7.0",
+    "pygments>=2.17.0",
+    "tomli-w>=1.0.0",
+    "watchdog>=4.0.0",
+    "pillow>=10.2.0",
+    "colorthief>=0.2.1",
+    "pydantic>=2.6.0"
+]
+
+[project.scripts]
+starship-command = "starship_command.main:main"
+
+[tool.setuptools]
+packages = ["starship_command", "starship_command.core", "starship_command.ui"]
+package-dir = {"" = "python"}
