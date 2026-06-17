@@ -2,7 +2,7 @@ import sys, os, shutil
 from PySide6.QtWidgets import QApplication, QMainWindow, QSplitter, QStatusBar, QLabel, QMessageBox
 from PySide6.QtCore import Qt
 from starship_command.ui.viewport import VortexViewport
-from starship_command.ui.editor import EditorPanel, ModuleConfigDialog
+from starship_command.ui.editor import EditorPanel, ModuleConfigDialog, start_global_symbol_scan
 from starship_command.core.parser import TomlParser
 from starship_command.core.sync import AuraLink
 from starship_command.core.colors import ColorUtils
@@ -16,6 +16,7 @@ class StarshipCommandApp(QMainWindow):
         self.active_file_path = os.path.expanduser("~/.config/starship.toml")
         self.scenarios = {"git": True, "python": False, "node": False, "rust": False, "docker": False, "duration": False, "error": False}
         self.load_config()
+        start_global_symbol_scan()
         
         # Professional, clean, readable stylesheet
         self.setStyleSheet("""
