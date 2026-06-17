@@ -709,31 +709,47 @@ class EditorPanel(QWidget):
             "Git / VCS": [
                 ("", "Branch"), ("", "Merge"), ("", "Git Logo"), ("", "GitHub"), 
                 ("", "GitLab"), ("", "User Info"), ("", "Commit"), ("", "Added Line"),
-                ("", "Modified Line"), ("", "Removed Line"), ("", "Detached"), ("", "Untracked")
+                ("", "Modified Line"), ("", "Removed Line"), ("", "Detached"), ("", "Untracked"),
+                ("", "Pull Request"), ("", "Git Stash"), ("", "Git Branch Alt")
             ],
             "Files & Folders": [
                 ("", "Folder"), ("", "Folder Open"), ("", "File Generic"), ("", "File Text"), 
-                ("", "File Code"), ("", "Locked/ReadOnly"), ("", "Shield Secure"), ("", "Document")
+                ("", "File Code"), ("", "Locked/ReadOnly"), ("", "Shield Secure"), ("", "Document"),
+                ("", "Folder Shared"), ("", "Folder Zip"), ("", "File Binary"), ("", "File Archive"),
+                ("", "File PDF")
             ],
             "OS & Distros": [
                 ("", "Linux Kernel"), ("", "Windows"), ("", "macOS"), ("", "Arch Linux"), 
                 ("", "Fedora"), ("", "Ubuntu Distro"), ("", "Debian"), ("", "Gentoo"),
-                ("", "Red Hat"), ("", "Alpine Linux"), ("", "openSUSE")
+                ("", "Red Hat"), ("", "Alpine Linux"), ("", "openSUSE"), ("", "CentOS"),
+                ("", "Void Linux"), ("", "Linux Mint"), ("", "Elementary OS"), ("", "Kali Linux"),
+                ("", "NixOS"), ("", "Manjaro"), ("", "AlmaLinux")
             ],
             "Languages & Tech": [
                 ("", "Python"), ("", "NodeJS / Javascript"), ("", "Rust Cargo"), ("", "Go Language"), 
-                ("", "C Header"), ("", "C++"), ("", "Java"), ("", "Lua")
+                ("", "C Header"), ("", "C++"), ("", "Java"), ("", "Lua"), ("", "HTML"),
+                ("", "CSS"), ("", "TypeScript"), ("", "Config Gear"), ("", "PHP"),
+                ("", "Ruby"), ("", "Docker"), ("", "Shell Script"), ("", "Elixir"),
+                ("", "Vim"), ("", "Android"), ("", "Swift"), ("", "Microsoft .NET"),
+                ("", "Database / SQL"), ("", "AWS"), ("", "Kubernetes")
             ],
             "Character Glyphs": [
                 ("❯", "Heavy Angle"), ("➜", "Arrow"), ("🚀", "Rocket"), ("⚡", "Lightning"), 
                 ("❖", "Diamond"), ("λ", "Lambda"), ("➔", "Thin Arrow"), ("➤", "Pointer"), 
                 ("✦", "Sparkle"), ("❇", "Asterisk"), ("»", "Double Angle"), ("✖", "Cross Fail"), 
-                ("✗", "Ballot Cross"), ("💥", "Explosion"), ("💀", "Skull"), ("🛑", "Stop Sign")
+                ("✗", "Ballot Cross"), ("💥", "Explosion"), ("💀", "Skull"), ("🛑", "Stop Sign"),
+                ("", "Chevron Right"), ("", "Arrow Right"), ("", "Chevron Heavy Right"),
+                ("", "Right Arrow Bold"), ("", "Planet"), ("🌀", "Cyclone"), ("✨", "Sparkles"),
+                ("🪐", "Saturn"), ("🍀", "Four Leaf Clover"), ("👽", "Alien"), ("👾", "Alien Monster"),
+                ("🛸", "UFO"), ("⚓", "Anchor"), ("🎯", "Target"), ("🔮", "Crystal Ball")
             ],
             "Misc / Info": [
                 ("", "Time / Clock"), ("", "Calendar"), ("", "Server / Node"), ("", "Terminal Prompt"), 
                 ("", "Snowflake / Freeze"), ("🔥", "Fire"), ("", "Moon Mode"), ("", "Sun Mode"), 
-                ("", "Package Generic"), ("ﮮ", "Sync Mode"), ("", "CPU Stats"), ("", "Memory Stats")
+                ("", "Package Generic"), ("ﮮ", "Sync Mode"), ("", "CPU Stats"), ("", "Memory Stats"),
+                ("", "PC / Monitor"), ("", "Plug / Connected"), ("🔋", "Battery"), ("📶", "Signal"),
+                ("", "Globe"), ("", "Network"), ("", "Key"), ("", "Lock"), ("", "Tag / Release"),
+                ("🔔", "Bell / Notification")
             ]
         }
         
