@@ -6,9 +6,311 @@ from PySide6.QtWidgets import (
     QColorDialog, QSpinBox, QGridLayout, QCheckBox,
     QComboBox
 )
-from PySide6.QtCore import Qt, Signal, QSize
+from PySide6.QtCore import Qt, Signal, QSize, QTimer, QThread
 from starship_command.core.database import DatabaseManager
 import os
+import glob
+import hashlib
+import json
+from fontTools.ttLib import TTFont
+from PySide6.QtGui import QFont
+
+GLOBAL_SYMBOL_CACHE = set()
+GLOBAL_SCANNER_STATUS = "idle"  # "idle", "scanning", "done"
+GLOBAL_SCANNER_PROGRESS = 0
+GLOBAL_SCANNER_THREAD = None
+
+SYMBOL_RANGES = [
+    (0x2200, 0x22FF),      # Mathematical Operators
+    (0x2300, 0x23FF),      # Miscellaneous Technical
+    (0x2500, 0x257F),      # Box Drawing
+    (0x2580, 0x259F),      # Block Elements
+    (0x25A0, 0x25FF),      # Geometric Shapes
+    (0x2600, 0x26FF),      # Miscellaneous Symbols
+    (0x2700, 0x27BF),      # Dingbats
+    (0x27F0, 0x27FF),      # Supplemental Arrows-A
+    (0x2900, 0x297F),      # Supplemental Arrows-B
+    (0x2B00, 0x2BFF),      # Miscellaneous Symbols and Arrows
+    (0xE000, 0xF8FF),      # Private Use Area (Nerd Fonts / Font Awesome)
+    (0xF0000, 0xFFFFD),    # Supplementary Private Use Area-A
+    (0x100000, 0x10FFFD),  # Supplementary Private Use Area-B
+    (0x1F300, 0x1F9FF),    # Emojis & Pictographs
+]
+
+class SymbolScannerThread(QThread):
+    progress = Signal(int)
+    finished = Signal(set)
+
+    def __init__(self, font_paths, ranges):
+        super().__init__()
+        self.font_paths = font_paths
+        self.ranges = ranges
+
+    def run(self):
+        global GLOBAL_SCANNER_STATUS, GLOBAL_SCANNER_PROGRESS
+        GLOBAL_SCANNER_STATUS = "scanning"
+        unique_symbols = set()
+        total = len(self.font_paths)
+        
+        # Load from cache first if valid
+        cache_dir = os.path.expanduser("~/.cache/starship-command")
+        cache_file = os.path.join(cache_dir, "symbols_cache.json")
+        fingerprint = self.get_fonts_fingerprint(self.font_paths)
+        
+        if os.path.exists(cache_file):
+            try:
+                with open(cache_file, "r") as f:
+                    data = json.load(f)
+                if data.get("fingerprint") == fingerprint:
+                    symbols = data.get("symbols", [])
+                    unique_symbols = set(symbols)
+                    GLOBAL_SYMBOL_CACHE.update(unique_symbols)
+                    GLOBAL_SCANNER_STATUS = "done"
+                    GLOBAL_SCANNER_PROGRESS = 100
+                    self.finished.emit(unique_symbols)
+                    return
+            except Exception:
+                pass
+
+        # Scan if cache missing or invalid
+        for i, path in enumerate(self.font_paths):
+            if self.isInterruptionRequested():
+                break
+            try:
+                font = TTFont(path, fontNumber=0, lazy=True)
+                cmap = font['cmap']
+                for table in cmap.tables:
+                    for char_code in table.cmap.keys():
+                        if any(start <= char_code <= end for start, end in self.ranges):
+                            unique_symbols.add(chr(char_code))
+            except Exception:
+                pass
+            GLOBAL_SCANNER_PROGRESS = int((i + 1) / total * 100)
+            self.progress.emit(GLOBAL_SCANNER_PROGRESS)
+
+        # Filter printable non-space
+        clean_symbols = {c for c in unique_symbols if c.isprintable() and not c.isspace()}
+        GLOBAL_SYMBOL_CACHE.update(clean_symbols)
+        GLOBAL_SCANNER_STATUS = "done"
+        
+        # Save to cache
+        try:
+            os.makedirs(cache_dir, exist_ok=True)
+            with open(cache_file, "w") as f:
+                json.dump({"fingerprint": fingerprint, "symbols": list(clean_symbols)}, f)
+        except Exception:
+            pass
+
+        self.finished.emit(clean_symbols)
+
+    def get_fonts_fingerprint(self, font_paths):
+        hasher = hashlib.md5()
+        for p in font_paths:
+            try:
+                mtime = os.path.getmtime(p)
+                size = os.path.getsize(p)
+                hasher.update(f"{p}:{mtime}:{size}".encode("utf-8"))
+            except Exception:
+                pass
+        return hasher.hexdigest()
+
+def start_global_symbol_scan():
+    global GLOBAL_SCANNER_THREAD
+    if GLOBAL_SCANNER_THREAD is not None:
+        return
+        
+    dirs = [
+        "/usr/share/fonts/**/*.ttf",
+        "/usr/share/fonts/**/*.otf",
+        os.path.expanduser("~/.local/share/fonts/**/*.ttf"),
+        os.path.expanduser("~/.local/share/fonts/**/*.otf"),
+        os.path.expanduser("~/.fonts/**/*.ttf"),
+        os.path.expanduser("~/.fonts/**/*.otf")
+    ]
+    font_files = []
+    for d in dirs:
+        font_files.extend(glob.glob(d, recursive=True))
+    font_files = sorted(list(set(font_files)))
+    
+    GLOBAL_SCANNER_THREAD = SymbolScannerThread(font_files, SYMBOL_RANGES)
+    GLOBAL_SCANNER_THREAD.start()
+
+class InstalledSymbolsDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("System Fonts Symbol Browser")
+        self.setMinimumSize(600, 500)
+        self.setStyleSheet("""
+            QDialog { background-color: #1e1e2e; color: #cdd6f4; font-size: 14px; }
+            QLineEdit, QComboBox { background-color: #11111b; border: 1px solid #45475a; padding: 8px; border-radius: 4px; color: #cdd6f4; }
+            QLabel { font-weight: bold; color: #a6adc8; }
+            QPushButton { background-color: #313244; color: #cdd6f4; border: 1px solid #45475a; font-weight: bold; border-radius: 4px; padding: 6px; }
+            QPushButton:hover { background-color: #45475a; }
+            QPushButton:disabled { background-color: #1e1e2e; color: #585b70; border: 1px solid #313244; }
+        """)
+        
+        self.selected_symbol = ""
+        self.font_files = self.find_system_fonts()
+        
+        self.symbols = []
+        self.filtered_symbols = []
+        self.page_size = 120
+        self.current_page = 0
+        
+        l = QVBoxLayout(self)
+        l.setSpacing(12)
+        
+        # Font file chooser
+        fl = QHBoxLayout()
+        fl.addWidget(QLabel("Select Font:"))
+        self.font_combo = QComboBox()
+        self.font_map = {}
+        for f in self.font_files:
+            name = os.path.basename(f)
+            self.font_map[name] = f
+            self.font_combo.addItem(name)
+        self.font_combo.currentTextChanged.connect(self.load_font_symbols)
+        fl.addWidget(self.font_combo, 1)
+        l.addLayout(fl)
+        
+        # Filter input
+        self.filter_in = QLineEdit()
+        self.filter_in.setPlaceholderText("Filter by symbol hex code (e.g. e700)...")
+        self.filter_in.textChanged.connect(self.filter_symbols)
+        l.addWidget(self.filter_in)
+        
+        # Symbols Scroll Area
+        self.scr = QScrollArea()
+        self.scr.setWidgetResizable(True)
+        self.scr.setStyleSheet("QScrollArea { border: 1px solid #313244; background: transparent; }")
+        self.con = QWidget()
+        self.con.setStyleSheet("background: transparent;")
+        self.grid = QGridLayout(self.con)
+        self.grid.setSpacing(8)
+        self.grid.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.scr.setWidget(self.con)
+        l.addWidget(self.scr)
+        
+        # Pagination controls
+        pl = QHBoxLayout()
+        self.btn_prev = QPushButton("◀ PREV")
+        self.btn_prev.clicked.connect(self.prev_page)
+        pl.addWidget(self.btn_prev)
+        
+        self.page_label = QLabel("Page 1 of 1 (0 symbols)")
+        self.page_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        pl.addWidget(self.page_label, 1)
+        
+        self.btn_next = QPushButton("NEXT ▶")
+        self.btn_next.clicked.connect(self.next_page)
+        pl.addWidget(self.btn_next)
+        
+        l.addLayout(pl)
+        
+        if self.font_files:
+            self.load_font_symbols(self.font_combo.currentText())
+
+    def find_system_fonts(self):
+        dirs = [
+            "/usr/share/fonts/**/*.ttf",
+            "/usr/share/fonts/**/*.otf",
+            os.path.expanduser("~/.local/share/fonts/**/*.ttf"),
+            os.path.expanduser("~/.local/share/fonts/**/*.otf"),
+            os.path.expanduser("~/.fonts/**/*.ttf"),
+            os.path.expanduser("~/.fonts/**/*.otf")
+        ]
+        files = []
+        for d in dirs:
+            files.extend(glob.glob(d, recursive=True))
+        return sorted(list(set(files)))
+
+    def load_font_symbols(self, font_name):
+        font_path = self.font_map.get(font_name)
+        if not font_path or not os.path.exists(font_path):
+            self.symbols = []
+            self.filtered_symbols = []
+            self.current_page = 0
+            self.display_page()
+            return
+            
+        ranges = [
+            (0xE000, 0xF8FF),      # Private Use Area (Nerd Fonts / Font Awesome)
+            (0xF0000, 0xFFFFD),    # Supplementary Private Use Area-A
+            (0x100000, 0x10FFFD)   # Supplementary Private Use Area-B
+        ]
+        
+        self.symbols = []
+        try:
+            font = TTFont(font_path)
+            cmap = font['cmap']
+            chars = set()
+            for table in cmap.tables:
+                for char_code in table.cmap.keys():
+                    if any(start <= char_code <= end for start, end in ranges):
+                        chars.add(chr(char_code))
+            self.symbols = sorted([c for c in chars if c.isprintable() and not c.isspace()])
+        except Exception:
+            self.symbols = []
+            
+        self.filtered_symbols = list(self.symbols)
+        self.current_page = 0
+        self.display_page()
+
+    def filter_symbols(self, text):
+        text = text.strip().lower()
+        if not text:
+            self.filtered_symbols = list(self.symbols)
+        else:
+            self.filtered_symbols = []
+            for s in self.symbols:
+                hex_str = f"{ord(s):x}"
+                if text in hex_str:
+                    self.filtered_symbols.append(s)
+                    
+        self.current_page = 0
+        self.display_page()
+
+    def display_page(self):
+        for i in reversed(range(self.grid.count())):
+            w = self.grid.itemAt(i).widget()
+            if w: w.setParent(None)
+            
+        start_idx = self.current_page * self.page_size
+        end_idx = start_idx + self.page_size
+        page_symbols = self.filtered_symbols[start_idx:end_idx]
+        
+        row = 0
+        col = 0
+        for s in page_symbols:
+            btn = QPushButton(s)
+            btn.setFixedSize(40, 40)
+            btn.setFont(QFont("Monospace", 14))
+            btn.setToolTip(f"Hex: u+{ord(s):04x}")
+            btn.clicked.connect(lambda checked=False, val=s: self.select_symbol(val))
+            self.grid.addWidget(btn, row, col)
+            col += 1
+            if col > 11:
+                col = 0
+                row += 1
+                
+        total_pages = (len(self.filtered_symbols) + self.page_size - 1) // self.page_size
+        self.page_label.setText(f"Page {self.current_page + 1} of {max(1, total_pages)} ({len(self.filtered_symbols)} symbols)")
+        self.btn_prev.setEnabled(self.current_page > 0)
+        self.btn_next.setEnabled(end_idx < len(self.filtered_symbols))
+
+    def prev_page(self):
+        if self.current_page > 0:
+            self.current_page -= 1
+            self.display_page()
+
+    def next_page(self):
+        if (self.current_page + 1) * self.page_size < len(self.filtered_symbols):
+            self.current_page += 1
+            self.display_page()
+
+    def select_symbol(self, glyph):
+        self.selected_symbol = glyph
+        self.accept()
 
 class ModuleConfigDialog(QDialog):
     updated = Signal(dict)
@@ -30,7 +332,12 @@ class ModuleConfigDialog(QDialog):
         
         if module_id == "character":
             self.success_sym_in = QLineEdit(self.config.get("success_symbol", "❯"))
-            f.addRow("Success Symbol:", self.success_sym_in)
+            s_hb = QHBoxLayout()
+            s_hb.addWidget(self.success_sym_in, 1)
+            btn_br_s = QPushButton("📋 Browse...")
+            btn_br_s.clicked.connect(lambda: self.browse_symbols(self.success_sym_in))
+            s_hb.addWidget(btn_br_s)
+            f.addRow("Success Symbol:", s_hb)
             
             s_glyphs = ["❯", "➜", "🚀", "⚡", "❖", "", "λ", "➔", "➤", "✦", "❇", "»"]
             sg_layout = QGridLayout()
@@ -48,7 +355,12 @@ class ModuleConfigDialog(QDialog):
             f.addRow("Success Glyphs:", sg_layout)
             
             self.error_sym_in = QLineEdit(self.config.get("error_symbol", "✖"))
-            f.addRow("Error Symbol:", self.error_sym_in)
+            e_hb = QHBoxLayout()
+            e_hb.addWidget(self.error_sym_in, 1)
+            btn_br_e = QPushButton("📋 Browse...")
+            btn_br_e.clicked.connect(lambda: self.browse_symbols(self.error_sym_in))
+            e_hb.addWidget(btn_br_e)
+            f.addRow("Error Symbol:", e_hb)
             
             e_glyphs = ["✖", "✗", "💥", "💀", "🛑", "❗", "▲", "✕", "✘", "×"]
             eg_layout = QGridLayout()
@@ -66,7 +378,12 @@ class ModuleConfigDialog(QDialog):
             f.addRow("Error Glyphs:", eg_layout)
         else:
             self.sym_in = QLineEdit(self.config.get("symbol", ""))
-            f.addRow("Symbol:", self.sym_in)
+            hb = QHBoxLayout()
+            hb.addWidget(self.sym_in, 1)
+            btn_br = QPushButton("📋 Browse...")
+            btn_br.clicked.connect(lambda: self.browse_symbols(self.sym_in))
+            hb.addWidget(btn_br)
+            f.addRow("Symbol:", hb)
         
         self.sty_in = QLineEdit(self.config.get("style", ""))
         sl = QHBoxLayout()
@@ -130,6 +447,12 @@ class ModuleConfigDialog(QDialog):
         updated_parts = [p for p in parts if not p.startswith(prefix)]
         updated_parts.append(token)
         self.sty_in.setText(" ".join(updated_parts).strip())
+
+    def browse_symbols(self, target_edit):
+        d = InstalledSymbolsDialog(self)
+        if d.exec():
+            if d.selected_symbol:
+                target_edit.setText(d.selected_symbol)
 
     def pick(self):
         c = QColorDialog.getColor()
