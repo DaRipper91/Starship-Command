@@ -29,6 +29,7 @@ class StarshipCommandApp(QMainWindow):
         self.setCentralWidget(sp)
         
         self.ed = EditorPanel()
+        self.ed.pop_mods(self.current_order)
         self.ed.save_req.connect(self.save)
         self.ed.order_ch.connect(self.order_ch)
         self.ed.theme_app.connect(self.apply_theme)
@@ -71,6 +72,7 @@ class StarshipCommandApp(QMainWindow):
         try:
             self.config, _ = TomlParser.parse(data["config_toml"])
             self.current_order = TomlParser.get_order_from_format(self.config.format)
+            self.ed.pop_mods(self.current_order)
             self.update_vp()
         except Exception as e: QMessageBox.warning(self, "Error", str(e))
 
