@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { StarshipConfig } from '../types/starship.types';
-import { parseFormatString, renderModule, styleToAnsi } from './format-parser';
+import {
+  parseFormatString,
+  parseFormattedString,
+  renderModule,
+  styleToAnsi,
+} from './format-parser';
 import { MOCK_SCENARIOS } from './mock-data';
 
 describe('styleToAnsi', () => {
@@ -48,6 +53,95 @@ describe('styleToAnsi', () => {
   it('should ignore unknown styles', () => {
     expect(styleToAnsi('unknown')).toBe('');
     expect(styleToAnsi('bold unknown')).toBe('\x1b[1m');
+  });
+});
+
+describe('parseFormattedString', () => {
+  const mockConfig: StarshipConfig = {
+    directory: {
+      style: 'cyan bold',
+    },
+    character: {
+      success_symbol: '[❯](bold green)',
+    },
+  };
+
+  it('should return empty array for empty format', () => {
+    expect(parseFormattedString('', mockConfig)).toEqual([]);
+  });
+
+  it('should pass through plain text', () => {
+    expect(parseFormattedString('hello world', mockConfig)).toEqual([
+      { text: 'hello world', style: '' },
+    ]);
+  });
+
+  it('should handle simple styled groups', () => {
+    const result = parseFormattedString('[text](bold red)', mockConfig);
+    expect(result).toEqual([{ text: 'text', style: 'bold red' }]);
+  });
+
+  it('should handle unstyled text with styled groups', () => {
+    const result = parseFormattedString('hello [world](blue)', mockConfig);
+    expect(result).toEqual([
+      { text: 'hello ', style: '' },
+      { text: 'world', style: 'blue' },
+    ]);
+  });
+
+  it('should replace module variables and parse their styles', () => {
+    const scenario = MOCK_SCENARIOS.clean;
+    // renderModule('directory') -> "[path](cyan bold) "
+    const result = parseFormattedString('$directory', mockConfig, scenario);
+    const expectedPath = scenario.values.directory;
+
+    expect(result).toEqual([
+      { text: expectedPath, style: 'cyan bold' },
+      { text: ' ', style: '' },
+    ]);
+  });
+
+  it('should handle nested styled groups by flattening them based on the current text logic', () => {
+    // Current implementation: `[[inner](blue) outer](red)`
+    // When inner is parsed, parent is empty string. segments.push({text: 'inner', style: 'blue'}).
+    // Then currentText is empty, loop adds ' outer'.
+    // Then outer is parsed. parent is empty string. segments.push({text: ' outer', style: 'red'}).
+    const result = parseFormattedString('[[inner](blue) outer](red)', mockConfig);
+    expect(result).toEqual([
+      { text: 'inner', style: 'blue' },
+      { text: ' outer', style: 'red' },
+    ]);
+  });
+
+  it('should handle newlines', () => {
+    expect(parseFormattedString('line1\\nline2', mockConfig)).toEqual([
+      { text: 'line1\nline2', style: '' },
+    ]);
+  });
+
+  it('should handle unmatched brackets', () => {
+    const result = parseFormattedString('[unmatched', mockConfig);
+    expect(result).toEqual([{ text: '[unmatched', style: '' }]);
+  });
+
+  it('should handle multiple modules', () => {
+    const scenario = MOCK_SCENARIOS.clean;
+    const format = '$directory$character';
+    const result = parseFormattedString(format, mockConfig, scenario);
+
+    const expectedPath = scenario.values.directory;
+    const expectedChar = scenario.values.character;
+
+    // renderModule('directory') -> "[path](cyan bold) "
+    // renderModule('character') -> "[❯](bold green) "
+    // "[path](cyan bold) [❯](bold green) "
+
+    expect(result).toEqual([
+      { text: expectedPath, style: 'cyan bold' },
+      { text: ' ', style: '' },
+      { text: expectedChar, style: 'bold green' },
+      { text: ' ', style: '' },
+    ]);
   });
 });
 
