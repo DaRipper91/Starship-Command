@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QListWidget, QListWidgetItem, QAbstractItemView,
     QTabWidget, QFileDialog, QDialog, QFormLayout,
     QColorDialog, QSpinBox, QGridLayout, QCheckBox,
-    QComboBox
+    QComboBox, QTextEdit, QGroupBox
 )
 from PySide6.QtCore import Qt, Signal, QSize, QTimer, QThread
 from starship_command.core.database import DatabaseManager
@@ -134,6 +134,71 @@ def start_global_symbol_scan():
     
     GLOBAL_SCANNER_THREAD = SymbolScannerThread(font_files, SYMBOL_RANGES)
     GLOBAL_SCANNER_THREAD.start()
+
+class SaveToStoreDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Save Theme to Sovereign Store")
+        self.setMinimumWidth(450)
+        self.setStyleSheet("""
+            QDialog { background-color: #1e1e2e; color: #cdd6f4; font-size: 14px; }
+            QLineEdit, QComboBox, QTextEdit { background-color: #11111b; border: 1px solid #45475a; padding: 8px; border-radius: 4px; color: #cdd6f4; }
+            QLabel { font-weight: bold; color: #a6adc8; }
+            QPushButton { background-color: #313244; color: #cdd6f4; border: 1px solid #45475a; font-weight: bold; border-radius: 4px; padding: 10px; }
+            QPushButton:hover { background-color: #45475a; }
+        """)
+        
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(15)
+        
+        title = QLabel("👑 PUBLISH TO SOVEREIGN STORE")
+        title.setStyleSheet("color: #fabd2f; font-weight: bold; font-size: 16px; margin-bottom: 5px;")
+        layout.addWidget(title)
+        
+        form = QFormLayout()
+        form.setSpacing(12)
+        
+        self.name_in = QLineEdit()
+        self.name_in.setPlaceholderText("e.g. Catppuccin Mocha Powerline")
+        form.addRow("Theme Name:", self.name_in)
+        
+        self.author_in = QLineEdit()
+        self.author_in.setPlaceholderText("e.g. DaRipper91")
+        form.addRow("Author:", self.author_in)
+        
+        self.desc_in = QTextEdit()
+        self.desc_in.setPlaceholderText("Describe your custom layout, aesthetics, and colors...")
+        self.desc_in.setMaximumHeight(100)
+        form.addRow("Description:", self.desc_in)
+        
+        self.cat_in = QComboBox()
+        self.cat_in.addItems(["Cyberpunk", "Minimalist", "Powerline", "Vibrant", "Neon", "Retro", "Default"])
+        form.addRow("Category:", self.cat_in)
+        
+        layout.addLayout(form)
+        
+        btn_box = QHBoxLayout()
+        btn_box.setSpacing(10)
+        
+        self.btn_save = QPushButton("SAVE TO STORE")
+        self.btn_save.setStyleSheet("background-color: #fabd2f; color: #11111b; font-weight: bold;")
+        self.btn_save.clicked.connect(self.accept)
+        btn_box.addWidget(self.btn_save, 1)
+        
+        self.btn_cancel = QPushButton("CANCEL")
+        self.btn_cancel.clicked.connect(self.reject)
+        btn_box.addWidget(self.btn_cancel, 1)
+        
+        layout.addLayout(btn_box)
+
+    def get_data(self):
+        return {
+            "name": self.name_in.text().strip(),
+            "author": self.author_in.text().strip(),
+            "description": self.desc_in.toPlainText().strip(),
+            "category": self.cat_in.currentText()
+        }
 
 class InstalledSymbolsDialog(QDialog):
     def __init__(self, parent=None):
@@ -576,7 +641,7 @@ class StoreThemeCard(QFrame):
         l.addWidget(b)
 
 class EditorPanel(QWidget):
-    save_req = Signal(); order_ch = Signal(list); theme_app = Signal(dict); mod_cfg_req = Signal(str); img_ex_req = Signal(str)
+    save_req = Signal(); save_to_store_req = Signal(); order_ch = Signal(list); theme_app = Signal(dict); mod_cfg_req = Signal(str); img_ex_req = Signal(str)
     scenarios_ch = Signal(dict); apply_symbol_req = Signal(str, str)
     load_toml_req = Signal(); save_as_req = Signal()
     def __init__(self, parent=None):
@@ -606,6 +671,14 @@ class EditorPanel(QWidget):
         """)
         btn_save_as.clicked.connect(self.save_as_req.emit)
         tb.addWidget(btn_save_as)
+        
+        btn_save_store = QPushButton("👑 SAVE TO STORE")
+        btn_save_store.setStyleSheet("""
+            QPushButton { background-color: #fabd2f; color: #11111b; font-size: 11px; padding: 6px 12px; border-radius: 4px; border: 1px solid #fabd2f; font-weight: bold; }
+            QPushButton:hover { background-color: #f9e2af; }
+        """)
+        btn_save_store.clicked.connect(self.save_to_store_req.emit)
+        tb.addWidget(btn_save_store)
         
         l.addLayout(tb)
         
@@ -661,23 +734,60 @@ class EditorPanel(QWidget):
         sl.addWidget(self.s_scr)
         self.tabs.addTab(self.s_tab, "SOVEREIGN STORE")
         
-        # Scenarios Tab
+        # Settings & Scenarios Tab
         self.sc_tab = QWidget()
         scl = QVBoxLayout(self.sc_tab)
         scl.setContentsMargins(20, 20, 20, 20)
         scl.setSpacing(12)
         scl.setAlignment(Qt.AlignmentFlag.AlignTop)
         
-        title_label = QLabel("VORTEX SCENARIO ENGINE")
+        title_label = QLabel("PROMPT SETTINGS & SCENARIOS")
         title_label.setStyleSheet("color: #89b4fa; font-weight: bold; font-size: 16px; margin-bottom: 5px;")
         scl.addWidget(title_label)
         
-        desc_label = QLabel("Simulate prompt segments rendering dynamically based on standard shell environments and toolchain state.")
+        desc_label = QLabel("Simulate prompt segments rendering dynamically based on standard shell environments, toolchain state, and prompt structures.")
         desc_label.setWordWrap(True)
         desc_label.setStyleSheet("color: #a6adc8; font-size: 13px; margin-bottom: 15px;")
         scl.addWidget(desc_label)
         
-        self.sc_cbs = {}
+        checkbox_style = """
+            QCheckBox { color: #cdd6f4; font-size: 14px; spacing: 10px; }
+            QCheckBox::indicator { width: 20px; height: 20px; border: 1px solid #45475a; border-radius: 4px; background-color: #11111b; }
+            QCheckBox::indicator:checked { background-color: #89b4fa; image: none; }
+        """
+        
+        # Prompt Layout Settings Group
+        layout_group = QGroupBox("PROMPT LAYOUT SETTINGS")
+        layout_group.setStyleSheet("""
+            QGroupBox { border: 1px solid #313244; border-radius: 6px; margin-top: 15px; padding-top: 20px; font-weight: bold; color: #cba6f7; }
+            QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 5px; }
+        """)
+        l_gl = QVBoxLayout(layout_group)
+        l_gl.setSpacing(10)
+        
+        self.cb_double_line = QCheckBox("Double-Lined Prompt")
+        self.cb_double_line.setChecked(True)
+        self.cb_double_line.setStyleSheet(checkbox_style)
+        self.cb_double_line.stateChanged.connect(self._sc_changed)
+        l_gl.addWidget(self.cb_double_line)
+        
+        self.cb_right_prompt = QCheckBox("Enable Right-Side Prompt")
+        self.cb_right_prompt.setChecked(False)
+        self.cb_right_prompt.setStyleSheet(checkbox_style)
+        self.cb_right_prompt.stateChanged.connect(self._sc_changed)
+        l_gl.addWidget(self.cb_right_prompt)
+        
+        scl.addWidget(layout_group)
+        
+        # Environmental Simulation Group
+        sim_group = QGroupBox("ENVIRONMENT SIMULATION")
+        sim_group.setStyleSheet("""
+            QGroupBox { border: 1px solid #313244; border-radius: 6px; margin-top: 15px; padding-top: 20px; font-weight: bold; color: #89b4fa; }
+            QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 5px; }
+        """)
+        s_gl = QVBoxLayout(sim_group)
+        s_gl.setSpacing(10)
+        
         sc_definitions = [
             ("git", "Git Repository Status (Active Branch/Index)", True),
             ("python", "Python Project (Active Python Virtualenv)", False),
@@ -688,21 +798,18 @@ class EditorPanel(QWidget):
             ("error", "Error State (Exit Code != 0)", False)
         ]
         
-        checkbox_style = """
-            QCheckBox { color: #cdd6f4; font-size: 14px; spacing: 10px; }
-            QCheckBox::indicator { width: 20px; height: 20px; border: 1px solid #45475a; border-radius: 4px; background-color: #11111b; }
-            QCheckBox::indicator:checked { background-color: #89b4fa; image: none; }
-        """
-        
+        self.sc_cbs = {}
         for key, label, default in sc_definitions:
             cb = QCheckBox(label)
             cb.setChecked(default)
             cb.setStyleSheet(checkbox_style)
             cb.stateChanged.connect(self._sc_changed)
-            scl.addWidget(cb)
+            s_gl.addWidget(cb)
             self.sc_cbs[key] = cb
             
-        self.tabs.addTab(self.sc_tab, "SCENARIOS")
+        scl.addWidget(sim_group)
+        
+        self.tabs.addTab(self.sc_tab, "SETTINGS & SCENARIOS")
         
         # Symbols Tab
         self.symbols_dict = {
@@ -750,6 +857,16 @@ class EditorPanel(QWidget):
                 ("", "PC / Monitor"), ("", "Plug / Connected"), ("🔋", "Battery"), ("📶", "Signal"),
                 ("", "Globe"), ("", "Network"), ("", "Key"), ("", "Lock"), ("", "Tag / Release"),
                 ("🔔", "Bell / Notification")
+            ],
+            "Powerline Connectors": [
+                ("", "Angled Right Solid"), ("", "Angled Left Solid"),
+                ("", "Curved Right Solid"), ("", "Curved Left Solid"),
+                ("", "Angled Right Thin"), ("", "Angled Left Thin"),
+                ("", "Curved Right Thin"), ("", "Curved Left Thin"),
+                ("", "Slanted Down Right Solid"), ("", "Slanted Up Left Solid"),
+                ("", "Slanted Down Right Thin"), ("", "Slanted Up Left Thin"),
+                ("", "Slanted Down Left Solid"), ("", "Slanted Up Right Solid"),
+                ("", "Slanted Down Left Thin"), ("", "Slanted Up Right Thin")
             ]
         }
         
@@ -882,6 +999,8 @@ class EditorPanel(QWidget):
 
     def _sc_changed(self, state):
         state_dict = {k: cb.isChecked() for k, cb in self.sc_cbs.items()}
+        state_dict["multiline"] = self.cb_double_line.isChecked()
+        state_dict["right_prompt"] = self.cb_right_prompt.isChecked()
         self.scenarios_ch.emit(state_dict)
 
     def _refresh_symbols(self, cat_name):
@@ -925,3 +1044,11 @@ class EditorPanel(QWidget):
     def set_active_file(self, path):
         display_path = path.replace(os.path.expanduser("~"), "~")
         self.file_label.setText(f"Active File: {display_path}")
+
+    def set_layout_state(self, multiline: bool, right_prompt: bool):
+        self.cb_double_line.blockSignals(True)
+        self.cb_right_prompt.blockSignals(True)
+        self.cb_double_line.setChecked(multiline)
+        self.cb_right_prompt.setChecked(right_prompt)
+        self.cb_double_line.blockSignals(False)
+        self.cb_right_prompt.blockSignals(False)
