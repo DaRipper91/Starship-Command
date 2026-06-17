@@ -15,20 +15,52 @@ class StarshipCommandApp(QMainWindow):
         self.config = TomlParser.get_default_config()
         self.current_order = TomlParser.get_order_from_format(self.config.format)
         
-        self.setStyleSheet("QMainWindow { background-color: #1e1e2e; } QWidget { color: #cdd6f4; } QStatusBar { background-color: #181825; }")
-        sp = QSplitter(Qt.Orientation.Horizontal); self.setCentralWidget(sp)
-        self.ed = EditorPanel(); self.ed.save_req.connect(self.save); self.ed.order_ch.connect(self.order_ch); self.ed.theme_app.connect(self.apply_theme); self.ed.mod_cfg_req.connect(self.show_cfg); self.ed.img_ex_req.connect(self.extract)
-        sp.addWidget(self.ed); self.vp = VortexViewport(); sp.addWidget(self.vp); sp.setStretchFactor(0, 1); sp.setStretchFactor(1, 2)
+        # Professional, clean, readable stylesheet
+        self.setStyleSheet("""
+            QMainWindow { background-color: #1e1e2e; }
+            QWidget { color: #cdd6f4; font-family: 'Inter', 'Segoe UI', sans-serif; font-size: 14px; }
+            QSplitter::handle { background-color: #313244; width: 4px; }
+            QStatusBar { background-color: #11111b; color: #a6adc8; border-top: 1px solid #313244; padding: 4px; }
+            QScrollBar:vertical { background: #1e1e2e; width: 12px; margin: 0px; }
+            QScrollBar::handle:vertical { background: #45475a; min-height: 20px; border-radius: 6px; }
+        """)
         
-        self.sb = QStatusBar(); self.setStatusBar(self.sb); self.ind = QLabel(" TENSOR-NATIVE "); self.ind.setStyleSheet("background: #f38ba8; color: #11111b; font-weight: bold;"); self.sb.addPermanentWidget(self.ind)
-        self.sync = AuraLink(); self.sync.start(); self.update_vp()
+        sp = QSplitter(Qt.Orientation.Horizontal)
+        self.setCentralWidget(sp)
+        
+        self.ed = EditorPanel()
+        self.ed.save_req.connect(self.save)
+        self.ed.order_ch.connect(self.order_ch)
+        self.ed.theme_app.connect(self.apply_theme)
+        self.ed.mod_cfg_req.connect(self.show_cfg)
+        self.ed.img_ex_req.connect(self.extract)
+        sp.addWidget(self.ed)
+        
+        self.vp = VortexViewport()
+        sp.addWidget(self.vp)
+        sp.setStretchFactor(0, 1)
+        sp.setStretchFactor(1, 2)
+        
+        self.sb = QStatusBar()
+        self.setStatusBar(self.sb)
+        self.ind = QLabel(" TENSOR-NATIVE ")
+        self.ind.setStyleSheet("background: #89b4fa; color: #11111b; font-weight: bold; padding: 4px 8px; border-radius: 4px; margin-right: 10px;")
+        self.sb.addPermanentWidget(self.ind)
+        self.sb.showMessage("Engine Ready.", 5000)
+        
+        self.sync = AuraLink()
+        self.sync.start()
+        self.update_vp()
 
     def order_ch(self, o): self.current_order = o; self.update_vp()
 
     def show_cfg(self, mid):
-        cfg = getattr(self.config, mid, {}) or self.config.modules.get(mid, {})
+        cfg = getattr(self.config, mid, {})
+        if hasattr(cfg, "model_dump"): cfg = cfg.model_dump()
+        if not cfg and isinstance(self.config.modules, dict): cfg = self.config.modules.get(mid, {})
         d = ModuleConfigDialog(mid, cfg, self)
-        d.updated.connect(lambda n: self.update_cfg(mid, n)); d.exec()
+        d.updated.connect(lambda n: self.update_cfg(mid, n))
+        d.exec()
 
     def update_cfg(self, mid, n):
         if hasattr(self.config, mid): setattr(self.config, mid, n)
@@ -53,18 +85,28 @@ class StarshipCommandApp(QMainWindow):
     def update_vp(self):
         lines = []
         fmt = self.config.format or ""
-        # Brute-force line break support for preview
         fmt_lines = fmt.split("$line_break")
         
         for fl in fmt_lines:
             line_order = TomlParser.get_order_from_format(fl)
             line_segs = []
             for mid in line_order:
-                cfg = getattr(self.config, mid, {}) or self.config.modules.get(mid, {})
-                s = cfg.get("style", "")
+                cfg = getattr(self.config, mid, {})
+                if hasattr(cfg, "model_dump"): cfg_dict = cfg.model_dump()
+                elif isinstance(cfg, dict): cfg_dict = cfg
+                else: cfg_dict = self.config.modules.get(mid, {})
+                
+                s = cfg_dict.get("style", "")
                 colors = TomlParser.parse_style(s)
-                sym = cfg.get("symbol", mid[:2])
-                line_segs.append({"text": f" {sym} segment ", "bg": colors["bg"], "fg": colors["fg"]})
+                
+                if mid == "character":
+                    sym = cfg_dict.get("success_symbol", "❯")
+                    line_segs.append({"text": f"{sym} ", "bg": None, "fg": colors["fg"] or "#a6e3a1"})
+                else:
+                    sym = cfg_dict.get("symbol", "")
+                    label = mid.replace("_", " ").title()
+                    text = f" {sym} {label} " if sym else f" {label} "
+                    line_segs.append({"text": text, "bg": colors["bg"], "fg": colors["fg"]})
             if line_segs: lines.append(line_segs)
             
         self.vp.segments = lines
@@ -80,4 +122,7 @@ class StarshipCommandApp(QMainWindow):
         except Exception as e: QMessageBox.critical(self, "Error", str(e))
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv); w = StarshipCommandApp(); w.show(); sys.exit(app.exec())
+    app = QApplication(sys.argv)
+    w = StarshipCommandApp()
+    w.show()
+    sys.exit(app.exec())
