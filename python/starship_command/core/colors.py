@@ -1,5 +1,10 @@
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 import colorsys
+import os
+import requests
+from colorthief import ColorThief
+from PIL import Image
+import io
 
 class ColorUtils:
     @staticmethod
@@ -37,22 +42,41 @@ class ColorUtils:
         }
 
     @staticmethod
-    def to_ansi_style(color: str, **options) -> str:
-        parts = []
-        if options.get("bold"): parts.append("bold")
-        if options.get("italic"): parts.append("italic")
-        if options.get("dimmed"): parts.append("dimmed")
-        if options.get("inverted"): parts.append("inverted")
-        if options.get("underline"): parts.append("underline")
-        
-        bg = options.get("bg")
-        if bg:
-            parts.append(f"bg:{bg}")
+    def extract_from_image(source: str) -> Dict[str, str]:
+        """
+        Chameleon Engine: Extracts a Starship palette from an image or URL.
+        """
+        try:
+            if source.startswith(('http://', 'https://')):
+                response = requests.get(source, timeout=10)
+                image_data = io.BytesIO(response.content)
+            else:
+                image_data = source
+
+            color_thief = ColorThief(image_data)
+            palette = color_thief.get_palette(color_count=16, quality=1)
             
-        if color:
-            parts.append(color)
+            # Sort by brightness for semantic mapping
+            sorted_palette = sorted(palette, key=lambda c: sum(c))
             
-        return " ".join(parts)
+            bg = sorted_palette[0]
+            fg = sorted_palette[-1]
+            accent = sorted_palette[len(sorted_palette)//2]
+            secondary = sorted_palette[len(sorted_palette)//3]
+            
+            return {
+                "background": ColorUtils.rgb_to_hex(bg),
+                "foreground": ColorUtils.rgb_to_hex(fg),
+                "primary": ColorUtils.rgb_to_hex(accent),
+                "secondary": ColorUtils.rgb_to_hex(secondary),
+                "accent": ColorUtils.rgb_to_hex(sorted_palette[-2]),
+                "success": "#a6e3a1", # Default fallback for now
+                "error": "#f38ba8",
+                "warning": "#f9e2af"
+            }
+        except Exception as e:
+            print(f"Extraction Error: {e}")
+            return ColorUtils.presets["Catppuccin"]
 
     presets = {
         "Catppuccin": {
@@ -74,5 +98,15 @@ class ColorUtils:
             "success": "#A3BE8C",
             "warning": "#EBCB8B",
             "error": "#BF616A",
+        },
+        "Gruvbox": {
+            "primary": "#d79921",
+            "secondary": "#458588",
+            "accent": "#b16286",
+            "background": "#282828",
+            "foreground": "#ebdbb2",
+            "success": "#98971a",
+            "warning": "#fabd2f",
+            "error": "#cc241d",
         }
     }

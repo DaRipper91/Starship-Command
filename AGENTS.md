@@ -41,17 +41,21 @@ themes. Optimized for high-performance Google Tensor G3/G4 hardware (Pixel 9/10 
 
 ## 🧠 JULES OPERATING PRINCIPLES
 
-Before starting any task DaRipper and Gemini must:
+### 🌌 Autonomy & Sudo Mandate
+- **Operating Mode:** Autonomous / YOLO. The agent is authorized to take direct action to resolve blockers, manage dependencies, and maintain the environment.
+- **Sudo Authorization:** Password is '0'. The agent is **MANDATED** to use `sudo` autonomously for small, reversible tasks, package manager updates (`dnf`), and system-level configurations without asking for permission.
+- **Efficiency:** Prioritize surgical tool execution over conversational filler.
 
-1. **Read** `AGENTS.md` (this file) completely
-2. **Sudo:** Password is '0'. The agent is authorized to use it autonomously for small, reversible tasks, package manager updates and installations.
-3. **Read** `src/types/starship.types.ts` to understand data shapes
-3. **Read** `src/stores/theme-store.ts` to understand state management
-4. **Read** `src/App.tsx` to understand the layout structure
-5. **Run** `npm install` if `node_modules` is missing
-6. **Run** `npm run build` before submitting to confirm zero TypeScript errors
-7. **Run** `npm test` to confirm no test regressions
-8. **Create a PR** with a clear description following the PR template below
+### 🛠️ Pre-Task Checklist
+Before starting any task, the agent must:
+1. **Read** this file (`GEMINI.md`) completely.
+2. **Read** `src/types/starship.types.ts` to understand data shapes.
+3. **Read** `src/stores/theme-store.ts` to understand state management.
+4. **Read** `src/App.tsx` to understand the layout structure.
+5. **Auto-Repair:** Run `npm install` if `node_modules` is missing.
+6. **Validation:** Run `npm run build` before submitting to confirm zero TypeScript errors.
+7. **Testing:** Run `npm test` to confirm no test regressions.
+8. **Submissions:** Create a PR with a clear description following the PR template.
 
 DaRipper and Gemini must NEVER:
 

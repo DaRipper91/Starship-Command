@@ -1,32 +1,75 @@
 import tomllib
 import tomli_w
-from typing import Dict, Any, Tuple
+import re
+from typing import Dict, Any, Tuple, Optional, List
 from .models import StarshipConfig, ThemeMetadata
 
 class TomlParser:
     @staticmethod
+    def parse_style(style_str: str, palette: Dict[str, str] = None) -> Dict[str, str]:
+        result = {"bg": None, "fg": None, "bold": False}
+        if not style_str:
+            return result
+            
+        # 1. Extract hex colors
+        bg_match = re.search(r'bg:(#[0-9a-fA-F]{6}|[0-9a-fA-F]{3})', style_str)
+        if bg_match:
+            result["bg"] = bg_match.group(1)
+            
+        fg_match = re.search(r'fg:(#[0-9a-fA-F]{6}|[0-9a-fA-F]{3})', style_str)
+        if fg_match:
+            result["fg"] = fg_match.group(1)
+            
+        # 2. Extract named colors from palette if provided
+        if palette:
+            for name, hex_code in palette.items():
+                if f"bg:{name}" in style_str:
+                    result["bg"] = hex_code
+                if f"fg:{name}" in style_str or (name in style_str and not result["fg"]):
+                    result["fg"] = hex_code
+
+        # 3. Fallback for plain hex codes
+        if not result["fg"]:
+            hex_matches = re.findall(r'#(?:[0-9a-fA-F]{3}){1,2}', style_str)
+            if hex_matches:
+                result["fg"] = hex_matches[0]
+                if not result["bg"] and len(hex_matches) > 1:
+                    result["bg"] = hex_matches[1]
+
+        if "bold" in style_str:
+            result["bold"] = True
+            
+        return result
+
+    @staticmethod
+    def get_order_from_format(format_str: str) -> List[str]:
+        """
+        Extracts variable names from a Starship format string.
+        e.g. '$os$directory$git_branch' -> ['os', 'directory', 'git_branch']
+        """
+        if not format_str:
+            return []
+        # Match $name but exclude \$ (escaped)
+        pattern = r'(?<!\\)\$([a-zA-Z0-9_]+)'
+        matches = re.findall(pattern, format_str)
+        # Exclude internal layout variables
+        exclude = ["line_break", "character"]
+        return [m for m in matches if m not in exclude]
+
+    @staticmethod
     def parse(toml_string: str) -> Tuple[StarshipConfig, ThemeMetadata]:
         try:
             parsed = tomllib.loads(toml_string)
-            
-            # Extract metadata if present
             metadata_dict = parsed.get("metadata", {})
-            metadata = ThemeMetadata(**metadata_dict) if metadata_dict else ThemeMetadata(
-                id="imported-theme",
-                name="Imported Theme"
-            )
+            metadata = ThemeMetadata(**metadata_dict) if metadata_dict else ThemeMetadata(id="local", name="Local Config")
             
-            # Remove metadata from the config
             config_dict = {k: v for k, v in parsed.items() if k != "metadata"}
-            
-            # Separate known core modules from dynamic modules
             core_fields = StarshipConfig.model_fields.keys()
             core_config = {k: v for k, v in config_dict.items() if k in core_fields}
             extra_modules = {k: v for k, v in config_dict.items() if k not in core_fields}
             
             config = StarshipConfig(**core_config)
             config.modules = extra_modules
-            
             return config, metadata
         except Exception as e:
             raise ValueError(f"Failed to parse TOML: {str(e)}")
@@ -34,17 +77,11 @@ class TomlParser:
     @staticmethod
     def stringify(config: StarshipConfig, metadata: Optional[ThemeMetadata] = None) -> str:
         try:
-            # Prepare config dict
             config_dict = config.model_dump(exclude_none=True)
-            
-            # Merge modules back to top level
             modules = config_dict.pop("modules", {})
             config_dict.update(modules)
-            
-            # Add metadata back if provided
             if metadata:
                 config_dict["metadata"] = metadata.model_dump(exclude_none=True)
-            
             return tomli_w.dumps(config_dict)
         except Exception as e:
             raise ValueError(f"Failed to generate TOML: {str(e)}")
@@ -53,5 +90,5 @@ class TomlParser:
     def get_default_config() -> StarshipConfig:
         return StarshipConfig(
             add_newline=True,
-            format="$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character"
+            format="$os$directory$git_branch$git_status$line_break$character"
         )

@@ -2,218 +2,105 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QScrollArea, QFrame, QLineEdit,
     QListWidget, QListWidgetItem, QAbstractItemView,
-    QTabWidget, QFileDialog
+    QTabWidget, QFileDialog, QDialog, QFormLayout,
+    QColorDialog, QSpinBox
 )
 from PySide6.QtCore import Qt, Signal, QSize
 from starship_command.core.database import DatabaseManager
 
+class ModuleConfigDialog(QDialog):
+    updated = Signal(dict)
+    def __init__(self, module_id: str, current_config: dict, parent=None):
+        super().__init__(parent)
+        self.module_id, self.config = module_id, current_config
+        self.setWindowTitle(f"Config: {module_id}")
+        self.setMinimumWidth(400)
+        self.setStyleSheet("background-color: #1e1e2e; color: #cdd6f4;")
+        l = QVBoxLayout(self)
+        f = QFormLayout()
+        self.sym_in = QLineEdit(self.config.get("symbol", "")); f.addRow("Symbol:", self.sym_in)
+        self.sty_in = QLineEdit(self.config.get("style", ""))
+        sl = QHBoxLayout(); sl.addWidget(self.sty_in)
+        p = QPushButton("🎨"); p.setFixedWidth(40); p.clicked.connect(self.pick); sl.addWidget(p)
+        f.addRow("Style:", sl)
+        if "truncation_length" in self.config or module_id == "directory":
+            self.ts = QSpinBox(); self.ts.setValue(self.config.get("truncation_length", 3)); f.addRow("Truncation:", self.ts)
+        l.addLayout(f)
+        b = QPushButton("APPLY"); b.setStyleSheet("background-color: #a6e3a1; color: #11111b; font-weight: bold; padding: 10px;"); b.clicked.connect(self.save); l.addWidget(b)
+    def pick(self):
+        c = QColorDialog.getColor()
+        if c.isValid(): self.sty_in.setText(f"{self.sty_in.text()} fg:{c.name()}".strip())
+    def save(self):
+        d = {"symbol": self.sym_in.text(), "style": self.sty_in.text()}
+        if hasattr(self, 'ts'): d["truncation_length"] = self.ts.value()
+        self.updated.emit(d); self.accept()
+
 class ModuleCard(QFrame):
-    def __init__(self, module_id: str, name: str, description: str = "", parent=None):
+    config_clicked = Signal(str)
+    def __init__(self, m_id, name, desc="", parent=None):
         super().__init__(parent)
-        self.module_id = module_id
-        self.setFrameShape(QFrame.Shape.StyledPanel)
-        self.setStyleSheet("""
-            ModuleCard {
-                background-color: #313244;
-                border-radius: 8px;
-                border: 1px solid #45475a;
-            }
-            ModuleCard:hover {
-                border: 1px solid #89b4fa;
-            }
-        """)
-        
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        self.handle = QLabel("⋮⋮")
-        self.handle.setStyleSheet("color: #585b70; font-weight: bold; margin-right: 5px;")
-        layout.addWidget(self.handle)
-        
-        info_layout = QVBoxLayout()
-        name_label = QLabel(name)
-        name_label.setStyleSheet("font-weight: bold; color: #89b4fa;")
-        info_layout.addWidget(name_label)
-        
-        if description:
-            desc_label = QLabel(description)
-            desc_label.setStyleSheet("color: #a6adc8; font-size: 11px;")
-            desc_label.setWordWrap(True)
-            info_layout.addWidget(desc_label)
-        
-        layout.addLayout(info_layout)
-        self.config_btn = QPushButton("⚙")
-        self.config_btn.setFixedSize(30, 30)
-        self.config_btn.setStyleSheet("""
-            QPushButton { background-color: #45475a; border-radius: 4px; color: #cdd6f4; }
-            QPushButton:hover { background-color: #585b70; }
-        """)
-        layout.addWidget(self.config_btn)
-
-class ModuleList(QListWidget):
-    order_changed = Signal(list)
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
-        self.setDefaultDropAction(Qt.DropAction.MoveAction)
-        self.setSpacing(5)
-        self.setStyleSheet("QListWidget { background: transparent; border: none; }")
-        self.model().rowsMoved.connect(self._on_rows_moved)
-
-    def _on_rows_moved(self, *args):
-        new_order = []
-        for i in range(self.count()):
-            item = self.item(i)
-            widget = self.itemWidget(item)
-            if widget: new_order.append(widget.module_id)
-        self.order_changed.emit(new_order)
+        self.m_id = m_id
+        self.setStyleSheet("background-color: #313244; border-radius: 8px; border: 1px solid #45475a;")
+        l = QHBoxLayout(self)
+        l.addWidget(QLabel("⋮⋮"))
+        il = QVBoxLayout(); il.addWidget(QLabel(f"<b>{name}</b>")); il.addWidget(QLabel(desc))
+        l.addLayout(il)
+        b = QPushButton("⚙"); b.setFixedSize(30,30); b.clicked.connect(lambda: self.config_clicked.emit(self.m_id)); l.addWidget(b)
 
 class StoreThemeCard(QFrame):
     applied = Signal(dict)
-    def __init__(self, theme_data: dict, parent=None):
+    def __init__(self, data, parent=None):
         super().__init__(parent)
-        self.theme_data = theme_data
+        self.data = data
         self.setStyleSheet("background-color: #313244; border-radius: 10px; border: 1px solid #45475a; margin-bottom: 5px;")
-        
-        layout = QVBoxLayout(self)
-        
-        header = QHBoxLayout()
-        name_label = QLabel(theme_data["name"].upper())
-        name_label.setStyleSheet("font-weight: bold; color: #89b4fa; font-size: 14px; border: none;")
-        header.addWidget(name_label)
-        
-        stars = QLabel(f"★ {theme_data['stars']}")
-        stars.setStyleSheet("color: #f9e2af; border: none;")
-        header.addWidget(stars, 0, Qt.AlignmentFlag.AlignRight)
-        layout.addLayout(header)
-        
-        desc = QLabel(theme_data["description"])
-        desc.setStyleSheet("color: #a6adc8; font-size: 11px; border: none;")
-        desc.setWordWrap(True)
-        layout.addWidget(desc)
-        
-        meta = QLabel(f"Author: {theme_data['author']} | {theme_data['category']}")
-        meta.setStyleSheet("color: #585b70; font-size: 10px; border: none; font-style: italic;")
-        layout.addWidget(meta)
-        
-        self.apply_btn = QPushButton("INSTALL / APPLY")
-        self.apply_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #45475a;
-                color: #cdd6f4;
-                font-weight: bold;
-                padding: 8px;
-                border-radius: 4px;
-                margin-top: 5px;
-            }
-            QPushButton:hover { background-color: #89b4fa; color: #1e1e2e; }
-        """)
-        self.apply_btn.clicked.connect(lambda: self.applied.emit(self.theme_data))
-        layout.addWidget(self.apply_btn)
+        l = QVBoxLayout(self)
+        h = QHBoxLayout(); h.addWidget(QLabel(f"<b>{data['name'].upper()}</b>")); h.addWidget(QLabel(f"★ {data['stars']}")); l.addLayout(h)
+        d = QLabel(data["description"]); d.setWordWrap(True); l.addWidget(d)
+        b = QPushButton("INSTALL / APPLY"); b.clicked.connect(lambda: self.applied.emit(self.data)); l.addWidget(b)
 
 class EditorPanel(QWidget):
-    save_requested = Signal()
-    order_changed = Signal(list)
-    theme_applied = Signal(dict)
-    image_extraction_requested = Signal(str)
-    
+    save_req = Signal(); order_ch = Signal(list); theme_app = Signal(dict); mod_cfg_req = Signal(str); img_ex_req = Signal(str)
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.db = DatabaseManager()
-        self.layout = QVBoxLayout(self)
+        self.db = DatabaseManager(); l = QVBoxLayout(self); self.tabs = QTabWidget(); l.addWidget(self.tabs)
         
-        self.tabs = QTabWidget()
-        self.tabs.setStyleSheet("""
-            QTabWidget::pane { border: 1px solid #45475a; top: -1px; background: #1e1e2e; }
-            QTabBar::tab { background: #181825; color: #a6adc8; padding: 12px; border: 1px solid #45475a; }
-            QTabBar::tab:selected { background: #1e1e2e; color: #89b4fa; border-bottom: 2px solid #89b4fa; }
-        """)
-        self.layout.addWidget(self.tabs)
+        # Interchange
+        self.m_tab = QWidget(); ml = QVBoxLayout(self.m_tab); self.m_list = QListWidget()
+        self.m_list.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
+        self.m_list.model().rowsMoved.connect(self._moved)
+        ml.addWidget(self.m_list); self.tabs.addTab(self.m_tab, "INTERCHANGE")
         
-        # TAB 1: MODULES
-        self.module_tab = QWidget()
-        mod_layout = QVBoxLayout(self.module_tab)
-        self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Search modules...")
-        mod_layout.addWidget(self.search_input)
+        # Store
+        self.s_tab = QWidget(); sl = QVBoxLayout(self.s_tab)
+        cb = QPushButton("🦎 CHAMELEON ENGINE"); cb.clicked.connect(self._cham); sl.addWidget(cb)
+        self.s_in = QLineEdit(); self.s_in.setPlaceholderText("Search Store..."); self.s_in.textChanged.connect(self.refresh_store); sl.addWidget(self.s_in)
+        self.s_scr = QScrollArea(); self.s_scr.setWidgetResizable(True); self.s_con = QWidget(); self.s_grd = QVBoxLayout(self.s_con)
+        self.s_grd.setAlignment(Qt.AlignmentFlag.AlignTop); self.s_scr.setWidget(self.s_con); sl.addWidget(self.s_scr)
+        self.tabs.addTab(self.s_tab, "SOVEREIGN STORE")
         
-        self.module_list = ModuleList()
-        self.module_list.order_changed.connect(self.order_changed.emit)
-        mod_layout.addWidget(self.module_list)
-        self.tabs.addTab(self.module_tab, "INTERCHANGE")
-        
-        # TAB 2: SOVEREIGN STORE
-        self.store_tab = QWidget()
-        store_layout = QVBoxLayout(self.store_tab)
-        
-        # Chameleon Action
-        self.chameleon_btn = QPushButton("🦎 CHAMELEON ENGINE")
-        self.chameleon_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #fabd2f;
-                color: #11111b;
-                font-weight: bold;
-                padding: 10px;
-                border-radius: 8px;
-            }
-            QPushButton:hover { background-color: #fe8019; }
-        """)
-        self.chameleon_btn.clicked.connect(self.handle_chameleon)
-        store_layout.addWidget(self.chameleon_btn)
+        self.pop_mods(); self.refresh_store()
+        sb = QPushButton("💾 SAVE CONFIG"); sb.clicked.connect(self.save_req.emit); l.addWidget(sb)
 
-        self.store_search = QLineEdit()
-        self.store_search.setPlaceholderText("Search Sovereign Store...")
-        self.store_search.setStyleSheet("background-color: #181825; border: 1px solid #45475a; padding: 8px; border-radius: 4px;")
-        store_layout.addWidget(self.store_search)
+    def _moved(self, *a):
+        o = []
+        for i in range(self.m_list.count()):
+            w = self.m_list.itemWidget(self.m_list.item(i))
+            if w: o.append(w.m_id)
+        self.order_ch.emit(o)
 
-        self.scroll_store = QScrollArea()
-        self.scroll_store.setWidgetResizable(True)
-        self.scroll_store.setStyleSheet("QScrollArea { border: none; background: transparent; }")
-        self.store_container = QWidget()
-        self.store_grid = QVBoxLayout(self.store_container)
-        self.store_grid.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.scroll_store.setWidget(self.store_container)
-        store_layout.addWidget(self.scroll_store)
-        self.tabs.addTab(self.store_tab, "SOVEREIGN STORE")
-        
-        # Initial Loads
-        self.populate_modules()
-        self.refresh_store()
-        
-        # Footer
-        self.save_btn = QPushButton("💾 SAVE CONFIG")
-        self.save_btn.setStyleSheet("background-color: #a6e3a1; color: #11111b; font-weight: bold; padding: 10px; border-radius: 6px;")
-        self.save_btn.clicked.connect(self.save_requested.emit)
-        self.layout.addWidget(self.save_btn)
+    def _cham(self):
+        f, _ = QFileDialog.getOpenFileName(self, "Select Wallpaper", "", "Images (*.png *.jpg *.jpeg)")
+        if f: self.img_ex_req.emit(f)
 
-    def populate_modules(self):
-        mods = [
-            ("directory", "Directory", "Work dir."),
-            ("git_branch", "Git Branch", "Branch."),
-            ("python", "Python", "Runtime."),
-            ("nodejs", "Node.js", "JS Runtime."),
-            ("cmd_duration", "Duration", "Execution time.")
-        ]
-        for m_id, name, desc in mods:
-            item = QListWidgetItem(self.module_list)
-            item.setSizeHint(QSize(0, 65))
-            self.module_list.addItem(item)
-            self.module_list.setItemWidget(item, ModuleCard(m_id, name, desc))
+    def pop_mods(self):
+        ms = [("os","OS",""),("directory","Dir",""),("git_branch","Git",""),("python","Py",""),("nodejs","JS",""),("cmd_duration","Dur","")]
+        for mid, n, d in ms:
+            it = QListWidgetItem(self.m_list); it.setSizeHint(QSize(0,60)); self.m_list.addItem(it)
+            c = ModuleCard(mid, n, d); c.config_clicked.connect(self.mod_cfg_req.emit); self.m_list.setItemWidget(it, c)
 
     def refresh_store(self):
-        # Clear existing
-        for i in reversed(range(self.store_grid.count())): 
-            self.store_grid.itemAt(i).widget().setParent(None)
-            
-        themes = self.db.get_all_themes()
-        for theme in themes:
-            card = StoreThemeCard(theme)
-            card.applied.connect(self.theme_applied.emit)
-            self.store_grid.addWidget(card)
-
-    def handle_chameleon(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "Chameleon: Extract from Wallpaper",
-            "", "Images (*.png *.jpg *.jpeg *.webp *.bmp)"
-        )
-        if file_path:
-            self.image_extraction_requested.emit(file_path)
+        q = self.s_in.text().lower()
+        for i in reversed(range(self.s_grd.count())): self.s_grd.itemAt(i).widget().setParent(None)
+        for t in self.db.get_all_themes():
+            if q in t["name"].lower() or q in t["description"].lower():
+                c = StoreThemeCard(t); c.applied.connect(self.theme_app.emit); self.s_grd.addWidget(c)
