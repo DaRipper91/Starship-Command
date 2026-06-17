@@ -118,7 +118,17 @@ class StarshipCommandApp(QMainWindow):
         try:
             p = os.path.expanduser("~/.config/starship.toml")
             if os.path.exists(p): shutil.copy(p, p + ".bak")
-            self.config.format = "".join([f"${m}" for m in self.current_order]) + "$line_break$character"
+            
+            if "character" in self.current_order:
+                idx = self.current_order.index("character")
+                before = self.current_order[:idx]
+                after = self.current_order[idx+1:]
+                fmt_before = "".join([f"${m}" for m in before])
+                fmt_after = "".join([f"${m}" for m in after])
+                self.config.format = fmt_before + "$line_break$character" + fmt_after
+            else:
+                self.config.format = "".join([f"${m}" for m in self.current_order]) + "$line_break$character"
+                
             with open(p, "w") as f: f.write(TomlParser.stringify(self.config))
             self.sb.showMessage("Saved & Backed up!", 5000)
         except Exception as e: QMessageBox.critical(self, "Error", str(e))
