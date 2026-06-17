@@ -222,7 +222,8 @@ class EditorPanel(QWidget):
         f, _ = QFileDialog.getOpenFileName(self, "Select Wallpaper", "", "Images (*.png *.jpg *.jpeg)")
         if f: self.img_ex_req.emit(f)
 
-    def pop_mods(self):
+    def pop_mods(self, current_order: list = None):
+        self.m_list.clear()
         ms = [
             ("os", "Operating System", "Detected OS icon"),
             ("username", "User", "Current user name"),
@@ -238,7 +239,15 @@ class EditorPanel(QWidget):
             ("status", "Exit Status", "Success/Error codes"),
             ("character", "Prompt Character", "The main input glyph")
         ]
-        for mid, n, d in ms:
+        ms_map = {item[0]: item for item in ms}
+        ordered_items = []
+        if current_order:
+            for mid in current_order:
+                if mid in ms_map:
+                    ordered_items.append(ms_map.pop(mid))
+        remaining_items = list(ms_map.values())
+        final_list = ordered_items + remaining_items
+        for mid, n, d in final_list:
             it = QListWidgetItem(self.m_list)
             it.setSizeHint(QSize(0, 80))
             self.m_list.addItem(it)
