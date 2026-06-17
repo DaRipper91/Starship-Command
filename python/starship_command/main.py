@@ -13,6 +13,7 @@ class StarshipCommandApp(QMainWindow):
         self.setWindowTitle("Starship Command // Unified Engine")
         self.setMinimumSize(1200, 800)
         self._last_saved_toml = ""
+        self.scenarios = {"git": True, "python": False, "node": False, "rust": False, "docker": False, "duration": False, "error": False}
         self.load_config()
         
         # Professional, clean, readable stylesheet
@@ -32,6 +33,7 @@ class StarshipCommandApp(QMainWindow):
         self.ed.pop_mods(self.current_order)
         self.ed.save_req.connect(self.save)
         self.ed.order_ch.connect(self.order_ch)
+        self.ed.scenarios_ch.connect(self.scenarios_ch)
         self.ed.theme_app.connect(self.apply_theme)
         self.ed.mod_cfg_req.connect(self.show_cfg)
         self.ed.img_ex_req.connect(self.extract)
@@ -51,10 +53,15 @@ class StarshipCommandApp(QMainWindow):
         
         self.sync = AuraLink()
         self.sync.file_changed.connect(self.reload_config)
+        self.sync.wallpaper_changed.connect(self.on_wallpaper_changed)
         self.sync.start()
         self.update_vp()
 
     def order_ch(self, o): self.current_order = o; self.update_vp()
+
+    def scenarios_ch(self, sc):
+        self.scenarios = sc
+        self.update_vp()
 
     def show_cfg(self, mid):
         cfg = getattr(self.config, mid, {})
@@ -110,7 +117,26 @@ class StarshipCommandApp(QMainWindow):
                 self.update_vp()
                 self.sb.showMessage("Configuration reloaded from disk.", 3000)
             except Exception as e:
-                self.sb.showMessage(f"Reload failed: {str(e)}", 5000)
+                 self.sb.showMessage(f"Reload failed: {str(e)}", 5000)
+
+    def on_wallpaper_changed(self):
+        p = os.path.expanduser("~/.config/plasma-org.kde.plasma.desktop-appletsrc")
+        if os.path.exists(p):
+            try:
+                img_path = None
+                with open(p, "r") as f:
+                    for line in f:
+                        if line.strip().startswith("Image="):
+                            val = line.strip().split("Image=")[1]
+                            if val.startswith("file://"):
+                                val = val[7:]
+                            img_path = val
+                            break
+                if img_path and os.path.exists(img_path):
+                    self.extract(img_path)
+                    self.sb.showMessage(f"Wallpaper color sync applied: {os.path.basename(img_path)}", 3000)
+            except Exception as e:
+                self.sb.showMessage(f"Wallpaper sync error: {str(e)}", 5000)
 
     def closeEvent(self, event):
         self.sync.stop()
@@ -124,34 +150,63 @@ class StarshipCommandApp(QMainWindow):
             self.update_vp()
         except Exception as e: QMessageBox.critical(self, "Error", str(e))
 
-    def update_vp(self):
+    def _get_segments_for_config(self, config):
         lines = []
-        fmt = self.config.format or ""
+        fmt = config.format or ""
         fmt_lines = fmt.split("$line_break")
         
         for fl in fmt_lines:
             line_order = TomlParser.get_order_from_format(fl)
             line_segs = []
             for mid in line_order:
-                cfg = getattr(self.config, mid, {})
+                # Scenario filter check!
+                if mid != "character" and hasattr(self, "scenarios"):
+                    if mid in ["git_branch", "git_status"] and not self.scenarios.get("git", True): continue
+                    if mid == "python" and not self.scenarios.get("python", False): continue
+                    if mid == "nodejs" and not self.scenarios.get("node", False): continue
+                    if mid == "rust" and not self.scenarios.get("rust", False): continue
+                    if mid == "docker_context" and not self.scenarios.get("docker", False): continue
+                    if mid == "cmd_duration" and not self.scenarios.get("duration", False): continue
+                    if mid == "status" and not self.scenarios.get("error", False): continue
+
+                cfg = getattr(config, mid, {})
                 if hasattr(cfg, "model_dump"): cfg_dict = cfg.model_dump()
                 elif isinstance(cfg, dict): cfg_dict = cfg
-                else: cfg_dict = self.config.modules.get(mid, {})
+                else: cfg_dict = config.modules.get(mid, {})
                 
                 s = cfg_dict.get("style", "")
                 colors = TomlParser.parse_style(s)
                 
                 if mid == "character":
-                    sym = cfg_dict.get("success_symbol", "❯")
-                    line_segs.append({"text": f"{sym} ", "bg": None, "fg": colors["fg"] or "#a6e3a1"})
+                    # Scenario exit code character check!
+                    if hasattr(self, "scenarios") and self.scenarios.get("error", False):
+                        sym = cfg_dict.get("error_symbol", "✖")
+                        fg_color = colors["fg"] or "#f38ba8" # standard error red
+                    else:
+                        sym = cfg_dict.get("success_symbol", "❯")
+                        fg_color = colors["fg"] or "#a6e3a1" # success green
+                    line_segs.append({"text": f"{sym} ", "bg": None, "fg": fg_color})
                 else:
                     sym = cfg_dict.get("symbol", "")
                     label = mid.replace("_", " ").title()
                     text = f" {sym} {label} " if sym else f" {label} "
                     line_segs.append({"text": text, "bg": colors["bg"], "fg": colors["fg"]})
             if line_segs: lines.append(line_segs)
+        return lines
+
+    def update_vp(self):
+        self.vp.segments = self._get_segments_for_config(self.config)
+        
+        # Parallel View Comparison
+        if getattr(self, "_last_saved_toml", ""):
+            try:
+                active_cfg, _ = TomlParser.parse(self._last_saved_toml)
+                self.vp.active_segments = self._get_segments_for_config(active_cfg)
+            except Exception:
+                self.vp.active_segments = []
+        else:
+            self.vp.active_segments = []
             
-        self.vp.segments = lines
         self.vp.update()
 
     def save(self):

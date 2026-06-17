@@ -5,8 +5,9 @@ from PySide6.QtCore import Qt, QPointF, QRectF
 class VortexViewport(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setMinimumHeight(350)
-        self.segments = []
+        self.setMinimumHeight(450)
+        self.segments = []         # Current draft segments
+        self.active_segments = []  # Active/saved config segments
         self.bg_color = QColor("#11111b") # Deep readable terminal background
         self.font_size = 15
         
@@ -15,20 +16,50 @@ class VortexViewport(QWidget):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.fillRect(self.rect(), self.bg_color)
         
-        if not self.segments:
-            return
-
-        # Use standard monospace terminal font
+        # 1. Draw Active config block
+        painter.setPen(QColor("#a6adc8"))
+        painter.setFont(QFont("Inter", 10, QFont.Weight.Bold))
+        painter.drawText(30, 30, "ACTIVE CONFIGURATION (DISK)")
+        
         painter.setFont(QFont("Monospace", self.font_size))
-        y_offset = 60
+        y_offset = 55
         height = 36
         line_spacing = 15
-
-        for line in self.segments:
-            x_offset = 30
-            for i, seg in enumerate(line):
-                x_offset = self._draw_segment(painter, seg, x_offset, y_offset, height, line, i)
+        
+        if self.active_segments:
+            for line in self.active_segments:
+                x_offset = 30
+                for i, seg in enumerate(line):
+                    x_offset = self._draw_segment(painter, seg, x_offset, y_offset, height, line, i)
+                y_offset += height + line_spacing
+        else:
+            painter.setPen(QColor("#585b70"))
+            painter.drawText(30, y_offset + 20, "(No configuration on disk / Loading...)")
             y_offset += height + line_spacing
+            
+        # Draw a separator line
+        y_offset += 15
+        painter.setPen(QPen(QColor("#313244"), 1, Qt.PenStyle.DashLine))
+        painter.drawLine(20, y_offset, self.width() - 20, y_offset)
+        y_offset += 25
+        
+        # 2. Draw Draft config block
+        painter.setPen(QColor("#89b4fa"))
+        painter.setFont(QFont("Inter", 10, QFont.Weight.Bold))
+        painter.drawText(30, y_offset, "DRAFT CONFIGURATION (UNSAVED)")
+        
+        painter.setFont(QFont("Monospace", self.font_size))
+        y_offset += 25
+        
+        if self.segments:
+            for line in self.segments:
+                x_offset = 30
+                for i, seg in enumerate(line):
+                    x_offset = self._draw_segment(painter, seg, x_offset, y_offset, height, line, i)
+                y_offset += height + line_spacing
+        else:
+            painter.setPen(QColor("#585b70"))
+            painter.drawText(30, y_offset + 20, "(No draft configuration)")
 
     def _draw_segment(self, painter, seg, x, y, h, line, idx):
         text = seg.get("text", "")

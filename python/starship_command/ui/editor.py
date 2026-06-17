@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
     QPushButton, QScrollArea, QFrame, QLineEdit,
     QListWidget, QListWidgetItem, QAbstractItemView,
     QTabWidget, QFileDialog, QDialog, QFormLayout,
-    QColorDialog, QSpinBox
+    QColorDialog, QSpinBox, QGridLayout, QCheckBox
 )
 from PySide6.QtCore import Qt, Signal, QSize
 from starship_command.core.database import DatabaseManager
@@ -14,29 +14,101 @@ class ModuleConfigDialog(QDialog):
         super().__init__(parent)
         self.module_id, self.config = module_id, current_config
         self.setWindowTitle(f"Config: {module_id}")
-        self.setMinimumWidth(450)
+        self.setMinimumWidth(500)
         self.setStyleSheet("""
             QDialog { background-color: #1e1e2e; color: #cdd6f4; font-size: 14px; }
             QLineEdit, QSpinBox { background-color: #11111b; border: 1px solid #45475a; padding: 8px; border-radius: 4px; color: #cdd6f4; }
             QLabel { font-weight: bold; color: #a6adc8; }
-            QPushButton { background-color: #89b4fa; color: #11111b; font-weight: bold; padding: 8px; border-radius: 4px; }
-            QPushButton:hover { background-color: #b4befe; }
+            QPushButton { background-color: #313244; color: #cdd6f4; border: 1px solid #45475a; font-weight: bold; border-radius: 4px; }
+            QPushButton:hover { background-color: #45475a; }
         """)
         l = QVBoxLayout(self)
         f = QFormLayout()
-        f.setSpacing(15)
+        f.setSpacing(12)
         
-        self.sym_in = QLineEdit(self.config.get("symbol", ""))
-        f.addRow("Symbol:", self.sym_in)
+        if module_id == "character":
+            self.success_sym_in = QLineEdit(self.config.get("success_symbol", "❯"))
+            f.addRow("Success Symbol:", self.success_sym_in)
+            
+            s_glyphs = ["❯", "➜", "🚀", "⚡", "❖", "", "λ", "➔", "➤", "✦", "❇", "»"]
+            sg_layout = QGridLayout()
+            col = 0
+            row = 0
+            for g in s_glyphs:
+                btn = QPushButton(g)
+                btn.setFixedSize(30, 30)
+                btn.clicked.connect(lambda checked=False, val=g: self.success_sym_in.setText(val))
+                sg_layout.addWidget(btn, row, col)
+                col += 1
+                if col > 5:
+                    col = 0
+                    row += 1
+            f.addRow("Success Glyphs:", sg_layout)
+            
+            self.error_sym_in = QLineEdit(self.config.get("error_symbol", "✖"))
+            f.addRow("Error Symbol:", self.error_sym_in)
+            
+            e_glyphs = ["✖", "✗", "💥", "💀", "🛑", "❗", "▲", "✕", "✘", "×"]
+            eg_layout = QGridLayout()
+            col = 0
+            row = 0
+            for g in e_glyphs:
+                btn = QPushButton(g)
+                btn.setFixedSize(30, 30)
+                btn.clicked.connect(lambda checked=False, val=g: self.error_sym_in.setText(val))
+                eg_layout.addWidget(btn, row, col)
+                col += 1
+                if col > 5:
+                    col = 0
+                    row += 1
+            f.addRow("Error Glyphs:", eg_layout)
+        else:
+            self.sym_in = QLineEdit(self.config.get("symbol", ""))
+            f.addRow("Symbol:", self.sym_in)
         
         self.sty_in = QLineEdit(self.config.get("style", ""))
         sl = QHBoxLayout()
         sl.addWidget(self.sty_in)
         p = QPushButton("🎨")
-        p.setFixedWidth(40)
+        p.setFixedSize(36, 36)
         p.clicked.connect(self.pick)
         sl.addWidget(p)
         f.addRow("Style:", sl)
+        
+        # Chameleon Palette Grid (FG and BG swatches)
+        swatches = [
+            ("#f5e0dc", "Rosewater"), ("#f2cdcd", "Flamingo"), ("#f5c2e7", "Pink"), ("#cba6f7", "Mauve"),
+            ("#f38ba8", "Red"), ("#fab387", "Peach"), ("#f9e2af", "Yellow"), ("#a6e3a1", "Green"),
+            ("#94e2d5", "Teal"), ("#89dceb", "Sky"), ("#74c7ec", "Sapphire"), ("#89b4fa", "Blue"),
+            ("#b4befe", "Lavender"), ("#ffffff", "White"), ("#a6adc8", "Subtext"), ("#585b70", "Overlay")
+        ]
+        
+        fg_layout = QGridLayout()
+        bg_layout = QGridLayout()
+        col = 0
+        row = 0
+        for hex_code, name in swatches:
+            btn_fg = QPushButton()
+            btn_fg.setFixedSize(22, 22)
+            btn_fg.setStyleSheet(f"background-color: {hex_code}; border: 1px solid #45475a; border-radius: 4px;")
+            btn_fg.setToolTip(f"Set FG to {name} ({hex_code})")
+            btn_fg.clicked.connect(lambda checked=False, h=hex_code: self._apply_color(f"fg:{h}"))
+            fg_layout.addWidget(btn_fg, row, col)
+            
+            btn_bg = QPushButton()
+            btn_bg.setFixedSize(22, 22)
+            btn_bg.setStyleSheet(f"background-color: {hex_code}; border: 1px solid #45475a; border-radius: 4px;")
+            btn_bg.setToolTip(f"Set BG to {name} ({hex_code})")
+            btn_bg.clicked.connect(lambda checked=False, h=hex_code: self._apply_color(f"bg:{h}"))
+            bg_layout.addWidget(btn_bg, row, col)
+            
+            col += 1
+            if col > 7:
+                col = 0
+                row += 1
+                
+        f.addRow("Text Colors (FG):", fg_layout)
+        f.addRow("Block Colors (BG):", bg_layout)
         
         if "truncation_length" in self.config or module_id == "directory":
             self.ts = QSpinBox()
@@ -45,17 +117,32 @@ class ModuleConfigDialog(QDialog):
             
         l.addLayout(f)
         b = QPushButton("APPLY CHANGES")
-        b.setStyleSheet("margin-top: 15px; padding: 12px; font-size: 14px;")
+        b.setStyleSheet("background-color: #89b4fa; color: #11111b; font-weight: bold; margin-top: 15px; padding: 12px; font-size: 14px;")
         b.clicked.connect(self.save)
         l.addWidget(b)
 
+    def _apply_color(self, token):
+        cur = self.sty_in.text().strip()
+        prefix = token.split(":")[0] + ":"
+        parts = cur.split()
+        updated_parts = [p for p in parts if not p.startswith(prefix)]
+        updated_parts.append(token)
+        self.sty_in.setText(" ".join(updated_parts).strip())
+
     def pick(self):
         c = QColorDialog.getColor()
-        if c.isValid(): self.sty_in.setText(f"{self.sty_in.text()} fg:{c.name()}".strip())
+        if c.isValid(): self._apply_color(f"fg:{c.name()}")
         
     def save(self):
-        d = {"symbol": self.sym_in.text(), "style": self.sty_in.text()}
-        if hasattr(self, 'ts'): d["truncation_length"] = self.ts.value()
+        if self.module_id == "character":
+            d = {
+                "success_symbol": self.success_sym_in.text(),
+                "error_symbol": self.error_sym_in.text(),
+                "style": self.sty_in.text()
+            }
+        else:
+            d = {"symbol": self.sym_in.text(), "style": self.sty_in.text()}
+            if hasattr(self, 'ts'): d["truncation_length"] = self.ts.value()
         self.updated.emit(d); self.accept()
 
 class ModuleCard(QFrame):
@@ -142,6 +229,7 @@ class StoreThemeCard(QFrame):
 
 class EditorPanel(QWidget):
     save_req = Signal(); order_ch = Signal(list); theme_app = Signal(dict); mod_cfg_req = Signal(str); img_ex_req = Signal(str)
+    scenarios_ch = Signal(dict)
     def __init__(self, parent=None):
         super().__init__(parent)
         self.db = DatabaseManager()
@@ -199,6 +287,49 @@ class EditorPanel(QWidget):
         self.s_scr.setWidget(self.s_con)
         sl.addWidget(self.s_scr)
         self.tabs.addTab(self.s_tab, "SOVEREIGN STORE")
+        
+        # Scenarios Tab
+        self.sc_tab = QWidget()
+        scl = QVBoxLayout(self.sc_tab)
+        scl.setContentsMargins(20, 20, 20, 20)
+        scl.setSpacing(12)
+        scl.setAlignment(Qt.AlignmentFlag.AlignTop)
+        
+        title_label = QLabel("VORTEX SCENARIO ENGINE")
+        title_label.setStyleSheet("color: #89b4fa; font-weight: bold; font-size: 16px; margin-bottom: 5px;")
+        scl.addWidget(title_label)
+        
+        desc_label = QLabel("Simulate prompt segments rendering dynamically based on standard shell environments and toolchain state.")
+        desc_label.setWordWrap(True)
+        desc_label.setStyleSheet("color: #a6adc8; font-size: 13px; margin-bottom: 15px;")
+        scl.addWidget(desc_label)
+        
+        self.sc_cbs = {}
+        sc_definitions = [
+            ("git", "Git Repository Status (Active Branch/Index)", True),
+            ("python", "Python Project (Active Python Virtualenv)", False),
+            ("node", "Node.js Project (Active package.json)", False),
+            ("rust", "Rust Project (Cargo toolchain active)", False),
+            ("docker", "Docker Context Active", False),
+            ("duration", "Command Execution Duration (>2.0s)", False),
+            ("error", "Error State (Exit Code != 0)", False)
+        ]
+        
+        checkbox_style = """
+            QCheckBox { color: #cdd6f4; font-size: 14px; spacing: 10px; }
+            QCheckBox::indicator { width: 20px; height: 20px; border: 1px solid #45475a; border-radius: 4px; background-color: #11111b; }
+            QCheckBox::indicator:checked { background-color: #89b4fa; image: none; }
+        """
+        
+        for key, label, default in sc_definitions:
+            cb = QCheckBox(label)
+            cb.setChecked(default)
+            cb.setStyleSheet(checkbox_style)
+            cb.stateChanged.connect(self._sc_changed)
+            scl.addWidget(cb)
+            self.sc_cbs[key] = cb
+            
+        self.tabs.addTab(self.sc_tab, "SCENARIOS")
         
         self.pop_mods()
         self.refresh_store()
@@ -265,3 +396,7 @@ class EditorPanel(QWidget):
                 c = StoreThemeCard(t)
                 c.applied.connect(self.theme_app.emit)
                 self.s_grd.addWidget(c)
+
+    def _sc_changed(self, state):
+        state_dict = {k: cb.isChecked() for k, cb in self.sc_cbs.items()}
+        self.scenarios_ch.emit(state_dict)
