@@ -2,9 +2,10 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QScrollArea, QFrame, QLineEdit,
     QListWidget, QListWidgetItem, QAbstractItemView,
-    QTabWidget
+    QTabWidget, QFileDialog
 )
 from PySide6.QtCore import Qt, Signal, QSize
+from starship_command.core.database import DatabaseManager
 
 class ModuleCard(QFrame):
     def __init__(self, module_id: str, name: str, description: str = "", parent=None):
@@ -66,50 +67,69 @@ class ModuleList(QListWidget):
             if widget: new_order.append(widget.module_id)
         self.order_changed.emit(new_order)
 
-class PresetCard(QFrame):
-    applied = Signal(str)
-    def __init__(self, preset_id: str, name: str, colors: list, parent=None):
+class StoreThemeCard(QFrame):
+    applied = Signal(dict)
+    def __init__(self, theme_data: dict, parent=None):
         super().__init__(parent)
-        self.preset_id = preset_id
-        self.setStyleSheet(f"background-color: #313244; border-radius: 8px; border: 1px solid #45475a;")
+        self.theme_data = theme_data
+        self.setStyleSheet("background-color: #313244; border-radius: 10px; border: 1px solid #45475a; margin-bottom: 5px;")
+        
         layout = QVBoxLayout(self)
         
-        label = QLabel(name)
-        label.setStyleSheet("font-weight: bold; color: #cdd6f4;")
-        layout.addWidget(label)
+        header = QHBoxLayout()
+        name_label = QLabel(theme_data["name"].upper())
+        name_label.setStyleSheet("font-weight: bold; color: #89b4fa; font-size: 14px; border: none;")
+        header.addWidget(name_label)
         
-        # Color preview strip
-        color_layout = QHBoxLayout()
-        for c in colors:
-            swatch = QWidget()
-            swatch.setFixedSize(20, 10)
-            swatch.setStyleSheet(f"background-color: {c}; border-radius: 2px;")
-            color_layout.addWidget(swatch)
-        layout.addLayout(color_layout)
+        stars = QLabel(f"★ {theme_data['stars']}")
+        stars.setStyleSheet("color: #f9e2af; border: none;")
+        header.addWidget(stars, 0, Qt.AlignmentFlag.AlignRight)
+        layout.addLayout(header)
         
-        self.apply_btn = QPushButton("APPLY")
-        self.apply_btn.setStyleSheet("background-color: #89b4fa; color: #1e1e2e; font-weight: bold; border-radius: 4px;")
-        self.apply_btn.clicked.connect(lambda: self.applied.emit(self.preset_id))
+        desc = QLabel(theme_data["description"])
+        desc.setStyleSheet("color: #a6adc8; font-size: 11px; border: none;")
+        desc.setWordWrap(True)
+        layout.addWidget(desc)
+        
+        meta = QLabel(f"Author: {theme_data['author']} | {theme_data['category']}")
+        meta.setStyleSheet("color: #585b70; font-size: 10px; border: none; font-style: italic;")
+        layout.addWidget(meta)
+        
+        self.apply_btn = QPushButton("INSTALL / APPLY")
+        self.apply_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #45475a;
+                color: #cdd6f4;
+                font-weight: bold;
+                padding: 8px;
+                border-radius: 4px;
+                margin-top: 5px;
+            }
+            QPushButton:hover { background-color: #89b4fa; color: #1e1e2e; }
+        """)
+        self.apply_btn.clicked.connect(lambda: self.applied.emit(self.theme_data))
         layout.addWidget(self.apply_btn)
 
 class EditorPanel(QWidget):
     save_requested = Signal()
     order_changed = Signal(list)
-    preset_requested = Signal(str)
+    theme_applied = Signal(dict)
+    image_extraction_requested = Signal(str)
     
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.db = DatabaseManager()
         self.layout = QVBoxLayout(self)
         
         self.tabs = QTabWidget()
         self.tabs.setStyleSheet("""
             QTabWidget::pane { border: 1px solid #45475a; top: -1px; background: #1e1e2e; }
-            QTabBar::tab { background: #181825; color: #a6adc8; padding: 10px; border: 1px solid #45475a; }
+            QTabBar::tab { background: #181825; color: #a6adc8; padding: 12px; border: 1px solid #45475a; }
             QTabBar::tab:selected { background: #1e1e2e; color: #89b4fa; border-bottom: 2px solid #89b4fa; }
         """)
         self.layout.addWidget(self.tabs)
         
-        # TAB 1: Modules
+        # TAB 1: MODULES
         self.module_tab = QWidget()
         mod_layout = QVBoxLayout(self.module_tab)
         self.search_input = QLineEdit()
@@ -119,28 +139,45 @@ class EditorPanel(QWidget):
         self.module_list = ModuleList()
         self.module_list.order_changed.connect(self.order_changed.emit)
         mod_layout.addWidget(self.module_list)
-        self.tabs.addTab(self.module_tab, "MODULES")
+        self.tabs.addTab(self.module_tab, "INTERCHANGE")
         
-        # TAB 2: Presets (Beacon Engine)
-        self.preset_tab = QWidget()
-        pre_layout = QVBoxLayout(self.preset_tab)
-        self.scroll_pre = QScrollArea()
-        self.scroll_pre.setWidgetResizable(True)
-        self.pre_container = QWidget()
-        self.pre_grid = QVBoxLayout(self.pre_container)
-        self.scroll_pre.setWidget(self.pre_container)
-        pre_layout.addWidget(self.scroll_pre)
-        self.tabs.addTab(self.preset_tab, "PRESETS")
+        # TAB 2: SOVEREIGN STORE
+        self.store_tab = QWidget()
+        store_layout = QVBoxLayout(self.store_tab)
         
-        # Populate Presets
-        self.add_preset("Catppuccin", ["#cba6f7", "#89b4fa", "#f5c2e7"])
-        self.add_preset("Nord", ["#88C0D0", "#81A1C1", "#5E81AC"])
-        self.add_preset("Gruvbox", ["#d79921", "#458588", "#b16286"])
+        # Chameleon Action
+        self.chameleon_btn = QPushButton("🦎 CHAMELEON ENGINE")
+        self.chameleon_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #fabd2f;
+                color: #11111b;
+                font-weight: bold;
+                padding: 10px;
+                border-radius: 8px;
+            }
+            QPushButton:hover { background-color: #fe8019; }
+        """)
+        self.chameleon_btn.clicked.connect(self.handle_chameleon)
+        store_layout.addWidget(self.chameleon_btn)
 
-        # Initial Modules
-        self.add_module("directory", "Directory", "Work dir.")
-        self.add_module("git_branch", "Git Branch", "Branch.")
-        self.add_module("python", "Python", "Runtime.")
+        self.store_search = QLineEdit()
+        self.store_search.setPlaceholderText("Search Sovereign Store...")
+        self.store_search.setStyleSheet("background-color: #181825; border: 1px solid #45475a; padding: 8px; border-radius: 4px;")
+        store_layout.addWidget(self.store_search)
+
+        self.scroll_store = QScrollArea()
+        self.scroll_store.setWidgetResizable(True)
+        self.scroll_store.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        self.store_container = QWidget()
+        self.store_grid = QVBoxLayout(self.store_container)
+        self.store_grid.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.scroll_store.setWidget(self.store_container)
+        store_layout.addWidget(self.scroll_store)
+        self.tabs.addTab(self.store_tab, "SOVEREIGN STORE")
+        
+        # Initial Loads
+        self.populate_modules()
+        self.refresh_store()
         
         # Footer
         self.save_btn = QPushButton("💾 SAVE CONFIG")
@@ -148,13 +185,35 @@ class EditorPanel(QWidget):
         self.save_btn.clicked.connect(self.save_requested.emit)
         self.layout.addWidget(self.save_btn)
 
-    def add_module(self, mod_id: str, name: str, desc: str):
-        item = QListWidgetItem(self.module_list)
-        item.setSizeHint(QSize(0, 65))
-        self.module_list.addItem(item)
-        self.module_list.setItemWidget(item, ModuleCard(mod_id, name, desc))
+    def populate_modules(self):
+        mods = [
+            ("directory", "Directory", "Work dir."),
+            ("git_branch", "Git Branch", "Branch."),
+            ("python", "Python", "Runtime."),
+            ("nodejs", "Node.js", "JS Runtime."),
+            ("cmd_duration", "Duration", "Execution time.")
+        ]
+        for m_id, name, desc in mods:
+            item = QListWidgetItem(self.module_list)
+            item.setSizeHint(QSize(0, 65))
+            self.module_list.addItem(item)
+            self.module_list.setItemWidget(item, ModuleCard(m_id, name, desc))
 
-    def add_preset(self, name: str, colors: list):
-        card = PresetCard(name.lower(), name, colors)
-        card.applied.connect(self.preset_requested.emit)
-        self.pre_grid.addWidget(card)
+    def refresh_store(self):
+        # Clear existing
+        for i in reversed(range(self.store_grid.count())): 
+            self.store_grid.itemAt(i).widget().setParent(None)
+            
+        themes = self.db.get_all_themes()
+        for theme in themes:
+            card = StoreThemeCard(theme)
+            card.applied.connect(self.theme_applied.emit)
+            self.store_grid.addWidget(card)
+
+    def handle_chameleon(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Chameleon: Extract from Wallpaper",
+            "", "Images (*.png *.jpg *.jpeg *.webp *.bmp)"
+        )
+        if file_path:
+            self.image_extraction_requested.emit(file_path)
