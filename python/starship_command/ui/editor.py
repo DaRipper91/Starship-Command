@@ -138,7 +138,7 @@ def start_global_symbol_scan():
 class InstalledSymbolsDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("System Fonts Symbol Browser")
+        self.setWindowTitle("Installed Symbols Browser")
         self.setMinimumSize(600, 500)
         self.setStyleSheet("""
             QDialog { background-color: #1e1e2e; color: #cdd6f4; font-size: 14px; }
@@ -157,6 +157,9 @@ class InstalledSymbolsDialog(QDialog):
         self.page_size = 120
         self.current_page = 0
         
+        self.scan_timer = QTimer(self)
+        self.scan_timer.timeout.connect(self.check_scan_status)
+        
         l = QVBoxLayout(self)
         l.setSpacing(12)
         
@@ -164,6 +167,7 @@ class InstalledSymbolsDialog(QDialog):
         fl = QHBoxLayout()
         fl.addWidget(QLabel("Select Font:"))
         self.font_combo = QComboBox()
+        self.font_combo.addItem("-- All Installed Fonts --")
         self.font_map = {}
         for f in self.font_files:
             name = os.path.basename(f)
@@ -175,7 +179,7 @@ class InstalledSymbolsDialog(QDialog):
         
         # Filter input
         self.filter_in = QLineEdit()
-        self.filter_in.setPlaceholderText("Filter by symbol hex code (e.g. e700)...")
+        self.filter_in.setPlaceholderText("Filter by symbol hex code (e.g. e700) or text...")
         self.filter_in.textChanged.connect(self.filter_symbols)
         l.addWidget(self.filter_in)
         
@@ -207,8 +211,8 @@ class InstalledSymbolsDialog(QDialog):
         
         l.addLayout(pl)
         
-        if self.font_files:
-            self.load_font_symbols(self.font_combo.currentText())
+        # Default to loading '-- All Installed Fonts --'
+        self.load_font_symbols(self.font_combo.currentText())
 
     def find_system_fonts(self):
         dirs = [
@@ -225,6 +229,19 @@ class InstalledSymbolsDialog(QDialog):
         return sorted(list(set(files)))
 
     def load_font_symbols(self, font_name):
+        if font_name == "-- All Installed Fonts --":
+            self.symbols = sorted(list(GLOBAL_SYMBOL_CACHE))
+            self.filtered_symbols = list(self.symbols)
+            self.current_page = 0
+            self.display_page()
+            
+            if GLOBAL_SCANNER_STATUS == "scanning":
+                self.scan_timer.start(500)
+            else:
+                self.scan_timer.stop()
+            return
+
+        self.scan_timer.stop()
         font_path = self.font_map.get(font_name)
         if not font_path or not os.path.exists(font_path):
             self.symbols = []
@@ -233,20 +250,14 @@ class InstalledSymbolsDialog(QDialog):
             self.display_page()
             return
             
-        ranges = [
-            (0xE000, 0xF8FF),      # Private Use Area (Nerd Fonts / Font Awesome)
-            (0xF0000, 0xFFFFD),    # Supplementary Private Use Area-A
-            (0x100000, 0x10FFFD)   # Supplementary Private Use Area-B
-        ]
-        
         self.symbols = []
         try:
-            font = TTFont(font_path)
+            font = TTFont(font_path, fontNumber=0, lazy=True)
             cmap = font['cmap']
             chars = set()
             for table in cmap.tables:
                 for char_code in table.cmap.keys():
-                    if any(start <= char_code <= end for start, end in ranges):
+                    if any(start <= char_code <= end for start, end in SYMBOL_RANGES):
                         chars.add(chr(char_code))
             self.symbols = sorted([c for c in chars if c.isprintable() and not c.isspace()])
         except Exception:
@@ -255,6 +266,14 @@ class InstalledSymbolsDialog(QDialog):
         self.filtered_symbols = list(self.symbols)
         self.current_page = 0
         self.display_page()
+
+    def check_scan_status(self):
+        if self.font_combo.currentText() == "-- All Installed Fonts --":
+            self.symbols = sorted(list(GLOBAL_SYMBOL_CACHE))
+            self.filter_symbols(self.filter_in.text())
+            
+            if GLOBAL_SCANNER_STATUS == "done":
+                self.scan_timer.stop()
 
     def filter_symbols(self, text):
         text = text.strip().lower()
@@ -294,7 +313,11 @@ class InstalledSymbolsDialog(QDialog):
                 row += 1
                 
         total_pages = (len(self.filtered_symbols) + self.page_size - 1) // self.page_size
-        self.page_label.setText(f"Page {self.current_page + 1} of {max(1, total_pages)} ({len(self.filtered_symbols)} symbols)")
+        status_suffix = ""
+        if self.font_combo.currentText() == "-- All Installed Fonts --" and GLOBAL_SCANNER_STATUS == "scanning":
+            status_suffix = f" (Scanning: {GLOBAL_SCANNER_PROGRESS}%)"
+            
+        self.page_label.setText(f"Page {self.current_page + 1} of {max(1, total_pages)} ({len(self.filtered_symbols)} symbols){status_suffix}")
         self.btn_prev.setEnabled(self.current_page > 0)
         self.btn_next.setEnabled(end_idx < len(self.filtered_symbols))
 
