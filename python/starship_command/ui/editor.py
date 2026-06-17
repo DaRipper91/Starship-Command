@@ -3,10 +3,12 @@ from PySide6.QtWidgets import (
     QPushButton, QScrollArea, QFrame, QLineEdit,
     QListWidget, QListWidgetItem, QAbstractItemView,
     QTabWidget, QFileDialog, QDialog, QFormLayout,
-    QColorDialog, QSpinBox, QGridLayout, QCheckBox
+    QColorDialog, QSpinBox, QGridLayout, QCheckBox,
+    QComboBox
 )
 from PySide6.QtCore import Qt, Signal, QSize
 from starship_command.core.database import DatabaseManager
+import os
 
 class ModuleConfigDialog(QDialog):
     updated = Signal(dict)
@@ -229,12 +231,37 @@ class StoreThemeCard(QFrame):
 
 class EditorPanel(QWidget):
     save_req = Signal(); order_ch = Signal(list); theme_app = Signal(dict); mod_cfg_req = Signal(str); img_ex_req = Signal(str)
-    scenarios_ch = Signal(dict)
+    scenarios_ch = Signal(dict); apply_symbol_req = Signal(str, str)
+    load_toml_req = Signal(); save_as_req = Signal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.db = DatabaseManager()
         l = QVBoxLayout(self)
         l.setContentsMargins(15, 15, 15, 15)
+        
+        # File toolbar header
+        tb = QHBoxLayout()
+        self.file_label = QLabel("Active File: ~/.config/starship.toml")
+        self.file_label.setStyleSheet("color: #a6adc8; font-family: monospace; font-size: 12px;")
+        tb.addWidget(self.file_label, 1)
+        
+        btn_load = QPushButton("📂 OPEN TOML")
+        btn_load.setStyleSheet("""
+            QPushButton { background-color: #313244; color: #cdd6f4; font-size: 11px; padding: 6px 12px; border-radius: 4px; border: 1px solid #45475a; }
+            QPushButton:hover { background-color: #45475a; }
+        """)
+        btn_load.clicked.connect(self.load_toml_req.emit)
+        tb.addWidget(btn_load)
+        
+        btn_save_as = QPushButton("💾 SAVE AS...")
+        btn_save_as.setStyleSheet("""
+            QPushButton { background-color: #313244; color: #cdd6f4; font-size: 11px; padding: 6px 12px; border-radius: 4px; border: 1px solid #45475a; }
+            QPushButton:hover { background-color: #45475a; }
+        """)
+        btn_save_as.clicked.connect(self.save_as_req.emit)
+        tb.addWidget(btn_save_as)
+        
+        l.addLayout(tb)
         
         self.tabs = QTabWidget()
         self.tabs.setStyleSheet("""
@@ -331,6 +358,100 @@ class EditorPanel(QWidget):
             
         self.tabs.addTab(self.sc_tab, "SCENARIOS")
         
+        # Symbols Tab
+        self.symbols_dict = {
+            "Git / VCS": [
+                ("", "Branch"), ("", "Merge"), ("", "Git Logo"), ("", "GitHub"), 
+                ("", "GitLab"), ("", "User Info"), ("", "Commit"), ("", "Added Line"),
+                ("", "Modified Line"), ("", "Removed Line"), ("", "Detached"), ("", "Untracked")
+            ],
+            "Files & Folders": [
+                ("", "Folder"), ("", "Folder Open"), ("", "File Generic"), ("", "File Text"), 
+                ("", "File Code"), ("", "Locked/ReadOnly"), ("", "Shield Secure"), ("", "Document")
+            ],
+            "OS & Distros": [
+                ("", "Linux Kernel"), ("", "Windows"), ("", "macOS"), ("", "Arch Linux"), 
+                ("", "Fedora"), ("", "Ubuntu Distro"), ("", "Debian"), ("", "Gentoo"),
+                ("", "Red Hat"), ("", "Alpine Linux"), ("", "openSUSE")
+            ],
+            "Languages & Tech": [
+                ("", "Python"), ("", "NodeJS / Javascript"), ("", "Rust Cargo"), ("", "Go Language"), 
+                ("", "C Header"), ("", "C++"), ("", "Java"), ("", "Lua")
+            ],
+            "Character Glyphs": [
+                ("❯", "Heavy Angle"), ("➜", "Arrow"), ("🚀", "Rocket"), ("⚡", "Lightning"), 
+                ("❖", "Diamond"), ("λ", "Lambda"), ("➔", "Thin Arrow"), ("➤", "Pointer"), 
+                ("✦", "Sparkle"), ("❇", "Asterisk"), ("»", "Double Angle"), ("✖", "Cross Fail"), 
+                ("✗", "Ballot Cross"), ("💥", "Explosion"), ("💀", "Skull"), ("🛑", "Stop Sign")
+            ],
+            "Misc / Info": [
+                ("", "Time / Clock"), ("", "Calendar"), ("", "Server / Node"), ("", "Terminal Prompt"), 
+                ("", "Snowflake / Freeze"), ("🔥", "Fire"), ("", "Moon Mode"), ("", "Sun Mode"), 
+                ("", "Package Generic"), ("ﮮ", "Sync Mode"), ("", "CPU Stats"), ("", "Memory Stats")
+            ]
+        }
+        
+        self.sy_tab = QWidget()
+        syl = QVBoxLayout(self.sy_tab)
+        syl.setContentsMargins(20, 20, 20, 20)
+        syl.setSpacing(10)
+        
+        sh_layout = QHBoxLayout()
+        sh_layout.addWidget(QLabel("Category:"))
+        self.sy_cat = QComboBox()
+        self.sy_cat.addItems(list(self.symbols_dict.keys()))
+        self.sy_cat.currentTextChanged.connect(self._refresh_symbols)
+        self.sy_cat.setStyleSheet("background-color: #11111b; border: 1px solid #45475a; padding: 6px; border-radius: 4px; color: #cdd6f4;")
+        sh_layout.addWidget(self.sy_cat)
+        syl.addLayout(sh_layout)
+        
+        self.sy_scr = QScrollArea()
+        self.sy_scr.setWidgetResizable(True)
+        self.sy_scr.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        self.sy_con = QWidget()
+        self.sy_con.setStyleSheet("background: transparent;")
+        self.sy_grd = QGridLayout(self.sy_con)
+        self.sy_grd.setSpacing(10)
+        self.sy_grd.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.sy_scr.setWidget(self.sy_con)
+        syl.addWidget(self.sy_scr)
+        
+        sa_layout = QVBoxLayout()
+        sa_layout.setSpacing(8)
+        
+        self.sy_sel_label = QLabel("Selected: None")
+        self.sy_sel_label.setStyleSheet("color: #fab387; font-weight: bold; font-size: 14px; padding-top: 5px;")
+        sa_layout.addWidget(self.sy_sel_label)
+        
+        sa_grid = QGridLayout()
+        apply_modules = [
+            ("os", "OS"), ("username", "User"), ("hostname", "Host"), ("directory", "Dir"),
+            ("git_branch", "Branch"), ("git_status", "Git Stat"), ("python", "Python"),
+            ("nodejs", "Node.js"), ("rust", "Rust"), ("docker_context", "Docker"),
+            ("cmd_duration", "Duration"), ("status", "Status"), ("character", "Character")
+        ]
+        
+        row = 0
+        col = 0
+        for mid, label in apply_modules:
+            btn = QPushButton(f"Apply to {label}")
+            btn.setStyleSheet("""
+                QPushButton { background-color: #313244; color: #cdd6f4; font-size: 11px; padding: 8px; border-radius: 4px; border: 1px solid #45475a; }
+                QPushButton:hover { background-color: #89b4fa; color: #11111b; border: none; }
+            """)
+            btn.clicked.connect(lambda checked=False, m=mid: self._apply_symbol_to_module(m))
+            sa_grid.addWidget(btn, row, col)
+            col += 1
+            if col > 2:
+                col = 0
+                row += 1
+        sa_layout.addLayout(sa_grid)
+        syl.addLayout(sa_layout)
+        
+        self.tabs.addTab(self.sy_tab, "SYMBOLS")
+        self.selected_symbol = ""
+        self._refresh_symbols(self.sy_cat.currentText())
+        
         self.pop_mods()
         self.refresh_store()
         
@@ -400,3 +521,45 @@ class EditorPanel(QWidget):
     def _sc_changed(self, state):
         state_dict = {k: cb.isChecked() for k, cb in self.sc_cbs.items()}
         self.scenarios_ch.emit(state_dict)
+
+    def _refresh_symbols(self, cat_name):
+        for i in reversed(range(self.sy_grd.count())): 
+            w = self.sy_grd.itemAt(i).widget()
+            if w: w.setParent(None)
+            
+        glyphs = self.symbols_dict.get(cat_name, [])
+        row = 0
+        col = 0
+        for glyph, desc in glyphs:
+            btn = QPushButton(glyph)
+            btn.setFixedSize(50, 50)
+            btn.setStyleSheet("""
+                QPushButton { background-color: #24273a; color: #cdd6f4; font-size: 20px; font-weight: bold; border-radius: 6px; border: 1px solid #313244; }
+                QPushButton:hover { background-color: #89b4fa; color: #11111b; border: 1px solid #89b4fa; }
+                QPushButton:checked { background-color: #fab387; color: #11111b; border: 1px solid #fab387; }
+            """)
+            btn.setToolTip(desc)
+            btn.setCheckable(True)
+            btn.clicked.connect(lambda checked=False, g=glyph: self._select_symbol(g))
+            self.sy_grd.addWidget(btn, row, col)
+            col += 1
+            if col > 5:
+                col = 0
+                row += 1
+
+    def _select_symbol(self, glyph):
+        for i in range(self.sy_grd.count()):
+            w = self.sy_grd.itemAt(i).widget()
+            if isinstance(w, QPushButton):
+                w.setChecked(w.text() == glyph)
+        self.selected_symbol = glyph
+        self.sy_sel_label.setText(f"Selected: {glyph}")
+
+    def _apply_symbol_to_module(self, mid):
+        if not self.selected_symbol:
+            return
+        self.apply_symbol_req.emit(mid, self.selected_symbol)
+
+    def set_active_file(self, path):
+        display_path = path.replace(os.path.expanduser("~"), "~")
+        self.file_label.setText(f"Active File: {display_path}")

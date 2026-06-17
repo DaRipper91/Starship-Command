@@ -13,6 +13,7 @@ class StarshipCommandApp(QMainWindow):
         self.setWindowTitle("Starship Command // Unified Engine")
         self.setMinimumSize(1200, 800)
         self._last_saved_toml = ""
+        self.active_file_path = os.path.expanduser("~/.config/starship.toml")
         self.scenarios = {"git": True, "python": False, "node": False, "rust": False, "docker": False, "duration": False, "error": False}
         self.load_config()
         
@@ -31,9 +32,13 @@ class StarshipCommandApp(QMainWindow):
         
         self.ed = EditorPanel()
         self.ed.pop_mods(self.current_order)
+        self.ed.set_active_file(self.active_file_path)
         self.ed.save_req.connect(self.save)
         self.ed.order_ch.connect(self.order_ch)
         self.ed.scenarios_ch.connect(self.scenarios_ch)
+        self.ed.apply_symbol_req.connect(self.apply_symbol_to_module)
+        self.ed.load_toml_req.connect(self.open_custom_toml)
+        self.ed.save_as_req.connect(self.save_toml_as)
         self.ed.theme_app.connect(self.apply_theme)
         self.ed.mod_cfg_req.connect(self.show_cfg)
         self.ed.img_ex_req.connect(self.extract)
@@ -84,11 +89,12 @@ class StarshipCommandApp(QMainWindow):
             self.update_vp()
         except Exception as e: QMessageBox.warning(self, "Error", str(e))
 
-    def load_config(self):
-        p = os.path.expanduser("~/.config/starship.toml")
-        if os.path.exists(p):
+    def load_config(self, path=None):
+        if path is None:
+            path = self.active_file_path
+        if os.path.exists(path):
             try:
-                with open(p, "r") as f:
+                with open(path, "r") as f:
                     toml_string = f.read()
                 self.config, _ = TomlParser.parse(toml_string)
                 self.current_order = TomlParser.get_order_from_format(self.config.format)
@@ -103,7 +109,7 @@ class StarshipCommandApp(QMainWindow):
             self._last_saved_toml = ""
 
     def reload_config(self):
-        p = os.path.expanduser("~/.config/starship.toml")
+        p = self.active_file_path
         if os.path.exists(p):
             try:
                 with open(p, "r") as f:
@@ -211,7 +217,7 @@ class StarshipCommandApp(QMainWindow):
 
     def save(self):
         try:
-            p = os.path.expanduser("~/.config/starship.toml")
+            p = self.active_file_path
             if os.path.exists(p): shutil.copy(p, p + ".bak")
             
             if "character" in self.current_order:
@@ -228,7 +234,50 @@ class StarshipCommandApp(QMainWindow):
             self._last_saved_toml = toml_string
             with open(p, "w") as f: f.write(toml_string)
             self.sb.showMessage("Saved & Backed up!", 5000)
+            self.update_vp()
         except Exception as e: QMessageBox.critical(self, "Error", str(e))
+
+    def apply_symbol_to_module(self, mid, symbol):
+        if mid == "character":
+            self.config.character.success_symbol = symbol
+        elif hasattr(self.config, mid):
+            mod_cfg = getattr(self.config, mid)
+            if hasattr(mod_cfg, "symbol"):
+                mod_cfg.symbol = symbol
+        else:
+            if mid not in self.config.modules:
+                self.config.modules[mid] = {}
+            if isinstance(self.config.modules[mid], dict):
+                self.config.modules[mid]["symbol"] = symbol
+            else:
+                self.config.modules[mid].symbol = symbol
+                
+        self.update_vp()
+        self.sb.showMessage(f"Applied '{symbol}' to {mid.replace('_', ' ').title()}", 3000)
+
+    def open_custom_toml(self):
+        f, _ = QFileDialog.getOpenFileName(self, "Open Starship TOML", "", "TOML files (*.toml)")
+        if f:
+            try:
+                self.active_file_path = f
+                self.load_config(f)
+                self.ed.pop_mods(self.current_order)
+                self.ed.set_active_file(f)
+                self.update_vp()
+                self.sb.showMessage(f"Loaded custom config: {os.path.basename(f)}", 4000)
+            except Exception as e:
+                QMessageBox.critical(self, "Load Error", f"Could not load custom TOML: {str(e)}")
+
+    def save_toml_as(self):
+        f, _ = QFileDialog.getSaveFileName(self, "Save Starship TOML As", "", "TOML files (*.toml)")
+        if f:
+            try:
+                self.active_file_path = f
+                self.save()
+                self.ed.set_active_file(f)
+                self.sb.showMessage(f"Saved custom config as: {os.path.basename(f)}", 4000)
+            except Exception as e:
+                QMessageBox.critical(self, "Save Error", f"Could not save TOML: {str(e)}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
