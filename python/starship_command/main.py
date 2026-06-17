@@ -12,8 +12,8 @@ class StarshipCommandApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("Starship Command // Unified Engine")
         self.setMinimumSize(1200, 800)
-        self.config = TomlParser.get_default_config()
-        self.current_order = TomlParser.get_order_from_format(self.config.format)
+        self._last_saved_toml = ""
+        self.load_config()
         
         # Professional, clean, readable stylesheet
         self.setStyleSheet("""
@@ -50,6 +50,7 @@ class StarshipCommandApp(QMainWindow):
         self.sb.showMessage("Engine Ready.", 5000)
         
         self.sync = AuraLink()
+        self.sync.file_changed.connect(self.reload_config)
         self.sync.start()
         self.update_vp()
 
@@ -75,6 +76,45 @@ class StarshipCommandApp(QMainWindow):
             self.ed.pop_mods(self.current_order)
             self.update_vp()
         except Exception as e: QMessageBox.warning(self, "Error", str(e))
+
+    def load_config(self):
+        p = os.path.expanduser("~/.config/starship.toml")
+        if os.path.exists(p):
+            try:
+                with open(p, "r") as f:
+                    toml_string = f.read()
+                self.config, _ = TomlParser.parse(toml_string)
+                self.current_order = TomlParser.get_order_from_format(self.config.format)
+                self._last_saved_toml = toml_string
+            except Exception as e:
+                self.config = TomlParser.get_default_config()
+                self.current_order = TomlParser.get_order_from_format(self.config.format)
+                self._last_saved_toml = ""
+        else:
+            self.config = TomlParser.get_default_config()
+            self.current_order = TomlParser.get_order_from_format(self.config.format)
+            self._last_saved_toml = ""
+
+    def reload_config(self):
+        p = os.path.expanduser("~/.config/starship.toml")
+        if os.path.exists(p):
+            try:
+                with open(p, "r") as f:
+                    toml_string = f.read()
+                if self._last_saved_toml == toml_string:
+                    return
+                self.config, _ = TomlParser.parse(toml_string)
+                self.current_order = TomlParser.get_order_from_format(self.config.format)
+                self._last_saved_toml = toml_string
+                self.ed.pop_mods(self.current_order)
+                self.update_vp()
+                self.sb.showMessage("Configuration reloaded from disk.", 3000)
+            except Exception as e:
+                self.sb.showMessage(f"Reload failed: {str(e)}", 5000)
+
+    def closeEvent(self, event):
+        self.sync.stop()
+        super().closeEvent(event)
 
     def extract(self, path):
         try:
@@ -129,7 +169,9 @@ class StarshipCommandApp(QMainWindow):
             else:
                 self.config.format = "".join([f"${m}" for m in self.current_order]) + "$line_break$character"
                 
-            with open(p, "w") as f: f.write(TomlParser.stringify(self.config))
+            toml_string = TomlParser.stringify(self.config)
+            self._last_saved_toml = toml_string
+            with open(p, "w") as f: f.write(toml_string)
             self.sb.showMessage("Saved & Backed up!", 5000)
         except Exception as e: QMessageBox.critical(self, "Error", str(e))
 
