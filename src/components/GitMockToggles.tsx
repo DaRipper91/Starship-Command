@@ -43,6 +43,8 @@ export function GitMockToggles() {
         {/* Toggles */}
         <div className="flex flex-wrap gap-2 pt-4">
           <button
+            aria-pressed={mockGitStatus.isDirty}
+            title="Toggle mock dirty state"
             onClick={() => toggle('isDirty')}
             className={cn(
               'rounded border px-3 py-1 text-[10px] transition-all',
@@ -54,6 +56,8 @@ export function GitMockToggles() {
             Dirty
           </button>
           <button
+            aria-pressed={mockGitStatus.staged}
+            title="Toggle mock staged state"
             onClick={() => toggle('staged')}
             className={cn(
               'rounded border px-3 py-1 text-[10px] transition-all',
@@ -65,6 +69,8 @@ export function GitMockToggles() {
             Staged
           </button>
           <button
+            aria-pressed={mockGitStatus.stashed}
+            title="Toggle mock stashed state"
             onClick={() => toggle('stashed')}
             className={cn(
               'rounded border px-3 py-1 text-[10px] transition-all',
@@ -84,6 +90,8 @@ export function GitMockToggles() {
           <span className="text-[10px] text-gray-500">Ahead</span>
           <div className="flex items-center gap-2">
             <button
+              aria-label="Decrease ahead count"
+              title="Decrease ahead count"
               onClick={() => increment('ahead', -1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
@@ -93,6 +101,8 @@ export function GitMockToggles() {
               {mockGitStatus.ahead}
             </span>
             <button
+              aria-label="Increase ahead count"
+              title="Increase ahead count"
               onClick={() => increment('ahead', 1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
@@ -104,6 +114,8 @@ export function GitMockToggles() {
           <span className="text-[10px] text-gray-500">Behind</span>
           <div className="flex items-center gap-2">
             <button
+              aria-label="Decrease behind count"
+              title="Decrease behind count"
               onClick={() => increment('behind', -1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
@@ -113,6 +125,8 @@ export function GitMockToggles() {
               {mockGitStatus.behind}
             </span>
             <button
+              aria-label="Increase behind count"
+              title="Increase behind count"
               onClick={() => increment('behind', 1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
