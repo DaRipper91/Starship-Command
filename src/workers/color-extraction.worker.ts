@@ -1,4 +1,4 @@
-import { Vibrant } from 'node-vibrant/browser';
+import { Vibrant } from "node-vibrant/browser";
 
 self.onmessage = async (e) => {
   const { imageUrl } = e.data;
@@ -8,7 +8,7 @@ self.onmessage = async (e) => {
     const palette = await vibrant.getPalette();
 
     if (!palette) {
-      throw new Error('Failed to extract palette');
+      throw new Error("Failed to extract palette");
     }
 
     // Transform Vibrant palette to Starship palette structure
@@ -27,11 +27,11 @@ self.onmessage = async (e) => {
     extractedPalette.warning = extractedPalette.secondary;
     extractedPalette.error = extractedPalette.accent;
 
-    self.postMessage({ type: 'success', payload: extractedPalette });
+    self.postMessage({ type: "success", payload: extractedPalette });
   } catch (error) {
     self.postMessage({
-      type: 'error',
-      error: error instanceof Error ? error.message : 'Unknown error',
+      type: "error",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };

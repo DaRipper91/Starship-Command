@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 // We'll import these as raw strings using Vite's ?raw feature
-import manualRaw from '../../MASTER_MANUAL.md?raw';
-import readmeRaw from '../../README.md?raw';
-import { Modal } from './ui/Modal';
+import manualRaw from "../../MASTER_MANUAL.md?raw";
+import readmeRaw from "../../README.md?raw";
+import { Modal } from "./ui/Modal";
 
 interface DocumentViewerProps {
   isOpen: boolean;
   onClose: () => void;
-  docType: 'manual' | 'readme';
+  docType: "manual" | "readme";
 }
 
 export function DocumentViewer({
@@ -18,8 +18,8 @@ export function DocumentViewer({
   onClose,
   docType,
 }: DocumentViewerProps) {
-  const content = docType === 'manual' ? manualRaw : readmeRaw;
-  const title = docType === 'manual' ? 'Master Manual' : 'Project README';
+  const content = docType === "manual" ? manualRaw : readmeRaw;
+  const title = docType === "manual" ? "Master Manual" : "Project README";
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title}>

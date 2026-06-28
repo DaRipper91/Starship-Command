@@ -1,12 +1,12 @@
-import { Eye, Info, Lightbulb, ShieldAlert, X, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Eye, Info, Lightbulb, ShieldAlert, X, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { SuggestionEngine } from '../../lib/suggestion-engine';
-import { useThemeStore } from '../../stores/theme-store';
+import { SuggestionEngine } from "../../lib/suggestion-engine";
+import { useThemeStore } from "../../stores/theme-store";
 
 interface Suggestion {
-  type: 'module' | 'performance' | 'visual' | 'compatibility';
-  priority: 'high' | 'medium' | 'low';
+  type: "module" | "performance" | "visual" | "compatibility";
+  priority: "high" | "medium" | "low";
   title: string;
   description: string;
   action?: () => void;
@@ -47,20 +47,20 @@ export function SuggestionPanel() {
       <div className="flex flex-col gap-2">
         {visibleSuggestions.map((s, idx) => {
           const Icon =
-            s.type === 'performance'
+            s.type === "performance"
               ? Zap
-              : s.type === 'visual'
+              : s.type === "visual"
                 ? Eye
-                : s.type === 'compatibility'
+                : s.type === "compatibility"
                   ? ShieldAlert
                   : Info;
 
           const iconColor =
-            s.priority === 'high'
-              ? 'text-red-400'
-              : s.priority === 'medium'
-                ? 'text-yellow-400'
-                : 'text-blue-400';
+            s.priority === "high"
+              ? "text-red-400"
+              : s.priority === "medium"
+                ? "text-yellow-400"
+                : "text-blue-400";
 
           return (
             <div

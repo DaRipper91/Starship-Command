@@ -1,7 +1,7 @@
-import { X } from 'lucide-react';
-import React, { useState } from 'react';
+import { X } from "lucide-react";
+import React, { useState } from "react";
 
-import { useToast } from '../contexts/ToastContext';
+import { useToast } from "../contexts/ToastContext";
 
 interface AuthModalProps {
   onClose: () => void;
@@ -10,9 +10,9 @@ interface AuthModalProps {
 
 export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { addToast } = useToast();
 
@@ -20,16 +20,16 @@ export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
     e.preventDefault();
     setLoading(true);
 
-    const endpoint = isLogin ? '/api/login' : '/api/register';
+    const endpoint = isLogin ? "/api/login" : "/api/register";
     const payload = isLogin
       ? { username, password }
       : { username, email, password };
 
     try {
       const response = await fetch(endpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -37,20 +37,20 @@ export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Authentication failed');
+        throw new Error(data.error || "Authentication failed");
       }
 
       if (isLogin) {
-        addToast('Logged in successfully', 'success');
+        addToast("Logged in successfully", "success");
         onLoginSuccess(data.user_id, username);
       } else {
-        addToast('Registered successfully. Please log in.', 'success');
+        addToast("Registered successfully. Please log in.", "success");
         setIsLogin(true);
       }
     } catch (err: unknown) {
       addToast(
-        err instanceof Error ? err.message : 'An error occurred',
-        'error',
+        err instanceof Error ? err.message : "An error occurred",
+        "error",
       );
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
     <div className="flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-2xl">
       <div className="flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4">
         <h2 className="text-lg font-bold text-white">
-          {isLogin ? 'Log In' : 'Register'}
+          {isLogin ? "Log In" : "Register"}
         </h2>
         <button
           onClick={onClose}
@@ -120,18 +120,18 @@ export function AuthModal({ onClose, onLoginSuccess }: AuthModalProps) {
             disabled={loading}
             className="mt-2 w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50"
           >
-            {loading ? 'Processing...' : isLogin ? 'Log In' : 'Register'}
+            {loading ? "Processing..." : isLogin ? "Log In" : "Register"}
           </button>
         </form>
 
         <div className="mt-4 text-center text-sm text-gray-400">
-          {isLogin ? "Don't have an account? " : 'Already have an account? '}
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
           <button
             type="button"
             onClick={() => setIsLogin(!isLogin)}
             className="text-blue-500 hover:underline"
           >
-            {isLogin ? 'Register' : 'Log In'}
+            {isLogin ? "Register" : "Log In"}
           </button>
         </div>
       </div>

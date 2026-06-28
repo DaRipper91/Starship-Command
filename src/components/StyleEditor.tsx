@@ -1,8 +1,8 @@
-import { Bold, Italic, Underline } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Bold, Italic, Underline } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { cn } from '../lib/utils';
-import { ColorPicker } from './ColorPicker';
+import { cn } from "../lib/utils";
+import { ColorPicker } from "./ColorPicker";
 
 interface StyleEditorProps {
   value: string;
@@ -11,8 +11,8 @@ interface StyleEditorProps {
 }
 
 export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
-  const [fgColor, setFgColor] = useState('');
-  const [bgColor, setBgColor] = useState('');
+  const [fgColor, setFgColor] = useState("");
+  const [bgColor, setBgColor] = useState("");
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
@@ -22,8 +22,8 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
   // Parse style string on mount/change
   useEffect(() => {
     if (!value) {
-      setFgColor('');
-      setBgColor('');
+      setFgColor("");
+      setBgColor("");
       setIsBold(false);
       setIsItalic(false);
       setIsUnderline(false);
@@ -33,8 +33,8 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
     }
 
     const parts = value.split(/\s+/);
-    let fg = '';
-    let bg = '';
+    let fg = "";
+    let bg = "";
     let bold = false;
     let italic = false;
     let underline = false;
@@ -42,12 +42,12 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
     let inverted = false;
 
     parts.forEach((p) => {
-      if (p === 'bold') bold = true;
-      else if (p === 'italic') italic = true;
-      else if (p === 'underline') underline = true;
-      else if (p === 'dimmed') dimmed = true;
-      else if (p === 'inverted') inverted = true;
-      else if (p.startsWith('bg:')) bg = p.substring(3);
+      if (p === "bold") bold = true;
+      else if (p === "italic") italic = true;
+      else if (p === "underline") underline = true;
+      else if (p === "dimmed") dimmed = true;
+      else if (p === "inverted") inverted = true;
+      else if (p.startsWith("bg:")) bg = p.substring(3);
       else fg = p;
     });
 
@@ -73,20 +73,20 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
   ) => {
     const parts: string[] = [];
 
-    if (modifiers.bold) parts.push('bold');
-    if (modifiers.italic) parts.push('italic');
-    if (modifiers.underline) parts.push('underline');
-    if (modifiers.dimmed) parts.push('dimmed');
-    if (modifiers.inverted) parts.push('inverted');
+    if (modifiers.bold) parts.push("bold");
+    if (modifiers.italic) parts.push("italic");
+    if (modifiers.underline) parts.push("underline");
+    if (modifiers.dimmed) parts.push("dimmed");
+    if (modifiers.inverted) parts.push("inverted");
 
     if (newBg) parts.push(`bg:${newBg}`);
     if (newFg) parts.push(newFg);
 
-    onChange(parts.join(' '));
+    onChange(parts.join(" "));
   };
 
   const handleModifierChange = (
-    mod: 'bold' | 'italic' | 'underline' | 'dimmed' | 'inverted',
+    mod: "bold" | "italic" | "underline" | "dimmed" | "inverted",
   ) => {
     const modifiers = {
       bold: isBold,
@@ -98,11 +98,11 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
     modifiers[mod] = !modifiers[mod];
 
     // Update local state for immediate feedback
-    if (mod === 'bold') setIsBold(!isBold);
-    if (mod === 'italic') setIsItalic(!isItalic);
-    if (mod === 'underline') setIsUnderline(!isUnderline);
-    if (mod === 'dimmed') setIsDimmed(!isDimmed);
-    if (mod === 'inverted') setIsInverted(!isInverted);
+    if (mod === "bold") setIsBold(!isBold);
+    if (mod === "italic") setIsItalic(!isItalic);
+    if (mod === "underline") setIsUnderline(!isUnderline);
+    if (mod === "dimmed") setIsDimmed(!isDimmed);
+    if (mod === "inverted") setIsInverted(!isInverted);
 
     updateStyle(fgColor, bgColor, modifiers);
   };
@@ -132,7 +132,7 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
   return (
     <div
       className={cn(
-        'flex flex-col gap-4 rounded-md border border-gray-700 bg-gray-800 p-4',
+        "flex flex-col gap-4 rounded-md border border-gray-700 bg-gray-800 p-4",
         className,
       )}
     >
@@ -157,12 +157,12 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
         </label>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => handleModifierChange('bold')}
+            onClick={() => handleModifierChange("bold")}
             className={cn(
-              'flex items-center justify-center rounded border border-transparent p-2 transition-colors',
+              "flex items-center justify-center rounded border border-transparent p-2 transition-colors",
               isBold
-                ? 'border-blue-500 bg-blue-600 text-white'
-                : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200',
+                ? "border-blue-500 bg-blue-600 text-white"
+                : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200",
             )}
             title="Bold"
             aria-label="Toggle Bold"
@@ -171,12 +171,12 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
             <Bold size={16} />
           </button>
           <button
-            onClick={() => handleModifierChange('italic')}
+            onClick={() => handleModifierChange("italic")}
             className={cn(
-              'flex items-center justify-center rounded border border-transparent p-2 transition-colors',
+              "flex items-center justify-center rounded border border-transparent p-2 transition-colors",
               isItalic
-                ? 'border-blue-500 bg-blue-600 text-white'
-                : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200',
+                ? "border-blue-500 bg-blue-600 text-white"
+                : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200",
             )}
             title="Italic"
             aria-label="Toggle Italic"
@@ -185,12 +185,12 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
             <Italic size={16} />
           </button>
           <button
-            onClick={() => handleModifierChange('underline')}
+            onClick={() => handleModifierChange("underline")}
             className={cn(
-              'flex items-center justify-center rounded border border-transparent p-2 transition-colors',
+              "flex items-center justify-center rounded border border-transparent p-2 transition-colors",
               isUnderline
-                ? 'border-blue-500 bg-blue-600 text-white'
-                : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200',
+                ? "border-blue-500 bg-blue-600 text-white"
+                : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-200",
             )}
             title="Underline"
             aria-label="Toggle Underline"
@@ -200,12 +200,12 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
           </button>
 
           <button
-            onClick={() => handleModifierChange('dimmed')}
+            onClick={() => handleModifierChange("dimmed")}
             className={cn(
-              'flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors',
+              "flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors",
               isDimmed
-                ? 'border-blue-500 bg-blue-600 text-white'
-                : 'bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200',
+                ? "border-blue-500 bg-blue-600 text-white"
+                : "bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200",
             )}
             aria-label="Toggle Dimmed"
             aria-pressed={isDimmed}
@@ -214,12 +214,12 @@ export function StyleEditor({ value, onChange, className }: StyleEditorProps) {
           </button>
 
           <button
-            onClick={() => handleModifierChange('inverted')}
+            onClick={() => handleModifierChange("inverted")}
             className={cn(
-              'flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors',
+              "flex h-9 items-center rounded border border-gray-600 px-3 py-1 text-xs font-medium transition-colors",
               isInverted
-                ? 'border-blue-500 bg-blue-600 text-white'
-                : 'bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200',
+                ? "border-blue-500 bg-blue-600 text-white"
+                : "bg-transparent text-gray-400 hover:bg-gray-700 hover:text-gray-200",
             )}
             aria-label="Toggle Inverted"
             aria-pressed={isInverted}

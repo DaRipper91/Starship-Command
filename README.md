@@ -23,13 +23,13 @@ By merging the best of both worlds, Starship Command provides a native, hardware
 
 <div align="center">
 
-| Component | Stack | Provenance |
-| :--- | :--- | :--- |
-| **Language** | Python 3.14+ (Strictly Typed) | **Aether** |
-| **GUI Framework** | PySide6 (Qt 6.7+) | **Both** |
+| Component           | Stack                           | Provenance |
+| :------------------ | :------------------------------ | :--------- |
+| **Language**        | Python 3.14+ (Strictly Typed)   | **Aether** |
+| **GUI Framework**   | PySide6 (Qt 6.7+)               | **Both**   |
 | **Prompt Viewport** | High-Fidelity QPainter / Vector | **Aether** |
-| **Config Logic** | Pydantic / Async Daemon | **Aura** |
-| **Terminal Output** | Rich / ANSI Engine | **Aura** |
+| **Config Logic**    | Pydantic / Async Daemon         | **Aura**   |
+| **Terminal Output** | Rich / ANSI Engine              | **Aura**   |
 
 </div>
 
@@ -37,22 +37,24 @@ By merging the best of both worlds, Starship Command provides a native, hardware
 
 ## 🌟 KEY FEATURES
 
-*   **Vortex Viewport:** A custom Aether-style renderer that draws Powerline glyphs and separators as actual geometric shapes with sub-pixel precision. No more font-rendering gaps.
-*   **Sovereign Editor:** A clean, sidebar-driven "Interchange" UI for dragging, dropping, and configuring modules in real-time.
-*   **Image-to-Palette:** Automatically extract theme colors from your desktop wallpaper using Python's Pillow and ColorThief libraries.
-*   **Contrast Guard:** Real-time WCAG AA/AAA contrast checking to ensure your prompt remains readable in all lighting conditions.
-*   **Self-Healing Sync:** An asynchronous file observer watches your `starship.toml` and updates the UI instantly if external changes are detected.
+- **Vortex Viewport:** A custom Aether-style renderer that draws Powerline glyphs and separators as actual geometric shapes with sub-pixel precision. No more font-rendering gaps.
+- **Sovereign Editor:** A clean, sidebar-driven "Interchange" UI for dragging, dropping, and configuring modules in real-time.
+- **Image-to-Palette:** Automatically extract theme colors from your desktop wallpaper using Python's Pillow and ColorThief libraries.
+- **Contrast Guard:** Real-time WCAG AA/AAA contrast checking to ensure your prompt remains readable in all lighting conditions.
+- **Self-Healing Sync:** An asynchronous file observer watches your `starship.toml` and updates the UI instantly if external changes are detected.
 
 ---
 
 ## 🛠️ INSTALLATION & USAGE
 
 ### Prerequisites
+
 - Python 3.14+
 - PySide6 6.7+
 - Nerd Fonts (Recommended: FiraCode Nerd Font)
 
 ### Running the Python Engine
+
 ```bash
 # Clone the repository
 git clone https://github.com/DaRipper91/Starship-Command.git
@@ -65,7 +67,9 @@ cd Starship-Command
 ---
 
 ## 📖 LEGACY SUPPORT
+
 The original React + TypeScript frontend is still available in the `src/` directory and can be built for Web and Android (Capacitor) using the legacy build scripts. However, the **Python Engine** is now the primary target for all future feature development.
 
 ---
-*Built for the community, optimized for the Tensor & Asahi hardware.*
+
+_Built for the community, optimized for the Tensor & Asahi hardware._

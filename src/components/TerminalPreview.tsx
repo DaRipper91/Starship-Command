@@ -1,7 +1,7 @@
-import '@xterm/xterm/css/xterm.css';
+import "@xterm/xterm/css/xterm.css";
 
-import html2canvas from 'html2canvas';
-import { ChevronUp, Copy, Download, Type } from 'lucide-react';
+import html2canvas from "html2canvas";
+import { ChevronUp, Copy, Download, Type } from "lucide-react";
 import React, {
   memo,
   useCallback,
@@ -9,36 +9,36 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { Terminal } from '@xterm/xterm';
-import { FitAddon } from '@xterm/addon-fit';
+} from "react";
+import { Terminal } from "@xterm/xterm";
+import { FitAddon } from "@xterm/addon-fit";
 
-import { useToast } from '../contexts/ToastContext';
-import { useDebounce } from '../hooks/useDebounce';
-import { ColorUtils } from '../lib/color-utils';
-import { parseFormattedString } from '../lib/format-parser';
-import { MOCK_SCENARIOS } from '../lib/mock-data';
-import { translateThemeToXterm } from '../lib/theme-to-xterm';
-import { cn } from '../lib/utils';
-import { useThemeStore } from '../stores/theme-store';
-import { StarshipConfig } from '../types/starship.types';
+import { useToast } from "../contexts/ToastContext";
+import { useDebounce } from "../hooks/useDebounce";
+import { ColorUtils } from "../lib/color-utils";
+import { parseFormattedString } from "../lib/format-parser";
+import { MOCK_SCENARIOS } from "../lib/mock-data";
+import { translateThemeToXterm } from "../lib/theme-to-xterm";
+import { cn } from "../lib/utils";
+import { useThemeStore } from "../stores/theme-store";
+import { StarshipConfig } from "../types/starship.types";
 
-const FONT_STORAGE_KEY = 'starship-font-settings';
+const FONT_STORAGE_KEY = "starship-font-settings";
 
 function styleToAnsi(style: string, config: StarshipConfig): string {
-  if (!style) return '';
+  if (!style) return "";
 
-  const paletteName = config.palette || 'global';
+  const paletteName = config.palette || "global";
   const customPalette = config.palettes?.[paletteName] || {};
   const parts = style.split(/\s+/);
   const codes: string[] = [];
 
   parts.forEach((part) => {
-    if (part === 'bold') codes.push('1');
-    else if (part === 'italic') codes.push('3');
-    else if (part === 'underline') codes.push('4');
-    else if (part === 'dimmed') codes.push('2');
-    else if (part.startsWith('bg:')) {
+    if (part === "bold") codes.push("1");
+    else if (part === "italic") codes.push("3");
+    else if (part === "underline") codes.push("4");
+    else if (part === "dimmed") codes.push("2");
+    else if (part.startsWith("bg:")) {
       const color = ColorUtils.resolveColor(part.substring(3), customPalette);
       const rgb = ColorUtils.hexToRgb(color);
       if (rgb) codes.push(`48;2;${rgb.r};${rgb.g};${rgb.b}`);
@@ -49,8 +49,8 @@ function styleToAnsi(style: string, config: StarshipConfig): string {
     }
   });
 
-  if (codes.length === 0) return '';
-  return `\x1b[${codes.join(';')}m`;
+  if (codes.length === 0) return "";
+  return `\x1b[${codes.join(";")}m`;
 }
 
 interface StoredFontSettings {
@@ -79,20 +79,20 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
 
     // Font loader state
     const [showFontLoader, setShowFontLoader] = useState(false);
-    const [fontUrl, setFontUrl] = useState('');
-    const [fontFamilyInput, setFontFamilyInput] = useState('');
+    const [fontUrl, setFontUrl] = useState("");
+    const [fontFamilyInput, setFontFamilyInput] = useState("");
     const [isLoadingFont, setIsLoadingFont] = useState(false);
     const [customFontFamily, setCustomFontFamily] = useState<string>(() => {
       try {
         const stored = localStorage.getItem(FONT_STORAGE_KEY);
         if (stored) {
           const parsed: StoredFontSettings = JSON.parse(stored);
-          return parsed.family || '';
+          return parsed.family || "";
         }
       } catch {
         /* ignore */
       }
-      return '';
+      return "";
     });
 
     // Pre-load stored font on mount
@@ -153,7 +153,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
       try {
         fitAddon.fit();
       } catch (e) {
-        console.warn('Initial fit failed:', e);
+        console.warn("Initial fit failed:", e);
       }
 
       xtermRef.current = term;
@@ -177,7 +177,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
     }, [effectiveFontFamily]); // Re-create terminal when font changes
 
     const segments = useMemo(() => {
-      const format = currentTheme.config.format || '';
+      const format = currentTheme.config.format || "";
       const currentScenarioKey = scenarioKeys[scenarioIndex];
       const scenario = MOCK_SCENARIOS[currentScenarioKey];
       return parseFormattedString(format, currentTheme.config, scenario);
@@ -196,12 +196,12 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
       term.reset();
       debouncedSegments.forEach((segment) => {
         const ansi = styleToAnsi(segment.style, currentTheme.config);
-        term.write(ansi + segment.text + (ansi ? '\x1b[0m' : ''));
+        term.write(ansi + segment.text + (ansi ? "\x1b[0m" : ""));
       });
     }, [debouncedSegments, currentTheme.config]);
 
     const terminalBg = useMemo(() => {
-      return translateThemeToXterm(currentTheme.config).background || '#1e1e1e';
+      return translateThemeToXterm(currentTheme.config).background || "#1e1e1e";
     }, [currentTheme.config]);
 
     // Screenshot helpers
@@ -219,13 +219,13 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
       try {
         const canvas = await captureCanvas();
         if (!canvas) return;
-        const a = document.createElement('a');
-        a.href = canvas.toDataURL('image/png');
-        a.download = `${currentTheme.metadata.name || 'theme'}-preview.png`;
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = `${currentTheme.metadata.name || "theme"}-preview.png`;
         a.click();
-        addToast('Screenshot downloaded!', 'success');
+        addToast("Screenshot downloaded!", "success");
       } catch {
-        addToast('Failed to capture screenshot', 'error');
+        addToast("Failed to capture screenshot", "error");
       }
     }, [captureCanvas, currentTheme.metadata.name, addToast]);
 
@@ -237,21 +237,21 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
           if (!blob) return;
           try {
             await navigator.clipboard.write([
-              new ClipboardItem({ 'image/png': blob }),
+              new ClipboardItem({ "image/png": blob }),
             ]);
-            addToast('Screenshot copied to clipboard!', 'success');
+            addToast("Screenshot copied to clipboard!", "success");
           } catch {
-            addToast('Clipboard write failed — try Download instead', 'error');
+            addToast("Clipboard write failed — try Download instead", "error");
           }
         });
       } catch {
-        addToast('Failed to capture screenshot', 'error');
+        addToast("Failed to capture screenshot", "error");
       }
     }, [captureCanvas, addToast]);
 
     const handleApplyFont = useCallback(async () => {
       if (!fontUrl.trim() || !fontFamilyInput.trim()) {
-        addToast('Please enter both a font URL and family name', 'error');
+        addToast("Please enter both a font URL and family name", "error");
         return;
       }
       setIsLoadingFont(true);
@@ -268,21 +268,21 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
           FONT_STORAGE_KEY,
           JSON.stringify({ url: fontUrl.trim(), family: newFamily }),
         );
-        addToast(`Font "${newFamily}" applied!`, 'success');
+        addToast(`Font "${newFamily}" applied!`, "success");
         setShowFontLoader(false);
       } catch {
-        addToast('Failed to load font. Check the URL and try again.', 'error');
+        addToast("Failed to load font. Check the URL and try again.", "error");
       } finally {
         setIsLoadingFont(false);
       }
     }, [fontUrl, fontFamilyInput, addToast]);
 
     const handleResetFont = useCallback(() => {
-      setCustomFontFamily('');
+      setCustomFontFamily("");
       localStorage.removeItem(FONT_STORAGE_KEY);
-      setFontUrl('');
-      setFontFamilyInput('');
-      addToast('Font reset to default', 'info');
+      setFontUrl("");
+      setFontFamilyInput("");
+      addToast("Font reset to default", "info");
     }, [addToast]);
 
     return (
@@ -290,7 +290,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
         id={id}
         ref={containerRef}
         className={cn(
-          'flex flex-col overflow-hidden rounded-lg border border-gray-700 shadow-2xl',
+          "flex flex-col overflow-hidden rounded-lg border border-gray-700 shadow-2xl",
           className,
         )}
         style={{ backgroundColor: terminalBg }}
@@ -364,7 +364,7 @@ export const TerminalPreview: React.FC<TerminalPreviewProps> = memo(
                   disabled={isLoadingFont}
                   className="rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50"
                 >
-                  {isLoadingFont ? 'Loading…' : 'Apply Font'}
+                  {isLoadingFont ? "Loading…" : "Apply Font"}
                 </button>
                 {customFontFamily && (
                   <button

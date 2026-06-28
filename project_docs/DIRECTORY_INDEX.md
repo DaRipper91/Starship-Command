@@ -1,7 +1,9 @@
 # 📂 INDEX: ~/Projects/Star_Command/project_docs
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📄 FILES
+
 - [ ] **ai-assistant-guide.md** | 24 KB | 2026-04-12
 - [ ] **ARCHITECTURE.md** | 4 KB | 2026-04-12
 - [ ] **checkpoint-guide.md** | 64 KB | 2026-04-12

@@ -1,13 +1,13 @@
-import equal from 'fast-deep-equal';
-import { temporal } from 'zundo';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import equal from "fast-deep-equal";
+import { temporal } from "zundo";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-import MODULE_DEFINITIONS from '../generated/module-definitions.json';
-import { createDebouncedStorage } from '../lib/storage-utils';
-import { TomlParser } from '../lib/toml-parser';
-import { generateId } from '../lib/utils';
-import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
+import MODULE_DEFINITIONS from "../generated/module-definitions.json";
+import { createDebouncedStorage } from "../lib/storage-utils";
+import { TomlParser } from "../lib/toml-parser";
+import { generateId } from "../lib/utils";
+import { StarshipConfig, Theme, ThemeMetadata } from "../types/starship.types";
 
 export interface DynamicThemeSettings {
   enabled: boolean;
@@ -45,16 +45,16 @@ export type ThemeStore = ThemeState & ThemeActions;
 
 const createDefaultDynamicSettings = (): DynamicThemeSettings => ({
   enabled: false,
-  dayThemeId: 'preset-clean',
-  nightThemeId: 'preset-dracula',
-  dayStartTime: '07:00',
-  nightStartTime: '19:00',
+  dayThemeId: "preset-clean",
+  nightThemeId: "preset-dracula",
+  dayStartTime: "07:00",
+  nightStartTime: "19:00",
 });
 
 const createDefaultTheme = (): Theme => ({
   metadata: {
     id: generateId(),
-    name: 'Untitled Theme',
+    name: "Untitled Theme",
     created: new Date(),
     updated: new Date(),
   },
@@ -85,7 +85,7 @@ export const useThemeStore = create<ThemeStore>()(
                 },
                 ...Object.fromEntries(
                   Object.entries(newConfig).filter(
-                    ([key]) => key !== 'palettes',
+                    ([key]) => key !== "palettes",
                   ),
                 ),
               },
@@ -190,7 +190,7 @@ export const useThemeStore = create<ThemeStore>()(
         },
       }),
       {
-        name: 'starship-theme-storage',
+        name: "starship-theme-storage",
         storage: createDebouncedStorage(() => localStorage),
         partialize: (state) => ({
           savedThemes: state.savedThemes,
@@ -208,43 +208,30 @@ export const useThemeStore = create<ThemeStore>()(
   ),
 );
 
+const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
+  id: def.name,
+  name: def.name,
+  isCustom: false,
+}));
+const PREDEFINED_MODULE_NAMES = new Set(predefinedModules.map((m) => m.name));
+
 // Selector for active modules
 export const selectActiveModules = (state: ThemeStore) => {
-  const customModules = Object.keys(state.currentTheme.config.custom || {}).map(
-    (id) => ({
-      id,
-      name: id,
-      isCustom: true,
-    }),
-  );
+  const customConfig = state.currentTheme.config.custom || {};
+  const customModuleNames = Object.keys(customConfig);
+  const existingCustomModuleNames = new Set(customModuleNames);
 
-  const predefinedModules = MODULE_DEFINITIONS.map((def) => ({
-    id: def.name,
-    name: def.name,
-    isCustom: false,
-  }));
-
-  const allModules = [...predefinedModules, ...customModules];
-
-  const format = state.currentTheme.config.format || '';
+  const format = state.currentTheme.config.format || "";
   const matches = format.match(/\$([a-zA-Z0-9_]+)/g) || [];
-  const existingModuleNames = new Set(allModules.map((m) => m.name));
 
-  const isCustomMap = new Map<string, boolean>();
-  for (const m of allModules) {
-    isCustomMap.set(m.name, m.isCustom);
-  }
-
-  const parsedModules = matches
+  return matches
     .map((m, i) => {
       const name = m.substring(1);
       return {
         id: `${name}-${i}`,
         name: name,
-        isCustom: isCustomMap.get(name) || false,
+        isCustom: existingCustomModuleNames.has(name),
       };
     })
-    .filter((item) => existingModuleNames.has(item.name));
-
-  return parsedModules;
+    .filter((item) => PREDEFINED_MODULE_NAMES.has(item.name) || item.isCustom);
 };

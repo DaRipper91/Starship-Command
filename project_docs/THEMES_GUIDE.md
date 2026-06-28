@@ -12,14 +12,16 @@
 ## 💾 Saving Your Work
 
 ### Local Save (Browser)
-*   Click the **Save** button in the top toolbar.
-*   This saves the theme to your browser's local storage.
-*   You can access these later in the **Saved Themes** section of the Gallery.
+
+- Click the **Save** button in the top toolbar.
+- This saves the theme to your browser's local storage.
+- You can access these later in the **Saved Themes** section of the Gallery.
 
 ### Exporting to TOML
-*   Click the **Export/Import** icon.
-*   Copy the generated TOML code.
-*   To apply it to your actual shell, paste it into `~/.config/starship.toml`.
+
+- Click the **Export/Import** icon.
+- Copy the generated TOML code.
+- To apply it to your actual shell, paste it into `~/.config/starship.toml`.
 
 ## 🌐 Sharing with the Community
 
@@ -27,7 +29,7 @@ Phase 6 introduces the **Community Gallery**, where you can publish your designs
 
 1.  **Authenticate:** Click the **Profile/Auth** icon and Log In or Register.
 2.  **Upload:** Once logged in, click **Publish Theme** (Share icon).
-3.  **Details:** Add a name, description, and category. 
+3.  **Details:** Add a name, description, and category.
 4.  **Publish:** Your theme will now appear in the **Community Gallery** for all users to download and enjoy!
 
 ## 📥 Using Community Themes
@@ -40,6 +42,7 @@ Phase 6 introduces the **Community Gallery**, where you can publish your designs
 ## 🚀 Advanced: Remote Sync (SSH)
 
 If you are using Starship Command on your phone but want to update the prompt on your laptop:
+
 1.  Open the **Sync Settings**.
 2.  Enter your laptop's **SSH IP, Username, and Password**.
 3.  Click **Push to Remote**.

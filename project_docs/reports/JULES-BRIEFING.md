@@ -120,14 +120,14 @@ name: Sync Repo Map
 
 on:
   schedule:
-    - cron: '0 */2 * * *' # Every 2 hours: midnight, 2am, 4am... 10pm UTC
+    - cron: "0 */2 * * *" # Every 2 hours: midnight, 2am, 4am... 10pm UTC
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'sync_repo_map.py'
-      - 'sync_changelogs.py'
-      - '.github/workflows/sync.yml'
+      - "sync_repo_map.py"
+      - "sync_changelogs.py"
+      - ".github/workflows/sync.yml"
 
 permissions:
   contents: write
@@ -152,7 +152,7 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Authenticate gh CLI
         run: |
@@ -615,8 +615,8 @@ on:
       - main
       - master
     paths-ignore:
-      - 'CHANGELOG.md'
-      - '.github/**'
+      - "CHANGELOG.md"
+      - ".github/**"
   workflow_dispatch:
 
 permissions:
@@ -642,7 +642,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: pip install google-generativeai --quiet

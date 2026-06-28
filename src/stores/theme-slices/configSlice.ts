@@ -1,14 +1,18 @@
-import equal from 'fast-deep-equal';
-import { StateCreator } from 'zustand';
-import { TomlParser } from '../../lib/toml-parser';
-import { generateId } from '../../lib/utils';
-import { StarshipConfig, Theme, ThemeMetadata } from '../../types/starship.types';
-import { ThemeStore, ConfigSlice } from '../../types/theme-store.types';
+import equal from "fast-deep-equal";
+import { StateCreator } from "zustand";
+import { TomlParser } from "../../lib/toml-parser";
+import { generateId } from "../../lib/utils";
+import {
+  StarshipConfig,
+  Theme,
+  ThemeMetadata,
+} from "../../types/starship.types";
+import { ThemeStore, ConfigSlice } from "../../types/theme-store.types";
 
 export const createDefaultTheme = (): Theme => ({
   metadata: {
     id: generateId(),
-    name: 'Untitled Theme',
+    name: "Untitled Theme",
     created: new Date(),
     updated: new Date(),
   },
@@ -17,7 +21,7 @@ export const createDefaultTheme = (): Theme => ({
 
 // Helper for deep cloning
 export const deepClone = <T>(obj: T): T => {
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || typeof obj !== "object") {
     return obj;
   }
 
@@ -40,7 +44,7 @@ export const deepClone = <T>(obj: T): T => {
 
 export const createConfigSlice: StateCreator<
   ThemeStore,
-  [['temporal', unknown], ['zustand/persist', unknown]],
+  [["temporal", unknown], ["zustand/persist", unknown]],
   [],
   ConfigSlice
 > = (set, get) => ({
@@ -61,7 +65,7 @@ export const createConfigSlice: StateCreator<
             },
           },
           ...Object.fromEntries(
-            Object.entries(newConfig).filter(([key]) => key !== 'palettes'),
+            Object.entries(newConfig).filter(([key]) => key !== "palettes"),
           ),
         },
         metadata: {
@@ -139,9 +143,9 @@ export const createConfigSlice: StateCreator<
             ...state.currentTheme.config.custom,
             [name]: {
               command: 'echo "Hello from custom module"',
-              when: 'true',
-              style: 'bold green',
-              format: '[()]()',
+              when: "true",
+              style: "bold green",
+              format: "[()]()",
             },
           },
         },

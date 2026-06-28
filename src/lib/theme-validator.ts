@@ -1,11 +1,11 @@
-import { StarshipConfig, Theme } from '../types/starship.types';
-import { ColorUtils } from './color-utils';
+import { StarshipConfig, Theme } from "../types/starship.types";
+import { ColorUtils } from "./color-utils";
 
 const HEX_COLOR_REGEX = /#[0-9a-fA-F]{6}/;
 
 export interface ValidationIssue {
-  type: 'config' | 'visual' | 'performance' | 'compatibility';
-  severity: 'error' | 'warning';
+  type: "config" | "visual" | "performance" | "compatibility";
+  severity: "error" | "warning";
   message: string;
   fix?: string;
   module?: string;
@@ -29,10 +29,10 @@ export class ThemeValidator {
     // Add metadata checks
     if (!theme.metadata.name) {
       result.warnings.push({
-        type: 'config',
-        severity: 'warning',
-        message: 'Theme has no name',
-        fix: 'Add a name in the theme settings',
+        type: "config",
+        severity: "warning",
+        message: "Theme has no name",
+        fix: "Add a name in the theme settings",
       });
     }
 
@@ -52,9 +52,9 @@ export class ThemeValidator {
     // 1. Basic Config Checks
     if (!config) {
       errors.push({
-        type: 'config',
-        severity: 'error',
-        message: 'Configuration is empty or invalid',
+        type: "config",
+        severity: "error",
+        message: "Configuration is empty or invalid",
       });
       return {
         valid: false,
@@ -73,29 +73,29 @@ export class ThemeValidator {
     const renderTime = this.estimateRenderTime(config);
     if (renderTime > 200) {
       warnings.push({
-        type: 'performance',
-        severity: 'warning',
+        type: "performance",
+        severity: "warning",
         message: `Estimated render time is high (${renderTime}ms)`,
-        fix: 'Disable expensive modules like git_status or kubernetes',
+        fix: "Disable expensive modules like git_status or kubernetes",
       });
     }
 
     // 4. Compatibility Checks
     // Example: Check for Nerd Fonts usage if likely needed
-    const usesSymbols = JSON.stringify(config).includes('symbol');
+    const usesSymbols = JSON.stringify(config).includes("symbol");
     if (usesSymbols) {
       suggestions.push(
-        'Make sure you have a Nerd Font installed to see all symbols correctly',
+        "Make sure you have a Nerd Font installed to see all symbols correctly",
       );
     }
 
     // 5. Structure Checks
-    if (config.format && !config.format.includes('$character')) {
+    if (config.format && !config.format.includes("$character")) {
       warnings.push({
-        type: 'config',
-        severity: 'warning',
-        message: 'Format string is missing the character module',
-        fix: 'Add $character to the end of your format string',
+        type: "config",
+        severity: "warning",
+        message: "Format string is missing the character module",
+        fix: "Add $character to the end of your format string",
       });
     }
 
@@ -116,13 +116,13 @@ export class ThemeValidator {
 
     // Check specific modules
     if (config.directory?.style) {
-      const issue = this.checkStyle(config.directory.style, 'directory module');
+      const issue = this.checkStyle(config.directory.style, "directory module");
       if (issue) issues.push(issue);
     }
     if (config.git_branch?.style) {
       const issue = this.checkStyle(
         config.git_branch.style,
-        'git_branch module',
+        "git_branch module",
       );
       if (issue) issues.push(issue);
     }
@@ -137,7 +137,7 @@ export class ThemeValidator {
   ): ValidationIssue | undefined {
     // This is a simplified check. A real one would parse all styles.
     // We assume a dark background for now as that's standard for terminals.
-    const defaultBg = '#000000';
+    const defaultBg = "#000000";
 
     if (!style) return;
     // Extract hex colors
@@ -147,10 +147,10 @@ export class ThemeValidator {
       const contrast = ColorUtils.checkContrast(fg, defaultBg);
       if (!contrast.AA) {
         return {
-          type: 'visual',
-          severity: 'warning',
+          type: "visual",
+          severity: "warning",
           message: `Low contrast color ${fg} in ${source}`,
-          fix: 'Choose a lighter color for better readability on dark backgrounds',
+          fix: "Choose a lighter color for better readability on dark backgrounds",
         };
       }
     }

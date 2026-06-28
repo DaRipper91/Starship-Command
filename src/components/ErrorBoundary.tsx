@@ -1,9 +1,9 @@
-import { AlertTriangle } from 'lucide-react';
-import React from 'react';
+import { AlertTriangle } from "lucide-react";
+import React from "react";
 import {
   ErrorBoundary as ReactErrorBoundary,
   FallbackProps,
-} from 'react-error-boundary';
+} from "react-error-boundary";
 
 function Fallback({ error, resetErrorBoundary }: FallbackProps) {
   return (

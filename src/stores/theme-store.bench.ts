@@ -1,69 +1,69 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { bench, describe } from 'vitest';
+import { bench, describe } from "vitest";
 
-import { Theme } from '../types/starship.types';
+import { Theme } from "../types/starship.types";
 
 // The object we will be testing
 const testTheme: Theme = {
   metadata: {
-    id: 'test-123',
-    name: 'Complex Benchmark Theme',
-    created: new Date('2023-01-01T12:00:00Z'),
-    updated: new Date('2023-01-02T12:00:00Z'),
+    id: "test-123",
+    name: "Complex Benchmark Theme",
+    created: new Date("2023-01-01T12:00:00Z"),
+    updated: new Date("2023-01-02T12:00:00Z"),
   },
   config: {
-    format: '$username$hostname$directory$git_branch$git_status$character',
+    format: "$username$hostname$directory$git_branch$git_status$character",
     add_newline: true,
     character: {
-      success_symbol: '[❯](bold green)',
-      error_symbol: '[✗](bold red)',
-      vimcmd_symbol: '[❮](bold green)',
+      success_symbol: "[❯](bold green)",
+      error_symbol: "[✗](bold red)",
+      vimcmd_symbol: "[❮](bold green)",
     },
     directory: {
       truncation_length: 3,
       truncate_to_repo: true,
-      read_only: ' 🔒',
+      read_only: " 🔒",
     },
     git_branch: {
-      symbol: '🌿 ',
+      symbol: "🌿 ",
       truncation_length: 20,
-      ignore_branches: ['master', 'main'],
+      ignore_branches: ["master", "main"],
     },
     git_status: {
-      conflicted: '🏳',
-      ahead: '⇡${count}',
-      behind: '⇣${count}',
-      diverged: '⇕⇡${ahead_count}⇣${behind_count}',
-      untracked: '🤷',
-      stashed: '📦',
-      modified: '📝',
-      staged: '[++\\($count\\)](green)',
-      renamed: '📛',
-      deleted: '🗑',
+      conflicted: "🏳",
+      ahead: "⇡${count}",
+      behind: "⇣${count}",
+      diverged: "⇕⇡${ahead_count}⇣${behind_count}",
+      untracked: "🤷",
+      stashed: "📦",
+      modified: "📝",
+      staged: "[++\\($count\\)](green)",
+      renamed: "📛",
+      deleted: "🗑",
     },
     kubernetes: {
       disabled: false,
-      context_alias: 'k8s',
+      context_alias: "k8s",
     },
     custom: {
       my_module: {
-        command: 'echo test',
-        when: 'true',
-        format: '[$output]($style)',
-        style: 'bold blue',
+        command: "echo test",
+        when: "true",
+        format: "[$output]($style)",
+        style: "bold blue",
       },
       another_module: {
-        command: 'date',
-        when: 'true',
-        format: '[$output]($style)',
-        style: 'bold red',
+        command: "date",
+        when: "true",
+        format: "[$output]($style)",
+        style: "bold red",
       },
     },
     palettes: {
       global: {
-        primary: '#ff0000',
-        secondary: '#00ff00',
-        accent: '#0000ff',
+        primary: "#ff0000",
+        secondary: "#00ff00",
+        accent: "#0000ff",
       },
     },
   },
@@ -81,7 +81,7 @@ const nativeStructuredClone = <T>(obj: T): T => {
 
 // Future optimized fallback
 const optimizedDeepClone = <T>(obj: T): T => {
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || typeof obj !== "object") {
     return obj;
   }
 
@@ -107,17 +107,17 @@ const optimizedDeepClone = <T>(obj: T): T => {
   return objCopy;
 };
 
-describe('ThemeStore deepClone performance', () => {
-  bench('oldDeepClone (JSON.parse/stringify)', () => {
+describe("ThemeStore deepClone performance", () => {
+  bench("oldDeepClone (JSON.parse/stringify)", () => {
     oldDeepClone(testTheme);
   });
 
-  bench('optimizedDeepClone (custom recursive)', () => {
+  bench("optimizedDeepClone (custom recursive)", () => {
     optimizedDeepClone(testTheme);
   });
 
-  if (typeof structuredClone === 'function') {
-    bench('native structuredClone', () => {
+  if (typeof structuredClone === "function") {
+    bench("native structuredClone", () => {
       nativeStructuredClone(testTheme);
     });
   }

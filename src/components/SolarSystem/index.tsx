@@ -1,10 +1,10 @@
-import { Download, Star, X } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { Download, Star, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
-import { useConfirmation } from '../../contexts/ConfirmationContext';
-import { useToast } from '../../contexts/ToastContext';
-import { useThemeStore } from '../../stores/theme-store';
-import { Theme } from '../../types/starship.types';
+import { useConfirmation } from "../../contexts/ConfirmationContext";
+import { useToast } from "../../contexts/ToastContext";
+import { useThemeStore } from "../../stores/theme-store";
+import { Theme } from "../../types/starship.types";
 
 interface CommunityTheme {
   id: number;
@@ -31,7 +31,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
   const [themes, setThemes] = useState<CommunityTheme[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,15 +41,17 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories', { credentials: 'include' });
+      const response = await fetch("/api/categories", {
+        credentials: "include",
+      });
       if (!response.ok) {
-        throw new Error('Failed to fetch categories.');
+        throw new Error("Failed to fetch categories.");
       }
       const data = await response.json();
       setCategories(data);
     } catch (err) {
-      console.error('Error fetching categories:', err);
-      setError('Failed to load categories.');
+      console.error("Error fetching categories:", err);
+      setError("Failed to load categories.");
     }
   };
 
@@ -59,13 +61,15 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
     try {
       const params = new URLSearchParams();
       if (selectedCategory) {
-        params.append('category', selectedCategory);
+        params.append("category", selectedCategory);
       }
       // No direct search endpoint for now, client-side filter for simplicity
 
-      const response = await fetch(`/api/themes?${params.toString()}`, { credentials: 'include' });
+      const response = await fetch(`/api/themes?${params.toString()}`, {
+        credentials: "include",
+      });
       if (!response.ok) {
-        throw new Error('Failed to fetch themes.');
+        throw new Error("Failed to fetch themes.");
       }
       let data: CommunityTheme[] = await response.json();
 
@@ -82,8 +86,8 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
 
       setThemes(data);
     } catch (err) {
-      console.error('Error fetching themes:', err);
-      setError('Failed to load themes.');
+      console.error("Error fetching themes:", err);
+      setError("Failed to load themes.");
     } finally {
       setIsLoading(false);
     }
@@ -97,14 +101,14 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
     const confirmed = await confirm({
       title: `Download & Apply "${theme.name}"?`,
       message:
-        'This will replace your current theme. Ensure you have saved any unsaved changes.',
-      confirmText: 'Apply Theme',
+        "This will replace your current theme. Ensure you have saved any unsaved changes.",
+      confirmText: "Apply Theme",
     });
     if (confirmed) {
       try {
         // The theme object from the API already contains config_toml
         // We need to parse it back into the StarshipConfig object and load it.
-        const newConfig = JSON.parse(theme.config_toml) as Theme['config']; // Assuming it's JSON stringified TOML
+        const newConfig = JSON.parse(theme.config_toml) as Theme["config"]; // Assuming it's JSON stringified TOML
         const downloadedTheme: Theme = {
           metadata: {
             id: theme.id.toString(),
@@ -119,11 +123,11 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
           config: newConfig,
         };
         loadTheme(downloadedTheme);
-        addToast(`Theme "${theme.name}" applied!`, 'success');
+        addToast(`Theme "${theme.name}" applied!`, "success");
         onClose();
       } catch (err: unknown) {
-        console.error('Error applying theme:', err);
-        addToast('Failed to apply theme.', 'error');
+        console.error("Error applying theme:", err);
+        addToast("Failed to apply theme.", "error");
       }
     }
   };
@@ -153,7 +157,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
             <li>
               <button
                 onClick={() => setSelectedCategory(null)}
-                className={`w-full rounded px-2 py-1 text-left text-sm transition-colors ${!selectedCategory ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                className={`w-full rounded px-2 py-1 text-left text-sm transition-colors ${!selectedCategory ? "bg-blue-600 text-white" : "text-gray-300 hover:bg-gray-700"}`}
                 aria-label="Show all themes"
               >
                 All Themes
@@ -163,7 +167,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
               <li key={cat}>
                 <button
                   onClick={() => setSelectedCategory(cat)}
-                  className={`w-full rounded px-2 py-1 text-left text-sm transition-colors ${selectedCategory === cat ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                  className={`w-full rounded px-2 py-1 text-left text-sm transition-colors ${selectedCategory === cat ? "bg-blue-600 text-white" : "text-gray-300 hover:bg-gray-700"}`}
                   aria-label={`Filter by category: ${cat}`}
                 >
                   {cat}
@@ -215,11 +219,11 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
                       {theme.name}
                     </h3>
                     <p className="mt-1 line-clamp-2 text-xs text-gray-500">
-                      {theme.description || 'No description provided.'}
+                      {theme.description || "No description provided."}
                     </p>
                     <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
                       <span className="flex items-center gap-1">
-                        <Star size={12} className="text-yellow-500" />{' '}
+                        <Star size={12} className="text-yellow-500" />{" "}
                         {theme.downloads}
                       </span>
                       <span>By {theme.author_username}</span>
@@ -228,7 +232,7 @@ export function SolarSystem({ onClose }: SolarSystemProps) {
                       onClick={() => handleDownloadAndApply(theme)}
                       className="mt-4 w-full rounded bg-blue-600 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500"
                     >
-                      <Download size={14} className="mr-2 inline-block" />{' '}
+                      <Download size={14} className="mr-2 inline-block" />{" "}
                       Download & Apply
                     </button>
                   </div>

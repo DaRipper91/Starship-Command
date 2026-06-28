@@ -1,7 +1,7 @@
-import { FileTerminal, Search, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { FileTerminal, Search, X } from "lucide-react";
+import React, { useState } from "react";
 
-import { cn } from '../lib/utils';
+import { cn } from "../lib/utils";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export function CommandPalette({
   onClose,
   actions,
 }: CommandPaletteProps) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   if (!isOpen) return null;
 
@@ -40,8 +40,8 @@ export function CommandPalette({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Escape') onClose();
-              if (e.key === 'Enter' && filteredActions.length > 0) {
+              if (e.key === "Escape") onClose();
+              if (e.key === "Enter" && filteredActions.length > 0) {
                 filteredActions[0].perform();
                 onClose();
               }
@@ -70,8 +70,8 @@ export function CommandPalette({
                   onClose();
                 }}
                 className={cn(
-                  'flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors hover:bg-gray-800 hover:text-white',
-                  index === 0 && search && 'bg-gray-800 text-white', // Auto-select first result if searching
+                  "flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors hover:bg-gray-800 hover:text-white",
+                  index === 0 && search && "bg-gray-800 text-white", // Auto-select first result if searching
                 )}
               >
                 <div className="text-gray-400">

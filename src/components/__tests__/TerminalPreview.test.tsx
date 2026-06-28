@@ -1,11 +1,11 @@
-import { render } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { render } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
-import { ToastProvider } from '../../contexts/ToastContext';
-import { TerminalPreview } from '../TerminalPreview';
+import { ToastProvider } from "../../contexts/ToastContext";
+import { TerminalPreview } from "../TerminalPreview";
 
 // Mock xterm globals
-vi.mock('@xterm/xterm', () => {
+vi.mock("@xterm/xterm", () => {
   return {
     Terminal: class {
       options: Record<string, unknown> = {};
@@ -18,7 +18,7 @@ vi.mock('@xterm/xterm', () => {
   };
 });
 
-vi.mock('@xterm/addon-fit', () => {
+vi.mock("@xterm/addon-fit", () => {
   return {
     FitAddon: class {
       fit() {}
@@ -37,8 +37,8 @@ class MockResizeObserver {
   globalThis as unknown as { ResizeObserver: typeof MockResizeObserver }
 ).ResizeObserver = MockResizeObserver;
 
-describe('TerminalPreview', () => {
-  it('renders correctly', () => {
+describe("TerminalPreview", () => {
+  it("renders correctly", () => {
     const { container } = render(
       <ToastProvider>
         <TerminalPreview />

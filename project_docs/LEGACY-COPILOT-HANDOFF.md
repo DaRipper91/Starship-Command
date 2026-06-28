@@ -42,7 +42,7 @@ This file is the shared context document for AI assistants working on **Starship
 
 ```typescript
 if (
-  ['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement).tagName) &&
+  ["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName) &&
   !e.metaKey &&
   !e.ctrlKey
 ) {
@@ -57,7 +57,7 @@ This allows `Cmd+Z` inside a text input to trigger **theme-level undo** instead 
 ```typescript
 const target = e.target as HTMLElement;
 const isEditable =
-  ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
+  ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) ||
   target.isContentEditable;
 if (isEditable) return; // suppress ALL theme shortcuts; browser handles Cmd+Z natively
 ```
@@ -75,7 +75,7 @@ Add a `<input type="search">` above the "Active Modules" heading. Filter both ac
 The module definitions come from `src/generated/module-definitions.json` (schema: `{ name, title, description, properties }`). Use `title` as the display name and `description` for search text.
 
 ```typescript
-const [query, setQuery] = useState('');
+const [query, setQuery] = useState("");
 const filtered = useMemo(
   () =>
     inactiveModules.filter((m) => {
@@ -97,20 +97,20 @@ const filtered = useMemo(
 `html2canvas` is already in `package.json`. Add **Copy** and **Download** buttons in the MacOS-style header bar of the terminal component.
 
 ```typescript
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 
 const canvas = await html2canvas(containerRef.current!, {
-  backgroundColor: '#1e1e1e',
+  backgroundColor: "#1e1e1e",
   scale: 2,
 });
 // Download:
-const a = document.createElement('a');
+const a = document.createElement("a");
 a.href = canvas.toDataURL();
-a.download = 'theme-preview.png';
+a.download = "theme-preview.png";
 a.click();
 // Copy:
 canvas.toBlob((blob) =>
-  navigator.clipboard.write([new ClipboardItem({ 'image/png': blob! })]),
+  navigator.clipboard.write([new ClipboardItem({ "image/png": blob! })]),
 );
 ```
 
@@ -238,18 +238,18 @@ npm run test:run     # Vitest single run (CI)
 ### Toast Usage Pattern
 
 ```typescript
-import { useToast } from '@/contexts/ToastContext';
+import { useToast } from "@/contexts/ToastContext";
 const { addToast } = useToast();
-addToast({ type: 'success', message: 'Done!' });
-addToast({ type: 'error', message: 'Something went wrong' });
+addToast({ type: "success", message: "Done!" });
+addToast({ type: "error", message: "Something went wrong" });
 ```
 
 ### UpdateConfig Pattern
 
 ```typescript
-import { useThemeStore } from '@/stores/theme-store';
+import { useThemeStore } from "@/stores/theme-store";
 const { updateConfig } = useThemeStore();
-updateConfig({ character: { symbol: '❯', style: 'bold green' } }); // deep merges
+updateConfig({ character: { symbol: "❯", style: "bold green" } }); // deep merges
 ```
 
 ---

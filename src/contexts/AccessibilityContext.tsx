@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AccessibilityContextType {
   highContrast: boolean;
@@ -17,30 +17,30 @@ export function AccessibilityProvider({
   children: React.ReactNode;
 }) {
   const [highContrast, setHighContrast] = useState(
-    () => localStorage.getItem('a11y_high_contrast') === 'true',
+    () => localStorage.getItem("a11y_high_contrast") === "true",
   );
 
   const [reducedMotion, setReducedMotion] = useState(
     () =>
-      localStorage.getItem('a11y_reduced_motion') === 'true' ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      localStorage.getItem("a11y_reduced_motion") === "true" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
   useEffect(() => {
-    localStorage.setItem('a11y_high_contrast', highContrast.toString());
+    localStorage.setItem("a11y_high_contrast", highContrast.toString());
     if (highContrast) {
-      document.documentElement.classList.add('high-contrast');
+      document.documentElement.classList.add("high-contrast");
     } else {
-      document.documentElement.classList.remove('high-contrast');
+      document.documentElement.classList.remove("high-contrast");
     }
   }, [highContrast]);
 
   useEffect(() => {
-    localStorage.setItem('a11y_reduced_motion', reducedMotion.toString());
+    localStorage.setItem("a11y_reduced_motion", reducedMotion.toString());
     if (reducedMotion) {
-      document.documentElement.classList.add('reduced-motion');
+      document.documentElement.classList.add("reduced-motion");
     } else {
-      document.documentElement.classList.remove('reduced-motion');
+      document.documentElement.classList.remove("reduced-motion");
     }
   }, [reducedMotion]);
 
@@ -58,7 +58,7 @@ export function useAccessibility() {
   const context = useContext(AccessibilityContext);
   if (!context) {
     throw new Error(
-      'useAccessibility must be used within AccessibilityProvider',
+      "useAccessibility must be used within AccessibilityProvider",
     );
   }
   return context;

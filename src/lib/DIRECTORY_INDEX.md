@@ -1,7 +1,9 @@
 # 📂 INDEX: ~/Projects/Star_Command/src/lib
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📄 FILES
+
 - [ ] **api.test.ts** | 8 KB | 2026-04-12
 - [ ] **api.ts** | 4 KB | 2026-04-12
 - [ ] **color-utils.test.ts** | 8 KB | 2026-04-12

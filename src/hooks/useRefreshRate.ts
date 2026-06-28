@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import { useUIStore } from '../stores/ui-store';
+import { useUIStore } from "../stores/ui-store";
 
 /**
  * Hook to auto-detect the hardware refresh rate (Hz) using requestAnimationFrame.

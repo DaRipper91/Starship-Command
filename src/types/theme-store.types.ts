@@ -1,4 +1,4 @@
-import { StarshipConfig, Theme, ThemeMetadata } from './starship.types';
+import { StarshipConfig, Theme, ThemeMetadata } from "./starship.types";
 
 export interface DynamicThemeSettings {
   enabled: boolean;
@@ -17,7 +17,7 @@ export interface ThemeStore extends ConfigSlice, UISlice {
 export interface ConfigSlice {
   currentTheme: Theme;
   savedThemes: Theme[];
-  
+
   updateConfig: (config: Partial<StarshipConfig>) => void;
   updateMetadata: (metadata: Partial<ThemeMetadata>) => void;
   loadTheme: (theme: Theme) => void;
@@ -26,7 +26,7 @@ export interface ConfigSlice {
   removeCustomModule: (name: string) => void;
   deleteTheme: (id: string) => void;
   resetTheme: () => void;
-  
+
   exportToml: () => string;
   importToml: (tomlString: string) => void;
 }

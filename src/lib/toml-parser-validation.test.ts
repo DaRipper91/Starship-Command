@@ -1,15 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
-import { StarshipConfig } from '../types/starship.types';
-import { TomlParser } from './toml-parser';
+import { StarshipConfig } from "../types/starship.types";
+import { TomlParser } from "./toml-parser";
 
-describe('TomlParser Validation', () => {
-  it('should validate a valid config', () => {
+describe("TomlParser Validation", () => {
+  it("should validate a valid config", () => {
     const config: StarshipConfig = {
-      format: '$all',
+      format: "$all",
       add_newline: true,
       character: {
-        success_symbol: '[➜](bold green)',
+        success_symbol: "[➜](bold green)",
       },
     };
     const result = TomlParser.validate(config);
@@ -18,19 +18,19 @@ describe('TomlParser Validation', () => {
     expect(result.warnings).toHaveLength(0);
   });
 
-  it('should detect invalid types', () => {
+  it("should detect invalid types", () => {
     const config = {
       format: 123, // should be string
     } as unknown as StarshipConfig;
     const result = TomlParser.validate(config);
     expect(result.valid).toBe(false);
-    expect(result.errors).toContain('Format must be a string');
+    expect(result.errors).toContain("Format must be a string");
   });
 
-  it('should detect unknown modules as warnings', () => {
+  it("should detect unknown modules as warnings", () => {
     const config = {
       unknown_module: {
-        some_prop: 'val',
+        some_prop: "val",
       },
     } as unknown as StarshipConfig;
     const result = TomlParser.validate(config);
@@ -41,9 +41,9 @@ describe('TomlParser Validation', () => {
     );
   });
 
-  it('should validate module structure', () => {
+  it("should validate module structure", () => {
     const config = {
-      git_branch: 'invalid', // should be object
+      git_branch: "invalid", // should be object
     } as unknown as StarshipConfig;
     const result = TomlParser.validate(config);
     expect(result.valid).toBe(false);
@@ -52,11 +52,11 @@ describe('TomlParser Validation', () => {
     );
   });
 
-  it('should allow custom modules in custom block', () => {
+  it("should allow custom modules in custom block", () => {
     const config: StarshipConfig = {
       custom: {
         my_module: {
-          command: 'echo hello',
+          command: "echo hello",
         },
       },
     };
