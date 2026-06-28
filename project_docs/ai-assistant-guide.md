@@ -61,21 +61,21 @@ VM, runs tests, and comes back with a pull request. You don't have to watch it.
 
 ### What DaRipper and Gemini Can Do
 
-| Capability                   | Details                                          |
-| ---------------------------- | ------------------------------------------------ |
-| **Build features**           | Full component implementation from a description |
-| **Fix bugs**                 | Root-cause analysis across multiple files        |
-| **Write tests**              | Unit, integration, component tests               |
-| **Refactor code**            | Safely restructure while keeping functionality   |
-| **Update dependencies**      | With verification via npm audit + build          |
-| **Create pull requests**     | Detailed PRs with before/after description       |
-| **Run shell commands**       | npm install, npm test, npm run build             |
-| **Read the whole codebase**  | Not just one file — entire project context       |
-| **Search the web**           | Can look up docs, Starship changelogs, etc.      |
-| **Generate audio summaries** | MP3 changelogs of recent commits                 |
-| **Scheduled automation**     | Runs daily/weekly via GitHub Actions             |
-| **Issue automation**         | Add 'jules' label → DaRipper and Gemini implements it          |
-| **CLI control**              | `jules remote new`, `jules remote list`          |
+| Capability                   | Details                                               |
+| ---------------------------- | ----------------------------------------------------- |
+| **Build features**           | Full component implementation from a description      |
+| **Fix bugs**                 | Root-cause analysis across multiple files             |
+| **Write tests**              | Unit, integration, component tests                    |
+| **Refactor code**            | Safely restructure while keeping functionality        |
+| **Update dependencies**      | With verification via npm audit + build               |
+| **Create pull requests**     | Detailed PRs with before/after description            |
+| **Run shell commands**       | npm install, npm test, npm run build                  |
+| **Read the whole codebase**  | Not just one file — entire project context            |
+| **Search the web**           | Can look up docs, Starship changelogs, etc.           |
+| **Generate audio summaries** | MP3 changelogs of recent commits                      |
+| **Scheduled automation**     | Runs daily/weekly via GitHub Actions                  |
+| **Issue automation**         | Add 'jules' label → DaRipper and Gemini implements it |
+| **CLI control**              | `jules remote new`, `jules remote list`               |
 
 ### How to Send Tasks to DaRipper and Gemini
 
@@ -566,20 +566,24 @@ No secret needed for Copilot — it uses your GitHub Copilot subscription
 For high-speed automation in Termux, use the following Fish functions.
 
 ### `scout [task]`
+
 Runs the local Gemini CLI research phase. It analyzes the `AGENTS.md` and project context to generate a high-density `JULES-BRIEFING.md` file.
 
 ### `hammer`
+
 The execution command. It invokes the `starship-jules.sh` script, which reads the `JULES-BRIEFING.md` and submits it to the Jules cloud agent.
 
 ### `sj [task]` (Scout + Hammer)
+
 Combines the two into a single operation: `sj "Refactor the theme store"`.
 
 ### `jl` and `jp [id]`
+
 - **`jl`**: List active Jules sessions.
 - **`jp [id]`**: Pull and apply a patch from a session ID.
 
 ### `g2j [instruction]`
+
 Pipes current `stdin` (file/diff) through Gemini for a quick-fix instruction, then submits it directly to Jules.
 
 ---
-

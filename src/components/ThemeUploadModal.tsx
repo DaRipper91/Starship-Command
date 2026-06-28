@@ -1,8 +1,8 @@
-import { X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
-import { useToast } from '../contexts/ToastContext';
-import { useThemeStore } from '../stores/theme-store';
+import { useToast } from "../contexts/ToastContext";
+import { useThemeStore } from "../stores/theme-store";
 
 interface ThemeUploadModalProps {
   onClose: () => void;
@@ -13,25 +13,25 @@ export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
   const { currentTheme, exportToml } = useThemeStore();
   const { addToast } = useToast();
 
-  const [name, setName] = useState(currentTheme.metadata.name || '');
+  const [name, setName] = useState(currentTheme.metadata.name || "");
   const [description, setDescription] = useState(
-    currentTheme.metadata.description || '',
+    currentTheme.metadata.description || "",
   );
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
+        const response = await fetch("/api/categories");
         if (response.ok) {
           const data = await response.json();
           setCategories(data);
           if (data.length > 0) setCategory(data[0]);
         }
       } catch (err) {
-        console.error('Failed to load categories', err);
+        console.error("Failed to load categories", err);
       }
     };
     fetchCategories();
@@ -52,10 +52,10 @@ export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
         preview_image: currentTheme.metadata.previewImage || null,
       };
 
-      const response = await fetch('/api/themes', {
-        method: 'POST',
+      const response = await fetch("/api/themes", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -63,13 +63,13 @@ export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to upload theme');
+        throw new Error(data.error || "Failed to upload theme");
       }
 
-      addToast('Theme uploaded successfully to Community Gallery!', 'success');
+      addToast("Theme uploaded successfully to Community Gallery!", "success");
       onClose();
     } catch (err: unknown) {
-      addToast(err instanceof Error ? err.message : 'Upload failed', 'error');
+      addToast(err instanceof Error ? err.message : "Upload failed", "error");
     } finally {
       setLoading(false);
     }
@@ -136,7 +136,7 @@ export function ThemeUploadModal({ onClose, userId }: ThemeUploadModalProps) {
           disabled={loading}
           className="mt-4 w-full rounded bg-indigo-600 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-50"
         >
-          {loading ? 'Uploading...' : 'Publish Theme'}
+          {loading ? "Uploading..." : "Publish Theme"}
         </button>
       </form>
     </div>

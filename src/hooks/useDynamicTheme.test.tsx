@@ -1,11 +1,11 @@
-import { renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { TomlParser } from '../lib/toml-parser';
-import { useThemeStore } from '../stores/theme-store';
-import { useDynamicTheme } from './useDynamicTheme';
+import { TomlParser } from "../lib/toml-parser";
+import { useThemeStore } from "../stores/theme-store";
+import { useDynamicTheme } from "./useDynamicTheme";
 
-describe('useDynamicTheme', () => {
+describe("useDynamicTheme", () => {
   const mockDate = new Date(2024, 0, 1, 12, 0, 0); // Noon local time
 
   beforeEach(() => {
@@ -16,8 +16,8 @@ describe('useDynamicTheme', () => {
     useThemeStore.setState({
       currentTheme: {
         metadata: {
-          id: 'test-id',
-          name: 'Test Theme',
+          id: "test-id",
+          name: "Test Theme",
           created: mockDate,
           updated: mockDate,
         },
@@ -32,7 +32,7 @@ describe('useDynamicTheme', () => {
     vi.restoreAllMocks();
   });
 
-  it('should not load theme when disabled', () => {
+  it("should not load theme when disabled", () => {
     const loadThemeSpy = vi.fn();
 
     // Patch the store's loadTheme function
@@ -43,10 +43,10 @@ describe('useDynamicTheme', () => {
     useThemeStore.setState({
       dynamicSettings: {
         enabled: false,
-        dayThemeId: 'preset-clean',
-        nightThemeId: 'preset-dracula',
-        dayStartTime: '07:00',
-        nightStartTime: '19:00',
+        dayThemeId: "preset-clean",
+        nightThemeId: "preset-dracula",
+        dayStartTime: "07:00",
+        nightStartTime: "19:00",
       },
     });
 
@@ -59,7 +59,7 @@ describe('useDynamicTheme', () => {
     useThemeStore.setState({ loadTheme: originalLoadTheme });
   });
 
-  it('should load day theme when time is within day start and night start times', () => {
+  it("should load day theme when time is within day start and night start times", () => {
     const loadThemeSpy = vi.fn();
 
     // Patch the store's loadTheme function
@@ -70,16 +70,16 @@ describe('useDynamicTheme', () => {
     useThemeStore.setState({
       dynamicSettings: {
         enabled: true,
-        dayThemeId: 'preset-clean',
-        nightThemeId: 'preset-dracula',
-        dayStartTime: '07:00',
-        nightStartTime: '19:00',
+        dayThemeId: "preset-clean",
+        nightThemeId: "preset-dracula",
+        dayStartTime: "07:00",
+        nightStartTime: "19:00",
       },
       currentTheme: {
         ...useThemeStore.getState().currentTheme,
         metadata: {
           ...useThemeStore.getState().currentTheme.metadata,
-          id: 'test-id', // Not day theme
+          id: "test-id", // Not day theme
         },
       },
     });
@@ -89,13 +89,13 @@ describe('useDynamicTheme', () => {
     // Since mockDate is 12:00 PM, which is between 07:00 and 19:00, day theme should load
     expect(loadThemeSpy).toHaveBeenCalled();
     const calledTheme = loadThemeSpy.mock.calls[0][0];
-    expect(calledTheme.metadata.id).toBe('preset-clean');
+    expect(calledTheme.metadata.id).toBe("preset-clean");
 
     // Restore
     useThemeStore.setState({ loadTheme: originalLoadTheme });
   });
 
-  it('should load night theme when time is outside day start and night start times', () => {
+  it("should load night theme when time is outside day start and night start times", () => {
     const nightDate = new Date(2024, 0, 1, 21, 0, 0); // 9 PM local time
     vi.setSystemTime(nightDate);
 
@@ -109,16 +109,16 @@ describe('useDynamicTheme', () => {
     useThemeStore.setState({
       dynamicSettings: {
         enabled: true,
-        dayThemeId: 'preset-clean',
-        nightThemeId: 'preset-dracula',
-        dayStartTime: '07:00',
-        nightStartTime: '19:00',
+        dayThemeId: "preset-clean",
+        nightThemeId: "preset-dracula",
+        dayStartTime: "07:00",
+        nightStartTime: "19:00",
       },
       currentTheme: {
         ...useThemeStore.getState().currentTheme,
         metadata: {
           ...useThemeStore.getState().currentTheme.metadata,
-          id: 'test-id', // Not night theme
+          id: "test-id", // Not night theme
         },
       },
     });
@@ -128,7 +128,7 @@ describe('useDynamicTheme', () => {
     // Since mockDate is 21:00, which is after 19:00, night theme should load
     expect(loadThemeSpy).toHaveBeenCalled();
     const calledTheme = loadThemeSpy.mock.calls[0][0];
-    expect(calledTheme.metadata.id).toBe('preset-dracula');
+    expect(calledTheme.metadata.id).toBe("preset-dracula");
 
     // Restore
     useThemeStore.setState({ loadTheme: originalLoadTheme });

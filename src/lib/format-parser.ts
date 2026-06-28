@@ -1,5 +1,5 @@
-import { BaseModuleConfig, StarshipConfig } from '../types/starship.types';
-import { MOCK_SCENARIOS, MockScenario } from './mock-data';
+import { BaseModuleConfig, StarshipConfig } from "../types/starship.types";
+import { MOCK_SCENARIOS, MockScenario } from "./mock-data";
 
 export interface FormatSegment {
   text: string;
@@ -57,41 +57,41 @@ const BG_BRIGHT: Record<string, number> = {
  * Modifiers appear first, then foreground colors, then background colors.
  */
 export function styleToAnsi(style: string): string {
-  if (!style) return '';
+  if (!style) return "";
   const parts = style.split(/\s+/).filter(Boolean);
   const modifiers: number[] = [];
   const fgCodes: number[] = [];
   const bgCodes: number[] = [];
 
   for (const part of parts) {
-    if (part === 'bold') {
+    if (part === "bold") {
       modifiers.push(1);
       continue;
     }
-    if (part === 'dimmed') {
+    if (part === "dimmed") {
       modifiers.push(2);
       continue;
     }
-    if (part === 'italic') {
+    if (part === "italic") {
       modifiers.push(3);
       continue;
     }
-    if (part === 'underline') {
+    if (part === "underline") {
       modifiers.push(4);
       continue;
     }
-    if (part === 'blink') {
+    if (part === "blink") {
       modifiers.push(5);
       continue;
     }
-    if (part === 'inverted') {
+    if (part === "inverted") {
       modifiers.push(7);
       continue;
     }
 
-    if (part.startsWith('bg:')) {
+    if (part.startsWith("bg:")) {
       const color = part.slice(3);
-      if (color.startsWith('bright-')) {
+      if (color.startsWith("bright-")) {
         const c = color.slice(7);
         if (BG_BRIGHT[c] !== undefined) bgCodes.push(BG_BRIGHT[c]);
       } else if (BG_COLORS[color] !== undefined) {
@@ -100,8 +100,8 @@ export function styleToAnsi(style: string): string {
       continue;
     }
 
-    const fgColor = part.startsWith('fg:') ? part.slice(3) : part;
-    if (fgColor.startsWith('bright-')) {
+    const fgColor = part.startsWith("fg:") ? part.slice(3) : part;
+    if (fgColor.startsWith("bright-")) {
       const c = fgColor.slice(7);
       if (FG_BRIGHT[c] !== undefined) fgCodes.push(FG_BRIGHT[c]);
     } else if (FG_COLORS[fgColor] !== undefined) {
@@ -110,8 +110,8 @@ export function styleToAnsi(style: string): string {
   }
 
   const codes = [...modifiers, ...fgCodes, ...bgCodes];
-  if (codes.length === 0) return '';
-  return `\x1b[${codes.join(';')}m`;
+  if (codes.length === 0) return "";
+  return `\x1b[${codes.join(";")}m`;
 }
 
 /**
@@ -131,31 +131,31 @@ export function renderModule(
     ? customModules?.[moduleName]
     : (config[moduleName] as BaseModuleConfig | undefined);
 
-  if (!moduleConfig || moduleConfig.disabled) return '';
-  if (!scenario.values[moduleName]) return '';
+  if (!moduleConfig || moduleConfig.disabled) return "";
+  if (!scenario.values[moduleName]) return "";
 
   const scenarioValue = scenario.values[moduleName];
 
   // Character module: use success_symbol or error_symbol based on scenario name
-  if (moduleName === 'character') {
+  if (moduleName === "character") {
     const charConfig = moduleConfig as {
       success_symbol?: string;
       error_symbol?: string;
     };
-    const isError = scenario.name.toLowerCase().includes('error');
+    const isError = scenario.name.toLowerCase().includes("error");
     const symbol = isError
-      ? (charConfig.error_symbol ?? '[❯](bold red)')
-      : (charConfig.success_symbol ?? '[❯](bold green)');
+      ? (charConfig.error_symbol ?? "[❯](bold red)")
+      : (charConfig.success_symbol ?? "[❯](bold green)");
     const styleMatch = symbol.match(/\]\(([^)]+)\)$/);
     const extractedStyle = styleMatch
       ? styleMatch[1]
-      : (moduleConfig.style ?? '');
+      : (moduleConfig.style ?? "");
     return `[${scenarioValue}](${extractedStyle}) `;
   }
 
-  const format = moduleConfig.format ?? '[$symbol$value]($style) ';
-  const symbol = moduleConfig.symbol ?? '';
-  const style = moduleConfig.style ?? '';
+  const format = moduleConfig.format ?? "[$symbol$value]($style) ";
+  const symbol = moduleConfig.symbol ?? "";
+  const style = moduleConfig.style ?? "";
 
   const subs: Record<string, string> = {
     symbol,
@@ -169,7 +169,7 @@ export function renderModule(
 
   return format.replace(
     /\$([a-zA-Z0-9_]+)/g,
-    (_match, varName: string) => subs[varName] ?? '',
+    (_match, varName: string) => subs[varName] ?? "",
   );
 }
 
@@ -181,9 +181,9 @@ export function parseFormatString(
   config: StarshipConfig,
   scenario: MockScenario = MOCK_SCENARIOS.clean,
 ): string {
-  if (!format) return '';
+  if (!format) return "";
 
-  let expanded = format.replace(/\\n/g, '\n');
+  let expanded = format.replace(/\\n/g, "\n");
 
   // Expand $module_name tokens
   expanded = expanded.replace(
@@ -195,23 +195,23 @@ export function parseFormatString(
   // Handles ANSI escape sequences [...m to prevent breaking the parse tree.
   const length = expanded.length;
   const stack: { text: string }[] = [];
-  let currentText = '';
+  let currentText = "";
 
   for (let i = 0; i < length; i++) {
     const char = expanded[i];
 
-    if (char === '\x1b') {
+    if (char === "\x1b") {
       let ansiStr = char;
       i++;
-      if (i < length && expanded[i] === '[') {
-        ansiStr += '[';
+      if (i < length && expanded[i] === "[") {
+        ansiStr += "[";
         i++;
-        while (i < length && '0123456789;'.includes(expanded[i])) {
+        while (i < length && "0123456789;".includes(expanded[i])) {
           ansiStr += expanded[i];
           i++;
         }
-        if (i < length && expanded[i] === 'm') {
-          ansiStr += 'm';
+        if (i < length && expanded[i] === "m") {
+          ansiStr += "m";
         } else {
           i--; // fallback if malformed
         }
@@ -222,12 +222,12 @@ export function parseFormatString(
       continue;
     }
 
-    if (char === '[') {
+    if (char === "[") {
       stack.push({ text: currentText });
-      currentText = '';
-    } else if (char === ']') {
-      if (i + 1 < length && expanded[i + 1] === '(') {
-        const closingParen = expanded.indexOf(')', i + 2);
+      currentText = "";
+    } else if (char === "]") {
+      if (i + 1 < length && expanded[i + 1] === "(") {
+        const closingParen = expanded.indexOf(")", i + 2);
         if (closingParen !== -1) {
           const style = expanded.substring(i + 2, closingParen);
           const ansi = styleToAnsi(style);
@@ -245,18 +245,18 @@ export function parseFormatString(
           // No closing ')', treat as literal
           if (stack.length > 0) {
             const parent = stack.pop()!;
-            currentText = parent.text + '[' + currentText + ']';
+            currentText = parent.text + "[" + currentText + "]";
           } else {
-            currentText += ']';
+            currentText += "]";
           }
         }
       } else {
         // No '(' after ']', treat as literal
         if (stack.length > 0) {
           const parent = stack.pop()!;
-          currentText = parent.text + '[' + currentText + ']';
+          currentText = parent.text + "[" + currentText + "]";
         } else {
-          currentText += ']';
+          currentText += "]";
         }
       }
     } else {
@@ -267,7 +267,7 @@ export function parseFormatString(
   // Clean up any unclosed '['
   while (stack.length > 0) {
     const parent = stack.pop()!;
-    currentText = parent.text + '[' + currentText;
+    currentText = parent.text + "[" + currentText;
   }
 
   return currentText;
@@ -284,7 +284,7 @@ export function parseFormattedString(
 ): FormatSegment[] {
   if (!format) return [];
 
-  let expanded = format.replace(/\\n/g, '\n');
+  let expanded = format.replace(/\\n/g, "\n");
   expanded = expanded.replace(
     /\$([a-zA-Z0-9_]+)/g,
     (_match, moduleName: string) => renderModule(moduleName, config, scenario),
@@ -293,23 +293,23 @@ export function parseFormattedString(
   const segments: FormatSegment[] = [];
   const length = expanded.length;
   const stack: { text: string }[] = [];
-  let currentText = '';
+  let currentText = "";
 
   for (let i = 0; i < length; i++) {
     const char = expanded[i];
 
-    if (char === '\x1b') {
+    if (char === "\x1b") {
       let ansiStr = char;
       i++;
-      if (i < length && expanded[i] === '[') {
-        ansiStr += '[';
+      if (i < length && expanded[i] === "[") {
+        ansiStr += "[";
         i++;
-        while (i < length && '0123456789;'.includes(expanded[i])) {
+        while (i < length && "0123456789;".includes(expanded[i])) {
           ansiStr += expanded[i];
           i++;
         }
-        if (i < length && expanded[i] === 'm') {
-          ansiStr += 'm';
+        if (i < length && expanded[i] === "m") {
+          ansiStr += "m";
         } else {
           i--;
         }
@@ -320,12 +320,12 @@ export function parseFormattedString(
       continue;
     }
 
-    if (char === '[') {
+    if (char === "[") {
       stack.push({ text: currentText });
-      currentText = '';
-    } else if (char === ']') {
-      if (i + 1 < length && expanded[i + 1] === '(') {
-        const closingParen = expanded.indexOf(')', i + 2);
+      currentText = "";
+    } else if (char === "]") {
+      if (i + 1 < length && expanded[i + 1] === "(") {
+        const closingParen = expanded.indexOf(")", i + 2);
         if (closingParen !== -1) {
           const style = expanded.substring(i + 2, closingParen);
 
@@ -339,10 +339,10 @@ export function parseFormattedString(
             // Since this is meant to be a flat array for the terminal component, we'll push what we have.
             // Wait, the parent text might be unstyled. We should push the parent text if it exists.
             if (parent.text) {
-              segments.push({ text: parent.text, style: '' });
+              segments.push({ text: parent.text, style: "" });
             }
             segments.push({ text: currentText, style: style });
-            currentText = ''; // Consume the text, parent is gone, we're back to base level
+            currentText = ""; // Consume the text, parent is gone, we're back to base level
           } else {
             currentText += `](${style})`;
           }
@@ -350,17 +350,17 @@ export function parseFormattedString(
         } else {
           if (stack.length > 0) {
             const parent = stack.pop()!;
-            currentText = parent.text + '[' + currentText + ']';
+            currentText = parent.text + "[" + currentText + "]";
           } else {
-            currentText += ']';
+            currentText += "]";
           }
         }
       } else {
         if (stack.length > 0) {
           const parent = stack.pop()!;
-          currentText = parent.text + '[' + currentText + ']';
+          currentText = parent.text + "[" + currentText + "]";
         } else {
-          currentText += ']';
+          currentText += "]";
         }
       }
     } else {
@@ -370,11 +370,11 @@ export function parseFormattedString(
 
   while (stack.length > 0) {
     const parent = stack.pop()!;
-    currentText = parent.text + '[' + currentText;
+    currentText = parent.text + "[" + currentText;
   }
 
   if (currentText) {
-    segments.push({ text: currentText, style: '' });
+    segments.push({ text: currentText, style: "" });
   }
 
   return segments;

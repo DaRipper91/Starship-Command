@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AlertCircle, CheckCircle2, Code } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { AlertCircle, CheckCircle2, Code } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
-import { ThemeEngine } from '../lib/theme-engine';
-import { ThemeStore, useThemeStore } from '../stores/theme-store';
+import { ThemeEngine } from "../lib/theme-engine";
+import { ThemeStore, useThemeStore } from "../stores/theme-store";
 
 export function RawEditor() {
   const currentTheme = useThemeStore((state: ThemeStore) => state.currentTheme);
   const updateConfig = useThemeStore((state: ThemeStore) => state.updateConfig);
 
-  const [localToml, setLocalToml] = useState('');
+  const [localToml, setLocalToml] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   // Sync from Store to Editor
@@ -29,7 +29,7 @@ export function RawEditor() {
       setError(null);
     } catch (err: any) {
       // Don't update store on invalid TOML, just show error
-      setError(err.message || 'Invalid TOML syntax');
+      setError(err.message || "Invalid TOML syntax");
     }
   };
 

@@ -1,8 +1,8 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-import { LayoutMode } from '../types';
+import { LayoutMode } from "../types";
 
-export type AppMode = 'BUILD' | 'PREVIEW' | 'EXPORT' | 'SETTINGS' | 'GALLERY';
+export type AppMode = "BUILD" | "PREVIEW" | "EXPORT" | "SETTINGS" | "GALLERY";
 
 export interface User {
   id: number;
@@ -26,8 +26,8 @@ interface UIStore {
   mode: AppMode;
   setMode: (mode: AppMode) => void;
 
-  showExportImport: 'export' | 'import' | null;
-  setShowExportImport: (state: 'export' | 'import' | null) => void;
+  showExportImport: "export" | "import" | null;
+  setShowExportImport: (state: "export" | "import" | null) => void;
 
   showGallery: boolean;
   setShowGallery: (state: boolean) => void;
@@ -76,10 +76,10 @@ interface UIStore {
 }
 
 export const useUIStore = create<UIStore>((set) => ({
-  layoutMode: 'auto',
+  layoutMode: "auto",
   setLayoutMode: (mode) => set({ layoutMode: mode }),
 
-  mode: 'BUILD',
+  mode: "BUILD",
   setMode: (mode) => set({ mode }),
 
   showExportImport: null,
@@ -94,7 +94,7 @@ export const useUIStore = create<UIStore>((set) => ({
   showCommandPalette: false,
   setShowCommandPalette: (state) => set({ showCommandPalette: state }),
 
-  showWelcomeWizard: !localStorage.getItem('welcome-wizard-seen'),
+  showWelcomeWizard: !localStorage.getItem("welcome-wizard-seen"),
   setShowWelcomeWizard: (state) => set({ showWelcomeWizard: state }),
 
   showDynamicThemeSettings: false,
@@ -110,7 +110,7 @@ export const useUIStore = create<UIStore>((set) => ({
   rightSidebarOpen: false,
   setRightSidebarOpen: (state) => set({ rightSidebarOpen: state }),
 
-  themeName: 'Untitled Theme',
+  themeName: "Untitled Theme",
   setThemeName: (name) => set({ themeName: name }),
 
   showAuthModal: false,
@@ -120,7 +120,7 @@ export const useUIStore = create<UIStore>((set) => ({
   setShowUploadModal: (state) => set({ showUploadModal: state }),
 
   mockGitStatus: {
-    branch: 'main',
+    branch: "main",
     isDirty: true,
     staged: false,
     stashed: false,
@@ -132,7 +132,7 @@ export const useUIStore = create<UIStore>((set) => ({
       mockGitStatus: { ...state.mockGitStatus, ...status },
     })),
 
-  preferredShell: 'bash',
+  preferredShell: "bash",
   setPreferredShell: (shell) => set({ preferredShell: shell }),
 
   refreshRate: 60,

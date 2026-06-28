@@ -1,7 +1,9 @@
 # 📂 INDEX: ~/Projects/Star_Command/assets
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📄 FILES
+
 - [ ] **feature-icons.png** | 16 KB | 2026-04-12
 - [ ] **feature-icons.svg** | 4 KB | 2026-04-12
 - [ ] **icon-foreground.png** | 160 KB | 2026-04-12

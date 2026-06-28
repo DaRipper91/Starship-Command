@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import { PRESET_THEMES } from '../lib/presets';
-import { useThemeStore } from '../stores/theme-store';
+import { PRESET_THEMES } from "../lib/presets";
+import { useThemeStore } from "../stores/theme-store";
 
 export function useDynamicTheme() {
   const { loadTheme, savedThemes, currentTheme, dynamicSettings } =
@@ -17,16 +17,16 @@ export function useDynamicTheme() {
       const currentTimeInMinutes = currentHour * 60 + currentMinute;
 
       const [dayHour, dayMinute] = dynamicSettings
-        .dayStartTime!.split(':')
+        .dayStartTime!.split(":")
         .map(Number);
       const dayTimeInMinutes = dayHour * 60 + dayMinute;
 
       const [nightHour, nightMinute] = dynamicSettings
-        .nightStartTime!.split(':')
+        .nightStartTime!.split(":")
         .map(Number);
       const nightTimeInMinutes = nightHour * 60 + nightMinute;
 
-      let themeToApplyId = '';
+      let themeToApplyId = "";
 
       if (
         currentTimeInMinutes >= dayTimeInMinutes &&

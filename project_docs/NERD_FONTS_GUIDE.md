@@ -17,10 +17,10 @@ termux-reload-settings
 
 ## 📂 Option 2: Manual Installation (Any Font)
 
-1.  **Download** your favorite Nerd Font `.ttf` file (e.g., *FiraCode*, *Hack*, or *Meslo*).
+1.  **Download** your favorite Nerd Font `.ttf` file (e.g., _FiraCode_, _Hack_, or _Meslo_).
 2.  **Move** the file to the following location in Termux:
     `~/.termux/font.ttf`
-    *(Note: The file MUST be named exactly `font.ttf` and placed in the `.termux` folder).*
+    _(Note: The file MUST be named exactly `font.ttf` and placed in the `.termux` folder)._
 3.  **Run** the command:
     `termux-reload-settings`
 
@@ -29,6 +29,7 @@ termux-reload-settings
 After installing, restart your Termux session. If you see icons instead of empty boxes (squares), the installation was successful!
 
 ### Common Issues:
+
 - **Icons are too small:** Adjust your Termux font size (Pinch-to-zoom).
 - **Icons are squares:** Ensure you downloaded a "Nerd Font" (patched), not the standard version of the font.
 - **Starship not showing:** Ensure you've added `eval "$(starship init bash)"` to your `~/.bashrc`.

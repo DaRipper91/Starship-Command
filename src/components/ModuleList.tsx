@@ -8,22 +8,22 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Search, X } from 'lucide-react';
-import { memo, useCallback, useMemo, useState } from 'react';
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical, Search, X } from "lucide-react";
+import { memo, useCallback, useMemo, useState } from "react";
 
-import MODULE_DEFINITIONS from '../generated/module-definitions.json';
-import { cn } from '../lib/utils';
-import { selectActiveModules, useThemeStore } from '../stores/theme-store';
-import { BaseModuleConfig } from '../types/starship.types';
+import MODULE_DEFINITIONS from "../generated/module-definitions.json";
+import { cn } from "../lib/utils";
+import { selectActiveModules, useThemeStore } from "../stores/theme-store";
+import { BaseModuleConfig } from "../types/starship.types";
 
 interface ModuleItem {
   id: string;
@@ -55,7 +55,7 @@ const SortableItem = memo(function SortableItem({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    touchAction: 'none',
+    touchAction: "none",
   };
 
   return (
@@ -64,11 +64,11 @@ const SortableItem = memo(function SortableItem({
       style={style}
       onClick={() => onSelect(item.name)}
       className={cn(
-        'group flex cursor-pointer items-center gap-3 rounded-md border p-3 shadow-sm transition-colors',
+        "group flex cursor-pointer items-center gap-3 rounded-md border p-3 shadow-sm transition-colors",
         isSelected
-          ? 'border-blue-500 bg-gray-800 ring-1 ring-blue-500'
-          : 'border-gray-700 bg-gray-800 hover:border-gray-600',
-        isDragging && 'z-50 bg-gray-700 opacity-50 ring-2 ring-blue-500',
+          ? "border-blue-500 bg-gray-800 ring-1 ring-blue-500"
+          : "border-gray-700 bg-gray-800 hover:border-gray-600",
+        isDragging && "z-50 bg-gray-700 opacity-50 ring-2 ring-blue-500",
       )}
     >
       <button
@@ -93,8 +93,8 @@ const SortableItem = memo(function SortableItem({
 
       <span
         className={cn(
-          'select-none font-mono text-sm',
-          isSelected ? 'text-blue-400' : 'text-gray-200',
+          "select-none font-mono text-sm",
+          isSelected ? "text-blue-400" : "text-gray-200",
         )}
       >
         {item.name}
@@ -130,7 +130,7 @@ export const ModuleList = memo(function ModuleList({
     useThemeStore();
   const activeModulesStore = useThemeStore(selectActiveModules);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const allModules = useMemo(() => {
     const customModules: ModuleItem[] = Object.keys(
@@ -189,13 +189,13 @@ export const ModuleList = memo(function ModuleList({
 
   const handleToggle = useCallback(
     (name: string, enable: boolean) => {
-      setSearchTerm('');
-      let newFormat = currentTheme.config.format || '';
+      setSearchTerm("");
+      let newFormat = currentTheme.config.format || "";
       if (enable) {
         newFormat += `$${name}`;
       } else {
-        const regex = new RegExp(`\\$${name}\\b`, 'g');
-        newFormat = newFormat.replace(regex, '');
+        const regex = new RegExp(`\\$${name}\\b`, "g");
+        newFormat = newFormat.replace(regex, "");
       }
 
       const existingModuleConfig =
@@ -234,7 +234,7 @@ export const ModuleList = memo(function ModuleList({
 
       if (oldIndex !== -1 && newIndex !== -1) {
         const newModules = arrayMove(activeModulesStore, oldIndex, newIndex);
-        const newFormat = newModules.map((m) => `$${m.name}`).join('');
+        const newFormat = newModules.map((m) => `$${m.name}`).join("");
         updateConfig({ format: newFormat });
       }
     }
@@ -246,7 +246,7 @@ export const ModuleList = memo(function ModuleList({
   );
 
   return (
-    <div className={cn('flex flex-col gap-6', className)}>
+    <div className={cn("flex flex-col gap-6", className)}>
       {/* Search Input */}
       <div className="relative">
         <Search
@@ -262,7 +262,7 @@ export const ModuleList = memo(function ModuleList({
         />
         {searchTerm && (
           <button
-            onClick={() => setSearchTerm('')}
+            onClick={() => setSearchTerm("")}
             aria-label="Clear search"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
           >
@@ -278,7 +278,7 @@ export const ModuleList = memo(function ModuleList({
             Active Modules
           </h2>
           <span className="text-xs text-gray-500">
-            {filteredActiveModules.length} {searchTerm ? 'matching' : 'enabled'}
+            {filteredActiveModules.length} {searchTerm ? "matching" : "enabled"}
           </span>
         </div>
 
@@ -306,8 +306,8 @@ export const ModuleList = memo(function ModuleList({
               {filteredActiveModules.length === 0 && (
                 <div className="rounded-lg border border-dashed border-gray-700 py-8 text-center text-gray-500">
                   {searchTerm
-                    ? 'No matching active modules'
-                    : 'No modules active'}
+                    ? "No matching active modules"
+                    : "No modules active"}
                 </div>
               )}
             </div>
@@ -336,7 +336,7 @@ export const ModuleList = memo(function ModuleList({
               Disabled Modules
             </h2>
             <span className="text-xs text-gray-600">
-              {inactiveModules.length} {searchTerm ? 'matching' : 'disabled'}
+              {inactiveModules.length} {searchTerm ? "matching" : "disabled"}
             </span>
           </div>
 
@@ -346,10 +346,10 @@ export const ModuleList = memo(function ModuleList({
                 key={module.id}
                 onClick={() => setSelectedModule(module.name)}
                 className={cn(
-                  'group flex cursor-pointer items-center gap-3 rounded-md border p-3 opacity-60 shadow-sm transition-colors hover:opacity-100',
+                  "group flex cursor-pointer items-center gap-3 rounded-md border p-3 opacity-60 shadow-sm transition-colors hover:opacity-100",
                   selectedModule === module.name
-                    ? 'border-gray-500 bg-gray-800'
-                    : 'border-gray-700 bg-gray-800/50 hover:border-gray-600',
+                    ? "border-gray-500 bg-gray-800"
+                    : "border-gray-700 bg-gray-800/50 hover:border-gray-600",
                 )}
               >
                 <div className="w-[18px]" />

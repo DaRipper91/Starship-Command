@@ -6,13 +6,13 @@ import {
   Settings,
   Trash2,
   Type,
-} from 'lucide-react';
-import { useState } from 'react';
+} from "lucide-react";
+import { useState } from "react";
 
-import { useThemeStore } from '../stores/theme-store';
-import { useUIStore } from '../stores/ui-store';
-import { DocumentViewer } from './DocumentViewer';
-import { Modal } from './ui/Modal';
+import { useThemeStore } from "../stores/theme-store";
+import { useUIStore } from "../stores/ui-store";
+import { DocumentViewer } from "./DocumentViewer";
+import { Modal } from "./ui/Modal";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -24,7 +24,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     useUIStore();
 
   const { currentTheme, resetTheme } = useThemeStore();
-  const [activeDoc, setActiveDoc] = useState<'manual' | 'readme' | null>(null);
+  const [activeDoc, setActiveDoc] = useState<"manual" | "readme" | null>(null);
 
   return (
     <>
@@ -37,13 +37,13 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             </h3>
             <div className="grid grid-cols-2 gap-3">
               <button
-                onClick={() => setActiveDoc('manual')}
+                onClick={() => setActiveDoc("manual")}
                 className="flex items-center justify-center gap-2 rounded border border-gray-700 bg-gray-800 py-2 text-xs transition-colors hover:bg-gray-700"
               >
                 <BookOpen size={14} /> Master Manual
               </button>
               <button
-                onClick={() => setActiveDoc('readme')}
+                onClick={() => setActiveDoc("readme")}
                 className="flex items-center justify-center gap-2 rounded border border-gray-700 bg-gray-800 py-2 text-xs transition-colors hover:bg-gray-700"
               >
                 <FileText size={14} /> README
@@ -62,7 +62,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <select
                 value={layoutMode}
                 onChange={(e) =>
-                  setLayoutMode(e.target.value as 'auto' | 'desktop' | 'mobile')
+                  setLayoutMode(e.target.value as "auto" | "desktop" | "mobile")
                 }
                 className="rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs"
               >
@@ -78,7 +78,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 value={preferredShell}
                 onChange={(e) =>
                   setPreferredShell(
-                    e.target.value as 'bash' | 'fish' | 'powershell',
+                    e.target.value as "bash" | "fish" | "powershell",
                   )
                 }
                 className="rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs"
@@ -98,7 +98,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             <div className="flex items-center justify-between">
               <label className="text-xs">Active Font</label>
               <span className="rounded bg-gray-900 px-2 py-1 font-mono text-[10px] text-gray-500">
-                {currentTheme.metadata.fontFamily || 'FiraCode NF'}
+                {currentTheme.metadata.fontFamily || "FiraCode NF"}
               </span>
             </div>
           </section>
@@ -112,7 +112,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               onClick={() => {
                 if (
                   confirm(
-                    'Are you sure? This will wipe your current theme and settings.',
+                    "Are you sure? This will wipe your current theme and settings.",
                   )
                 ) {
                   resetTheme();

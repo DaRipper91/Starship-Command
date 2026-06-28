@@ -1,10 +1,10 @@
-import { AlertCircle, ClipboardPaste, Link, Upload } from 'lucide-react';
-import React, { useState } from 'react';
+import { AlertCircle, ClipboardPaste, Link, Upload } from "lucide-react";
+import React, { useState } from "react";
 
-import { useToast } from '../../contexts/ToastContext';
-import { TomlParser } from '../../lib/toml-parser';
-import { useThemeStore } from '../../stores/theme-store';
-import { LoadingSpinner } from '../LoadingSpinner';
+import { useToast } from "../../contexts/ToastContext";
+import { TomlParser } from "../../lib/toml-parser";
+import { useThemeStore } from "../../stores/theme-store";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 interface ImportTabProps {
   onClose: () => void;
@@ -14,8 +14,8 @@ export function ImportTab({ onClose }: ImportTabProps) {
   const { importToml } = useThemeStore();
   const { addToast } = useToast();
 
-  const [importText, setImportText] = useState('');
-  const [importUrl, setImportUrl] = useState('');
+  const [importText, setImportText] = useState("");
+  const [importUrl, setImportUrl] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
   const [importWarnings, setImportWarnings] = useState<string[]>([]);
   const [pendingImport, setPendingImport] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
   const executeImport = (tomlString: string) => {
     try {
       importToml(tomlString);
-      addToast('Theme imported successfully!', 'success');
+      addToast("Theme imported successfully!", "success");
       onClose();
     } catch (err) {
       setValidationError(
@@ -55,7 +55,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
 
       if (!valid) {
         setValidationError(
-          `Invalid configuration structure: ${errors.join(', ') || 'Unknown error. Check that all modules are properly formatted.'}`,
+          `Invalid configuration structure: ${errors.join(", ") || "Unknown error. Check that all modules are properly formatted."}`,
         );
         return false;
       }
@@ -66,7 +66,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
         return false; // Wait for user confirmation
       }
 
-      if (!confirm('This will overwrite your current theme. Are you sure?')) {
+      if (!confirm("This will overwrite your current theme. Are you sure?")) {
         return false;
       }
 
@@ -97,7 +97,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
         }
       };
       reader.onerror = () => {
-        setValidationError('Failed to read file.');
+        setValidationError("Failed to read file.");
       };
       reader.readAsText(file);
     } catch (err) {
@@ -106,13 +106,13 @@ export function ImportTab({ onClose }: ImportTabProps) {
       );
     } finally {
       // Reset input
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
   const handlePasteImport = () => {
     if (!importText.trim()) {
-      setValidationError('Please paste TOML configuration first.');
+      setValidationError("Please paste TOML configuration first.");
       return;
     }
     try {
@@ -126,7 +126,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
 
   const handleUrlImport = async () => {
     if (!importUrl.trim()) {
-      setValidationError('Please enter a URL.');
+      setValidationError("Please enter a URL.");
       return;
     }
 
@@ -136,12 +136,12 @@ export function ImportTab({ onClose }: ImportTabProps) {
     try {
       // Very basic URL fetch (CORS might block this in a real app unless using a proxy)
       const res = await fetch(importUrl);
-      if (!res.ok) throw new Error('Failed to fetch from URL');
+      if (!res.ok) throw new Error("Failed to fetch from URL");
       const text = await res.text();
       validateAndImport(text);
     } catch (err) {
       setValidationError(
-        'Failed to fetch from URL. Make sure it points to a raw text file.',
+        "Failed to fetch from URL. Make sure it points to a raw text file.",
       );
     } finally {
       setIsLoading(false);
@@ -232,7 +232,7 @@ export function ImportTab({ onClose }: ImportTabProps) {
                 className="flex items-center gap-2 rounded bg-gray-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading && <LoadingSpinner className="h-4 w-4 text-white" />}
-                {isLoading ? 'Loading...' : 'Fetch'}
+                {isLoading ? "Loading..." : "Fetch"}
               </button>
             </div>
           </div>

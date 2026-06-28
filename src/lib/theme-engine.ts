@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StarshipConfig } from '../types/starship.types';
-import { TomlParser } from './toml-parser';
+import { StarshipConfig } from "../types/starship.types";
+import { TomlParser } from "./toml-parser";
 
 export class ThemeEngine {
   static stringify(config: StarshipConfig, metadata?: any): string {

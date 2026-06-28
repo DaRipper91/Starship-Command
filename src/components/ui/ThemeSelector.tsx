@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React from "react";
 
-import { Theme } from '../../types/starship.types';
+import { Theme } from "../../types/starship.types";
 
 interface ThemeSelectorProps {
   label: string;

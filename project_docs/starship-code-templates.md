@@ -140,7 +140,7 @@ export interface TimeModuleConfig extends ModuleConfig {
 export interface ColorPalette {
   name: string;
   colors: Record<string, string>;
-  source?: 'preset' | 'image' | 'custom';
+  source?: "preset" | "image" | "custom";
 }
 
 // Theme metadata
@@ -168,8 +168,8 @@ export interface Theme {
 ## 2. TOML Parser (src/lib/toml-parser.ts)
 
 ```typescript
-import TOML from '@iarna/toml';
-import { StarshipConfig } from '../types/starship.types';
+import TOML from "@iarna/toml";
+import { StarshipConfig } from "../types/starship.types";
 
 export class TomlParser {
   /**
@@ -179,8 +179,8 @@ export class TomlParser {
     try {
       return TOML.parse(tomlString) as StarshipConfig;
     } catch (error) {
-      console.error('Failed to parse TOML:', error);
-      throw new Error('Invalid TOML format');
+      console.error("Failed to parse TOML:", error);
+      throw new Error("Invalid TOML format");
     }
   }
 
@@ -191,8 +191,8 @@ export class TomlParser {
     try {
       return TOML.stringify(config as any);
     } catch (error) {
-      console.error('Failed to stringify config:', error);
-      throw new Error('Failed to generate TOML');
+      console.error("Failed to stringify config:", error);
+      throw new Error("Failed to generate TOML");
     }
   }
 
@@ -201,34 +201,34 @@ export class TomlParser {
    */
   static getDefaultConfig(): StarshipConfig {
     return {
-      format: '$all',
+      format: "$all",
       add_newline: true,
       character: {
-        success_symbol: '[➜](bold green)',
-        error_symbol: '[✗](bold red)',
+        success_symbol: "[➜](bold green)",
+        error_symbol: "[✗](bold red)",
       },
       directory: {
         truncation_length: 3,
         truncate_to_repo: true,
       },
       git_branch: {
-        symbol: ' ',
-        format: 'on [$symbol$branch]($style) ',
+        symbol: " ",
+        format: "on [$symbol$branch]($style) ",
       },
       git_status: {
-        format: '([$all_status$ahead_behind]($style) )',
+        format: "([$all_status$ahead_behind]($style) )",
       },
       nodejs: {
-        symbol: ' ',
-        format: 'via [$symbol($version )]($style)',
+        symbol: " ",
+        format: "via [$symbol($version )]($style)",
       },
       python: {
-        symbol: ' ',
-        format: 'via [$symbol($version )]($style)',
+        symbol: " ",
+        format: "via [$symbol($version )]($style)",
       },
       rust: {
-        symbol: ' ',
-        format: 'via [$symbol($version )]($style)',
+        symbol: " ",
+        format: "via [$symbol($version )]($style)",
       },
     };
   }
@@ -243,8 +243,8 @@ export class TomlParser {
     const errors: string[] = [];
 
     // Check for common issues
-    if (config.format && !config.format.includes('$')) {
-      errors.push('Format string should contain module placeholders');
+    if (config.format && !config.format.includes("$")) {
+      errors.push("Format string should contain module placeholders");
     }
 
     // Validate colors
@@ -259,7 +259,7 @@ export class TomlParser {
 
     // Validate module styles
     Object.entries(config).forEach(([key, value]) => {
-      if (typeof value === 'object' && value !== null && 'style' in value) {
+      if (typeof value === "object" && value !== null && "style" in value) {
         validateColor(value.style as string, key);
       }
     });
@@ -283,7 +283,7 @@ export class TomlParser {
       // Deep merge module configs
       ...Object.keys(override).reduce((acc, key) => {
         if (
-          typeof override[key] === 'object' &&
+          typeof override[key] === "object" &&
           !Array.isArray(override[key])
         ) {
           acc[key] = { ...base[key], ...override[key] };
@@ -300,9 +300,9 @@ export class TomlParser {
 ## 3. Color Utilities (src/lib/color-utils.ts)
 
 ```typescript
-import { colord, extend } from 'colord';
-import a11yPlugin from 'colord/plugins/a11y';
-import Vibrant from 'node-vibrant';
+import { colord, extend } from "colord";
+import a11yPlugin from "colord/plugins/a11y";
+import Vibrant from "node-vibrant";
 
 extend([a11yPlugin]);
 
@@ -320,14 +320,14 @@ export class ColorUtils {
       const palette = await vibrant.getPalette();
 
       return {
-        primary: palette.Vibrant?.hex || '#000000',
-        secondary: palette.Muted?.hex || '#666666',
-        accent: palette.LightVibrant?.hex || '#ff00ff',
-        background: palette.DarkMuted?.hex || '#1a1a1a',
-        foreground: palette.LightMuted?.hex || '#ffffff',
-        success: palette.Vibrant?.hex || '#00ff00',
-        error: '#ff0000',
-        warning: '#ffaa00',
+        primary: palette.Vibrant?.hex || "#000000",
+        secondary: palette.Muted?.hex || "#666666",
+        accent: palette.LightVibrant?.hex || "#ff00ff",
+        background: palette.DarkMuted?.hex || "#1a1a1a",
+        foreground: palette.LightMuted?.hex || "#ffffff",
+        success: palette.Vibrant?.hex || "#00ff00",
+        error: "#ff0000",
+        warning: "#ffaa00",
       };
     } finally {
       URL.revokeObjectURL(imageUrl);
@@ -395,12 +395,12 @@ export class ColorUtils {
   static toAnsiStyle(color: string, bold = false, italic = false): string {
     const styles = [];
 
-    if (bold) styles.push('bold');
-    if (italic) styles.push('italic');
+    if (bold) styles.push("bold");
+    if (italic) styles.push("italic");
 
     styles.push(color);
 
-    return styles.join(' ');
+    return styles.join(" ");
   }
 
   /**
@@ -408,68 +408,68 @@ export class ColorUtils {
    */
   static presets = {
     nord: {
-      name: 'Nord',
+      name: "Nord",
       colors: {
-        background: '#2E3440',
-        foreground: '#ECEFF4',
-        primary: '#88C0D0',
-        secondary: '#81A1C1',
-        accent: '#B48EAD',
-        success: '#A3BE8C',
-        error: '#BF616A',
-        warning: '#EBCB8B',
+        background: "#2E3440",
+        foreground: "#ECEFF4",
+        primary: "#88C0D0",
+        secondary: "#81A1C1",
+        accent: "#B48EAD",
+        success: "#A3BE8C",
+        error: "#BF616A",
+        warning: "#EBCB8B",
       },
     },
     dracula: {
-      name: 'Dracula',
+      name: "Dracula",
       colors: {
-        background: '#282A36',
-        foreground: '#F8F8F2',
-        primary: '#BD93F9',
-        secondary: '#6272A4',
-        accent: '#FF79C6',
-        success: '#50FA7B',
-        error: '#FF5555',
-        warning: '#F1FA8C',
+        background: "#282A36",
+        foreground: "#F8F8F2",
+        primary: "#BD93F9",
+        secondary: "#6272A4",
+        accent: "#FF79C6",
+        success: "#50FA7B",
+        error: "#FF5555",
+        warning: "#F1FA8C",
       },
     },
     gruvbox: {
-      name: 'Gruvbox',
+      name: "Gruvbox",
       colors: {
-        background: '#282828',
-        foreground: '#EBDBB2',
-        primary: '#FABD2F',
-        secondary: '#83A598',
-        accent: '#D3869B',
-        success: '#B8BB26',
-        error: '#FB4934',
-        warning: '#FE8019',
+        background: "#282828",
+        foreground: "#EBDBB2",
+        primary: "#FABD2F",
+        secondary: "#83A598",
+        accent: "#D3869B",
+        success: "#B8BB26",
+        error: "#FB4934",
+        warning: "#FE8019",
       },
     },
     catppuccin: {
-      name: 'Catppuccin Mocha',
+      name: "Catppuccin Mocha",
       colors: {
-        background: '#1E1E2E',
-        foreground: '#CDD6F4',
-        primary: '#89B4FA',
-        secondary: '#74C7EC',
-        accent: '#F5C2E7',
-        success: '#A6E3A1',
-        error: '#F38BA8',
-        warning: '#F9E2AF',
+        background: "#1E1E2E",
+        foreground: "#CDD6F4",
+        primary: "#89B4FA",
+        secondary: "#74C7EC",
+        accent: "#F5C2E7",
+        success: "#A6E3A1",
+        error: "#F38BA8",
+        warning: "#F9E2AF",
       },
     },
     tokyo: {
-      name: 'Tokyo Night',
+      name: "Tokyo Night",
       colors: {
-        background: '#1A1B26',
-        foreground: '#C0CAF5',
-        primary: '#7AA2F7',
-        secondary: '#BB9AF7',
-        accent: '#FF9E64',
-        success: '#9ECE6A',
-        error: '#F7768E',
-        warning: '#E0AF68',
+        background: "#1A1B26",
+        foreground: "#C0CAF5",
+        primary: "#7AA2F7",
+        secondary: "#BB9AF7",
+        accent: "#FF9E64",
+        success: "#9ECE6A",
+        error: "#F7768E",
+        warning: "#E0AF68",
       },
     },
   };
@@ -481,10 +481,10 @@ export class ColorUtils {
 ## 4. Theme Store (src/stores/theme-store.ts)
 
 ```typescript
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { StarshipConfig, Theme, ThemeMetadata } from '../types/starship.types';
-import { TomlParser } from '../lib/toml-parser';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { StarshipConfig, Theme, ThemeMetadata } from "../types/starship.types";
+import { TomlParser } from "../lib/toml-parser";
 
 interface ThemeStore {
   currentTheme: Theme;
@@ -502,9 +502,9 @@ interface ThemeStore {
 }
 
 const defaultMetadata: ThemeMetadata = {
-  name: 'My Theme',
-  author: 'Anonymous',
-  description: '',
+  name: "My Theme",
+  author: "Anonymous",
+  description: "",
   tags: [],
   created: new Date(),
   updated: new Date(),
@@ -593,7 +593,7 @@ export const useThemeStore = create<ThemeStore>()(
           currentTheme: {
             metadata: {
               ...defaultMetadata,
-              name: 'Imported Theme',
+              name: "Imported Theme",
               created: new Date(),
             },
             config,
@@ -602,7 +602,7 @@ export const useThemeStore = create<ThemeStore>()(
       },
     }),
     {
-      name: 'starship-theme-storage',
+      name: "starship-theme-storage",
     },
   ),
 );

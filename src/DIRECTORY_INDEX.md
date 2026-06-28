@@ -1,7 +1,9 @@
 # 📂 INDEX: ~/Projects/Star_Command/src
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📁 SUBDIRECTORIES
+
 - [ ] 📂 [components/](./components/)
 - [ ] 📂 [contexts/](./contexts/)
 - [ ] 📂 [data/](./data/)
@@ -13,6 +15,7 @@
 - [ ] 📂 [workers/](./workers/)
 
 ## 📄 FILES
+
 - [ ] **App.tsx** | 24 KB | 2026-04-12
 - [ ] **checkpoint-1.test.ts** | 4 KB | 2026-04-12
 - [ ] **checkpoint-2.test.ts** | 4 KB | 2026-04-12

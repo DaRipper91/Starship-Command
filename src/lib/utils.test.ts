@@ -1,22 +1,22 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
-import { generateId } from './utils';
+import { generateId } from "./utils";
 
-describe('utils', () => {
-  describe('generateId', () => {
-    it('should return a string', () => {
+describe("utils", () => {
+  describe("generateId", () => {
+    it("should return a string", () => {
       const id = generateId();
-      expect(typeof id).toBe('string');
+      expect(typeof id).toBe("string");
       expect(id.length).toBeGreaterThan(0);
     });
 
-    it('should generate unique IDs', () => {
+    it("should generate unique IDs", () => {
       const id1 = generateId();
       const id2 = generateId();
       expect(id1).not.toBe(id2);
     });
 
-    it('should generate valid UUIDs', () => {
+    it("should generate valid UUIDs", () => {
       const id = generateId();
       // UUID v4 regex
       const uuidRegex =

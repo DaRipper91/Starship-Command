@@ -220,12 +220,12 @@ Add JSDoc comments for each method.
 Create temporary test in `src/App.tsx`:
 
 ```typescript
-import { TomlParser } from './lib/toml-parser';
+import { TomlParser } from "./lib/toml-parser";
 
 const config = TomlParser.getDefaultConfig();
-console.log('Default config:', config);
+console.log("Default config:", config);
 const toml = TomlParser.stringify(config);
-console.log('TOML:', toml);
+console.log("TOML:", toml);
 ```
 
 Check browser console - should see output without errors.
@@ -291,11 +291,11 @@ Export as a class called ColorUtils.
 Add to `src/App.tsx`:
 
 ```typescript
-import { ColorUtils } from './lib/color-utils';
+import { ColorUtils } from "./lib/color-utils";
 
-const complementary = ColorUtils.generateComplementary('#3b82f6');
-console.log('Colors:', complementary);
-console.log('Presets:', Object.keys(ColorUtils.presets));
+const complementary = ColorUtils.generateComplementary("#3b82f6");
+console.log("Colors:", complementary);
+console.log("Presets:", Object.keys(ColorUtils.presets));
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
@@ -459,13 +459,13 @@ Export all functions.
 **🧪 COMPLETION TEST:**
 
 ```typescript
-import { parseFormatString } from './lib/format-parser';
-import { TomlParser } from './lib/toml-parser';
+import { parseFormatString } from "./lib/format-parser";
+import { TomlParser } from "./lib/toml-parser";
 
 const config = TomlParser.getDefaultConfig();
-const format = '[$directory](bold cyan)';
+const format = "[$directory](bold cyan)";
 const result = parseFormatString(format, config);
-console.log('Parsed:', result);
+console.log("Parsed:", result);
 // Should see ANSI codes in output
 ```
 
@@ -548,10 +548,10 @@ Export as ThemeValidator class.
 **🧪 COMPLETION TEST:**
 
 ```typescript
-import { ThemeValidator } from './lib/theme-validator';
+import { ThemeValidator } from "./lib/theme-validator";
 
 const result = ThemeValidator.validateTheme(currentTheme);
-console.log('Validation:', result);
+console.log("Validation:", result);
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
@@ -631,12 +631,12 @@ Export as SuggestionEngine class.
 **🧪 COMPLETION TEST:**
 
 ```typescript
-import { SuggestionEngine } from './lib/suggestion-engine';
+import { SuggestionEngine } from "./lib/suggestion-engine";
 
 const env = await SuggestionEngine.detectEnvironment();
 const suggestions = SuggestionEngine.suggestModules(env);
-console.log('Environment:', env);
-console.log('Suggestions:', suggestions);
+console.log("Environment:", env);
+console.log("Suggestions:", suggestions);
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**
@@ -694,10 +694,10 @@ Export as an array: export const PRESET_THEMES: Theme[]
 **🧪 COMPLETION TEST:**
 
 ```typescript
-import { PRESET_THEMES } from './lib/presets';
+import { PRESET_THEMES } from "./lib/presets";
 
-console.log('Presets:', PRESET_THEMES.length);
-console.log('First preset:', PRESET_THEMES[0].metadata.name);
+console.log("Presets:", PRESET_THEMES.length);
+console.log("First preset:", PRESET_THEMES[0].metadata.name);
 ```
 
 **✅ TASK COMPLETE CHECKLIST:**

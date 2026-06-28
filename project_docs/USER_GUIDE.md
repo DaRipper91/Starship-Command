@@ -28,9 +28,9 @@ The **Enhanced APK** brings the power of Starship Command to your pocket!
 1.  **Design:** Create your perfect prompt in the mobile app.
 2.  **Copy TOML:** Go to the **Export** tab and tap the **Copy to Clipboard** button.
 3.  **Apply in Termux:**
-    *   Open Termux.
-    *   Run `nano ~/.config/starship.toml`.
-    *   Paste your configuration and save (Ctrl+O, Enter, Ctrl+X).
+    - Open Termux.
+    - Run `nano ~/.config/starship.toml`.
+    - Paste your configuration and save (Ctrl+O, Enter, Ctrl+X).
 4.  **Restart Shell:** Run `exec fish` or `exec bash` to see your new prompt!
 
 ![Screenshot: Exporting TOML to Termux](assets/screenshots/android-export.png)

@@ -1,9 +1,9 @@
-import { Info, Settings } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { Info, Settings } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-import { useThemeStore } from '../stores/theme-store';
-import { FormatEditor } from './FormatEditor';
-import { IconBrowser } from './IconBrowser';
+import { useThemeStore } from "../stores/theme-store";
+import { FormatEditor } from "./FormatEditor";
+import { IconBrowser } from "./IconBrowser";
 
 export function GlobalFormatControls() {
   const { currentTheme, updateConfig } = useThemeStore();
@@ -21,8 +21,8 @@ export function GlobalFormatControls() {
         setShowIconBrowser(null);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showIconBrowser]);
 
   const handleChange = (
@@ -35,7 +35,7 @@ export function GlobalFormatControls() {
   };
 
   const handleSymbolChange = (key: string, symbol: string) => {
-    if (key === 'continuation_prompt') {
+    if (key === "continuation_prompt") {
       handleChange(key, symbol);
     }
   };
@@ -52,8 +52,8 @@ export function GlobalFormatControls() {
           Left Prompt Format
         </label>
         <FormatEditor
-          formatString={currentTheme.config.format || ''}
-          onChange={(newFormat) => handleChange('format', newFormat)}
+          formatString={currentTheme.config.format || ""}
+          onChange={(newFormat) => handleChange("format", newFormat)}
         />
         <div className="flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
@@ -67,8 +67,8 @@ export function GlobalFormatControls() {
           Right Prompt Format (optional)
         </label>
         <FormatEditor
-          formatString={currentTheme.config.right_format || ''}
-          onChange={(newFormat) => handleChange('right_format', newFormat)}
+          formatString={currentTheme.config.right_format || ""}
+          onChange={(newFormat) => handleChange("right_format", newFormat)}
         />
         <div className="flex items-start gap-2 rounded bg-blue-900/20 p-2 text-xs text-blue-200">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
@@ -82,7 +82,7 @@ export function GlobalFormatControls() {
           <input
             type="checkbox"
             checked={currentTheme.config.add_newline !== false}
-            onChange={(e) => handleChange('add_newline', e.target.checked)}
+            onChange={(e) => handleChange("add_newline", e.target.checked)}
             className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
           />
           Add Newline (before prompt)
@@ -100,9 +100,9 @@ export function GlobalFormatControls() {
         <div className="flex gap-2">
           <input
             type="text"
-            value={currentTheme.config.continuation_prompt || ''}
+            value={currentTheme.config.continuation_prompt || ""}
             onChange={(e) =>
-              handleChange('continuation_prompt', e.target.value)
+              handleChange("continuation_prompt", e.target.value)
             }
             placeholder="e.g. '[∙](bright-black) '
 "
@@ -111,9 +111,9 @@ export function GlobalFormatControls() {
           <button
             onClick={() =>
               setShowIconBrowser(
-                showIconBrowser === 'continuation_prompt'
+                showIconBrowser === "continuation_prompt"
                   ? null
-                  : 'continuation_prompt',
+                  : "continuation_prompt",
               )
             }
             className="shrink-0 rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -121,7 +121,7 @@ export function GlobalFormatControls() {
             Browse
           </button>
         </div>
-        {showIconBrowser === 'continuation_prompt' && (
+        {showIconBrowser === "continuation_prompt" && (
           <div
             ref={iconBrowserRef}
             className="absolute left-0 top-full z-50 mt-1 w-full sm:w-[400px]"
@@ -129,7 +129,7 @@ export function GlobalFormatControls() {
             <IconBrowser
               currentSymbol={currentTheme.config.continuation_prompt as string}
               onSelect={(symbol) => {
-                handleSymbolChange('continuation_prompt', symbol);
+                handleSymbolChange("continuation_prompt", symbol);
                 setShowIconBrowser(null);
               }}
             />

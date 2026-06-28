@@ -1,8 +1,8 @@
-import { X } from 'lucide-react';
-import React from 'react';
+import { X } from "lucide-react";
+import React from "react";
 
-import { PRESET_THEMES } from '../lib/presets';
-import { useThemeStore } from '../stores/theme-store';
+import { PRESET_THEMES } from "../lib/presets";
+import { useThemeStore } from "../stores/theme-store";
 
 interface DynamicThemeSettingsModalProps {
   onClose: () => void;
@@ -56,7 +56,7 @@ export function DynamicThemeSettingsModal({
             <button
               onClick={handleToggle}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                dynamicSettings.enabled ? 'bg-blue-600' : 'bg-gray-600'
+                dynamicSettings.enabled ? "bg-blue-600" : "bg-gray-600"
               }`}
               aria-label="Toggle dynamic theme"
               aria-checked={dynamicSettings.enabled}
@@ -64,7 +64,7 @@ export function DynamicThemeSettingsModal({
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  dynamicSettings.enabled ? 'translate-x-6' : 'translate-x-1'
+                  dynamicSettings.enabled ? "translate-x-6" : "translate-x-1"
                 }`}
               />
             </button>
@@ -73,7 +73,7 @@ export function DynamicThemeSettingsModal({
           <div className="h-px bg-gray-800" />
 
           <div
-            className={`flex flex-col gap-4 ${!dynamicSettings.enabled ? 'pointer-events-none opacity-50' : ''}`}
+            className={`flex flex-col gap-4 ${!dynamicSettings.enabled ? "pointer-events-none opacity-50" : ""}`}
           >
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-gray-300">

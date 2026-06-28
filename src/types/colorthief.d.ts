@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-declare module 'colorthief' {
+declare module "colorthief" {
   export default class ColorThief {
     getColor(sourceImage: HTMLImageElement | null, quality?: number): number[];
     getPalette(

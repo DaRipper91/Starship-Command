@@ -1,9 +1,9 @@
-import { ChevronDown, Download, Info } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { ChevronDown, Download, Info } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
-import { logger } from '../lib/logger';
-import { cn } from '../lib/utils';
-import { Modal } from './ui/Modal';
+import { logger } from "../lib/logger";
+import { cn } from "../lib/utils";
+import { Modal } from "./ui/Modal";
 
 interface FontSelectorProps {
   currentFont: string;
@@ -11,37 +11,37 @@ interface FontSelectorProps {
 }
 
 const NERD_FONT_FAMILIES = [
-  'FiraCode NF',
-  'JetBrainsMono NF',
-  'Hack NF',
-  'RobotoMono NF',
-  'MesloLGS NF',
+  "FiraCode NF",
+  "JetBrainsMono NF",
+  "Hack NF",
+  "RobotoMono NF",
+  "MesloLGS NF",
 ];
 
 const fontDownloadUrls: Record<string, string> = {
-  'FiraCode NF':
-    'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip',
-  'JetBrainsMono NF':
-    'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip',
-  'Hack NF':
-    'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip',
-  'RobotoMono NF':
-    'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip',
-  'MesloLGS NF':
-    'https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip',
+  "FiraCode NF":
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip",
+  "JetBrainsMono NF":
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip",
+  "Hack NF":
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip",
+  "RobotoMono NF":
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip",
+  "MesloLGS NF":
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip",
 };
 
 const fontPreviewUrls: Record<string, string> = {
-  'FiraCode NF':
-    'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf',
-  'JetBrainsMono NF':
-    'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Nerd%20Font%20Complete.ttf',
-  'Hack NF':
-    'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Hack/Regular/complete/Hack%20Nerd%20Font%20Complete.ttf',
-  'RobotoMono NF':
-    'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/RobotoMono/Regular/complete/Roboto%20Mono%20Nerd%20Font%20Complete.ttf',
-  'MesloLGS NF':
-    'https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Meslo/M/Regular/complete/Meslo%20LGS%20NF%20Regular.ttf',
+  "FiraCode NF":
+    "https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf",
+  "JetBrainsMono NF":
+    "https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Nerd%20Font%20Complete.ttf",
+  "Hack NF":
+    "https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Hack/Regular/complete/Hack%20Nerd%20Font%20Complete.ttf",
+  "RobotoMono NF":
+    "https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/RobotoMono/Regular/complete/Roboto%20Mono%20Nerd%20Font%20Complete.ttf",
+  "MesloLGS NF":
+    "https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@latest/patched-fonts/Meslo/M/Regular/complete/Meslo%20LGS%20NF%20Regular.ttf",
 };
 
 export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
@@ -67,15 +67,15 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
   const handleDownload = useCallback(() => {
     const downloadUrl = fontDownloadUrls[currentFont];
     if (downloadUrl) {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = `${currentFont.replace(/ /g, '')}.zip`;
+      link.download = `${currentFont.replace(/ /g, "")}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       setShowInstallInstructions(true);
     } else {
-      logger.error('No download URL found for this font.');
+      logger.error("No download URL found for this font.");
     }
   }, [currentFont]);
 
@@ -92,8 +92,8 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
         <ChevronDown
           size={16}
           className={cn(
-            'transform transition-transform',
-            isOpen ? 'rotate-180' : 'rotate-0',
+            "transform transition-transform",
+            isOpen ? "rotate-180" : "rotate-0",
           )}
         />
       </button>
@@ -138,7 +138,7 @@ export function FontSelector({ currentFont, onSelectFont }: FontSelectorProps) {
             <li>
               <strong>1. Locate the downloaded .zip file:</strong> Check your
               browser's downloads (e.g., `~/Downloads/$
-              {currentFont.replace(/ /g, '')}.zip`).
+              {currentFont.replace(/ /g, "")}.zip`).
             </li>
             <li>
               <strong>2. Extract the fonts:</strong> Unzip the downloaded file.

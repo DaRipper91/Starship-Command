@@ -1,7 +1,9 @@
 # 📂 INDEX: ~/Projects/Star_Command
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📁 SUBDIRECTORIES
+
 - [ ] 📂 [android/](./android/)
 - [ ] 📂 [assets/](./assets/)
 - [ ] 📂 [dist/](./dist/)
@@ -13,6 +15,7 @@
 - [ ] 📂 [templates/](./templates/)
 
 ## 📄 FILES
+
 - [ ] **AGENT_REPORT.md** | 4 KB | 2026-04-12
 - [ ] **AGENTS.md** | 8 KB | 2026-04-12
 - [ ] **build_exe.sh** | 4 KB | 2026-04-12

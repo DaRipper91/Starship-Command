@@ -189,16 +189,16 @@ Add JSDoc comments for each method.
 Create a test file `src/test-parser.ts`:
 
 ```typescript
-import { TomlParser } from './lib/toml-parser';
+import { TomlParser } from "./lib/toml-parser";
 
 const config = TomlParser.getDefaultConfig();
-console.log('Default config:', config);
+console.log("Default config:", config);
 
 const toml = TomlParser.stringify(config);
-console.log('TOML output:', toml);
+console.log("TOML output:", toml);
 
 const parsed = TomlParser.parse(toml);
-console.log('Parsed back:', parsed);
+console.log("Parsed back:", parsed);
 ```
 
 Run: `npm run dev` and check console - no errors should appear.
@@ -263,15 +263,15 @@ Export as a class called ColorUtils.
 Add to your test file:
 
 ```typescript
-import { ColorUtils } from './lib/color-utils';
+import { ColorUtils } from "./lib/color-utils";
 
-const complementary = ColorUtils.generateComplementary('#3b82f6');
-console.log('Complementary colors:', complementary);
+const complementary = ColorUtils.generateComplementary("#3b82f6");
+console.log("Complementary colors:", complementary);
 
-const contrast = ColorUtils.checkContrast('#ffffff', '#000000');
-console.log('Contrast ratio:', contrast);
+const contrast = ColorUtils.checkContrast("#ffffff", "#000000");
+console.log("Contrast ratio:", contrast);
 
-console.log('Presets:', Object.keys(ColorUtils.presets));
+console.log("Presets:", Object.keys(ColorUtils.presets));
 ```
 
 **⏱️ Time:** 15 minutes
@@ -645,7 +645,7 @@ Export as ModuleBuilder component.
 3. Import and add to App.tsx left sidebar:
 
    ```tsx
-   import { ModuleBuilder } from './components/ModuleBuilder';
+   import { ModuleBuilder } from "./components/ModuleBuilder";
 
    // In left sidebar:
    <section className="p-4">
@@ -725,9 +725,9 @@ Export as ColorPicker component.
 3. Test by adding to App.tsx temporarily:
 
    ```tsx
-   import { ColorPicker } from './components/ColorPicker';
+   import { ColorPicker } from "./components/ColorPicker";
 
-   const [testColor, setTestColor] = useState('#3b82f6');
+   const [testColor, setTestColor] = useState("#3b82f6");
 
    <ColorPicker
      color={testColor}
@@ -810,7 +810,7 @@ Export as ImagePalette component.
 3. Add to App.tsx left sidebar in Colors section:
 
    ```tsx
-   import { ImagePalette } from './components/ImagePalette';
+   import { ImagePalette } from "./components/ImagePalette";
 
    <section className="p-4">
      <h2 className="mb-3 font-semibold">Color from Image</h2>
@@ -1477,8 +1477,8 @@ Functions:
 
 ```typescript
 interface Suggestion {
-  type: 'module' | 'performance' | 'visual' | 'compatibility';
-  priority: 'high' | 'medium' | 'low';
+  type: "module" | "performance" | "visual" | "compatibility";
+  priority: "high" | "medium" | "low";
   title: string;
   description: string;
   action?: () => void; // Auto-apply function

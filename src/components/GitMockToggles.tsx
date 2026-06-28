@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GitBranch } from 'lucide-react';
+import { GitBranch } from "lucide-react";
 
-import { cn } from '../lib/utils';
-import { useUIStore } from '../stores/ui-store';
+import { cn } from "../lib/utils";
+import { useUIStore } from "../stores/ui-store";
 
 export function GitMockToggles() {
   const { mockGitStatus, setMockGitStatus } = useUIStore();
@@ -12,7 +12,7 @@ export function GitMockToggles() {
     setMockGitStatus({ [key]: !status[key] });
   };
 
-  const increment = (key: 'ahead' | 'behind', val: number) => {
+  const increment = (key: "ahead" | "behind", val: number) => {
     const newVal = Math.max(0, mockGitStatus[key] + val);
     setMockGitStatus({ [key]: newVal });
   };
@@ -43,34 +43,34 @@ export function GitMockToggles() {
         {/* Toggles */}
         <div className="flex flex-wrap gap-2 pt-4">
           <button
-            onClick={() => toggle('isDirty')}
+            onClick={() => toggle("isDirty")}
             className={cn(
-              'rounded border px-3 py-1 text-[10px] transition-all',
+              "rounded border px-3 py-1 text-[10px] transition-all",
               mockGitStatus.isDirty
-                ? 'border-yellow-600 bg-yellow-900/20 text-yellow-400'
-                : 'border-gray-700 bg-gray-800 text-gray-500',
+                ? "border-yellow-600 bg-yellow-900/20 text-yellow-400"
+                : "border-gray-700 bg-gray-800 text-gray-500",
             )}
           >
             Dirty
           </button>
           <button
-            onClick={() => toggle('staged')}
+            onClick={() => toggle("staged")}
             className={cn(
-              'rounded border px-3 py-1 text-[10px] transition-all',
+              "rounded border px-3 py-1 text-[10px] transition-all",
               mockGitStatus.staged
-                ? 'border-green-600 bg-green-900/20 text-green-400'
-                : 'border-gray-700 bg-gray-800 text-gray-500',
+                ? "border-green-600 bg-green-900/20 text-green-400"
+                : "border-gray-700 bg-gray-800 text-gray-500",
             )}
           >
             Staged
           </button>
           <button
-            onClick={() => toggle('stashed')}
+            onClick={() => toggle("stashed")}
             className={cn(
-              'rounded border px-3 py-1 text-[10px] transition-all',
+              "rounded border px-3 py-1 text-[10px] transition-all",
               mockGitStatus.stashed
-                ? 'border-blue-600 bg-blue-900/20 text-blue-400'
-                : 'border-gray-700 bg-gray-800 text-gray-500',
+                ? "border-blue-600 bg-blue-900/20 text-blue-400"
+                : "border-gray-700 bg-gray-800 text-gray-500",
             )}
           >
             Stashed
@@ -84,7 +84,7 @@ export function GitMockToggles() {
           <span className="text-[10px] text-gray-500">Ahead</span>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => increment('ahead', -1)}
+              onClick={() => increment("ahead", -1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
               -
@@ -93,7 +93,7 @@ export function GitMockToggles() {
               {mockGitStatus.ahead}
             </span>
             <button
-              onClick={() => increment('ahead', 1)}
+              onClick={() => increment("ahead", 1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
               +
@@ -104,7 +104,7 @@ export function GitMockToggles() {
           <span className="text-[10px] text-gray-500">Behind</span>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => increment('behind', -1)}
+              onClick={() => increment("behind", -1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
               -
@@ -113,7 +113,7 @@ export function GitMockToggles() {
               {mockGitStatus.behind}
             </span>
             <button
-              onClick={() => increment('behind', 1)}
+              onClick={() => increment("behind", 1)}
               className="flex h-5 w-5 items-center justify-center rounded bg-gray-800 text-gray-400"
             >
               +

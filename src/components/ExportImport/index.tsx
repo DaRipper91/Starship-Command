@@ -1,20 +1,20 @@
-import { X } from 'lucide-react';
-import { useState } from 'react';
+import { X } from "lucide-react";
+import { useState } from "react";
 
-import { cn } from '../../lib/utils';
-import { ExportTab } from './ExportTab';
-import { ImportTab } from './ImportTab';
+import { cn } from "../../lib/utils";
+import { ExportTab } from "./ExportTab";
+import { ImportTab } from "./ImportTab";
 
 interface ExportImportProps {
   onClose: () => void;
-  initialTab?: 'export' | 'import';
+  initialTab?: "export" | "import";
 }
 
 export function ExportImport({
   onClose,
-  initialTab = 'export',
+  initialTab = "export",
 }: ExportImportProps) {
-  const [activeTab, setActiveTab] = useState<'export' | 'import'>(initialTab);
+  const [activeTab, setActiveTab] = useState<"export" | "import">(initialTab);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
@@ -23,24 +23,24 @@ export function ExportImport({
         <div className="flex items-center justify-between border-b border-gray-800 bg-gray-800/50 p-4">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setActiveTab('export')}
+              onClick={() => setActiveTab("export")}
               className={cn(
-                'text-lg font-bold transition-colors',
-                activeTab === 'export'
-                  ? 'text-white'
-                  : 'text-gray-500 hover:text-gray-300',
+                "text-lg font-bold transition-colors",
+                activeTab === "export"
+                  ? "text-white"
+                  : "text-gray-500 hover:text-gray-300",
               )}
             >
               Export
             </button>
             <span className="text-gray-600">/</span>
             <button
-              onClick={() => setActiveTab('import')}
+              onClick={() => setActiveTab("import")}
               className={cn(
-                'text-lg font-bold transition-colors',
-                activeTab === 'import'
-                  ? 'text-white'
-                  : 'text-gray-500 hover:text-gray-300',
+                "text-lg font-bold transition-colors",
+                activeTab === "import"
+                  ? "text-white"
+                  : "text-gray-500 hover:text-gray-300",
               )}
             >
               Import
@@ -57,7 +57,7 @@ export function ExportImport({
 
         {/* Content */}
         <div className="p-6">
-          {activeTab === 'export' ? (
+          {activeTab === "export" ? (
             <ExportTab />
           ) : (
             <ImportTab onClose={onClose} />

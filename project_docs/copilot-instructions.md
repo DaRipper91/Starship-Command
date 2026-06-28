@@ -137,35 +137,35 @@ const { currentTheme, updateConfig, saveTheme } = useThemeStore();
 // ✅ Update specific module config
 updateConfig({
   directory: {
-    style: 'bold cyan',
+    style: "bold cyan",
     truncation_length: 3,
     truncate_to_repo: true,
   },
 });
 
 // ❌ Never mutate directly
-state.currentTheme.config.directory.style = 'bold cyan';
+state.currentTheme.config.directory.style = "bold cyan";
 ```
 
 ### User Feedback Pattern
 
 ```typescript
 // ✅ Always use toast for feedback
-import { useToast } from '@/hooks/useToast';
+import { useToast } from "@/hooks/useToast";
 const { toast } = useToast();
 
 try {
   await saveToGist(toml);
-  toast.success('Theme saved to GitHub Gist!');
+  toast.success("Theme saved to GitHub Gist!");
 } catch (err) {
   toast.error(
-    `Failed to save: ${err instanceof Error ? err.message : 'Unknown error'}`,
+    `Failed to save: ${err instanceof Error ? err.message : "Unknown error"}`,
   );
 }
 
 // ❌ Never use these
-alert('Saved!');
-console.error('Failed', err);
+alert("Saved!");
+console.error("Failed", err);
 ```
 
 ### Loading States
@@ -179,9 +179,9 @@ const handleImageUpload = async (file: File) => {
   try {
     const palette = await ColorUtils.extractPaletteFromImage(file);
     applyPalette(palette);
-    toast.success('Palette applied!');
+    toast.success("Palette applied!");
   } catch (err) {
-    toast.error('Could not extract colors from image');
+    toast.error("Could not extract colors from image");
   } finally {
     setIsExtracting(false);
   }
@@ -430,40 +430,40 @@ When @copilot reviews a PR, check for:
 ```typescript
 // Common Starship style values to suggest
 const COMMON_STYLES = [
-  'bold',
-  'italic',
-  'underline',
-  'bold red',
-  'bold green',
-  'bold blue',
-  'bold cyan',
-  'bold yellow',
-  'bold purple',
-  'italic red',
-  'bg:blue white',
-  'bg:black yellow',
-  '#ff0000',
-  '#00ff00',
-  '#0000ff',
+  "bold",
+  "italic",
+  "underline",
+  "bold red",
+  "bold green",
+  "bold blue",
+  "bold cyan",
+  "bold yellow",
+  "bold purple",
+  "italic red",
+  "bg:blue white",
+  "bg:black yellow",
+  "#ff0000",
+  "#00ff00",
+  "#0000ff",
 ];
 
 // Format string building blocks
 const FORMAT_PARTS = {
-  directory: '$directory',
-  git: '$git_branch$git_status',
-  languages: '$nodejs$python$rust$golang',
-  cloud: '$aws$gcloud',
-  system: '$battery$time',
-  newline: '\n',
-  character: '$character',
+  directory: "$directory",
+  git: "$git_branch$git_status",
+  languages: "$nodejs$python$rust$golang",
+  cloud: "$aws$gcloud",
+  system: "$battery$time",
+  newline: "\n",
+  character: "$character",
 };
 
 // Default module formats
 const MODULE_FORMATS = {
-  directory: '[$path]($style)[$read_only]($read_only_style) ',
-  git_branch: 'on [$symbol$branch(:$remote_branch)]($style) ',
-  character: '$symbol ',
-  nodejs: 'via [$symbol($version )]($style)',
+  directory: "[$path]($style)[$read_only]($read_only_style) ",
+  git_branch: "on [$symbol$branch(:$remote_branch)]($style) ",
+  character: "$symbol ",
+  nodejs: "via [$symbol($version )]($style)",
 };
 ```
 

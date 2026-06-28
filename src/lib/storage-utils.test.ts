@@ -1,9 +1,9 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { StateStorage } from 'zustand/middleware';
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { StateStorage } from "zustand/middleware";
 
-import { createDebouncedStorage } from './storage-utils';
+import { createDebouncedStorage } from "./storage-utils";
 
-describe('createDebouncedStorage', () => {
+describe("createDebouncedStorage", () => {
   const mockStorage: StateStorage = {
     getItem: vi.fn(),
     setItem: vi.fn(),
@@ -17,14 +17,14 @@ describe('createDebouncedStorage', () => {
     vi.useRealTimers();
   });
 
-  it('should debounce setItem calls', () => {
+  it("should debounce setItem calls", () => {
     vi.useFakeTimers();
     const storage = createDebouncedStorage<string>(getStorage, {
       debounceTime: 100,
     });
 
     // Initial call
-    storage!.setItem('key', { state: 'value1', version: 0 });
+    storage!.setItem("key", { state: "value1", version: 0 });
 
     // Should not call underlying storage yet
     expect(mockStorage.setItem).not.toHaveBeenCalled();
@@ -34,7 +34,7 @@ describe('createDebouncedStorage', () => {
     expect(mockStorage.setItem).not.toHaveBeenCalled();
 
     // Second call before debounce finishes
-    storage!.setItem('key', { state: 'value2', version: 0 });
+    storage!.setItem("key", { state: "value2", version: 0 });
 
     // Advance time past first debounce but not second
     vi.advanceTimersByTime(60); // Total 110 from start, but reset at 50 -> 60 elapsed since second call
@@ -45,8 +45,8 @@ describe('createDebouncedStorage', () => {
     expect(mockStorage.setItem).toHaveBeenCalledTimes(1);
     // createJSONStorage stringifies the value
     expect(mockStorage.setItem).toHaveBeenCalledWith(
-      'key',
-      JSON.stringify({ state: 'value2', version: 0 }),
+      "key",
+      JSON.stringify({ state: "value2", version: 0 }),
     );
   });
 });

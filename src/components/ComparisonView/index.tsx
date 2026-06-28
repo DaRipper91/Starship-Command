@@ -1,12 +1,12 @@
-import html2canvas from 'html2canvas';
-import { ArrowLeftRight, Camera, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import html2canvas from "html2canvas";
+import { ArrowLeftRight, Camera, X } from "lucide-react";
+import { useRef, useState } from "react";
 
-import { useToast } from '../../contexts/ToastContext';
-import { PRESET_THEMES } from '../../lib/presets';
-import { TomlParser } from '../../lib/toml-parser';
-import { useThemeStore } from '../../stores/theme-store';
-import { Theme } from '../../types/starship.types';
+import { useToast } from "../../contexts/ToastContext";
+import { PRESET_THEMES } from "../../lib/presets";
+import { TomlParser } from "../../lib/toml-parser";
+import { useThemeStore } from "../../stores/theme-store";
+import { Theme } from "../../types/starship.types";
 
 interface ComparisonViewProps {
   onClose: () => void;
@@ -17,6 +17,7 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
   const { addToast } = useToast();
 
   const allThemes = [currentTheme, ...savedThemes, ...PRESET_THEMES];
+  const allThemesMap = new Map(allThemes.map((t) => [t.metadata.id, t]));
 
   // By default compare current vs a clean preset or the first saved theme
   const [themeA, setThemeA] = useState<Theme>(currentTheme);
@@ -36,27 +37,27 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
 
     try {
       const canvas = await html2canvas(comparisonRef.current, {
-        backgroundColor: '#0d1117',
+        backgroundColor: "#0d1117",
         scale: 2,
       });
 
-      const image = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
       link.href = image;
       link.download = `comparison-${themeA.metadata.name}-vs-${themeB.metadata.name}.png`;
       link.click();
-      addToast('Comparison image downloaded!', 'success');
+      addToast("Comparison image downloaded!", "success");
     } catch (err) {
-      addToast('Failed to generate image', 'error');
+      addToast("Failed to generate image", "error");
     }
   };
 
   // Calculate basic stats for diff
   const getModulesLength = (theme: Theme) => {
     return Object.keys(theme.config).filter((k) => {
-      if (k === 'format') return false;
+      if (k === "format") return false;
       const val = theme.config[k];
-      if (typeof val === 'object' && val !== null && 'disabled' in val) {
+      if (typeof val === "object" && val !== null && "disabled" in val) {
         return (val as { disabled?: boolean }).disabled !== true;
       }
       return true;
@@ -104,10 +105,7 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
               <select
                 value={themeA.metadata.id}
                 onChange={(e) =>
-                  setThemeA(
-                    allThemes.find((t) => t.metadata.id === e.target.value) ||
-                      themeA,
-                  )
+                  setThemeA(allThemesMap.get(e.target.value) || themeA)
                 }
                 className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none"
               >
@@ -131,10 +129,7 @@ export function ComparisonView({ onClose }: ComparisonViewProps) {
               <select
                 value={themeB.metadata.id}
                 onChange={(e) =>
-                  setThemeB(
-                    allThemes.find((t) => t.metadata.id === e.target.value) ||
-                      themeB,
-                  )
+                  setThemeB(allThemesMap.get(e.target.value) || themeB)
                 }
                 className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none"
               >
