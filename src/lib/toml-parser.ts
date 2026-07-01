@@ -18,9 +18,9 @@ export class TomlParser {
    * @param tomlString - The TOML configuration string
    * @returns Object containing parsed configuration and metadata
    */
-  static parse(tomlString: string): { config: StarshipConfig; metadata: any } {
+  static parse(tomlString: string): { config: StarshipConfig; metadata: Record<string, unknown> } {
     try {
-      const parsed = TOML.parse(tomlString) as any;
+      const parsed = TOML.parse(tomlString) as Record<string, unknown>;
       if (typeof parsed !== 'object' || parsed === null) {
         throw new Error('Parsed TOML result is not an object');
       }
@@ -35,11 +35,12 @@ export class TomlParser {
       };
 
       // Remove metadata from the config so Starship doesn't get confused
-      const { metadata: _, ...config } = parsed;
+      const config = { ...parsed };
+      delete config.metadata;
 
       return {
-        config: config as StarshipConfig,
-        metadata,
+        config: config as unknown as StarshipConfig,
+        metadata: metadata as Record<string, unknown>,
       };
     } catch (error) {
       console.error('Failed to parse TOML:', error);

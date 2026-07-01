@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AlertCircle, CheckCircle2, Code } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

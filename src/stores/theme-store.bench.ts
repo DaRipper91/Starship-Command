@@ -86,7 +86,7 @@ const optimizedDeepClone = <T>(obj: T): T => {
   }
 
   if (obj instanceof Date) {
-    return new Date(obj.getTime()) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    return new Date(obj.getTime()) as any;
   }
 
   if (Array.isArray(obj)) {
@@ -94,14 +94,14 @@ const optimizedDeepClone = <T>(obj: T): T => {
     for (let i = 0; i < obj.length; i++) {
       arrCopy[i] = optimizedDeepClone(obj[i]);
     }
-    return arrCopy as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    return arrCopy as any;
   }
 
   // Plain objects
-  const objCopy = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  const objCopy = {} as any;
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      objCopy[key] = optimizedDeepClone((obj as any)[key]); // eslint-disable-line @typescript-eslint/no-explicit-any
+      objCopy[key] = optimizedDeepClone((obj as any)[key]);
     }
   }
   return objCopy;

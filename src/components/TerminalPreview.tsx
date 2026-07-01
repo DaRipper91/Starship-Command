@@ -1,5 +1,7 @@
 import '@xterm/xterm/css/xterm.css';
 
+import { FitAddon } from '@xterm/addon-fit';
+import { Terminal } from '@xterm/xterm';
 import html2canvas from 'html2canvas';
 import { ChevronUp, Copy, Download, Type } from 'lucide-react';
 import React, {
@@ -10,8 +12,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Terminal } from '@xterm/xterm';
-import { FitAddon } from '@xterm/addon-fit';
 
 import { useToast } from '../contexts/ToastContext';
 import { useDebounce } from '../hooks/useDebounce';
