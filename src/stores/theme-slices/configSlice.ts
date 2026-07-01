@@ -1,9 +1,10 @@
 import equal from 'fast-deep-equal';
 import { StateCreator } from 'zustand';
+
 import { TomlParser } from '../../lib/toml-parser';
 import { generateId } from '../../lib/utils';
 import { StarshipConfig, Theme, ThemeMetadata } from '../../types/starship.types';
-import { ThemeStore, ConfigSlice } from '../../types/theme-store.types';
+import { ConfigSlice,ThemeStore } from '../../types/theme-store.types';
 
 export const createDefaultTheme = (): Theme => ({
   metadata: {
@@ -185,7 +186,7 @@ export const createConfigSlice: StateCreator<
         config,
         metadata: {
           ...state.currentTheme.metadata,
-          ...(metadata as any),
+          ...(metadata as Record<string, unknown>),
           updated: new Date(),
         },
       },

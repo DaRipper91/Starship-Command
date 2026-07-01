@@ -63,7 +63,7 @@ describe('UIStore', () => {
   });
 
   describe('actions', () => {
-    let useUIStore: any;
+    let useUIStore: typeof import('./ui-store').useUIStore;
 
     beforeEach(async () => {
       const module = await import('./ui-store');
@@ -71,8 +71,8 @@ describe('UIStore', () => {
     });
 
     it('setLayoutMode', () => {
-      useUIStore.getState().setLayoutMode('split');
-      expect(useUIStore.getState().layoutMode).toBe('split');
+      useUIStore.getState().setLayoutMode('desktop');
+      expect(useUIStore.getState().layoutMode).toBe('desktop');
     });
 
     it('setMode', () => {

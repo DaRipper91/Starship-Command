@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand';
-import { ThemeStore, UISlice, DynamicThemeSettings } from '../../types/theme-store.types';
+
+import { DynamicThemeSettings,ThemeStore, UISlice } from '../../types/theme-store.types';
 
 export const createDefaultDynamicSettings = (): DynamicThemeSettings => ({
   enabled: false,
