@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { bench, describe } from 'vitest';
+import { bench, describe } from "vitest";
 
 const mockTheme = {
   metadata: {
-    id: 'test-id',
-    name: 'Test Theme',
+    id: "test-id",
+    name: "Test Theme",
     created: new Date(),
     updated: new Date(),
   },
   config: {
-    format: '$directory$character',
-    directory: { style: 'blue', truncation_length: 3 },
-    character: { success_symbol: '[❯](green)' },
+    format: "$directory$character",
+    directory: { style: "blue", truncation_length: 3 },
+    character: { success_symbol: "[❯](green)" },
     palettes: {
       global: {
-        primary: '#ff0000',
+        primary: "#ff0000",
       },
     },
   },
@@ -23,7 +23,7 @@ const mockTheme = {
 const jsonClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
 
 const customClone = <T>(obj: T): T => {
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || typeof obj !== "object") {
     return obj;
   }
   if (obj instanceof Date) {
@@ -46,22 +46,22 @@ const customClone = <T>(obj: T): T => {
 };
 
 const structuredCloneFallback = <T>(obj: T): T => {
-  if (typeof structuredClone === 'function') {
+  if (typeof structuredClone === "function") {
     return structuredClone(obj);
   }
   return JSON.parse(JSON.stringify(obj));
 };
 
-describe('Deep Clone Benchmarks', () => {
-  bench('JSON.parse(JSON.stringify())', () => {
+describe("Deep Clone Benchmarks", () => {
+  bench("JSON.parse(JSON.stringify())", () => {
     jsonClone(mockTheme);
   });
 
-  bench('custom recursive clone', () => {
+  bench("custom recursive clone", () => {
     customClone(mockTheme);
   });
 
-  bench('structuredClone (if available)', () => {
+  bench("structuredClone (if available)", () => {
     structuredCloneFallback(mockTheme);
   });
 });

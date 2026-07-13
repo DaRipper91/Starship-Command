@@ -1,5 +1,5 @@
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
-export type LayoutMode = 'auto' | 'mobile' | 'desktop' | 'terminal';
+export type LogLevel = "debug" | "info" | "warn" | "error";
+export type LayoutMode = "auto" | "mobile" | "desktop" | "terminal";
 
 export interface ThemeMetadata {
   id: string;

@@ -1,10 +1,10 @@
 // scripts/fetch-schema.mjs
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises";
+import path from "path";
 
-const SCHEMA_URL = 'https://starship.rs/config-schema.json';
-const OUTPUT_DIR = 'src/generated';
-const OUTPUT_FILE = 'module-definitions.json';
+const SCHEMA_URL = "https://starship.rs/config-schema.json";
+const OUTPUT_DIR = "src/generated";
+const OUTPUT_FILE = "module-definitions.json";
 
 /**
  * Transforms the raw Starship JSON schema into a simplified format for the UI.
@@ -20,19 +20,19 @@ function transformSchema(schema) {
     const prop = topLevelProps[key];
     const ref = prop.$ref;
 
-    if (ref && ref.startsWith('#/$defs/')) {
-      const defName = ref.substring('#/$defs/'.length);
+    if (ref && ref.startsWith("#/$defs/")) {
+      const defName = ref.substring("#/$defs/".length);
       const definition = definitions[defName];
 
       if (definition && definition.properties) {
         const module = {
           name: key,
           title: definition.title || key,
-          description: definition.description || '',
+          description: definition.description || "",
           properties: Object.entries(definition.properties).map(
             ([propKey, propValue]) => ({
               name: propKey,
-              description: propValue.description || '',
+              description: propValue.description || "",
               type: propValue.type,
               default: propValue.default,
             }),
@@ -49,7 +49,7 @@ function transformSchema(schema) {
     const prop = topLevelProps[key];
     if (!prop.$ref) {
       topLevelNonModuleProps[key] = {
-        description: prop.description || '',
+        description: prop.description || "",
         type: prop.type,
         default: prop.default,
       };
@@ -57,13 +57,13 @@ function transformSchema(schema) {
   }
 
   modules.push({
-    name: 'config',
-    title: 'Top-Level Config',
-    description: 'Global configuration settings for Starship.',
+    name: "config",
+    title: "Top-Level Config",
+    description: "Global configuration settings for Starship.",
     properties: Object.entries(topLevelNonModuleProps).map(
       ([propKey, propValue]) => ({
         name: propKey,
-        description: propValue.description || '',
+        description: propValue.description || "",
         type: propValue.type,
         default: propValue.default,
       }),
@@ -81,9 +81,9 @@ async function main() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const schema = await response.json();
-    console.log('Schema fetched successfully.');
+    console.log("Schema fetched successfully.");
 
-    console.log('Transforming schema...');
+    console.log("Transforming schema...");
     const transformedData = transformSchema(schema);
 
     const outputPath = path.join(OUTPUT_DIR, OUTPUT_FILE);
@@ -91,7 +91,7 @@ async function main() {
     await fs.writeFile(outputPath, JSON.stringify(transformedData, null, 2));
     console.log(`Transformed schema saved to ${outputPath}`);
   } catch (error) {
-    console.error('Failed to fetch or process schema:', error);
+    console.error("Failed to fetch or process schema:", error);
     process.exit(1);
   }
 }

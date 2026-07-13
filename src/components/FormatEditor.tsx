@@ -1,26 +1,26 @@
-import { LayoutGrid, PenTool, Text, X } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { LayoutGrid, PenTool, Text, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import MODULE_DEFINITIONS from '../generated/module-definitions.json';
-import { cn } from '../lib/utils';
-import { useThemeStore } from '../stores/theme-store';
-import { BaseModuleConfig } from '../types/starship.types';
-import { FormatSegmentEditor } from './FormatSegmentEditor';
+import MODULE_DEFINITIONS from "../generated/module-definitions.json";
+import { cn } from "../lib/utils";
+import { useThemeStore } from "../stores/theme-store";
+import { BaseModuleConfig } from "../types/starship.types";
+import { FormatSegmentEditor } from "./FormatSegmentEditor";
 
 // Define types for format segments
 export interface TextSegment {
-  type: 'text';
+  type: "text";
   value: string;
 }
 
 export interface ModuleSegment {
-  type: 'module';
+  type: "module";
   value: string; // e.g., 'directory', 'git_branch'
   style?: string;
 }
 
 export interface StyledTextSegment {
-  type: 'styledText';
+  type: "styledText";
   text: string;
   style: string;
 }
@@ -37,8 +37,8 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const [segments, setSegments] = useState<FormatSegment[]>([]);
   const [editingSegment, setEditingSegment] = useState<number | null>(null);
   const [showIconBrowser, setShowIconBrowser] = useState(false);
-  const [activeStyle, setActiveStyle] = useState('');
-  const [activeText, setActiveText] = useState('');
+  const [activeStyle, setActiveStyle] = useState("");
+  const [activeText, setActiveText] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
 
   // Parse format string into segments on initial load and formatString change
@@ -55,22 +55,22 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
       while ((match = regex.exec(remaining)) !== null) {
         if (match.index > lastIndex) {
           newSegments.push({
-            type: 'text',
+            type: "text",
             value: remaining.substring(lastIndex, match.index),
           });
         }
 
-        if (match[1].startsWith('[')) {
+        if (match[1].startsWith("[")) {
           // Styled text segment: [text](style)
           newSegments.push({
-            type: 'styledText',
+            type: "styledText",
             text: match[2],
             style: match[3],
           });
         } else if (match[4]) {
           // Module segment: $module
           newSegments.push({
-            type: 'module',
+            type: "module",
             value: match[4],
             style: (currentTheme.config[match[4]] as BaseModuleConfig)?.style, // Grab style from current theme
           });
@@ -80,7 +80,7 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
 
       if (remaining.length > lastIndex) {
         newSegments.push({
-          type: 'text',
+          type: "text",
           value: remaining.substring(lastIndex),
         });
       }
@@ -93,29 +93,29 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
   const compileFormatString = useCallback((s: FormatSegment[]): string => {
     return s
       .map((segment) => {
-        if (segment.type === 'text') return segment.value;
-        if (segment.type === 'module') {
+        if (segment.type === "text") return segment.value;
+        if (segment.type === "module") {
           // Modules don't keep inline style in format string unless it's overridden
           return `$${segment.value}`;
         }
-        if (segment.type === 'styledText')
+        if (segment.type === "styledText")
           return `[${segment.text}](${segment.style})`;
-        return '';
+        return "";
       })
-      .join('');
+      .join("");
   }, []);
 
   const handleSegmentClick = (index: number) => {
     setEditingSegment(index);
     const seg = segments[index];
-    if (seg.type === 'text') setActiveText(seg.value);
-    else if (seg.type === 'styledText') setActiveText(seg.text);
-    else setActiveText('');
+    if (seg.type === "text") setActiveText(seg.value);
+    else if (seg.type === "styledText") setActiveText(seg.text);
+    else setActiveText("");
 
     setActiveStyle(
-      segments[index].type === 'styledText'
+      segments[index].type === "styledText"
         ? (segments[index] as StyledTextSegment).style
-        : '',
+        : "",
     );
     setShowIconBrowser(false);
   };
@@ -133,16 +133,16 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
     onChange(compileFormatString(newSegments));
   };
 
-  const addSegment = (type: 'text' | 'module' | 'styledText') => {
+  const addSegment = (type: "text" | "module" | "styledText") => {
     const newSegments = [...segments];
-    if (type === 'text') newSegments.push({ type: 'text', value: 'New Text' });
-    if (type === 'module')
-      newSegments.push({ type: 'module', value: 'directory' });
-    if (type === 'styledText')
+    if (type === "text") newSegments.push({ type: "text", value: "New Text" });
+    if (type === "module")
+      newSegments.push({ type: "module", value: "directory" });
+    if (type === "styledText")
       newSegments.push({
-        type: 'styledText',
-        text: 'Styled Text',
-        style: 'white',
+        type: "styledText",
+        text: "Styled Text",
+        style: "white",
       });
     setSegments(newSegments);
     onChange(compileFormatString(newSegments));
@@ -156,9 +156,9 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
     setEditingSegment(null);
   };
 
-  const handleAddText = () => addSegment('text');
-  const handleAddModule = () => addSegment('module');
-  const handleAddStyledText = () => addSegment('styledText');
+  const handleAddText = () => addSegment("text");
+  const handleAddModule = () => addSegment("module");
+  const handleAddStyledText = () => addSegment("styledText");
 
   const availableModules = MODULE_DEFINITIONS.map((m) => m.name);
 
@@ -173,26 +173,26 @@ export function FormatEditor({ formatString, onChange }: FormatEditorProps) {
             key={index}
             onClick={() => handleSegmentClick(index)}
             className={cn(
-              'flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium',
+              "flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium",
               editingSegment === index
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600',
+                ? "bg-blue-600 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600",
             )}
             aria-label={`Select ${segment.type} segment`}
           >
-            {segment.type === 'text' && (
+            {segment.type === "text" && (
               <Text size={12} className="text-gray-400" />
             )}
-            {segment.type === 'module' && (
+            {segment.type === "module" && (
               <LayoutGrid size={12} className="text-purple-400" />
             )}
-            {segment.type === 'styledText' && (
+            {segment.type === "styledText" && (
               <PenTool size={12} className="text-green-400" />
             )}
             <span>
-              {segment.type === 'text' && segment.value}
-              {segment.type === 'module' && `$${segment.value}`}
-              {segment.type === 'styledText' && `[${segment.text}]`}
+              {segment.type === "text" && segment.value}
+              {segment.type === "module" && `$${segment.value}`}
+              {segment.type === "styledText" && `[${segment.text}]`}
             </span>
             {editingSegment === index && <X size={10} className="ml-1" />}
           </button>

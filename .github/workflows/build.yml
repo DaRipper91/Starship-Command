@@ -2,9 +2,9 @@ name: Build & Release Pipeline
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
   pull_request:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          
+
       - name: Install pnpm
         run: npm install -g pnpm
 
@@ -48,8 +48,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: "temurin"
+          java-version: "21"
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -99,7 +99,7 @@ jobs:
         with:
           name: web-dist
           path: dist/
-          
+
       - name: Install Desktop Dependencies
         working-directory: ./platforms/desktop
         run: npm install

@@ -1,46 +1,46 @@
-import { Image as ImageIcon, Link } from 'lucide-react';
-import { useState } from 'react';
+import { Image as ImageIcon, Link } from "lucide-react";
+import { useState } from "react";
 
-import { useToast } from '../contexts/ToastContext';
-import { useThemeStore } from '../stores/theme-store';
-import { LoadingSpinner } from './LoadingSpinner';
+import { useToast } from "../contexts/ToastContext";
+import { useThemeStore } from "../stores/theme-store";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 export function ImagePalette() {
   const { updateConfig } = useThemeStore();
   const { addToast } = useToast();
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
 
   const handleExtract = async () => {
     if (!imageUrl) {
-      addToast('Please enter an image URL.', 'info');
+      addToast("Please enter an image URL.", "info");
       return;
     }
 
     setIsExtracting(true);
     try {
       const worker = new Worker(
-        new URL('../workers/color-extraction.worker.ts', import.meta.url),
-        { type: 'module' },
+        new URL("../workers/color-extraction.worker.ts", import.meta.url),
+        { type: "module" },
       );
 
       worker.onmessage = (e) => {
-        if (e.data.type === 'success') {
+        if (e.data.type === "success") {
           updateConfig({
-            palette: 'extracted',
+            palette: "extracted",
             palettes: { extracted: e.data.payload },
           });
-          addToast('Palette extracted and applied!', 'success');
-        } else if (e.data.type === 'error') {
-          addToast(e.data.error || 'Failed to extract palette.', 'error');
+          addToast("Palette extracted and applied!", "success");
+        } else if (e.data.type === "error") {
+          addToast(e.data.error || "Failed to extract palette.", "error");
         }
         setIsExtracting(false);
         worker.terminate();
       };
 
       worker.onerror = (e) => {
-        console.error('Worker error:', e);
-        addToast('Worker failed to extract palette.', 'error');
+        console.error("Worker error:", e);
+        addToast("Worker failed to extract palette.", "error");
         setIsExtracting(false);
         worker.terminate();
       };
@@ -48,8 +48,8 @@ export function ImagePalette() {
       worker.postMessage({ imageUrl });
     } catch (error) {
       addToast(
-        error instanceof Error ? error.message : 'An unknown error occurred.',
-        'error',
+        error instanceof Error ? error.message : "An unknown error occurred.",
+        "error",
       );
       setIsExtracting(false);
     }
@@ -90,7 +90,7 @@ export function ImagePalette() {
             Extracting...
           </>
         ) : (
-          'Extract & Apply Palette'
+          "Extract & Apply Palette"
         )}
       </button>
     </div>

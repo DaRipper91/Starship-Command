@@ -1,8 +1,8 @@
-import { useThemeStore } from '../stores/theme-store';
-import { BaseModuleConfig } from '../types/starship.types';
-import { FormatSegment, StyledTextSegment } from './FormatEditor';
-import { IconBrowser } from './IconBrowser';
-import { StyleEditor } from './StyleEditor';
+import { useThemeStore } from "../stores/theme-store";
+import { BaseModuleConfig } from "../types/starship.types";
+import { FormatSegment, StyledTextSegment } from "./FormatEditor";
+import { IconBrowser } from "./IconBrowser";
+import { StyleEditor } from "./StyleEditor";
 
 interface FormatSegmentEditorProps {
   segment: FormatSegment;
@@ -34,20 +34,20 @@ export function FormatSegmentEditor({
   return (
     <div className="mt-4 flex flex-col gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-inner">
       <h4 className="text-sm font-semibold capitalize text-gray-200">
-        Edit {segment.type.replace('Text', ' Text')} Segment
+        Edit {segment.type.replace("Text", " Text")} Segment
       </h4>
 
       {/* Text/Value Input */}
-      {(segment.type === 'text' || segment.type === 'styledText') && (
+      {(segment.type === "text" || segment.type === "styledText") && (
         <input
           type="text"
           value={activeText}
           onChange={(e) => {
             const newValue = e.target.value;
             setActiveText(newValue);
-            if (segment.type === 'text') {
+            if (segment.type === "text") {
               onSegmentChange({ value: newValue });
-            } else if (segment.type === 'styledText') {
+            } else if (segment.type === "styledText") {
               onSegmentChange({ text: newValue });
             }
           }}
@@ -56,7 +56,7 @@ export function FormatSegmentEditor({
         />
       )}
 
-      {segment.type === 'module' && (
+      {segment.type === "module" && (
         <select
           value={segment.value}
           onChange={(e) => onSegmentChange({ value: e.target.value })}
@@ -64,14 +64,14 @@ export function FormatSegmentEditor({
         >
           {availableModules.map((modId) => (
             <option key={modId} value={modId}>
-              {modId.replace(/_/g, ' ')}
+              {modId.replace(/_/g, " ")}
             </option>
           ))}
         </select>
       )}
 
       {/* Style Input (for modules and styledText) */}
-      {(segment.type === 'styledText' || segment.type === 'module') && (
+      {(segment.type === "styledText" || segment.type === "module") && (
         <div className="flex flex-col gap-2">
           <label className="text-xs font-medium text-gray-400">Style</label>
           <StyleEditor
@@ -85,7 +85,7 @@ export function FormatSegmentEditor({
       )}
 
       {/* Icon Browser Integration (for symbols in modules or styled text) */}
-      {(segment.type === 'module' || segment.type === 'styledText') && (
+      {(segment.type === "module" || segment.type === "styledText") && (
         <div className="relative flex flex-col gap-2">
           <label className="text-xs font-medium text-gray-400">
             Symbol (via Icon Browser)
@@ -102,13 +102,13 @@ export function FormatSegmentEditor({
             <div className="absolute left-0 top-full z-50 mt-1 w-full sm:w-[300px]">
               <IconBrowser
                 currentSymbol={
-                  segment.type === 'module'
+                  segment.type === "module"
                     ? (currentTheme.config[segment.value] as BaseModuleConfig)
-                        ?.symbol || ''
+                        ?.symbol || ""
                     : (segment as StyledTextSegment).text
                 }
                 onSelect={(icon) => {
-                  if (segment.type === 'styledText') {
+                  if (segment.type === "styledText") {
                     onSegmentChange({ text: icon });
                     setActiveText(icon);
                   }

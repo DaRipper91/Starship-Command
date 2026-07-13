@@ -1,6 +1,6 @@
-import { describe, it } from 'vitest';
+import { describe, it } from "vitest";
 
-describe('Lookup Benchmark', () => {
+describe("Lookup Benchmark", () => {
   const ARRAY_SIZE = 1000;
   const ITERATIONS = 100000;
 
@@ -12,26 +12,26 @@ describe('Lookup Benchmark', () => {
   }));
   const targetId = `b${ARRAY_SIZE - 1}`;
 
-  it('benchmark array spreading', () => {
+  it("benchmark array spreading", () => {
     const start = performance.now();
     for (let i = 0; i < ITERATIONS; i++) {
       const target = [...array1, ...array2].find(
         (item) => item.metadata.id === targetId,
       );
-      if (!target) throw new Error('Not found');
+      if (!target) throw new Error("Not found");
     }
     const end = performance.now();
     // eslint-disable-next-line no-console
     console.log(`Array spreading took: ${(end - start).toFixed(2)}ms`);
   }, 20000);
 
-  it('benchmark sequential searching', () => {
+  it("benchmark sequential searching", () => {
     const start = performance.now();
     for (let i = 0; i < ITERATIONS; i++) {
       const target =
         array1.find((item) => item.metadata.id === targetId) ||
         array2.find((item) => item.metadata.id === targetId);
-      if (!target) throw new Error('Not found');
+      if (!target) throw new Error("Not found");
     }
     const end = performance.now();
     // eslint-disable-next-line no-console

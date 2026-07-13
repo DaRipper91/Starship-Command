@@ -1,7 +1,7 @@
-import { X } from 'lucide-react';
-import React from 'react';
+import { X } from "lucide-react";
+import React from "react";
 
-import { cn } from '../../lib/utils';
+import { cn } from "../../lib/utils";
 
 interface ModalProps {
   isOpen: boolean;
@@ -32,7 +32,7 @@ export function Modal({
     >
       <div
         className={cn(
-          'relative w-full max-w-lg rounded-xl border border-gray-700 bg-gray-800 text-gray-200 shadow-2xl',
+          "relative w-full max-w-lg rounded-xl border border-gray-700 bg-gray-800 text-gray-200 shadow-2xl",
           className,
         )}
         onClick={(e) => e.stopPropagation()}

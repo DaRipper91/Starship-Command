@@ -21,8 +21,8 @@ If you want a different font (like FiraCode, Meslo, or Hack), follow these steps
 3.  **Extract:** Extract the `.ttf` or `.otf` file.
 4.  **Rename:** Rename your chosen file to exactly `font.ttf`.
 5.  **Move to Termux:** Move the file to the Termux configuration directory:
-    *   If using a file manager: `/data/data/com.termux/files/home/.termux/font.ttf`
-    *   Using terminal: `mv my-font.ttf ~/.termux/font.ttf`
+    - If using a file manager: `/data/data/com.termux/files/home/.termux/font.ttf`
+    - Using terminal: `mv my-font.ttf ~/.termux/font.ttf`
 6.  **Apply:** Run `termux-reload-settings`.
 
 ## 🧪 Verifying the Installation
@@ -37,11 +37,11 @@ If you see a **Windows icon, GitHub logo, Docker logo, Node.js logo, Java logo, 
 
 ## 💡 Troubleshooting
 
-*   **Icons still broken?** Ensure you are using the **native Termux terminal**. Some 3rd-party keyboards or overlays may interfere with font rendering.
-*   **Font looks weird?** Try a different font from the "Ligatures" or "Mono" variants. JetBrainsMono is generally the most stable for mobile screens.
-*   **Using Termux-X11?** You may need to install the fonts in your XFCE environment as well:
-    ```bash
+- **Icons still broken?** Ensure you are using the **native Termux terminal**. Some 3rd-party keyboards or overlays may interfere with font rendering.
+- **Font looks weird?** Try a different font from the "Ligatures" or "Mono" variants. JetBrainsMono is generally the most stable for mobile screens.
+- **Using Termux-X11?** You may need to install the fonts in your XFCE environment as well:
+  `bash
 mkdir -p ~/.local/share/fonts
 cp ~/.termux/font.ttf ~/.local/share/fonts/
 fc-cache -fv
-    ```
+    `

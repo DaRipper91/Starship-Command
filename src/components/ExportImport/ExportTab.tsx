@@ -1,8 +1,8 @@
-import { Copy, Download, Share2, Terminal } from 'lucide-react';
+import { Copy, Download, Share2, Terminal } from "lucide-react";
 
-import { useToast } from '../../contexts/ToastContext';
-import { TomlParser } from '../../lib/toml-parser';
-import { useThemeStore } from '../../stores/theme-store';
+import { useToast } from "../../contexts/ToastContext";
+import { TomlParser } from "../../lib/toml-parser";
+import { useThemeStore } from "../../stores/theme-store";
 
 export function ExportTab() {
   const { currentTheme } = useThemeStore();
@@ -11,18 +11,18 @@ export function ExportTab() {
   const handleDownload = () => {
     try {
       const toml = TomlParser.stringify(currentTheme.config);
-      const blob = new Blob([toml], { type: 'text/plain;charset=utf-8' });
+      const blob = new Blob([toml], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = 'starship.toml';
+      link.download = "starship.toml";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      addToast('File downloaded successfully!', 'success');
+      addToast("File downloaded successfully!", "success");
     } catch (err) {
-      addToast('Failed to generate file.', 'error');
+      addToast("Failed to generate file.", "error");
     }
   };
 
@@ -30,9 +30,9 @@ export function ExportTab() {
     try {
       const toml = TomlParser.stringify(currentTheme.config);
       await navigator.clipboard.writeText(toml);
-      addToast('Copied to clipboard!', 'success');
+      addToast("Copied to clipboard!", "success");
     } catch (err) {
-      addToast('Failed to copy text.', 'error');
+      addToast("Failed to copy text.", "error");
     }
   };
 
@@ -42,9 +42,9 @@ export function ExportTab() {
       const base64 = btoa(encodeURIComponent(toml));
       const url = `${window.location.origin}${window.location.pathname}?theme=${base64}`;
       await navigator.clipboard.writeText(url);
-      addToast('Share URL copied to clipboard!', 'success');
+      addToast("Share URL copied to clipboard!", "success");
     } catch (err) {
-      addToast('Failed to create share URL.', 'error');
+      addToast("Failed to create share URL.", "error");
     }
   };
 

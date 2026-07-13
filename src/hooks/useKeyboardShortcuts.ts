@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from "react";
 
 type KeyCombo = string; // e.g., "meta+s" or "ctrl+k"
 type ShortcutHandler = (e: KeyboardEvent) => void;
@@ -21,14 +21,14 @@ interface ParsedShortcut extends Shortcut {
 export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
   const parsedShortcuts = useMemo(() => {
     return shortcuts.map((shortcut) => {
-      const keys = shortcut.keys.toLowerCase().split('+');
+      const keys = shortcut.keys.toLowerCase().split("+");
       return {
         ...shortcut,
-        requiresMeta: keys.includes('meta') || keys.includes('cmd'),
-        requiresCtrl: keys.includes('ctrl'),
-        requiresShift: keys.includes('shift'),
-        requiresAlt: keys.includes('alt'),
-        requiresMod: keys.includes('mod'),
+        requiresMeta: keys.includes("meta") || keys.includes("cmd"),
+        requiresCtrl: keys.includes("ctrl"),
+        requiresShift: keys.includes("shift"),
+        requiresAlt: keys.includes("alt"),
+        requiresMod: keys.includes("mod"),
         mainKey: keys[keys.length - 1],
       };
     });
@@ -44,14 +44,14 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
       const isEditable =
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName) ||
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target?.tagName) ||
         target?.isContentEditable;
 
       // When in an input, suppress all custom shortcuts (like Cmd+Z for theme undo)
       // so the browser can handle text editing natively.
       // Exception: Allow Cmd+S (Save) to trigger from anywhere.
       if (isEditable) {
-        const isSave = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's';
+        const isSave = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s";
         if (!isSave) {
           return;
         }
@@ -92,7 +92,7 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[]) {
       });
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 }

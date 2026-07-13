@@ -12,13 +12,15 @@ All notable changes to this project will be documented in this file.
 
 - [`d9448a8`](https://github.com/DaRipper91/Star_Command/commit/d9448a8) — fix(android): remove invalid res markdown files for apk build _DaRipper91_
 
-### 📁 Files Changed  _24 total (0 added, 1 modified, 23 deleted)_
+### 📁 Files Changed _24 total (0 added, 1 modified, 23 deleted)_
 
 **Config**
+
 - `.github/workflows/android-build.yml` — Modified
 - `.github/workflows/android.yml` — Deleted
 
 **Markup/Docs**
+
 - `android/app/src/main/res/DIRECTORY_INDEX.md` — Deleted
 - `android/app/src/main/res/drawable-land-hdpi/DIRECTORY_INDEX.md` — Deleted
 - `android/app/src/main/res/drawable-land-mdpi/DIRECTORY_INDEX.md` — Deleted

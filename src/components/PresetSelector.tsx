@@ -1,11 +1,11 @@
-import { ChevronDown, Palette } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { useStore } from 'zustand';
+import { ChevronDown, Palette } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useStore } from "zustand";
 
-import { useConfirmation } from '../contexts/ConfirmationContext';
-import { useToast } from '../contexts/ToastContext';
-import { PRESET_THEMES } from '../lib/presets';
-import { useThemeStore } from '../stores/theme-store';
+import { useConfirmation } from "../contexts/ConfirmationContext";
+import { useToast } from "../contexts/ToastContext";
+import { PRESET_THEMES } from "../lib/presets";
+import { useThemeStore } from "../stores/theme-store";
 
 export function PresetSelector() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,9 +28,9 @@ export function PresetSelector() {
         setIsOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -61,19 +61,19 @@ export function PresetSelector() {
 
     if (hasUnsavedChanges && hasHistory) {
       const confirmed = await confirm({
-        title: 'Apply Preset?',
+        title: "Apply Preset?",
         message:
-          'This will overwrite your current theme changes. Are you sure?',
-        confirmText: 'Apply Anyway',
+          "This will overwrite your current theme changes. Are you sure?",
+        confirmText: "Apply Anyway",
       });
       if (!confirmed) return;
     }
 
     try {
       loadTheme(preset);
-      addToast(`Applied preset: ${preset.metadata.name}`, 'success');
+      addToast(`Applied preset: ${preset.metadata.name}`, "success");
     } catch (err) {
-      addToast('Failed to load preset.', 'error');
+      addToast("Failed to load preset.", "error");
     }
   };
 

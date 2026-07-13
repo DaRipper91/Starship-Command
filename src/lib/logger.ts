@@ -1,13 +1,13 @@
-import { LogLevel } from '../types';
+import { LogLevel } from "../types";
 
 /* eslint-disable no-console */
 class Logger {
   private level: LogLevel =
-    import.meta.env.MODE === 'production' ? 'error' : 'debug';
+    import.meta.env.MODE === "production" ? "error" : "debug";
 
   private log(level: LogLevel, message: string, ...args: unknown[]) {
     // Basic level check
-    const levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
+    const levels: LogLevel[] = ["debug", "info", "warn", "error"];
     const currentLevelIndex = levels.indexOf(this.level);
     const targetLevelIndex = levels.indexOf(level);
 
@@ -16,16 +16,16 @@ class Logger {
       const prefix = `[${timestamp}] [${level.toUpperCase()}]`;
 
       switch (level) {
-        case 'debug':
+        case "debug":
           console.debug(prefix, message, ...args);
           break;
-        case 'info':
+        case "info":
           console.info(prefix, message, ...args);
           break;
-        case 'warn':
+        case "warn":
           console.warn(prefix, message, ...args);
           break;
-        case 'error':
+        case "error":
           console.error(prefix, message, ...args);
           break;
       }
@@ -33,19 +33,19 @@ class Logger {
   }
 
   debug(message: string, ...args: unknown[]) {
-    this.log('debug', message, ...args);
+    this.log("debug", message, ...args);
   }
 
   info(message: string, ...args: unknown[]) {
-    this.log('info', message, ...args);
+    this.log("info", message, ...args);
   }
 
   warn(message: string, ...args: unknown[]) {
-    this.log('warn', message, ...args);
+    this.log("warn", message, ...args);
   }
 
   error(message: string, ...args: unknown[]) {
-    this.log('error', message, ...args);
+    this.log("error", message, ...args);
   }
 }
 

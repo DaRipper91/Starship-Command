@@ -1,17 +1,20 @@
 # 📂 INDEX: ~/Projects/Star_Command/src/components
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📁 SUBDIRECTORIES
+
 - [ ] 📂 [ComparisonView/](./ComparisonView/)
 - [ ] 📂 [ExportImport/](./ExportImport/)
 - [ ] 📂 [IconBrowser/](./IconBrowser/)
 - [ ] 📂 [SolarSystem/](./SolarSystem/)
 - [ ] 📂 [SuggestionPanel/](./SuggestionPanel/)
-- [ ] 📂 [__tests__/](./__tests__/)
+- [ ] 📂 [**tests**/](./__tests__/)
 - [ ] 📂 [ui/](./ui/)
 - [ ] 📂 [WelcomeWizard/](./WelcomeWizard/)
 
 ## 📄 FILES
+
 - [ ] **App_Alternative.jsx** | 64 KB | 2026-04-12
 - [ ] **AuthModal.tsx** | 8 KB | 2026-04-12
 - [ ] **ColorPicker.tsx** | 8 KB | 2026-04-12

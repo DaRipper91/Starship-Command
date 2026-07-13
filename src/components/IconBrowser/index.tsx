@@ -1,7 +1,7 @@
-import { Check, Search, X } from 'lucide-react';
-import { useState } from 'react';
+import { Check, Search, X } from "lucide-react";
+import { useState } from "react";
 
-import { cn } from '../../lib/utils';
+import { cn } from "../../lib/utils";
 
 interface IconBrowserProps {
   onSelect: (symbol: string) => void;
@@ -9,13 +9,13 @@ interface IconBrowserProps {
 }
 
 const CATEGORIES = [
-  'All',
-  'Arrows',
-  'Git',
-  'Languages',
-  'Cloud',
-  'Containers',
-  'Misc',
+  "All",
+  "Arrows",
+  "Git",
+  "Languages",
+  "Cloud",
+  "Containers",
+  "Misc",
 ] as const;
 type Category = (typeof CATEGORIES)[number];
 
@@ -27,88 +27,88 @@ interface SymbolDef {
 
 const SYMBOLS: SymbolDef[] = [
   // Arrows & Separators (Powerline/Fancy)
-  { icon: '', name: 'Powerline Arrow Right', category: 'Arrows' },
-  { icon: '', name: 'Powerline Arrow Left', category: 'Arrows' },
-  { icon: '', name: 'Powerline Arrow Right Thin', category: 'Arrows' },
-  { icon: '', name: 'Powerline Arrow Left Thin', category: 'Arrows' },
-  { icon: '', name: 'Flame Right', category: 'Arrows' },
-  { icon: '', name: 'Rounded Right', category: 'Arrows' },
-  { icon: '', name: 'Rounded Right Thin', category: 'Arrows' },
-  { icon: '', name: 'Rounded Left', category: 'Arrows' },
-  { icon: '', name: 'Rounded Left Thin', category: 'Arrows' },
-  { icon: '', name: 'Slant Right', category: 'Arrows' },
-  { icon: '', name: 'Slant Left', category: 'Arrows' },
-  { icon: '', name: 'Pixelated Right', category: 'Arrows' },
-  { icon: '', name: 'Pixelated Left', category: 'Arrows' },
-  { icon: '', name: 'Ice Right', category: 'Arrows' },
-  { icon: '', name: 'Ice Left', category: 'Arrows' },
-  { icon: '→', name: 'Right Arrow', category: 'Arrows' },
-  { icon: '⇒', name: 'Right Double Arrow', category: 'Arrows' },
-  { icon: '➔', name: 'Heavy Right Arrow', category: 'Arrows' },
-  { icon: '➜', name: 'Heavy Round Right Arrow', category: 'Arrows' },
-  { icon: '❯', name: 'Heavy Right Angle Bracket', category: 'Arrows' },
-  { icon: '⚡', name: 'Lightning Zap', category: 'Arrows' },
+  { icon: "", name: "Powerline Arrow Right", category: "Arrows" },
+  { icon: "", name: "Powerline Arrow Left", category: "Arrows" },
+  { icon: "", name: "Powerline Arrow Right Thin", category: "Arrows" },
+  { icon: "", name: "Powerline Arrow Left Thin", category: "Arrows" },
+  { icon: "", name: "Flame Right", category: "Arrows" },
+  { icon: "", name: "Rounded Right", category: "Arrows" },
+  { icon: "", name: "Rounded Right Thin", category: "Arrows" },
+  { icon: "", name: "Rounded Left", category: "Arrows" },
+  { icon: "", name: "Rounded Left Thin", category: "Arrows" },
+  { icon: "", name: "Slant Right", category: "Arrows" },
+  { icon: "", name: "Slant Left", category: "Arrows" },
+  { icon: "", name: "Pixelated Right", category: "Arrows" },
+  { icon: "", name: "Pixelated Left", category: "Arrows" },
+  { icon: "", name: "Ice Right", category: "Arrows" },
+  { icon: "", name: "Ice Left", category: "Arrows" },
+  { icon: "→", name: "Right Arrow", category: "Arrows" },
+  { icon: "⇒", name: "Right Double Arrow", category: "Arrows" },
+  { icon: "➔", name: "Heavy Right Arrow", category: "Arrows" },
+  { icon: "➜", name: "Heavy Round Right Arrow", category: "Arrows" },
+  { icon: "❯", name: "Heavy Right Angle Bracket", category: "Arrows" },
+  { icon: "⚡", name: "Lightning Zap", category: "Arrows" },
 
   // Git
-  { icon: '', name: 'Branch (Powerline)', category: 'Git' },
-  { icon: '', name: 'Branch (FontAwesome)', category: 'Git' },
-  { icon: '', name: 'Git Repo', category: 'Git' },
-  { icon: '', name: 'Pull Request', category: 'Git' },
-  { icon: '', name: 'Commit', category: 'Git' },
-  { icon: '±', name: 'Plus-Minus (Status)', category: 'Git' },
-  { icon: '⇡', name: 'Upwards Dashed Arrow (Ahead)', category: 'Git' },
-  { icon: '⇣', name: 'Downwards Dashed Arrow (Behind)', category: 'Git' },
-  { icon: '⇕', name: 'Up Down Arrow (Diverged)', category: 'Git' },
-  { icon: 'x', name: 'Cross (Conflicted)', category: 'Git' },
-  { icon: '!', name: 'Exclamation (Modified)', category: 'Git' },
-  { icon: '+', name: 'Plus (Added)', category: 'Git' },
-  { icon: '?', name: 'Question (Untracked)', category: 'Git' },
+  { icon: "", name: "Branch (Powerline)", category: "Git" },
+  { icon: "", name: "Branch (FontAwesome)", category: "Git" },
+  { icon: "", name: "Git Repo", category: "Git" },
+  { icon: "", name: "Pull Request", category: "Git" },
+  { icon: "", name: "Commit", category: "Git" },
+  { icon: "±", name: "Plus-Minus (Status)", category: "Git" },
+  { icon: "⇡", name: "Upwards Dashed Arrow (Ahead)", category: "Git" },
+  { icon: "⇣", name: "Downwards Dashed Arrow (Behind)", category: "Git" },
+  { icon: "⇕", name: "Up Down Arrow (Diverged)", category: "Git" },
+  { icon: "x", name: "Cross (Conflicted)", category: "Git" },
+  { icon: "!", name: "Exclamation (Modified)", category: "Git" },
+  { icon: "+", name: "Plus (Added)", category: "Git" },
+  { icon: "?", name: "Question (Untracked)", category: "Git" },
 
   // Languages
-  { icon: '', name: 'Node.js (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'React', category: 'Languages' },
-  { icon: '', name: 'Python (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'Rust (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'Go (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'Java (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'PHP (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'Ruby (NerdFont)', category: 'Languages' },
-  { icon: '', name: 'C++', category: 'Languages' },
-  { icon: '', name: 'C#', category: 'Languages' },
+  { icon: "", name: "Node.js (NerdFont)", category: "Languages" },
+  { icon: "", name: "React", category: "Languages" },
+  { icon: "", name: "Python (NerdFont)", category: "Languages" },
+  { icon: "", name: "Rust (NerdFont)", category: "Languages" },
+  { icon: "", name: "Go (NerdFont)", category: "Languages" },
+  { icon: "", name: "Java (NerdFont)", category: "Languages" },
+  { icon: "", name: "PHP (NerdFont)", category: "Languages" },
+  { icon: "", name: "Ruby (NerdFont)", category: "Languages" },
+  { icon: "", name: "C++", category: "Languages" },
+  { icon: "", name: "C#", category: "Languages" },
 
   // Cloud
-  { icon: '', name: 'Cloud (FontAwesome)', category: 'Cloud' },
-  { icon: '', name: 'AWS (NerdFont)', category: 'Cloud' },
-  { icon: '', name: 'Azure (NerdFont)', category: 'Cloud' },
-  { icon: '☁️', name: 'Cloud Emoji', category: 'Cloud' },
+  { icon: "", name: "Cloud (FontAwesome)", category: "Cloud" },
+  { icon: "", name: "AWS (NerdFont)", category: "Cloud" },
+  { icon: "", name: "Azure (NerdFont)", category: "Cloud" },
+  { icon: "☁️", name: "Cloud Emoji", category: "Cloud" },
 
   // Containers
-  { icon: '', name: 'Docker (FontAwesome)', category: 'Containers' },
-  { icon: '󱃾', name: 'Kubernetes (Material)', category: 'Containers' },
-  { icon: '📦', name: 'Package', category: 'Containers' },
-  { icon: '󰏗', name: 'Box (Material)', category: 'Containers' },
+  { icon: "", name: "Docker (FontAwesome)", category: "Containers" },
+  { icon: "󱃾", name: "Kubernetes (Material)", category: "Containers" },
+  { icon: "📦", name: "Package", category: "Containers" },
+  { icon: "󰏗", name: "Box (Material)", category: "Containers" },
 
   // Misc
-  { icon: '', name: 'Folder (Solid)', category: 'Misc' },
-  { icon: '', name: 'Folder (Open)', category: 'Misc' },
-  { icon: '', name: 'Home', category: 'Misc' },
-  { icon: '', name: 'Arch Linux', category: 'Misc' },
-  { icon: '', name: 'Apple', category: 'Misc' },
-  { icon: '', name: 'Windows', category: 'Misc' },
-  { icon: '🚀', name: 'Rocket', category: 'Misc' },
-  { icon: '✓', name: 'Check', category: 'Misc' },
-  { icon: '✗', name: 'Cross', category: 'Misc' },
-  { icon: '', name: 'Clock (FontAwesome)', category: 'Misc' },
-  { icon: '', name: 'Battery (Half)', category: 'Misc' },
+  { icon: "", name: "Folder (Solid)", category: "Misc" },
+  { icon: "", name: "Folder (Open)", category: "Misc" },
+  { icon: "", name: "Home", category: "Misc" },
+  { icon: "", name: "Arch Linux", category: "Misc" },
+  { icon: "", name: "Apple", category: "Misc" },
+  { icon: "", name: "Windows", category: "Misc" },
+  { icon: "🚀", name: "Rocket", category: "Misc" },
+  { icon: "✓", name: "Check", category: "Misc" },
+  { icon: "✗", name: "Cross", category: "Misc" },
+  { icon: "", name: "Clock (FontAwesome)", category: "Misc" },
+  { icon: "", name: "Battery (Half)", category: "Misc" },
 ];
 
 export function IconBrowser({ onSelect, currentSymbol }: IconBrowserProps) {
-  const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState<Category>('All');
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
 
   const filteredSymbols = SYMBOLS.filter((symbol) => {
     const matchesCategory =
-      activeCategory === 'All' || symbol.category === activeCategory;
+      activeCategory === "All" || symbol.category === activeCategory;
     const matchesSearch =
       symbol.name.toLowerCase().includes(search.toLowerCase()) ||
       symbol.icon.includes(search);
@@ -132,7 +132,7 @@ export function IconBrowser({ onSelect, currentSymbol }: IconBrowserProps) {
           />
           {search && (
             <button
-              onClick={() => setSearch('')}
+              onClick={() => setSearch("")}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 hover:bg-gray-700 hover:text-white"
               aria-label="Clear search"
             >
@@ -147,10 +147,10 @@ export function IconBrowser({ onSelect, currentSymbol }: IconBrowserProps) {
               key={category}
               onClick={() => setActiveCategory(category)}
               className={cn(
-                'whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition-colors',
+                "whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition-colors",
                 activeCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white',
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white",
               )}
               aria-label={`Filter by category: ${category}`}
             >
@@ -175,19 +175,19 @@ export function IconBrowser({ onSelect, currentSymbol }: IconBrowserProps) {
                   key={`${symbol.icon}-${idx}`}
                   onClick={() => onSelect(symbol.icon)}
                   className={cn(
-                    'group relative flex aspect-square flex-col items-center justify-center rounded-md border transition-all',
+                    "group relative flex aspect-square flex-col items-center justify-center rounded-md border transition-all",
                     isSelected
-                      ? 'border-blue-500 bg-blue-900/20'
-                      : 'border-gray-800 bg-gray-800 hover:border-gray-600 hover:bg-gray-700',
+                      ? "border-blue-500 bg-blue-900/20"
+                      : "border-gray-800 bg-gray-800 hover:border-gray-600 hover:bg-gray-700",
                   )}
                   title={symbol.name}
                 >
                   <span
                     className={cn(
-                      'text-xl',
+                      "text-xl",
                       isSelected
-                        ? 'text-blue-400'
-                        : 'text-gray-200 group-hover:text-white',
+                        ? "text-blue-400"
+                        : "text-gray-200 group-hover:text-white",
                     )}
                   >
                     {symbol.icon}

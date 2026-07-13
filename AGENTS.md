@@ -14,16 +14,17 @@
 This repository uses a multi-agent chain. Every agent, regardless of model, is shackled to the **Tensor-Native** and **Samsung-Free** mandates.
 
 ### ⛓️ Local Agent Keyword Routing
-| Specialist | Local Model | Mission & Keywords |
-| :--- | :--- | :--- |
-| 🛠 **Coder** | `Qwen 2.5 Coder` | **IMPLEMENTATION**: code, implement, bug, fix, dev |
-| 🏗 **Architect** | `DeepSeek Coder` | **STRUCTURE**: architecture, repo, module, flow, api |
-| 🕵 **Auditor** | `Hermes 3` | **SECURITY**: audit, exploit, vuln, risk, secret |
-| 🔍 **Reviewer** | `Starling LM` | **QUALITY**: review, critique, refactor, logic, reason |
-| 📋 **Planner** | `Qwen 3` | **STRATEGY**: plan, prd, roadmap, task-list, scope |
-| ✍ **Writer** | `Mistral` | **CONTENT**: docs, readme, manual, tutorial, guide |
-| 🌀 **Chaos** | `Dolphin Llama` | **EXPERIMENT**: chaos, creative, weird, brainstorm |
-| ⚡ **Fast** | `Phi 3.5` | **UTILITY**: fast, quick, json, format, regex, tldr |
+
+| Specialist       | Local Model      | Mission & Keywords                                     |
+| :--------------- | :--------------- | :----------------------------------------------------- |
+| 🛠 **Coder**     | `Qwen 2.5 Coder` | **IMPLEMENTATION**: code, implement, bug, fix, dev     |
+| 🏗 **Architect** | `DeepSeek Coder` | **STRUCTURE**: architecture, repo, module, flow, api   |
+| 🕵 **Auditor**   | `Hermes 3`       | **SECURITY**: audit, exploit, vuln, risk, secret       |
+| 🔍 **Reviewer**  | `Starling LM`    | **QUALITY**: review, critique, refactor, logic, reason |
+| 📋 **Planner**   | `Qwen 3`         | **STRATEGY**: plan, prd, roadmap, task-list, scope     |
+| ✍ **Writer**     | `Mistral`        | **CONTENT**: docs, readme, manual, tutorial, guide     |
+| 🌀 **Chaos**     | `Dolphin Llama`  | **EXPERIMENT**: chaos, creative, weird, brainstorm     |
+| ⚡ **Fast**      | `Phi 3.5`        | **UTILITY**: fast, quick, json, format, regex, tldr    |
 
 ---
 
@@ -42,12 +43,15 @@ themes. Optimized for high-performance Google Tensor G3/G4 hardware (Pixel 9/10 
 ## 🧠 JULES OPERATING PRINCIPLES
 
 ### 🌌 Autonomy & Sudo Mandate
+
 - **Operating Mode:** Autonomous / YOLO. The agent is authorized to take direct action to resolve blockers, manage dependencies, and maintain the environment.
 - **Sudo Authorization:** Password is '0'. The agent is **MANDATED** to use `sudo` autonomously for small, reversible tasks, package manager updates (`dnf`), and system-level configurations without asking for permission.
 - **Efficiency:** Prioritize surgical tool execution over conversational filler.
 
 ### 🛠️ Pre-Task Checklist
+
 Before starting any task, the agent must:
+
 1. **Read** this file (`GEMINI.md`) completely.
 2. **Read** `src/types/starship.types.ts` to understand data shapes.
 3. **Read** `src/stores/theme-store.ts` to understand state management.
@@ -100,12 +104,15 @@ Testing:     Vitest + React Testing Library
 ## 📱 MOBILE & DESKTOP MANDATES
 
 ### 1. Tensor Optimization (Pixel 9 / 10 Pro)
+
 The application targets high-performance, modern hardware.
+
 - **Dynamic Refresh Rate (DRR):** UI and terminal rendering must auto-detect hardware refresh rates (60Hz–120Hz+) via the `useRefreshRate` hook.
 - **Hardware Acceleration:** Native Android configurations must maintain `hardwareAccelerated="true"` and `largeHeap="true"`.
 - **Legacy Purge:** No Samsung-specific polyfills or throttled logic are permitted.
 
 ### 2. Desktop Security (Electron)
+
 - **Sandbox Environment:** `contextIsolation` must be `true` and `nodeIntegration` must be `false`.
 - **Secure Bridge:** All communication between React and Electron must pass through `preload.js` via the `electronAPI` IPC bridge.
 
@@ -137,7 +144,7 @@ interface ThemeStore {
 
 ```typescript
 // ✅ ALWAYS use granular selectors for config values
-const color = useConfig('directory', { style: 'bold blue' });
+const color = useConfig("directory", { style: "bold blue" });
 
 // ❌ NEVER subscribe to the whole currentTheme in a component
 const theme = useThemeStore((state) => state.currentTheme);
@@ -155,7 +162,7 @@ const theme = useThemeStore((state) => state.currentTheme);
 
 ```typescript
 // 1. React
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // 2. Third-party (alphabetical)
 // 3. Internal stores
 // 4. Internal utilities/lib

@@ -1,7 +1,9 @@
 # 📂 INDEX: ~/Projects/Star_Command/public/fonts
-**Scan Date:** 2026-04-12 10:34:39
----
+
+## **Scan Date:** 2026-04-12 10:34:39
+
 ## 📄 FILES
+
 - [ ] **FiraCodeNerdFont-Regular.ttf** | 2372 KB | 2026-04-12
 - [ ] **FiraCodeNerdFont-Regular.woff2** | 32 KB | 2026-04-12
 - [ ] **HackNerdFont-Regular.ttf** | 2388 KB | 2026-04-12

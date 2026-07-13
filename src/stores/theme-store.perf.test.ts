@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
-import { useThemeStore } from './theme-store';
+import { useThemeStore } from "./theme-store";
 
-describe('ThemeStore Performance', () => {
-  it('should maintain stable config reference when updating metadata', () => {
+describe("ThemeStore Performance", () => {
+  it("should maintain stable config reference when updating metadata", () => {
     // Reset store
     useThemeStore.getState().resetTheme();
     const store = useThemeStore.getState();
@@ -11,7 +11,7 @@ describe('ThemeStore Performance', () => {
     const initialTheme = store.currentTheme;
 
     // Update metadata only
-    store.updateMetadata({ name: 'Optimized Name' });
+    store.updateMetadata({ name: "Optimized Name" });
 
     const updatedStore = useThemeStore.getState();
     const updatedTheme = updatedStore.currentTheme;

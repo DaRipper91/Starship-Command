@@ -4,14 +4,14 @@ import {
   Settings,
   Terminal,
   X,
-} from 'lucide-react';
-import { useEffect, useState } from 'react';
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { PRESET_THEMES } from '../../lib/presets';
-import { cn } from '../../lib/utils';
-import { useThemeStore } from '../../stores/theme-store';
-import { useUIStore } from '../../stores/ui-store';
-import { Theme } from '../../types/starship.types';
+import { PRESET_THEMES } from "../../lib/presets";
+import { cn } from "../../lib/utils";
+import { useThemeStore } from "../../stores/theme-store";
+import { useUIStore } from "../../stores/ui-store";
+import { Theme } from "../../types/starship.types";
 
 //... (imports are the same)
 
@@ -26,14 +26,14 @@ function ProgressStep({ stepNumber, currentStep, label }: ProgressStepProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-3',
-        isActive ? 'text-blue-400' : 'text-gray-600',
+        "flex items-center gap-3",
+        isActive ? "text-blue-400" : "text-gray-600",
       )}
     >
       <div
         className={cn(
-          'flex h-8 w-8 items-center justify-center rounded-full border',
-          isActive ? 'border-blue-400 bg-blue-900/20' : 'border-gray-700',
+          "flex h-8 w-8 items-center justify-center rounded-full border",
+          isActive ? "border-blue-400 bg-blue-900/20" : "border-gray-700",
         )}
       >
         {stepNumber}
@@ -51,14 +51,14 @@ export function WelcomeWizard() {
   // This logic is now handled in the store, but we can keep a check here
   // in case the store logic is removed or changed.
   useEffect(() => {
-    const hasSeenWizard = localStorage.getItem('starship_wizard_completed');
+    const hasSeenWizard = localStorage.getItem("starship_wizard_completed");
     if (showWelcomeWizard && hasSeenWizard) {
       setShowWelcomeWizard(false);
     }
   }, [showWelcomeWizard, setShowWelcomeWizard]);
 
   const handleComplete = () => {
-    localStorage.setItem('starship_wizard_completed', 'true');
+    localStorage.setItem("starship_wizard_completed", "true");
     setShowWelcomeWizard(false);
   };
 

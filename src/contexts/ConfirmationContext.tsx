@@ -4,9 +4,9 @@ import {
   useCallback,
   useContext,
   useState,
-} from 'react';
+} from "react";
 
-import { Modal } from '../components/ui/Modal';
+import { Modal } from "../components/ui/Modal";
 
 interface ConfirmationOptions {
   title: string;
@@ -24,7 +24,7 @@ export const useConfirmation = () => {
   const context = useContext(ConfirmationContext);
   if (!context) {
     throw new Error(
-      'useConfirmation must be used within a ConfirmationProvider',
+      "useConfirmation must be used within a ConfirmationProvider",
     );
   }
   return context;
@@ -73,13 +73,13 @@ export const ConfirmationProvider = ({ children }: { children: ReactNode }) => {
                 onClick={handleClose}
                 className="rounded-md border border-gray-600 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700"
               >
-                {options.cancelText || 'Cancel'}
+                {options.cancelText || "Cancel"}
               </button>
               <button
                 onClick={handleConfirm}
                 className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500"
               >
-                {options.confirmText || 'Confirm'}
+                {options.confirmText || "Confirm"}
               </button>
             </>
           }

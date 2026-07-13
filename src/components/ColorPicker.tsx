@@ -1,19 +1,19 @@
-import { colord, extend } from 'colord';
-import a11yPlugin from 'colord/plugins/a11y';
-import namesPlugin from 'colord/plugins/names';
-import { AlertTriangle, Check, Pipette } from 'lucide-react';
+import { colord, extend } from "colord";
+import a11yPlugin from "colord/plugins/a11y";
+import namesPlugin from "colord/plugins/names";
+import { AlertTriangle, Check, Pipette } from "lucide-react";
 import React, {
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { HexColorPicker } from 'react-colorful';
+} from "react";
+import { HexColorPicker } from "react-colorful";
 
-import { ColorUtils } from '../lib/color-utils';
-import { cn } from '../lib/utils';
-import { useThemeStore } from '../stores/theme-store';
+import { ColorUtils } from "../lib/color-utils";
+import { cn } from "../lib/utils";
+import { useThemeStore } from "../stores/theme-store";
 
 extend([namesPlugin, a11yPlugin]);
 
@@ -26,16 +26,16 @@ interface ColorPickerProps {
 }
 
 const DEFAULT_SWATCHES = [
-  '#000000',
-  '#FF0000',
-  '#00FF00',
-  '#FFFF00',
-  '#0000FF',
-  '#FF00FF',
-  '#00FFFF',
-  '#FFFFFF',
-  '#808080',
-  '#C0C0C0',
+  "#000000",
+  "#FF0000",
+  "#00FF00",
+  "#FFFF00",
+  "#0000FF",
+  "#FF00FF",
+  "#00FFFF",
+  "#FFFFFF",
+  "#808080",
+  "#C0C0C0",
 ];
 
 interface SwatchProps {
@@ -89,7 +89,7 @@ export function ColorPicker({
 
   const displayColors = useMemo(() => {
     const activePalette =
-      currentTheme.config.palettes?.[currentTheme.config.palette || 'global'] ||
+      currentTheme.config.palettes?.[currentTheme.config.palette || "global"] ||
       {};
     const paletteColors = Object.values(activePalette);
     return [...new Set([...paletteColors, ...DEFAULT_SWATCHES])];
@@ -110,8 +110,8 @@ export function ColorPicker({
         setIsOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleColorChange = useCallback(
@@ -132,7 +132,7 @@ export function ColorPicker({
 
   const handlePresetClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      const presetColor = e.currentTarget.getAttribute('data-color');
+      const presetColor = e.currentTarget.getAttribute("data-color");
       if (presetColor) {
         handleColorChange(presetColor);
       }
@@ -147,11 +147,11 @@ export function ColorPicker({
   }, [inputValue]);
 
   // Contrast check against standard dark background
-  const contrast = ColorUtils.checkContrast(inputValue, '#000000');
+  const contrast = ColorUtils.checkContrast(inputValue, "#000000");
   const isAccessible = contrast.ratio >= 4.5;
 
   return (
-    <div className={cn('relative', className)} ref={popoverRef}>
+    <div className={cn("relative", className)} ref={popoverRef}>
       {label && (
         <label className="mb-1.5 block text-xs font-medium text-gray-400">
           {label}
@@ -210,7 +210,7 @@ export function ColorPicker({
         <div className="absolute left-0 top-full z-50 mt-2 w-64 rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-xl">
           <div className="mb-3">
             <HexColorPicker
-              color={inputValue.startsWith('#') ? inputValue : '#ffffff'}
+              color={inputValue.startsWith("#") ? inputValue : "#ffffff"}
               onChange={handleColorChange}
             />
           </div>

@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 import {
   ArrowLeftRight,
   Globe,
@@ -11,59 +11,59 @@ import {
   Smartphone,
   Undo,
   X,
-} from 'lucide-react';
-import React, { Suspense, useEffect } from 'react';
-import { useStore } from 'zustand';
+} from "lucide-react";
+import React, { Suspense, useEffect } from "react";
+import { useStore } from "zustand";
 
-import { AuthModal } from './components/AuthModal';
-import { CommandPalette } from './components/CommandPalette';
-import { DynamicThemeSettingsModal } from './components/DynamicThemeSettingsModal';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { FontSelector } from './components/FontSelector';
-import { GlobalFormatControls } from './components/GlobalFormatControls';
-import { LoadingSpinner } from './components/LoadingSpinner';
-import { ModuleConfig } from './components/ModuleConfig';
-import { ModuleList } from './components/ModuleList';
-import { PresetSelector } from './components/PresetSelector';
-import { SuggestionPanel } from './components/SuggestionPanel';
-import { ThemeUploadModal } from './components/ThemeUploadModal';
-import { WelcomeWizard } from './components/WelcomeWizard';
-import { AccessibilityProvider } from './contexts/AccessibilityContext';
-import { ConfirmationProvider } from './contexts/ConfirmationContext';
-import { ToastProvider, useToast } from './contexts/ToastContext';
-import { useDynamicTheme } from './hooks/useDynamicTheme';
-import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
-import { cn } from './lib/utils';
-import { useThemeStore } from './stores/theme-store';
-import { useUIStore } from './stores/ui-store';
+import { AuthModal } from "./components/AuthModal";
+import { CommandPalette } from "./components/CommandPalette";
+import { DynamicThemeSettingsModal } from "./components/DynamicThemeSettingsModal";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { FontSelector } from "./components/FontSelector";
+import { GlobalFormatControls } from "./components/GlobalFormatControls";
+import { LoadingSpinner } from "./components/LoadingSpinner";
+import { ModuleConfig } from "./components/ModuleConfig";
+import { ModuleList } from "./components/ModuleList";
+import { PresetSelector } from "./components/PresetSelector";
+import { SuggestionPanel } from "./components/SuggestionPanel";
+import { ThemeUploadModal } from "./components/ThemeUploadModal";
+import { WelcomeWizard } from "./components/WelcomeWizard";
+import { AccessibilityProvider } from "./contexts/AccessibilityContext";
+import { ConfirmationProvider } from "./contexts/ConfirmationContext";
+import { ToastProvider, useToast } from "./contexts/ToastContext";
+import { useDynamicTheme } from "./hooks/useDynamicTheme";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
+import { cn } from "./lib/utils";
+import { useThemeStore } from "./stores/theme-store";
+import { useUIStore } from "./stores/ui-store";
 
 const ComparisonView = React.lazy(() =>
-  import('./components/ComparisonView').then((module) => ({
+  import("./components/ComparisonView").then((module) => ({
     default: module.ComparisonView,
   })),
 );
 const ExportImport = React.lazy(() =>
-  import('./components/ExportImport').then((module) => ({
+  import("./components/ExportImport").then((module) => ({
     default: module.ExportImport,
   })),
 );
 const ImagePalette = React.lazy(() =>
-  import('./components/ImagePalette').then((module) => ({
+  import("./components/ImagePalette").then((module) => ({
     default: module.ImagePalette,
   })),
 );
 const TerminalPreview = React.lazy(() =>
-  import('./components/TerminalPreview').then((module) => ({
+  import("./components/TerminalPreview").then((module) => ({
     default: module.TerminalPreview,
   })),
 );
 const ThemeGallery = React.lazy(() =>
-  import('./components/ThemeGallery').then((module) => ({
+  import("./components/ThemeGallery").then((module) => ({
     default: module.ThemeGallery,
   })),
 );
 const SolarSystem = React.lazy(() =>
-  import('./components/SolarSystem').then((module) => ({
+  import("./components/SolarSystem").then((module) => ({
     default: module.SolarSystem,
   })),
 );
@@ -126,18 +126,18 @@ function AppContent() {
 
   // Derive effective layout mode
   const isMobileLayout =
-    layoutMode === 'mobile' ||
-    (layoutMode === 'auto' && window.innerWidth <= 1024);
+    layoutMode === "mobile" ||
+    (layoutMode === "auto" && window.innerWidth <= 1024);
   const isDesktopLayout =
-    layoutMode === 'desktop' ||
-    (layoutMode === 'auto' && window.innerWidth > 1024);
+    layoutMode === "desktop" ||
+    (layoutMode === "auto" && window.innerWidth > 1024);
 
   // Sync sidebars when layout mode changes
   useEffect(() => {
-    if (layoutMode === 'desktop') {
+    if (layoutMode === "desktop") {
       setLeftSidebarOpen(true);
       setRightSidebarOpen(window.innerWidth > 1280);
-    } else if (layoutMode === 'mobile') {
+    } else if (layoutMode === "mobile") {
       setLeftSidebarOpen(false);
       setRightSidebarOpen(false);
     }
@@ -146,7 +146,7 @@ function AppContent() {
   useDynamicTheme();
 
   useEffect(() => {
-    setThemeName(currentTheme.metadata.name || 'My Awesome Theme');
+    setThemeName(currentTheme.metadata.name || "My Awesome Theme");
   }, [currentTheme.metadata.id, currentTheme.metadata.name, setThemeName]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,7 +158,7 @@ function AppContent() {
   const handleSave = async () => {
     try {
       const element = document.getElementById(
-        'terminal-preview-capture-source',
+        "terminal-preview-capture-source",
       );
       if (element) {
         const canvas = await html2canvas(element, {
@@ -166,80 +166,80 @@ function AppContent() {
           logging: false,
           useCORS: true,
         });
-        const previewImage = canvas.toDataURL('image/jpeg', 0.5);
+        const previewImage = canvas.toDataURL("image/jpeg", 0.5);
         saveTheme(previewImage);
-        addToast('Theme saved successfully!', 'success');
+        addToast("Theme saved successfully!", "success");
       } else {
         saveTheme();
-        addToast('Theme saved (no preview).', 'info');
+        addToast("Theme saved (no preview).", "info");
       }
     } catch (error) {
-      console.error('Failed to capture theme preview:', error);
+      console.error("Failed to capture theme preview:", error);
       saveTheme();
-      addToast('Theme saved, but failed to generate preview.', 'info');
+      addToast("Theme saved, but failed to generate preview.", "info");
     }
   };
 
   const handleNew = () => {
-    if (confirm('Create a new theme? Any unsaved changes will be lost.')) {
+    if (confirm("Create a new theme? Any unsaved changes will be lost.")) {
       resetTheme();
-      setThemeName('Untitled Theme');
-      addToast('Started a new theme.', 'info');
+      setThemeName("Untitled Theme");
+      addToast("Started a new theme.", "info");
     }
   };
 
   useKeyboardShortcuts([
-    { keys: 'mod+s', description: 'Save current theme', handler: handleSave },
-    { keys: 'mod+z', description: 'Undo', handler: handleUndo },
-    { keys: 'mod+shift+z', description: 'Redo', handler: handleRedo },
+    { keys: "mod+s", description: "Save current theme", handler: handleSave },
+    { keys: "mod+z", description: "Undo", handler: handleUndo },
+    { keys: "mod+shift+z", description: "Redo", handler: handleRedo },
     {
-      keys: 'mod+k',
-      description: 'Open Command Palette',
+      keys: "mod+k",
+      description: "Open Command Palette",
       handler: () => setShowCommandPalette(true),
     },
     {
-      keys: 'mod+o',
-      description: 'Open Theme Gallery',
+      keys: "mod+o",
+      description: "Open Theme Gallery",
       handler: () => setShowGallery(true),
     },
     {
-      keys: 'mod+e',
-      description: 'Export Theme',
-      handler: () => setShowExportImport('export'),
+      keys: "mod+e",
+      description: "Export Theme",
+      handler: () => setShowExportImport("export"),
     },
     {
-      keys: 'mod+i',
-      description: 'Import Theme',
-      handler: () => setShowExportImport('import'),
+      keys: "mod+i",
+      description: "Import Theme",
+      handler: () => setShowExportImport("import"),
     },
   ]);
 
   const commandActions = [
-    { id: 'save', title: 'Save Theme', shortcut: 'Cmd+S', perform: handleSave },
-    { id: 'undo', title: 'Undo', shortcut: 'Cmd+Z', perform: undo },
-    { id: 'redo', title: 'Redo', shortcut: 'Cmd+Shift+Z', perform: redo },
-    { id: 'new', title: 'New Theme', perform: handleNew },
+    { id: "save", title: "Save Theme", shortcut: "Cmd+S", perform: handleSave },
+    { id: "undo", title: "Undo", shortcut: "Cmd+Z", perform: undo },
+    { id: "redo", title: "Redo", shortcut: "Cmd+Shift+Z", perform: redo },
+    { id: "new", title: "New Theme", perform: handleNew },
     {
-      id: 'gallery',
-      title: 'Open Theme Gallery',
-      shortcut: 'Cmd+O',
+      id: "gallery",
+      title: "Open Theme Gallery",
+      shortcut: "Cmd+O",
       perform: () => setShowGallery(true),
     },
     {
-      id: 'export',
-      title: 'Export Config',
-      shortcut: 'Cmd+E',
-      perform: () => setShowExportImport('export'),
+      id: "export",
+      title: "Export Config",
+      shortcut: "Cmd+E",
+      perform: () => setShowExportImport("export"),
     },
     {
-      id: 'import',
-      title: 'Import Config',
-      shortcut: 'Cmd+I',
-      perform: () => setShowExportImport('import'),
+      id: "import",
+      title: "Import Config",
+      shortcut: "Cmd+I",
+      perform: () => setShowExportImport("import"),
     },
     {
-      id: 'compare',
-      title: 'Compare Themes',
+      id: "compare",
+      title: "Compare Themes",
       perform: () => setShowComparison(true),
     },
   ];
@@ -260,11 +260,11 @@ function AppContent() {
             <button
               onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
               aria-label={
-                leftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'
+                leftSidebarOpen ? "Close left sidebar" : "Open left sidebar"
               }
               className={cn(
-                'rounded p-2 text-gray-400 hover:bg-gray-800',
-                !isMobileLayout && isDesktopLayout && 'lg:hidden',
+                "rounded p-2 text-gray-400 hover:bg-gray-800",
+                !isMobileLayout && isDesktopLayout && "lg:hidden",
               )}
             >
               <Menu size={20} />
@@ -294,11 +294,11 @@ function AppContent() {
             <button
               onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
               aria-label={
-                rightSidebarOpen ? 'Close right sidebar' : 'Open right sidebar'
+                rightSidebarOpen ? "Close right sidebar" : "Open right sidebar"
               }
               className={cn(
-                'rounded p-2 text-gray-400 hover:bg-gray-800',
-                isDesktopLayout && 'xl:hidden',
+                "rounded p-2 text-gray-400 hover:bg-gray-800",
+                isDesktopLayout && "xl:hidden",
               )}
             >
               <Settings size={20} />
@@ -310,39 +310,39 @@ function AppContent() {
           {/* Layout Switcher */}
           <div className="flex items-center rounded-lg bg-gray-800 p-1">
             <button
-              onClick={() => setLayoutMode('mobile')}
+              onClick={() => setLayoutMode("mobile")}
               aria-label="Mobile Mode"
               className={cn(
-                'rounded px-2 py-1 transition-colors',
-                layoutMode === 'mobile'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-400 hover:text-gray-200',
+                "rounded px-2 py-1 transition-colors",
+                layoutMode === "mobile"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-400 hover:text-gray-200",
               )}
               title="Mobile Mode"
             >
               <Smartphone size={16} />
             </button>
             <button
-              onClick={() => setLayoutMode('auto')}
+              onClick={() => setLayoutMode("auto")}
               aria-label="Auto Layout"
               className={cn(
-                'rounded px-2 py-1 text-[10px] font-bold transition-colors',
-                layoutMode === 'auto'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-400 hover:text-gray-200',
+                "rounded px-2 py-1 text-[10px] font-bold transition-colors",
+                layoutMode === "auto"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-400 hover:text-gray-200",
               )}
               title="Auto Layout"
             >
               AUTO
             </button>
             <button
-              onClick={() => setLayoutMode('desktop')}
+              onClick={() => setLayoutMode("desktop")}
               aria-label="Desktop Mode"
               className={cn(
-                'rounded px-2 py-1 transition-colors',
-                layoutMode === 'desktop'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-400 hover:text-gray-200',
+                "rounded px-2 py-1 transition-colors",
+                layoutMode === "desktop"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-400 hover:text-gray-200",
               )}
               title="Desktop Mode"
             >
@@ -354,8 +354,8 @@ function AppContent() {
             <button
               onClick={handleUndo}
               disabled={!isUndoPossible}
-              aria-label={!isUndoPossible ? 'Undo (disabled)' : 'Undo'}
-              title={!isUndoPossible ? 'Nothing to undo' : 'Undo'}
+              aria-label={!isUndoPossible ? "Undo (disabled)" : "Undo"}
+              title={!isUndoPossible ? "Nothing to undo" : "Undo"}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Undo size={16} />
@@ -363,8 +363,8 @@ function AppContent() {
             <button
               onClick={handleRedo}
               disabled={!isRedoPossible}
-              aria-label={!isRedoPossible ? 'Redo (disabled)' : 'Redo'}
-              title={!isRedoPossible ? 'Nothing to redo' : 'Redo'}
+              aria-label={!isRedoPossible ? "Redo (disabled)" : "Redo"}
+              title={!isRedoPossible ? "Nothing to redo" : "Redo"}
               className="rounded p-1.5 text-gray-400 hover:bg-gray-800 disabled:opacity-30"
             >
               <Redo size={16} />
@@ -416,12 +416,12 @@ function AppContent() {
         {/* LEFT SIDEBAR */}
         <aside
           className={cn(
-            'absolute inset-y-0 left-0 z-40 w-72 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22] transition-transform duration-300',
+            "absolute inset-y-0 left-0 z-40 w-72 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-[#161b22] transition-transform duration-300",
             isDesktopLayout
-              ? 'relative translate-x-0'
+              ? "relative translate-x-0"
               : leftSidebarOpen
-                ? 'translate-x-0'
-                : '-translate-x-full',
+                ? "translate-x-0"
+                : "-translate-x-full",
           )}
         >
           <ErrorBoundary>
@@ -458,7 +458,7 @@ function AppContent() {
             </h2>
             <ErrorBoundary>
               <FontSelector
-                currentFont={currentTheme.metadata.fontFamily || 'FiraCode NF'}
+                currentFont={currentTheme.metadata.fontFamily || "FiraCode NF"}
                 onSelectFont={(font) => updateMetadata({ fontFamily: font })}
               />
             </ErrorBoundary>
@@ -490,12 +490,12 @@ function AppContent() {
         {/* RIGHT SIDEBAR */}
         <aside
           className={cn(
-            'absolute inset-y-0 right-0 z-40 w-80 shrink-0 flex-col overflow-y-auto border-l border-gray-800 bg-[#161b22] transition-transform duration-300',
+            "absolute inset-y-0 right-0 z-40 w-80 shrink-0 flex-col overflow-y-auto border-l border-gray-800 bg-[#161b22] transition-transform duration-300",
             isDesktopLayout && window.innerWidth > 1280
-              ? 'relative translate-x-0'
+              ? "relative translate-x-0"
               : rightSidebarOpen
-                ? 'translate-x-0'
-                : '-translate-x-full',
+                ? "translate-x-0"
+                : "-translate-x-full",
           )}
         >
           <div className="p-4">

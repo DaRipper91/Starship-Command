@@ -49,7 +49,7 @@ naming conventions, file organization, and import patterns.
 Create `src/hooks/useHistory.ts`:
 
 ```typescript
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useHistory<T>(initial: T) {
   const [history, setHistory] = useState<T[]>([initial]);
@@ -95,17 +95,17 @@ Add keyboard listeners in App.tsx:
 ```typescript
 useEffect(() => {
   const handler = (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    if ((e.ctrlKey || e.metaKey) && e.key === "z") {
       e.preventDefault();
       undo();
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+    if ((e.ctrlKey || e.metaKey) && e.key === "y") {
       e.preventDefault();
       redo();
     }
   };
-  window.addEventListener('keydown', handler);
-  return () => window.removeEventListener('keydown', handler);
+  window.addEventListener("keydown", handler);
+  return () => window.removeEventListener("keydown", handler);
 }, [undo, redo]);
 ```
 
@@ -124,7 +124,7 @@ In `src/components/ModuleBuilder.tsx` (or wherever the available modules list
 is rendered), add:
 
 ```typescript
-const [search, setSearch] = useState('');
+const [search, setSearch] = useState("");
 const filteredModules = ALL_MODULES.filter((m) =>
   m.id.toLowerCase().includes(search.toLowerCase()),
 );
@@ -151,43 +151,43 @@ export const MODULE_DESCRIPTIONS: Record<string, string> = {
   username:
     "Shows the current user's username. Useful for multi-user or SSH environments.",
   hostname:
-    'Displays the machine hostname. Great for SSH or container contexts.',
+    "Displays the machine hostname. Great for SSH or container contexts.",
   directory:
-    'Shows the current working directory with configurable truncation.',
-  git_branch: 'Displays the active git branch name with a configurable symbol.',
-  git_status: 'Shows git repo status: staged, unstaged, ahead/behind counts.',
-  git_commit: 'Shows the current commit hash (short SHA).',
+    "Shows the current working directory with configurable truncation.",
+  git_branch: "Displays the active git branch name with a configurable symbol.",
+  git_status: "Shows git repo status: staged, unstaged, ahead/behind counts.",
+  git_commit: "Shows the current commit hash (short SHA).",
   git_state:
-    'Shows transient git states like MERGING, REBASING, CHERRY-PICKING.',
-  git_metrics: 'Shows added/deleted line counts since last commit.',
-  nodejs: 'Displays Node.js version when in a JS/TS project.',
-  python: 'Displays Python version when in a Python project.',
-  rust: 'Displays Rust toolchain version when in a Rust project.',
-  golang: 'Displays Go version when in a Go project.',
-  java: 'Displays Java version when in a Java project.',
-  ruby: 'Displays Ruby version when in a Ruby project.',
-  php: 'Displays PHP version when in a PHP project.',
-  kotlin: 'Displays Kotlin version when in a Kotlin project.',
-  swift: 'Displays Swift version in Swift projects.',
-  elixir: 'Displays Elixir/OTP version in Elixir projects.',
-  package: 'Shows the package version from package.json, Cargo.toml, etc.',
-  docker_context: 'Shows the active Docker context.',
-  kubernetes: 'Shows the active Kubernetes context and namespace.',
-  terraform: 'Shows the active Terraform workspace.',
-  aws: 'Shows the AWS profile and region from environment variables.',
-  gcloud: 'Shows the active Google Cloud project and region.',
-  azure: 'Shows the active Azure subscription.',
-  cmd_duration: 'Shows how long the last command took to execute.',
-  time: 'Displays the current local time.',
-  battery: 'Shows battery charge level and charging status.',
-  memory_usage: 'Shows current RAM usage percentage.',
-  env_var: 'Displays the value of a specified environment variable.',
-  custom: 'A fully custom module — define your own command and format.',
-  shell: 'Indicates the current shell (bash, zsh, fish, etc.).',
-  shlvl: 'Shows the shell nesting level ($SHLVL).',
-  status: 'Shows the exit code of the last command when non-zero.',
-  jobs: 'Shows the number of background jobs running.',
-  character: 'The prompt character (❯ by default). Changes color on error.',
+    "Shows transient git states like MERGING, REBASING, CHERRY-PICKING.",
+  git_metrics: "Shows added/deleted line counts since last commit.",
+  nodejs: "Displays Node.js version when in a JS/TS project.",
+  python: "Displays Python version when in a Python project.",
+  rust: "Displays Rust toolchain version when in a Rust project.",
+  golang: "Displays Go version when in a Go project.",
+  java: "Displays Java version when in a Java project.",
+  ruby: "Displays Ruby version when in a Ruby project.",
+  php: "Displays PHP version when in a PHP project.",
+  kotlin: "Displays Kotlin version when in a Kotlin project.",
+  swift: "Displays Swift version in Swift projects.",
+  elixir: "Displays Elixir/OTP version in Elixir projects.",
+  package: "Shows the package version from package.json, Cargo.toml, etc.",
+  docker_context: "Shows the active Docker context.",
+  kubernetes: "Shows the active Kubernetes context and namespace.",
+  terraform: "Shows the active Terraform workspace.",
+  aws: "Shows the AWS profile and region from environment variables.",
+  gcloud: "Shows the active Google Cloud project and region.",
+  azure: "Shows the active Azure subscription.",
+  cmd_duration: "Shows how long the last command took to execute.",
+  time: "Displays the current local time.",
+  battery: "Shows battery charge level and charging status.",
+  memory_usage: "Shows current RAM usage percentage.",
+  env_var: "Displays the value of a specified environment variable.",
+  custom: "A fully custom module — define your own command and format.",
+  shell: "Indicates the current shell (bash, zsh, fish, etc.).",
+  shlvl: "Shows the shell nesting level ($SHLVL).",
+  status: "Shows the exit code of the last command when non-zero.",
+  jobs: "Shows the number of background jobs running.",
+  character: "The prompt character (❯ by default). Changes color on error.",
 };
 ```
 
@@ -229,11 +229,11 @@ TOML as `starship.toml`.
 
 ```typescript
 const handleDownload = () => {
-  const blob = new Blob([generatedTOML], { type: 'text/plain' });
+  const blob = new Blob([generatedTOML], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
-  a.download = 'starship.toml';
+  a.download = "starship.toml";
   a.click();
   URL.revokeObjectURL(url);
 };
@@ -264,9 +264,9 @@ On app load, check `window.location.hash` for a `#theme=` value and decode it:
 ```typescript
 useEffect(() => {
   const hash = window.location.hash;
-  if (hash.startsWith('#theme=')) {
+  if (hash.startsWith("#theme=")) {
     try {
-      const decoded = JSON.parse(atob(hash.replace('#theme=', '')));
+      const decoded = JSON.parse(atob(hash.replace("#theme=", "")));
       // validate and apply decoded config
       push(decoded);
     } catch {
@@ -341,7 +341,7 @@ a "Favorites" section.
 
 ```typescript
 const [favorites, setFavorites] = useState<Set<string>>(() => {
-  const stored = localStorage.getItem('starship-favorites');
+  const stored = localStorage.getItem("starship-favorites");
   return new Set(stored ? JSON.parse(stored) : []);
 });
 
@@ -349,7 +349,7 @@ const toggleFavorite = (themeId: string) => {
   setFavorites((prev) => {
     const next = new Set(prev);
     next.has(themeId) ? next.delete(themeId) : next.add(themeId);
-    localStorage.setItem('starship-favorites', JSON.stringify([...next]));
+    localStorage.setItem("starship-favorites", JSON.stringify([...next]));
     return next;
   });
 };
@@ -378,7 +378,7 @@ interface SavedTheme {
 
 // Load saved themes from localStorage on mount
 const [savedThemes, setSavedThemes] = useState<SavedTheme[]>(() => {
-  const raw = localStorage.getItem('starship-saved-themes');
+  const raw = localStorage.getItem("starship-saved-themes");
   return raw ? JSON.parse(raw) : [];
 });
 
@@ -391,13 +391,13 @@ const saveTheme = (name: string) => {
   };
   const updated = [...savedThemes, theme];
   setSavedThemes(updated);
-  localStorage.setItem('starship-saved-themes', JSON.stringify(updated));
+  localStorage.setItem("starship-saved-themes", JSON.stringify(updated));
 };
 
 const deleteTheme = (id: string) => {
   const updated = savedThemes.filter((t) => t.id !== id);
   setSavedThemes(updated);
-  localStorage.setItem('starship-saved-themes', JSON.stringify(updated));
+  localStorage.setItem("starship-saved-themes", JSON.stringify(updated));
 };
 ```
 
@@ -415,17 +415,17 @@ prompt character, and the separator style.
 
 ```typescript
 const RANDOM_PALETTES = [
-  { bg: '#1e1e2e', fg: '#cdd6f4', accent: '#cba6f7', accent2: '#89dceb' },
-  { bg: '#282828', fg: '#ebdbb2', accent: '#fabd2f', accent2: '#8ec07c' },
-  { bg: '#1a1b26', fg: '#c0caf5', accent: '#7aa2f7', accent2: '#9ece6a' },
-  { bg: '#2e3440', fg: '#eceff4', accent: '#88c0d0', accent2: '#a3be8c' },
-  { bg: '#282a36', fg: '#f8f8f2', accent: '#bd93f9', accent2: '#50fa7b' },
-  { bg: '#0d1117', fg: '#e6edf3', accent: '#58a6ff', accent2: '#3fb950' },
-  { bg: '#fdf6e3', fg: '#657b83', accent: '#268bd2', accent2: '#2aa198' },
-  { bg: '#002b36', fg: '#839496', accent: '#2aa198', accent2: '#859900' },
+  { bg: "#1e1e2e", fg: "#cdd6f4", accent: "#cba6f7", accent2: "#89dceb" },
+  { bg: "#282828", fg: "#ebdbb2", accent: "#fabd2f", accent2: "#8ec07c" },
+  { bg: "#1a1b26", fg: "#c0caf5", accent: "#7aa2f7", accent2: "#9ece6a" },
+  { bg: "#2e3440", fg: "#eceff4", accent: "#88c0d0", accent2: "#a3be8c" },
+  { bg: "#282a36", fg: "#f8f8f2", accent: "#bd93f9", accent2: "#50fa7b" },
+  { bg: "#0d1117", fg: "#e6edf3", accent: "#58a6ff", accent2: "#3fb950" },
+  { bg: "#fdf6e3", fg: "#657b83", accent: "#268bd2", accent2: "#2aa198" },
+  { bg: "#002b36", fg: "#839496", accent: "#2aa198", accent2: "#859900" },
 ];
 
-const RANDOM_PROMPT_CHARS = ['❯', '➜', '▶', '➤', 'λ', '»', '⚡', '→', '', ''];
+const RANDOM_PROMPT_CHARS = ["❯", "➜", "▶", "➤", "λ", "»", "⚡", "→", "", ""];
 
 const generateRandom = () => {
   const palette =
@@ -541,72 +541,72 @@ Create `src/data/nerdFontIcons.ts` with categorized icon maps:
 ```typescript
 export const NERD_FONT_CATEGORIES: Record<string, string[]> = {
   Git: [
-    '\ue702',
-    '\uf418',
-    '\uf7a1',
-    '\uf7a0',
-    '\uf7a2',
-    '\udb80\udda2',
-    '\udb8a\ude2c',
-    '\udb80\udd98',
+    "\ue702",
+    "\uf418",
+    "\uf7a1",
+    "\uf7a0",
+    "\uf7a2",
+    "\udb80\udda2",
+    "\udb8a\ude2c",
+    "\udb80\udd98",
   ],
   Folders: [
-    '\ue5ff',
-    '\uf115',
-    '\uf07b',
-    '\uf07c',
-    '\udb80\udecb',
-    '\udb80\udccd',
-    '\udb80\udccc',
-    '\udb80\udcd0',
+    "\ue5ff",
+    "\uf115",
+    "\uf07b",
+    "\uf07c",
+    "\udb80\udecb",
+    "\udb80\udccd",
+    "\udb80\udccc",
+    "\udb80\udcd0",
   ],
   Arrows: [
-    '\ue0b0',
-    '\ue0b2',
-    '\ue0b4',
-    '\ue0b6',
-    '❯',
-    '➜',
-    '➤',
-    '▶',
-    '→',
-    '⟶',
-    '⚡',
+    "\ue0b0",
+    "\ue0b2",
+    "\ue0b4",
+    "\ue0b6",
+    "❯",
+    "➜",
+    "➤",
+    "▶",
+    "→",
+    "⟶",
+    "⚡",
   ],
-  'Stars/Sparks': ['★', '✦', '✧', '✨', '⭐', '🌟', '💫'],
-  Shells: ['\ue691', '\ue692', '\ue693', '\ue77d', '\udb82\udec3'],
-  'Dev/Code': [
-    '\ue64b',
-    '\ue738',
-    '\uf121',
-    '\ue60e',
-    '\uf1d0',
-    '\uf017',
-    '\udb80\udd20',
-    '\udb80\udcf7',
-    '\udb82\udcde',
+  "Stars/Sparks": ["★", "✦", "✧", "✨", "⭐", "🌟", "💫"],
+  Shells: ["\ue691", "\ue692", "\ue693", "\ue77d", "\udb82\udec3"],
+  "Dev/Code": [
+    "\ue64b",
+    "\ue738",
+    "\uf121",
+    "\ue60e",
+    "\uf1d0",
+    "\uf017",
+    "\udb80\udd20",
+    "\udb80\udcf7",
+    "\udb82\udcde",
   ],
-  OS: ['\uf179', '\uf17c', '\uf17d', '\uf462', '\uf83f', '\udb80\udc36'],
-  'Powerline Solid': [
-    '\ue0b0',
-    '\ue0b1',
-    '\ue0b2',
-    '\ue0b3',
-    '\ue0b4',
-    '\ue0b5',
+  OS: ["\uf179", "\uf17c", "\uf17d", "\uf462", "\uf83f", "\udb80\udc36"],
+  "Powerline Solid": [
+    "\ue0b0",
+    "\ue0b1",
+    "\ue0b2",
+    "\ue0b3",
+    "\ue0b4",
+    "\ue0b5",
   ],
-  'Powerline Thin': [
-    '\ue0b8',
-    '\ue0b9',
-    '\ue0ba',
-    '\ue0bb',
-    '\ue0bc',
-    '\ue0bd',
+  "Powerline Thin": [
+    "\ue0b8",
+    "\ue0b9",
+    "\ue0ba",
+    "\ue0bb",
+    "\ue0bc",
+    "\ue0bd",
   ],
-  Circles: ['●', '◉', '○', '◎', '⬤', '\ue0b6', '\ue0b7'],
-  Triangles: ['▶', '◀', '▲', '▼', '◤', '◥', '◣', '◢'],
-  Blocks: ['█', '▓', '▒', '░', '▌', '▐', '▀', '▄'],
-  Special: ['∞', '≡', '≈', 'λ', 'Ω', 'π', 'μ', 'Σ'],
+  Circles: ["●", "◉", "○", "◎", "⬤", "\ue0b6", "\ue0b7"],
+  Triangles: ["▶", "◀", "▲", "▼", "◤", "◥", "◣", "◢"],
+  Blocks: ["█", "▓", "▒", "░", "▌", "▐", "▀", "▄"],
+  Special: ["∞", "≡", "≈", "λ", "Ω", "π", "μ", "Σ"],
 };
 ```
 
@@ -648,60 +648,60 @@ export interface SeparatorSet {
 
 export const SEPARATOR_PRESETS: SeparatorSet[] = [
   {
-    key: 'powerline',
-    label: 'Powerline Solid',
-    leftOuter: '\ue0b0',
-    leftInner: '\ue0b1',
-    rightOuter: '\ue0b2',
-    rightInner: '\ue0b3',
+    key: "powerline",
+    label: "Powerline Solid",
+    leftOuter: "\ue0b0",
+    leftInner: "\ue0b1",
+    rightOuter: "\ue0b2",
+    rightInner: "\ue0b3",
   },
   {
-    key: 'powerline-thin',
-    label: 'Powerline Thin',
-    leftOuter: '\ue0b4',
-    leftInner: '\ue0b5',
-    rightOuter: '\ue0b6',
-    rightInner: '\ue0b7',
+    key: "powerline-thin",
+    label: "Powerline Thin",
+    leftOuter: "\ue0b4",
+    leftInner: "\ue0b5",
+    rightOuter: "\ue0b6",
+    rightInner: "\ue0b7",
   },
   {
-    key: 'round',
-    label: 'Round',
-    leftOuter: '\ue0b4',
-    leftInner: '\ue0b5',
-    rightOuter: '\ue0b6',
-    rightInner: '\ue0b7',
+    key: "round",
+    label: "Round",
+    leftOuter: "\ue0b4",
+    leftInner: "\ue0b5",
+    rightOuter: "\ue0b6",
+    rightInner: "\ue0b7",
   },
   {
-    key: 'flame',
-    label: 'Flame',
-    leftOuter: '\ue0c0',
-    leftInner: '\ue0c1',
-    rightOuter: '\ue0c2',
-    rightInner: '\ue0c3',
+    key: "flame",
+    label: "Flame",
+    leftOuter: "\ue0c0",
+    leftInner: "\ue0c1",
+    rightOuter: "\ue0c2",
+    rightInner: "\ue0c3",
   },
   {
-    key: 'pixel',
-    label: 'Pixel / Lego',
-    leftOuter: '\ue0c4',
-    leftInner: '\ue0c5',
-    rightOuter: '\ue0c6',
-    rightInner: '\ue0c7',
+    key: "pixel",
+    label: "Pixel / Lego",
+    leftOuter: "\ue0c4",
+    leftInner: "\ue0c5",
+    rightOuter: "\ue0c6",
+    rightInner: "\ue0c7",
   },
   {
-    key: 'diagonal-forward',
-    label: 'Diagonal /',
-    leftOuter: '\ue0be',
-    leftInner: '/',
-    rightOuter: '\\',
-    rightInner: '\ue0bf',
+    key: "diagonal-forward",
+    label: "Diagonal /",
+    leftOuter: "\ue0be",
+    leftInner: "/",
+    rightOuter: "\\",
+    rightInner: "\ue0bf",
   },
   {
-    key: 'none',
-    label: 'None (space only)',
-    leftOuter: ' ',
-    leftInner: ' ',
-    rightOuter: ' ',
-    rightInner: ' ',
+    key: "none",
+    label: "None (space only)",
+    leftOuter: " ",
+    leftInner: " ",
+    rightOuter: " ",
+    rightInner: " ",
   },
 ];
 ```
@@ -866,7 +866,7 @@ interface ThemeConfig {
   leftModules: ModuleItem[];
   rightModules: ModuleItem[];
   rightPromptEnabled: boolean;
-  promptStyle: 'singleline' | 'multiline';
+  promptStyle: "singleline" | "multiline";
   promptChar: string;
   promptCharError?: string;
   colors: ThemeColors;

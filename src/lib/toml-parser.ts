@@ -1,7 +1,7 @@
-import TOML from '@iarna/toml';
+import TOML from "@iarna/toml";
 
-import MODULE_DEFINITIONS from '../generated/module-definitions.json';
-import { StarshipConfig, ThemeMetadata } from '../types';
+import MODULE_DEFINITIONS from "../generated/module-definitions.json";
+import { StarshipConfig, ThemeMetadata } from "../types";
 
 export interface ValidationResult {
   valid: boolean;
@@ -21,15 +21,15 @@ export class TomlParser {
   static parse(tomlString: string): { config: StarshipConfig; metadata: any } {
     try {
       const parsed = TOML.parse(tomlString) as any;
-      if (typeof parsed !== 'object' || parsed === null) {
-        throw new Error('Parsed TOML result is not an object');
+      if (typeof parsed !== "object" || parsed === null) {
+        throw new Error("Parsed TOML result is not an object");
       }
 
       // Extract metadata if present in comments or a special [metadata] table
       // (Starship ignores unknown tables, so we can store ours there)
       const metadata = parsed.metadata || {
         id: crypto.randomUUID(),
-        name: 'Imported Theme',
+        name: "Imported Theme",
         created: new Date(),
         updated: new Date(),
       };
@@ -42,7 +42,7 @@ export class TomlParser {
         metadata,
       };
     } catch (error) {
-      console.error('Failed to parse TOML:', error);
+      console.error("Failed to parse TOML:", error);
       throw new Error(
         `Invalid TOML syntax: ${error instanceof Error ? error.message : String(error)}`,
       );
@@ -65,8 +65,8 @@ export class TomlParser {
       const cleanConfig = JSON.parse(JSON.stringify(combined)) as TOML.JsonMap;
       return TOML.stringify(cleanConfig);
     } catch (error) {
-      console.error('Failed to stringify config:', error);
-      throw new Error('Failed to generate TOML');
+      console.error("Failed to stringify config:", error);
+      throw new Error("Failed to generate TOML");
     }
   }
 
@@ -80,11 +80,11 @@ export class TomlParser {
       add_newline: true,
       // Minimal format to start with
       format:
-        '$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character',
+        "$username$hostname$directory$git_branch$git_state$git_status$cmd_duration$line_break$character",
 
       character: {
-        success_symbol: '[➜](bold green)',
-        error_symbol: '[➜](bold red)',
+        success_symbol: "[➜](bold green)",
+        error_symbol: "[➜](bold red)",
       },
 
       directory: {
@@ -93,28 +93,28 @@ export class TomlParser {
       },
 
       git_branch: {
-        symbol: '🌱 ',
-        format: '[$symbol$branch]($style) ',
+        symbol: "🌱 ",
+        format: "[$symbol$branch]($style) ",
         truncation_length: 24,
       },
 
       git_status: {
-        format: '([$all_status$ahead_behind]($style) )',
-        conflicted: '🏳',
-        ahead: '🏎💨',
-        behind: '😰',
-        diverged: '😵',
-        up_to_date: '✓',
-        untracked: '🤷',
-        stashed: '📦',
-        modified: '📝',
-        staged: '[++()](green)',
-        renamed: '👅',
-        deleted: '🗑',
+        format: "([$all_status$ahead_behind]($style) )",
+        conflicted: "🏳",
+        ahead: "🏎💨",
+        behind: "😰",
+        diverged: "😵",
+        up_to_date: "✓",
+        untracked: "🤷",
+        stashed: "📦",
+        modified: "📝",
+        staged: "[++()](green)",
+        renamed: "👅",
+        deleted: "🗑",
       },
 
       nodejs: {
-        format: 'via [⬢ $version](bold green) ',
+        format: "via [⬢ $version](bold green) ",
       },
     };
   }
@@ -129,63 +129,63 @@ export class TomlParser {
     const warnings: string[] = [];
 
     // Check for invalid types or required fields
-    if (typeof config !== 'object' || config === null) {
+    if (typeof config !== "object" || config === null) {
       return {
         valid: false,
-        errors: ['Configuration must be an object'],
+        errors: ["Configuration must be an object"],
         warnings: [],
       };
     }
 
     // Known top-level string/number/boolean properties
     const knownProps = [
-      'format',
-      'right_format',
-      'continuation_prompt',
-      'add_newline',
-      'scan_timeout',
-      'command_timeout',
-      'palette',
-      'palettes',
-      'custom',
+      "format",
+      "right_format",
+      "continuation_prompt",
+      "add_newline",
+      "scan_timeout",
+      "command_timeout",
+      "palette",
+      "palettes",
+      "custom",
     ];
 
     // Validate top-level properties types
-    if (config.format !== undefined && typeof config.format !== 'string') {
-      errors.push('Format must be a string');
+    if (config.format !== undefined && typeof config.format !== "string") {
+      errors.push("Format must be a string");
     }
     if (
       config.add_newline !== undefined &&
-      typeof config.add_newline !== 'boolean'
+      typeof config.add_newline !== "boolean"
     ) {
-      errors.push('add_newline must be a boolean');
+      errors.push("add_newline must be a boolean");
     }
     if (
       config.scan_timeout !== undefined &&
-      typeof config.scan_timeout !== 'number'
+      typeof config.scan_timeout !== "number"
     ) {
-      errors.push('scan_timeout must be a number');
+      errors.push("scan_timeout must be a number");
     }
     if (
       config.command_timeout !== undefined &&
-      typeof config.command_timeout !== 'number'
+      typeof config.command_timeout !== "number"
     ) {
-      errors.push('command_timeout must be a number');
+      errors.push("command_timeout must be a number");
     }
-    if (config.palette !== undefined && typeof config.palette !== 'string') {
-      errors.push('palette must be a string');
+    if (config.palette !== undefined && typeof config.palette !== "string") {
+      errors.push("palette must be a string");
     }
     if (
       config.palettes !== undefined &&
-      (typeof config.palettes !== 'object' || Array.isArray(config.palettes))
+      (typeof config.palettes !== "object" || Array.isArray(config.palettes))
     ) {
-      errors.push('palettes must be a table');
+      errors.push("palettes must be a table");
     }
     if (
       config.custom !== undefined &&
-      (typeof config.custom !== 'object' || Array.isArray(config.custom))
+      (typeof config.custom !== "object" || Array.isArray(config.custom))
     ) {
-      errors.push('custom must be a table');
+      errors.push("custom must be a table");
     }
 
     // Check for unknown modules or properties
@@ -200,34 +200,34 @@ export class TomlParser {
         // It's a known module, check if it's an object (or disabled boolean which is rare but technically TOML handles)
         // Usually modules are tables.
         const val = config[key];
-        if (typeof val !== 'object' && val !== undefined) {
+        if (typeof val !== "object" && val !== undefined) {
           // Some modules might be effectively disabled if set to false? No, Starship usually expects a table.
           // But strict type check:
           errors.push(`Module '${key}' must be a table (object)`);
-        } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+        } else if (val && typeof val === "object" && !Array.isArray(val)) {
           // Check common module props
           const modConfig = val as Record<string, unknown>;
           if (
             modConfig.disabled !== undefined &&
-            typeof modConfig.disabled !== 'boolean'
+            typeof modConfig.disabled !== "boolean"
           ) {
             errors.push(`Module '${key}': 'disabled' must be a boolean`);
           }
           if (
             modConfig.format !== undefined &&
-            typeof modConfig.format !== 'string'
+            typeof modConfig.format !== "string"
           ) {
             errors.push(`Module '${key}': 'format' must be a string`);
           }
           if (
             modConfig.style !== undefined &&
-            typeof modConfig.style !== 'string'
+            typeof modConfig.style !== "string"
           ) {
             errors.push(`Module '${key}': 'style' must be a string`);
           }
           if (
             modConfig.symbol !== undefined &&
-            typeof modConfig.symbol !== 'string'
+            typeof modConfig.symbol !== "string"
           ) {
             errors.push(`Module '${key}': 'symbol' must be a string`);
           }
@@ -263,15 +263,15 @@ export class TomlParser {
     const result: Record<string, unknown> = { ...base };
 
     Object.keys(override).forEach((key) => {
-      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      if (key === "__proto__" || key === "constructor" || key === "prototype") {
         return;
       }
 
       if (
-        typeof override[key] === 'object' &&
+        typeof override[key] === "object" &&
         override[key] !== null &&
         !Array.isArray(override[key]) &&
-        typeof result[key] === 'object' &&
+        typeof result[key] === "object" &&
         result[key] !== null &&
         !Array.isArray(result[key])
       ) {

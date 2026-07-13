@@ -42,14 +42,14 @@ const { currentTheme, updateConfig } = useThemeStore();
 
 ```typescript
 updateConfig({
-  directory: { ...currentTheme.config.directory, style: 'bold cyan' },
+  directory: { ...currentTheme.config.directory, style: "bold cyan" },
 });
 ```
 
 ### Manually Parsing TOML
 
 ```typescript
-import { TomlParser } from '@/lib/toml-parser';
+import { TomlParser } from "@/lib/toml-parser";
 const config = TomlParser.parse(tomlString);
 ```
 

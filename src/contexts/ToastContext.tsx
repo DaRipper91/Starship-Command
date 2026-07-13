@@ -4,19 +4,19 @@ import {
   useCallback,
   useContext,
   useState,
-} from 'react';
+} from "react";
 
-import { ToastContainer } from '../components/ui/Toast';
-import { generateId } from '../lib/utils';
+import { ToastContainer } from "../components/ui/Toast";
+import { generateId } from "../lib/utils";
 
 export interface Toast {
   id: string;
   message: string;
-  type: 'success' | 'error' | 'info';
+  type: "success" | "error" | "info";
 }
 
 interface ToastContextType {
-  addToast: (message: string, type?: 'success' | 'error' | 'info') => void;
+  addToast: (message: string, type?: "success" | "error" | "info") => void;
   removeToast: (id: string) => void;
 }
 
@@ -30,7 +30,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addToast = useCallback(
-    (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    (message: string, type: "success" | "error" | "info" = "info") => {
       const id = generateId();
       setToasts((prev) => [...prev, { id, message, type }]);
 
@@ -54,7 +54,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 export function useToast() {
   const context = useContext(ToastContext);
   if (context === undefined) {
-    throw new Error('useToast must be used within a ToastProvider');
+    throw new Error("useToast must be used within a ToastProvider");
   }
   return context;
 }

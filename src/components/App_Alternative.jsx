@@ -1,185 +1,185 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 // ─────────────────────────────────────────────────────────────────
 // DATA
 // ─────────────────────────────────────────────────────────────────
 
 const NERD_FONT_ICONS = {
-  Git: ['', '', '', '', '', '󰊢', '󰘬', '󰜘'],
-  Folders: ['', '', '', '', '󰉋', '󰉍', '󰉌', '󰉐'],
-  Arrows: ['', '', '', '', '❯', '➜', '➤', '▶', '→', '⟶', '⚡'],
-  'Stars/Sparks': ['★', '✦', '✧', '✨', '⭐', '🌟', '💫'],
-  Shells: ['', '', '', '', '󱆃'],
-  'Dev/Code': ['', '', '', '', '', '', '󰌠', '󰏗', '󱓞'],
-  OS: ['', '', '', '', '', '󰀶'],
-  'Powerline Solid': ['', '', '', '', '', ''],
-  'Powerline Thin': ['', '', '', '', '', ''],
-  Circles: ['●', '◉', '○', '◎', '⬤', '', ''],
-  Triangles: ['▶', '◀', '▲', '▼', '◤', '◥', '◣', '◢'],
-  Blocks: ['█', '▓', '▒', '░', '▌', '▐', '▀', '▄'],
-  Special: ['∞', '≡', '≈', 'λ', 'Ω', 'π', 'μ', 'Σ'],
+  Git: ["", "", "", "", "", "󰊢", "󰘬", "󰜘"],
+  Folders: ["", "", "", "", "󰉋", "󰉍", "󰉌", "󰉐"],
+  Arrows: ["", "", "", "", "❯", "➜", "➤", "▶", "→", "⟶", "⚡"],
+  "Stars/Sparks": ["★", "✦", "✧", "✨", "⭐", "🌟", "💫"],
+  Shells: ["", "", "", "", "󱆃"],
+  "Dev/Code": ["", "", "", "", "", "", "󰌠", "󰏗", "󱓞"],
+  OS: ["", "", "", "", "", "󰀶"],
+  "Powerline Solid": ["", "", "", "", "", ""],
+  "Powerline Thin": ["", "", "", "", "", ""],
+  Circles: ["●", "◉", "○", "◎", "⬤", "", ""],
+  Triangles: ["▶", "◀", "▲", "▼", "◤", "◥", "◣", "◢"],
+  Blocks: ["█", "▓", "▒", "░", "▌", "▐", "▀", "▄"],
+  Special: ["∞", "≡", "≈", "λ", "Ω", "π", "μ", "Σ"],
 };
 
 const SEPARATOR_SHAPES = {
-  Powerline: { left: ['', ''], right: ['', ''], label: 'Powerline Solid' },
-  'Powerline Thin': {
-    left: ['', ''],
-    right: ['', ''],
-    label: 'Powerline Thin',
+  Powerline: { left: ["", ""], right: ["", ""], label: "Powerline Solid" },
+  "Powerline Thin": {
+    left: ["", ""],
+    right: ["", ""],
+    label: "Powerline Thin",
   },
-  Round: { left: ['', ''], right: ['', ''], label: 'Round' },
-  Flame: { left: ['', ''], right: ['', ''], label: 'Flame' },
-  Pixel: { left: ['', ''], right: ['', ''], label: 'Pixel/Lego' },
-  None: { left: ['', ''], right: ['', ''], label: 'None (space)' },
-  Diagonal: { left: ['/', '\\'], right: ['\\', '/'], label: 'Diagonal' },
+  Round: { left: ["", ""], right: ["", ""], label: "Round" },
+  Flame: { left: ["", ""], right: ["", ""], label: "Flame" },
+  Pixel: { left: ["", ""], right: ["", ""], label: "Pixel/Lego" },
+  None: { left: ["", ""], right: ["", ""], label: "None (space)" },
+  Diagonal: { left: ["/", "\\"], right: ["\\", "/"], label: "Diagonal" },
 };
 
 const ALL_MODULES = [
-  'username',
-  'hostname',
-  'directory',
-  'git_branch',
-  'git_status',
-  'git_commit',
-  'git_state',
-  'git_metrics',
-  'nodejs',
-  'python',
-  'rust',
-  'golang',
-  'java',
-  'ruby',
-  'php',
-  'kotlin',
-  'swift',
-  'elixir',
-  'package',
-  'docker_context',
-  'kubernetes',
-  'terraform',
-  'aws',
-  'gcloud',
-  'azure',
-  'cmd_duration',
-  'time',
-  'battery',
-  'memory_usage',
-  'env_var',
-  'custom',
-  'shell',
-  'shlvl',
-  'status',
-  'jobs',
-  'character',
+  "username",
+  "hostname",
+  "directory",
+  "git_branch",
+  "git_status",
+  "git_commit",
+  "git_state",
+  "git_metrics",
+  "nodejs",
+  "python",
+  "rust",
+  "golang",
+  "java",
+  "ruby",
+  "php",
+  "kotlin",
+  "swift",
+  "elixir",
+  "package",
+  "docker_context",
+  "kubernetes",
+  "terraform",
+  "aws",
+  "gcloud",
+  "azure",
+  "cmd_duration",
+  "time",
+  "battery",
+  "memory_usage",
+  "env_var",
+  "custom",
+  "shell",
+  "shlvl",
+  "status",
+  "jobs",
+  "character",
 ];
 
 const MODULE_ICONS = {
-  username: '',
-  hostname: '󰟀',
-  directory: '',
-  git_branch: '',
-  git_status: '',
-  nodejs: '',
-  python: '',
-  rust: '',
-  golang: '',
-  java: '',
-  ruby: '',
-  php: '',
-  kotlin: '',
-  swift: '',
-  elixir: '',
-  package: '󰏗',
-  docker_context: '',
-  kubernetes: '󱃾',
-  terraform: '',
-  aws: '',
-  gcloud: '',
-  azure: '󰠅',
-  cmd_duration: '',
-  time: '',
-  battery: '',
-  memory_usage: '',
-  status: '',
-  character: '❯',
-  jobs: '',
-  shell: '',
-  shlvl: '',
-  env_var: '',
+  username: "",
+  hostname: "󰟀",
+  directory: "",
+  git_branch: "",
+  git_status: "",
+  nodejs: "",
+  python: "",
+  rust: "",
+  golang: "",
+  java: "",
+  ruby: "",
+  php: "",
+  kotlin: "",
+  swift: "",
+  elixir: "",
+  package: "󰏗",
+  docker_context: "",
+  kubernetes: "󱃾",
+  terraform: "",
+  aws: "",
+  gcloud: "",
+  azure: "󰠅",
+  cmd_duration: "",
+  time: "",
+  battery: "",
+  memory_usage: "",
+  status: "",
+  character: "❯",
+  jobs: "",
+  shell: "",
+  shlvl: "",
+  env_var: "",
 };
 
 const GALLERY_THEMES = [
   {
     id: 1,
-    name: 'Catppuccin Mocha',
-    tags: ['dark', 'colorful', 'minimal'],
+    name: "Catppuccin Mocha",
+    tags: ["dark", "colorful", "minimal"],
     colors: {
-      bg: '#1e1e2e',
-      fg: '#cdd6f4',
-      accent: '#cba6f7',
-      accent2: '#89dceb',
+      bg: "#1e1e2e",
+      fg: "#cdd6f4",
+      accent: "#cba6f7",
+      accent2: "#89dceb",
     },
-    preview: '~  main  ❯',
+    preview: "~  main  ❯",
   },
   {
     id: 2,
-    name: 'Gruvbox Dark',
-    tags: ['dark', 'retro', 'warm'],
+    name: "Gruvbox Dark",
+    tags: ["dark", "retro", "warm"],
     colors: {
-      bg: '#282828',
-      fg: '#ebdbb2',
-      accent: '#fabd2f',
-      accent2: '#8ec07c',
+      bg: "#282828",
+      fg: "#ebdbb2",
+      accent: "#fabd2f",
+      accent2: "#8ec07c",
     },
-    preview: '~  main  ❯',
+    preview: "~  main  ❯",
   },
   {
     id: 3,
-    name: 'Tokyo Night',
-    tags: ['dark', 'blue', 'clean'],
+    name: "Tokyo Night",
+    tags: ["dark", "blue", "clean"],
     colors: {
-      bg: '#1a1b26',
-      fg: '#c0caf5',
-      accent: '#7aa2f7',
-      accent2: '#9ece6a',
+      bg: "#1a1b26",
+      fg: "#c0caf5",
+      accent: "#7aa2f7",
+      accent2: "#9ece6a",
     },
-    preview: '~  main  ❯',
+    preview: "~  main  ❯",
   },
   {
     id: 4,
-    name: 'Nord',
-    tags: ['dark', 'arctic', 'minimal'],
+    name: "Nord",
+    tags: ["dark", "arctic", "minimal"],
     colors: {
-      bg: '#2e3440',
-      fg: '#eceff4',
-      accent: '#88c0d0',
-      accent2: '#a3be8c',
+      bg: "#2e3440",
+      fg: "#eceff4",
+      accent: "#88c0d0",
+      accent2: "#a3be8c",
     },
-    preview: '~  main  ❯',
+    preview: "~  main  ❯",
   },
   {
     id: 5,
-    name: 'Dracula',
-    tags: ['dark', 'purple', 'popular'],
+    name: "Dracula",
+    tags: ["dark", "purple", "popular"],
     colors: {
-      bg: '#282a36',
-      fg: '#f8f8f2',
-      accent: '#bd93f9',
-      accent2: '#50fa7b',
+      bg: "#282a36",
+      fg: "#f8f8f2",
+      accent: "#bd93f9",
+      accent2: "#50fa7b",
     },
-    preview: '~  main  ❯',
+    preview: "~  main  ❯",
   },
   {
     id: 6,
-    name: 'Solarized Light',
-    tags: ['light', 'warm', 'classic'],
+    name: "Solarized Light",
+    tags: ["light", "warm", "classic"],
     colors: {
-      bg: '#fdf6e3',
-      fg: '#657b83',
-      accent: '#268bd2',
-      accent2: '#2aa198',
+      bg: "#fdf6e3",
+      fg: "#657b83",
+      accent: "#268bd2",
+      accent2: "#2aa198",
     },
-    preview: '~  main  ❯',
+    preview: "~  main  ❯",
   },
 ];
 
@@ -201,7 +201,7 @@ function generateTOML(config) {
 
   let toml = `# Generated by Starship Command Enhanced\n`;
   toml += `# https://starship.rs\n\n`;
-  toml += `add_newline = ${promptStyle === 'multiline'}\n`;
+  toml += `add_newline = ${promptStyle === "multiline"}\n`;
   toml += `\n[palette]\n`;
   toml += `accent = "${colors.accent}"\n`;
   toml += `accent2 = "${colors.accent2}"\n\n`;
@@ -221,8 +221,8 @@ function generateTOML(config) {
   }
 
   toml += `[character]\n`;
-  toml += `success_symbol = "[${config.promptChar || '❯'}](bold green)"\n`;
-  toml += `error_symbol = "[${config.promptChar || '❯'}](bold red)"\n\n`;
+  toml += `success_symbol = "[${config.promptChar || "❯"}](bold green)"\n`;
+  toml += `error_symbol = "[${config.promptChar || "❯"}](bold red)"\n\n`;
 
   toml += `[directory]\n`;
   toml += `style = "bold ${colors.accent}"\n`;
@@ -235,11 +235,11 @@ function generateTOML(config) {
   toml += `[git_status]\n`;
   toml += `style = "bold red"\n\n`;
 
-  if (separator !== 'None') {
+  if (separator !== "None") {
     const sep = SEPARATOR_SHAPES[separator];
     toml += `# Separator: ${sep?.label}\n`;
-    toml += `# Left separators: ${sep?.left?.join(' ')}\n`;
-    toml += `# Right separators: ${sep?.right?.join(' ')}\n\n`;
+    toml += `# Left separators: ${sep?.left?.join(" ")}\n`;
+    toml += `# Right separators: ${sep?.right?.join(" ")}\n\n`;
   }
 
   return toml;
@@ -253,12 +253,12 @@ function Tag({ label }) {
   return (
     <span
       style={{
-        background: 'rgba(139,92,246,0.18)',
-        color: '#a78bfa',
+        background: "rgba(139,92,246,0.18)",
+        color: "#a78bfa",
         borderRadius: 4,
-        padding: '1px 7px',
+        padding: "1px 7px",
         fontSize: 10,
-        fontFamily: 'monospace',
+        fontFamily: "monospace",
       }}
     >
       {label}
@@ -282,30 +282,30 @@ function ModuleChip({
       onDragOver={onDragOver}
       title={`Drag to reorder. Click × to remove.`}
       style={{
-        display: 'inline-flex',
-        alignItems: 'center',
+        display: "inline-flex",
+        alignItems: "center",
         gap: 5,
-        background: 'rgba(139,92,246,0.13)',
-        border: '1px solid rgba(139,92,246,0.35)',
+        background: "rgba(139,92,246,0.13)",
+        border: "1px solid rgba(139,92,246,0.35)",
         borderRadius: 8,
-        padding: '3px 10px',
-        cursor: 'grab',
-        userSelect: 'none',
+        padding: "3px 10px",
+        cursor: "grab",
+        userSelect: "none",
         fontSize: 12,
-        color: '#c4b5fd',
-        margin: '2px',
+        color: "#c4b5fd",
+        margin: "2px",
       }}
     >
-      <span style={{ fontSize: 14 }}>{MODULE_ICONS[mod.id] || '◈'}</span>
+      <span style={{ fontSize: 14 }}>{MODULE_ICONS[mod.id] || "◈"}</span>
       <span>{mod.id}</span>
       {onRemove && (
         <button
           onClick={onRemove}
           style={{
-            background: 'none',
-            border: 'none',
-            color: '#f87171',
-            cursor: 'pointer',
+            background: "none",
+            border: "none",
+            color: "#f87171",
+            cursor: "pointer",
             fontSize: 13,
             padding: 0,
             lineHeight: 1,
@@ -323,35 +323,35 @@ function SectionCard({ title, icon, children, defaultOpen = true }) {
   return (
     <div
       style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.08)",
         borderRadius: 12,
         marginBottom: 16,
-        overflow: 'hidden',
+        overflow: "hidden",
       }}
     >
       <button
         onClick={() => setOpen((o) => !o)}
         style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
           gap: 8,
-          background: 'rgba(255,255,255,0.03)',
-          border: 'none',
-          borderBottom: open ? '1px solid rgba(255,255,255,0.07)' : 'none',
-          padding: '12px 16px',
-          cursor: 'pointer',
-          color: '#e2e8f0',
+          background: "rgba(255,255,255,0.03)",
+          border: "none",
+          borderBottom: open ? "1px solid rgba(255,255,255,0.07)" : "none",
+          padding: "12px 16px",
+          cursor: "pointer",
+          color: "#e2e8f0",
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: 13,
           fontWeight: 600,
         }}
       >
         <span style={{ fontSize: 16 }}>{icon}</span>
-        <span style={{ flex: 1, textAlign: 'left' }}>{title}</span>
-        <span style={{ color: '#94a3b8', fontSize: 12 }}>
-          {open ? '▲' : '▼'}
+        <span style={{ flex: 1, textAlign: "left" }}>{title}</span>
+        <span style={{ color: "#94a3b8", fontSize: 12 }}>
+          {open ? "▲" : "▼"}
         </span>
       </button>
       {open && <div style={{ padding: 16 }}>{children}</div>}
@@ -373,7 +373,7 @@ function TerminalPreview({ config }) {
     rightPromptEnabled,
     promptChar,
   } = config;
-  const sep = SEPARATOR_SHAPES[separator] || SEPARATOR_SHAPES['None'];
+  const sep = SEPARATOR_SHAPES[separator] || SEPARATOR_SHAPES["None"];
 
   const leftSegments = leftModules.slice(0, 5);
   const rightSegments = rightModules.slice(0, 3);
@@ -381,18 +381,18 @@ function TerminalPreview({ config }) {
   const promptLine = (
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: 13,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         {leftSegments.map((mod, i) => (
           <span
             key={mod.id}
-            style={{ display: 'inline-flex', alignItems: 'center' }}
+            style={{ display: "inline-flex", alignItems: "center" }}
           >
             <span
               style={{
@@ -401,30 +401,30 @@ function TerminalPreview({ config }) {
                     ? colors.accent
                     : i === 1
                       ? colors.accent2
-                      : 'rgba(255,255,255,0.1)',
-                color: '#111',
-                padding: '2px 8px',
+                      : "rgba(255,255,255,0.1)",
+                color: "#111",
+                padding: "2px 8px",
                 fontWeight: 700,
                 fontSize: 12,
               }}
             >
-              {MODULE_ICONS[mod.id] || '◈'}{' '}
-              {mod.id === 'directory'
-                ? '~/projects'
-                : mod.id === 'git_branch'
-                  ? 'main'
-                  : mod.id === 'username'
-                    ? 'user'
+              {MODULE_ICONS[mod.id] || "◈"}{" "}
+              {mod.id === "directory"
+                ? "~/projects"
+                : mod.id === "git_branch"
+                  ? "main"
+                  : mod.id === "username"
+                    ? "user"
                     : mod.id}
             </span>
-            {separator !== 'None' && i < leftSegments.length - 1 && (
+            {separator !== "None" && i < leftSegments.length - 1 && (
               <span style={{ color: colors.accent, fontSize: 16 }}>
                 {sep.left[0]}
               </span>
             )}
           </span>
         ))}
-        {separator !== 'None' && leftSegments.length > 0 && (
+        {separator !== "None" && leftSegments.length > 0 && (
           <span style={{ color: colors.accent, fontSize: 16 }}>
             {sep.left[1]}
           </span>
@@ -432,8 +432,8 @@ function TerminalPreview({ config }) {
       </div>
 
       {rightPromptEnabled && rightSegments.length > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {separator !== 'None' && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {separator !== "None" && (
             <span style={{ color: colors.accent2, fontSize: 16 }}>
               {sep.right[0]}
             </span>
@@ -441,26 +441,26 @@ function TerminalPreview({ config }) {
           {rightSegments.map((mod, i) => (
             <span
               key={mod.id}
-              style={{ display: 'inline-flex', alignItems: 'center' }}
+              style={{ display: "inline-flex", alignItems: "center" }}
             >
               <span
                 style={{
                   background:
-                    i === 0 ? colors.accent2 : 'rgba(255,255,255,0.1)',
-                  color: '#111',
-                  padding: '2px 8px',
+                    i === 0 ? colors.accent2 : "rgba(255,255,255,0.1)",
+                  color: "#111",
+                  padding: "2px 8px",
                   fontWeight: 700,
                   fontSize: 12,
                 }}
               >
-                {MODULE_ICONS[mod.id] || '◈'}{' '}
-                {mod.id === 'time'
-                  ? '12:30'
-                  : mod.id === 'cmd_duration'
-                    ? '2s'
+                {MODULE_ICONS[mod.id] || "◈"}{" "}
+                {mod.id === "time"
+                  ? "12:30"
+                  : mod.id === "cmd_duration"
+                    ? "2s"
                     : mod.id}
               </span>
-              {separator !== 'None' && i < rightSegments.length - 1 && (
+              {separator !== "None" && i < rightSegments.length - 1 && (
                 <span style={{ color: colors.accent2, fontSize: 16 }}>
                   {sep.right[1]}
                 </span>
@@ -478,18 +478,18 @@ function TerminalPreview({ config }) {
         fontFamily: "'JetBrains Mono', monospace",
         color: colors.accent,
         fontSize: 15,
-        marginTop: promptStyle === 'multiline' ? 4 : 0,
+        marginTop: promptStyle === "multiline" ? 4 : 0,
       }}
     >
-      {promptChar || '❯'} <span style={{ color: '#94a3b8' }}>█</span>
+      {promptChar || "❯"} <span style={{ color: "#94a3b8" }}>█</span>
     </div>
   );
 
   return (
     <div
       style={{
-        background: colors.bg || '#1e1e2e',
-        border: '1px solid rgba(255,255,255,0.1)',
+        background: colors.bg || "#1e1e2e",
+        border: "1px solid rgba(255,255,255,0.1)",
         borderRadius: 10,
         padding: 16,
         minHeight: 80,
@@ -499,61 +499,61 @@ function TerminalPreview({ config }) {
       {/* Terminal title bar */}
       <div
         style={{
-          display: 'flex',
+          display: "flex",
           gap: 6,
           marginBottom: 14,
-          alignItems: 'center',
+          alignItems: "center",
         }}
       >
         <span
           style={{
             width: 10,
             height: 10,
-            borderRadius: '50%',
-            background: '#ff5f57',
-            display: 'block',
+            borderRadius: "50%",
+            background: "#ff5f57",
+            display: "block",
           }}
         />
         <span
           style={{
             width: 10,
             height: 10,
-            borderRadius: '50%',
-            background: '#ffbd2e',
-            display: 'block',
+            borderRadius: "50%",
+            background: "#ffbd2e",
+            display: "block",
           }}
         />
         <span
           style={{
             width: 10,
             height: 10,
-            borderRadius: '50%',
-            background: '#28c840',
-            display: 'block',
+            borderRadius: "50%",
+            background: "#28c840",
+            display: "block",
           }}
         />
         <span
-          style={{ flex: 1, textAlign: 'center', color: '#555', fontSize: 11 }}
+          style={{ flex: 1, textAlign: "center", color: "#555", fontSize: 11 }}
         >
           Starship Preview
         </span>
       </div>
-      <div style={{ color: colors.fg || '#cdd6f4' }}>
+      <div style={{ color: colors.fg || "#cdd6f4" }}>
         {/* Fake previous command */}
-        <div style={{ color: '#555', fontSize: 12, marginBottom: 4 }}>
+        <div style={{ color: "#555", fontSize: 12, marginBottom: 4 }}>
           $ git status
         </div>
-        <div style={{ color: '#555', fontSize: 11, marginBottom: 8 }}>
+        <div style={{ color: "#555", fontSize: 11, marginBottom: 8 }}>
           On branch main, nothing to commit
         </div>
         {/* Prompt */}
-        {promptStyle === 'multiline' ? (
+        {promptStyle === "multiline" ? (
           <>
             {promptLine}
             {charLine}
           </>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             {promptLine}
             {charLine}
           </div>
@@ -579,11 +579,11 @@ function TOMLPanel({ config }) {
   };
 
   const download = () => {
-    const blob = new Blob([toml], { type: 'text/plain' });
+    const blob = new Blob([toml], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'starship.toml';
+    a.download = "starship.toml";
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -592,34 +592,34 @@ function TOMLPanel({ config }) {
     const encoded = btoa(JSON.stringify(config));
     const url = `${window.location.origin}${window.location.pathname}#theme=${encoded}`;
     navigator.clipboard.writeText(url);
-    alert('Shareable URL copied to clipboard!');
+    alert("Shareable URL copied to clipboard!");
   };
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-        <button onClick={copy} style={btnStyle(copied ? '#22c55e' : '#8b5cf6')}>
-          {copied ? '✓ Copied!' : ' Copy TOML'}
+      <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+        <button onClick={copy} style={btnStyle(copied ? "#22c55e" : "#8b5cf6")}>
+          {copied ? "✓ Copied!" : " Copy TOML"}
         </button>
-        <button onClick={download} style={btnStyle('#06b6d4')}>
+        <button onClick={download} style={btnStyle("#06b6d4")}>
           ⬇ Download starship.toml
         </button>
-        <button onClick={shareUrl} style={btnStyle('#f59e0b')}>
+        <button onClick={shareUrl} style={btnStyle("#f59e0b")}>
           🔗 Share URL
         </button>
       </div>
       <pre
         style={{
-          background: 'rgba(0,0,0,0.4)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: "rgba(0,0,0,0.4)",
+          border: "1px solid rgba(255,255,255,0.08)",
           borderRadius: 8,
           padding: 14,
           fontSize: 11,
           fontFamily: "'JetBrains Mono', monospace",
-          color: '#94a3b8',
+          color: "#94a3b8",
           maxHeight: 320,
-          overflowY: 'auto',
-          whiteSpace: 'pre-wrap',
+          overflowY: "auto",
+          whiteSpace: "pre-wrap",
         }}
       >
         {toml}
@@ -634,8 +634,8 @@ function btnStyle(color) {
     border: `1px solid ${color}55`,
     color: color,
     borderRadius: 7,
-    padding: '6px 14px',
-    cursor: 'pointer',
+    padding: "6px 14px",
+    cursor: "pointer",
     fontSize: 12,
     fontFamily: "'JetBrains Mono', monospace",
     fontWeight: 600,
@@ -653,7 +653,7 @@ function ModuleBuilder({
   setRightModules,
   rightPromptEnabled,
 }) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const dragRef = useRef(null);
 
   const availableLeft = ALL_MODULES.filter(
@@ -700,23 +700,23 @@ function ModuleBuilder({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         style={{
-          width: '100%',
-          background: 'rgba(255,255,255,0.05)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          width: "100%",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.12)",
           borderRadius: 7,
-          padding: '7px 12px',
-          color: '#e2e8f0',
+          padding: "7px 12px",
+          color: "#e2e8f0",
           fontSize: 12,
           fontFamily: "'JetBrains Mono', monospace",
           marginBottom: 12,
-          boxSizing: 'border-box',
+          boxSizing: "border-box",
         }}
       />
 
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: rightPromptEnabled ? '1fr 1fr' : '1fr',
+          display: "grid",
+          gridTemplateColumns: rightPromptEnabled ? "1fr 1fr" : "1fr",
           gap: 12,
         }}
       >
@@ -724,11 +724,11 @@ function ModuleBuilder({
         <div>
           <div
             style={{
-              color: '#a78bfa',
+              color: "#a78bfa",
               fontSize: 11,
               fontWeight: 700,
               marginBottom: 6,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
             }}
           >
             ← LEFT PROMPT
@@ -736,18 +736,18 @@ function ModuleBuilder({
           <div
             style={{
               minHeight: 48,
-              background: 'rgba(139,92,246,0.07)',
-              border: '1px dashed rgba(139,92,246,0.3)',
+              background: "rgba(139,92,246,0.07)",
+              border: "1px dashed rgba(139,92,246,0.3)",
               borderRadius: 8,
               padding: 8,
-              display: 'flex',
-              flexWrap: 'wrap',
+              display: "flex",
+              flexWrap: "wrap",
               gap: 4,
               marginBottom: 10,
             }}
           >
             {leftModules.length === 0 && (
-              <span style={{ color: '#555', fontSize: 11 }}>
+              <span style={{ color: "#555", fontSize: 11 }}>
                 Drag modules here...
               </span>
             )}
@@ -762,41 +762,41 @@ function ModuleBuilder({
           </div>
           <div
             style={{
-              color: '#64748b',
+              color: "#64748b",
               fontSize: 10,
               marginBottom: 6,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
             }}
           >
             AVAILABLE →
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
             {filtered(availableLeft).map((id) => (
               <span
                 key={id}
                 onClick={() => addToLeft(id)}
                 title={`Add ${id} to left prompt`}
                 style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: 6,
-                  padding: '2px 8px',
-                  cursor: 'pointer',
+                  padding: "2px 8px",
+                  cursor: "pointer",
                   fontSize: 11,
-                  color: '#94a3b8',
-                  fontFamily: 'monospace',
-                  transition: 'all 0.15s',
+                  color: "#94a3b8",
+                  fontFamily: "monospace",
+                  transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(139,92,246,0.2)';
-                  e.target.style.color = '#c4b5fd';
+                  e.target.style.background = "rgba(139,92,246,0.2)";
+                  e.target.style.color = "#c4b5fd";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255,255,255,0.05)';
-                  e.target.style.color = '#94a3b8';
+                  e.target.style.background = "rgba(255,255,255,0.05)";
+                  e.target.style.color = "#94a3b8";
                 }}
               >
-                {MODULE_ICONS[id] || '◈'} {id}
+                {MODULE_ICONS[id] || "◈"} {id}
               </span>
             ))}
           </div>
@@ -807,11 +807,11 @@ function ModuleBuilder({
           <div>
             <div
               style={{
-                color: '#22d3ee',
+                color: "#22d3ee",
                 fontSize: 11,
                 fontWeight: 700,
                 marginBottom: 6,
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
               }}
             >
               RIGHT PROMPT →
@@ -819,18 +819,18 @@ function ModuleBuilder({
             <div
               style={{
                 minHeight: 48,
-                background: 'rgba(34,211,238,0.07)',
-                border: '1px dashed rgba(34,211,238,0.3)',
+                background: "rgba(34,211,238,0.07)",
+                border: "1px dashed rgba(34,211,238,0.3)",
                 borderRadius: 8,
                 padding: 8,
-                display: 'flex',
-                flexWrap: 'wrap',
+                display: "flex",
+                flexWrap: "wrap",
                 gap: 4,
                 marginBottom: 10,
               }}
             >
               {rightModules.length === 0 && (
-                <span style={{ color: '#555', fontSize: 11 }}>
+                <span style={{ color: "#555", fontSize: 11 }}>
                   Drag modules here...
                 </span>
               )}
@@ -845,39 +845,39 @@ function ModuleBuilder({
             </div>
             <div
               style={{
-                color: '#64748b',
+                color: "#64748b",
                 fontSize: 10,
                 marginBottom: 6,
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
               }}
             >
               AVAILABLE →
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
               {filtered(availableRight).map((id) => (
                 <span
                   key={id}
                   onClick={() => addToRight(id)}
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: 6,
-                    padding: '2px 8px',
-                    cursor: 'pointer',
+                    padding: "2px 8px",
+                    cursor: "pointer",
                     fontSize: 11,
-                    color: '#94a3b8',
-                    fontFamily: 'monospace',
+                    color: "#94a3b8",
+                    fontFamily: "monospace",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.background = 'rgba(34,211,238,0.2)';
-                    e.target.style.color = '#67e8f9';
+                    e.target.style.background = "rgba(34,211,238,0.2)";
+                    e.target.style.color = "#67e8f9";
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.background = 'rgba(255,255,255,0.05)';
-                    e.target.style.color = '#94a3b8';
+                    e.target.style.background = "rgba(255,255,255,0.05)";
+                    e.target.style.color = "#94a3b8";
                   }}
                 >
-                  {MODULE_ICONS[id] || '◈'} {id}
+                  {MODULE_ICONS[id] || "◈"} {id}
                 </span>
               ))}
             </div>
@@ -893,8 +893,8 @@ function ModuleBuilder({
 // ─────────────────────────────────────────────────────────────────
 
 function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
-  const [category, setCategory] = useState('Powerline Solid');
-  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState("Powerline Solid");
+  const [search, setSearch] = useState("");
 
   const allIcons = Object.entries(NERD_FONT_ICONS).flatMap(([cat, icons]) =>
     icons.map((icon) => ({ icon, cat })),
@@ -908,18 +908,18 @@ function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
       <div style={{ marginBottom: 10 }}>
         <label
           style={{
-            color: '#94a3b8',
+            color: "#94a3b8",
             fontSize: 11,
-            fontFamily: 'monospace',
-            display: 'block',
+            fontFamily: "monospace",
+            display: "block",
             marginBottom: 4,
           }}
         >
           PROMPT CHARACTER (success symbol)
         </label>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 22, minWidth: 30, textAlign: 'center' }}>
-            {promptChar || '❯'}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 22, minWidth: 30, textAlign: "center" }}>
+            {promptChar || "❯"}
           </span>
           <input
             value={promptChar}
@@ -927,11 +927,11 @@ function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
             placeholder="Type or click an icon below..."
             style={{
               flex: 1,
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.12)",
               borderRadius: 7,
-              padding: '6px 10px',
-              color: '#e2e8f0',
+              padding: "6px 10px",
+              color: "#e2e8f0",
               fontSize: 16,
               fontFamily: "'JetBrains Mono', monospace",
             }}
@@ -944,24 +944,24 @@ function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         style={{
-          width: '100%',
-          background: 'rgba(255,255,255,0.05)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          width: "100%",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.12)",
           borderRadius: 7,
-          padding: '6px 10px',
-          color: '#e2e8f0',
+          padding: "6px 10px",
+          color: "#e2e8f0",
           fontSize: 12,
           marginBottom: 8,
-          fontFamily: 'monospace',
-          boxSizing: 'border-box',
+          fontFamily: "monospace",
+          boxSizing: "border-box",
         }}
       />
 
       {!search && (
         <div
           style={{
-            display: 'flex',
-            flexWrap: 'wrap',
+            display: "flex",
+            flexWrap: "wrap",
             gap: 6,
             marginBottom: 10,
           }}
@@ -973,15 +973,15 @@ function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
               style={{
                 background:
                   category === cat
-                    ? 'rgba(139,92,246,0.3)'
-                    : 'rgba(255,255,255,0.05)',
-                border: `1px solid ${category === cat ? '#8b5cf6' : 'rgba(255,255,255,0.1)'}`,
+                    ? "rgba(139,92,246,0.3)"
+                    : "rgba(255,255,255,0.05)",
+                border: `1px solid ${category === cat ? "#8b5cf6" : "rgba(255,255,255,0.1)"}`,
                 borderRadius: 6,
-                padding: '3px 9px',
-                cursor: 'pointer',
-                color: category === cat ? '#c4b5fd' : '#64748b',
+                padding: "3px 9px",
+                cursor: "pointer",
+                color: category === cat ? "#c4b5fd" : "#64748b",
                 fontSize: 11,
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
               }}
             >
               {cat}
@@ -990,7 +990,7 @@ function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {(search ? allIcons.map((x) => x.icon) : displayIcons).map(
           (icon, i) => (
             <button
@@ -1001,24 +1001,24 @@ function NerdFontPicker({ onInsert, promptChar, setPromptChar }) {
               }}
               title={`Insert: ${icon}`}
               style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: 6,
-                padding: '6px 10px',
-                cursor: 'pointer',
-                color: '#e2e8f0',
+                padding: "6px 10px",
+                cursor: "pointer",
+                color: "#e2e8f0",
                 fontSize: 18,
                 fontFamily: "'JetBrains Mono', monospace",
                 lineHeight: 1,
-                transition: 'all 0.1s',
+                transition: "all 0.1s",
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(139,92,246,0.25)';
-                e.target.style.borderColor = '#8b5cf6';
+                e.target.style.background = "rgba(139,92,246,0.25)";
+                e.target.style.borderColor = "#8b5cf6";
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.05)';
-                e.target.style.borderColor = 'rgba(255,255,255,0.1)';
+                e.target.style.background = "rgba(255,255,255,0.05)";
+                e.target.style.borderColor = "rgba(255,255,255,0.1)";
               }}
             >
               {icon}
@@ -1039,9 +1039,9 @@ function SeparatorPicker({ value, onChange, colors }) {
     <div>
       <div
         style={{
-          color: '#94a3b8',
+          color: "#94a3b8",
           fontSize: 11,
-          fontFamily: 'monospace',
+          fontFamily: "monospace",
           marginBottom: 10,
         }}
       >
@@ -1049,8 +1049,8 @@ function SeparatorPicker({ value, onChange, colors }) {
       </div>
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
           gap: 8,
         }}
       >
@@ -1061,28 +1061,28 @@ function SeparatorPicker({ value, onChange, colors }) {
             style={{
               background:
                 value === key
-                  ? 'rgba(139,92,246,0.2)'
-                  : 'rgba(255,255,255,0.04)',
-              border: `2px solid ${value === key ? '#8b5cf6' : 'rgba(255,255,255,0.08)'}`,
+                  ? "rgba(139,92,246,0.2)"
+                  : "rgba(255,255,255,0.04)",
+              border: `2px solid ${value === key ? "#8b5cf6" : "rgba(255,255,255,0.08)"}`,
               borderRadius: 8,
-              padding: '10px 12px',
-              cursor: 'pointer',
-              color: value === key ? '#c4b5fd' : '#64748b',
+              padding: "10px 12px",
+              cursor: "pointer",
+              color: value === key ? "#c4b5fd" : "#64748b",
               fontFamily: "'JetBrains Mono', monospace",
-              textAlign: 'left',
-              transition: 'all 0.15s',
+              textAlign: "left",
+              transition: "all 0.15s",
             }}
           >
-            <div style={{ fontSize: 11, marginBottom: 4, color: '#94a3b8' }}>
+            <div style={{ fontSize: 11, marginBottom: 4, color: "#94a3b8" }}>
               {sep.label}
             </div>
             <div style={{ fontSize: 16 }}>
               <span style={{ color: colors.accent }}>{sep.left[0]}</span>
-              <span style={{ fontSize: 12, color: '#444' }}>content</span>
+              <span style={{ fontSize: 12, color: "#444" }}>content</span>
               <span style={{ color: colors.accent2 }}>{sep.left[1]}</span>
-              {' · '}
+              {" · "}
               <span style={{ color: colors.accent2 }}>{sep.right[0]}</span>
-              <span style={{ fontSize: 12, color: '#444' }}>right</span>
+              <span style={{ fontSize: 12, color: "#444" }}>right</span>
               <span style={{ color: colors.accent }}>{sep.right[1]}</span>
             </div>
           </button>
@@ -1097,18 +1097,18 @@ function SeparatorPicker({ value, onChange, colors }) {
 // ─────────────────────────────────────────────────────────────────
 
 function ThemeGallery({ onApply, filterTags }) {
-  const [tagFilter, setTagFilter] = useState('all');
+  const [tagFilter, setTagFilter] = useState("all");
   const [favorites, setFavorites] = useState(new Set());
-  const allTags = ['all', ...new Set(GALLERY_THEMES.flatMap((t) => t.tags))];
+  const allTags = ["all", ...new Set(GALLERY_THEMES.flatMap((t) => t.tags))];
 
   const filtered = GALLERY_THEMES.filter(
-    (t) => tagFilter === 'all' || t.tags.includes(tagFilter),
+    (t) => tagFilter === "all" || t.tags.includes(tagFilter),
   );
 
   return (
     <div>
       <div
-        style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}
+        style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}
       >
         {allTags.map((tag) => (
           <button
@@ -1117,15 +1117,15 @@ function ThemeGallery({ onApply, filterTags }) {
             style={{
               background:
                 tagFilter === tag
-                  ? 'rgba(139,92,246,0.3)'
-                  : 'rgba(255,255,255,0.05)',
-              border: `1px solid ${tagFilter === tag ? '#8b5cf6' : 'rgba(255,255,255,0.1)'}`,
+                  ? "rgba(139,92,246,0.3)"
+                  : "rgba(255,255,255,0.05)",
+              border: `1px solid ${tagFilter === tag ? "#8b5cf6" : "rgba(255,255,255,0.1)"}`,
               borderRadius: 20,
-              padding: '3px 10px',
-              cursor: 'pointer',
-              color: tagFilter === tag ? '#c4b5fd' : '#64748b',
+              padding: "3px 10px",
+              cursor: "pointer",
+              color: tagFilter === tag ? "#c4b5fd" : "#64748b",
               fontSize: 11,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
             }}
           >
             {tag}
@@ -1134,8 +1134,8 @@ function ThemeGallery({ onApply, filterTags }) {
       </div>
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
           gap: 10,
         }}
       >
@@ -1144,17 +1144,17 @@ function ThemeGallery({ onApply, filterTags }) {
             key={theme.id}
             style={{
               background: theme.colors.bg,
-              border: '1px solid rgba(255,255,255,0.1)',
+              border: "1px solid rgba(255,255,255,0.1)",
               borderRadius: 10,
-              overflow: 'hidden',
+              overflow: "hidden",
             }}
           >
-            <div style={{ padding: '10px 12px' }}>
+            <div style={{ padding: "10px 12px" }}>
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   marginBottom: 8,
                 }}
               >
@@ -1163,7 +1163,7 @@ function ThemeGallery({ onApply, filterTags }) {
                     color: theme.colors.fg,
                     fontSize: 12,
                     fontWeight: 700,
-                    fontFamily: 'monospace',
+                    fontFamily: "monospace",
                   }}
                 >
                   {theme.name}
@@ -1177,20 +1177,20 @@ function ThemeGallery({ onApply, filterTags }) {
                     })
                   }
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
                     fontSize: 14,
                   }}
                 >
-                  {favorites.has(theme.id) ? '★' : '☆'}
+                  {favorites.has(theme.id) ? "★" : "☆"}
                 </button>
               </div>
               <div
                 style={{
-                  background: 'rgba(0,0,0,0.3)',
+                  background: "rgba(0,0,0,0.3)",
                   borderRadius: 5,
-                  padding: '6px 8px',
+                  padding: "6px 8px",
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 11,
                   color: theme.colors.fg,
@@ -1204,8 +1204,8 @@ function ThemeGallery({ onApply, filterTags }) {
               </div>
               <div
                 style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
+                  display: "flex",
+                  flexWrap: "wrap",
                   gap: 4,
                   marginBottom: 8,
                 }}
@@ -1217,15 +1217,15 @@ function ThemeGallery({ onApply, filterTags }) {
               <button
                 onClick={() => onApply(theme)}
                 style={{
-                  width: '100%',
+                  width: "100%",
                   background: `${theme.colors.accent}22`,
                   border: `1px solid ${theme.colors.accent}55`,
                   color: theme.colors.accent,
                   borderRadius: 6,
-                  padding: '5px 0',
-                  cursor: 'pointer',
+                  padding: "5px 0",
+                  cursor: "pointer",
                   fontSize: 11,
-                  fontFamily: 'monospace',
+                  fontFamily: "monospace",
                   fontWeight: 600,
                 }}
               >
@@ -1245,7 +1245,7 @@ function ThemeGallery({ onApply, filterTags }) {
 
 function ColorSection({ colors, setColors }) {
   const contrast = (bg, fg) => {
-    const hex = (h) => parseInt(h.replace('#', ''), 16);
+    const hex = (h) => parseInt(h.replace("#", ""), 16);
     const lum = (c) => {
       const r = (hex(c) >> 16) & 0xff;
       const g = (hex(c) >> 8) & 0xff;
@@ -1262,15 +1262,15 @@ function ColorSection({ colors, setColors }) {
       const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
       return ratio.toFixed(1);
     } catch {
-      return '?';
+      return "?";
     }
   };
 
   const fields = [
-    { key: 'bg', label: 'Background' },
-    { key: 'fg', label: 'Foreground' },
-    { key: 'accent', label: 'Accent (Primary)' },
-    { key: 'accent2', label: 'Accent (Secondary)' },
+    { key: "bg", label: "Background" },
+    { key: "fg", label: "Foreground" },
+    { key: "accent", label: "Accent (Primary)" },
+    { key: "accent2", label: "Accent (Secondary)" },
   ];
 
   const contrastRatio = contrast(colors.bg, colors.fg);
@@ -1280,8 +1280,8 @@ function ColorSection({ colors, setColors }) {
     <div>
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
           gap: 10,
           marginBottom: 12,
         }}
@@ -1290,45 +1290,45 @@ function ColorSection({ colors, setColors }) {
           <div key={key}>
             <label
               style={{
-                color: '#94a3b8',
+                color: "#94a3b8",
                 fontSize: 10,
-                fontFamily: 'monospace',
-                display: 'block',
+                fontFamily: "monospace",
+                display: "block",
                 marginBottom: 4,
               }}
             >
               {label}
             </label>
-            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
               <input
                 type="color"
-                value={colors[key] || '#888888'}
+                value={colors[key] || "#888888"}
                 onChange={(e) =>
                   setColors((c) => ({ ...c, [key]: e.target.value }))
                 }
                 style={{
                   width: 36,
                   height: 32,
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer',
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
                   padding: 0,
                 }}
               />
               <input
-                value={colors[key] || ''}
+                value={colors[key] || ""}
                 onChange={(e) =>
                   setColors((c) => ({ ...c, [key]: e.target.value }))
                 }
                 style={{
                   flex: 1,
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: 6,
-                  padding: '5px 8px',
-                  color: '#e2e8f0',
+                  padding: "5px 8px",
+                  color: "#e2e8f0",
                   fontSize: 11,
-                  fontFamily: 'monospace',
+                  fontFamily: "monospace",
                 }}
               />
             </div>
@@ -1340,18 +1340,18 @@ function ColorSection({ colors, setColors }) {
       <div
         style={{
           background: contrastOk
-            ? 'rgba(34,197,94,0.1)'
-            : 'rgba(239,68,68,0.1)',
-          border: `1px solid ${contrastOk ? '#22c55e44' : '#ef444444'}`,
+            ? "rgba(34,197,94,0.1)"
+            : "rgba(239,68,68,0.1)",
+          border: `1px solid ${contrastOk ? "#22c55e44" : "#ef444444"}`,
           borderRadius: 7,
-          padding: '8px 12px',
+          padding: "8px 12px",
           fontSize: 11,
-          fontFamily: 'monospace',
-          color: contrastOk ? '#86efac' : '#fca5a5',
+          fontFamily: "monospace",
+          color: contrastOk ? "#86efac" : "#fca5a5",
         }}
       >
-        {contrastOk ? '✓' : '⚠'} Contrast ratio: {contrastRatio}:1 —{' '}
-        {contrastOk ? 'WCAG AA Pass' : 'WCAG AA Fail (needs 4.5:1+)'}
+        {contrastOk ? "✓" : "⚠"} Contrast ratio: {contrastRatio}:1 —{" "}
+        {contrastOk ? "WCAG AA Pass" : "WCAG AA Fail (needs 4.5:1+)"}
       </div>
     </div>
   );
@@ -1395,31 +1395,31 @@ function useHistory(initial) {
 
 const INITIAL_CONFIG = {
   leftModules: [
-    { id: 'username' },
-    { id: 'directory' },
-    { id: 'git_branch' },
-    { id: 'git_status' },
+    { id: "username" },
+    { id: "directory" },
+    { id: "git_branch" },
+    { id: "git_status" },
   ],
-  rightModules: [{ id: 'cmd_duration' }, { id: 'time' }],
+  rightModules: [{ id: "cmd_duration" }, { id: "time" }],
   colors: {
-    bg: '#1e1e2e',
-    fg: '#cdd6f4',
-    accent: '#cba6f7',
-    accent2: '#89dceb',
+    bg: "#1e1e2e",
+    fg: "#cdd6f4",
+    accent: "#cba6f7",
+    accent2: "#89dceb",
   },
-  separator: 'Powerline',
-  promptStyle: 'multiline',
+  separator: "Powerline",
+  promptStyle: "multiline",
   rightPromptEnabled: true,
-  promptChar: '❯',
+  promptChar: "❯",
 };
 
 const TABS = [
-  { id: 'modules', label: 'Modules', icon: '⊞' },
-  { id: 'style', label: 'Style', icon: '🎨' },
-  { id: 'nerd', label: 'Nerd Fonts', icon: '' },
-  { id: 'separators', label: 'Separators', icon: '' },
-  { id: 'gallery', label: 'Gallery', icon: '✦' },
-  { id: 'export', label: 'Export', icon: '⬇' },
+  { id: "modules", label: "Modules", icon: "⊞" },
+  { id: "style", label: "Style", icon: "🎨" },
+  { id: "nerd", label: "Nerd Fonts", icon: "" },
+  { id: "separators", label: "Separators", icon: "" },
+  { id: "gallery", label: "Gallery", icon: "✦" },
+  { id: "export", label: "Export", icon: "⬇" },
 ];
 
 export default function App() {
@@ -1431,16 +1431,16 @@ export default function App() {
     canUndo,
     canRedo,
   } = useHistory(INITIAL_CONFIG);
-  const [tab, setTab] = useState('modules');
+  const [tab, setTab] = useState("modules");
   const [savedThemes, setSavedThemes] = useState([]);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
-  const [saveName, setSaveName] = useState('');
+  const [saveName, setSaveName] = useState("");
   const [randomMode, setRandomMode] = useState(false);
 
   const update = useCallback(
     (updater) => {
       push(
-        typeof updater === 'function'
+        typeof updater === "function"
           ? updater(config)
           : { ...config, ...updater },
       );
@@ -1451,45 +1451,45 @@ export default function App() {
   const setLeftModules = (fn) =>
     update((c) => ({
       ...c,
-      leftModules: typeof fn === 'function' ? fn(c.leftModules) : fn,
+      leftModules: typeof fn === "function" ? fn(c.leftModules) : fn,
     }));
   const setRightModules = (fn) =>
     update((c) => ({
       ...c,
-      rightModules: typeof fn === 'function' ? fn(c.rightModules) : fn,
+      rightModules: typeof fn === "function" ? fn(c.rightModules) : fn,
     }));
   const setColors = (fn) =>
     update((c) => ({
       ...c,
-      colors: typeof fn === 'function' ? fn(c.colors) : fn,
+      colors: typeof fn === "function" ? fn(c.colors) : fn,
     }));
 
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "z") {
         e.preventDefault();
         undo();
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "y") {
         e.preventDefault();
         redo();
       }
     };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
   }, [undo, redo]);
 
   const randomTheme = () => {
     const palettes = [
-      { bg: '#1e1e2e', fg: '#cdd6f4', accent: '#cba6f7', accent2: '#89dceb' },
-      { bg: '#282828', fg: '#ebdbb2', accent: '#fabd2f', accent2: '#8ec07c' },
-      { bg: '#1a1b26', fg: '#c0caf5', accent: '#7aa2f7', accent2: '#9ece6a' },
-      { bg: '#2e3440', fg: '#eceff4', accent: '#88c0d0', accent2: '#a3be8c' },
-      { bg: '#282a36', fg: '#f8f8f2', accent: '#bd93f9', accent2: '#50fa7b' },
-      { bg: '#0d1117', fg: '#e6edf3', accent: '#58a6ff', accent2: '#3fb950' },
+      { bg: "#1e1e2e", fg: "#cdd6f4", accent: "#cba6f7", accent2: "#89dceb" },
+      { bg: "#282828", fg: "#ebdbb2", accent: "#fabd2f", accent2: "#8ec07c" },
+      { bg: "#1a1b26", fg: "#c0caf5", accent: "#7aa2f7", accent2: "#9ece6a" },
+      { bg: "#2e3440", fg: "#eceff4", accent: "#88c0d0", accent2: "#a3be8c" },
+      { bg: "#282a36", fg: "#f8f8f2", accent: "#bd93f9", accent2: "#50fa7b" },
+      { bg: "#0d1117", fg: "#e6edf3", accent: "#58a6ff", accent2: "#3fb950" },
     ];
-    const chars = ['❯', '➜', '▶', '➤', 'λ', '»', '⚡', '→'];
+    const chars = ["❯", "➜", "▶", "➤", "λ", "»", "⚡", "→"];
     const separators = Object.keys(SEPARATOR_SHAPES);
     update({
       colors: palettes[Math.floor(Math.random() * palettes.length)],
@@ -1504,38 +1504,38 @@ export default function App() {
       ...s,
       { name: saveName, config: { ...config }, id: Date.now() },
     ]);
-    setSaveName('');
+    setSaveName("");
     setSaveDialogOpen(false);
   };
 
   const applyGalleryTheme = (theme) => {
     update((c) => ({ ...c, colors: theme.colors }));
-    setTab('modules');
+    setTab("modules");
   };
 
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: "100vh",
         background:
-          'linear-gradient(135deg, #0f0f1a 0%, #0c0c18 50%, #0a0f1e 100%)',
+          "linear-gradient(135deg, #0f0f1a 0%, #0c0c18 50%, #0a0f1e 100%)",
         fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-        color: '#e2e8f0',
+        color: "#e2e8f0",
       }}
     >
       {/* Header */}
       <header
         style={{
-          background: 'rgba(255,255,255,0.03)',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
-          padding: '14px 24px',
-          display: 'flex',
-          alignItems: 'center',
+          background: "rgba(255,255,255,0.03)",
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          padding: "14px 24px",
+          display: "flex",
+          alignItems: "center",
           gap: 16,
-          position: 'sticky',
+          position: "sticky",
           top: 0,
           zIndex: 100,
-          backdropFilter: 'blur(12px)',
+          backdropFilter: "blur(12px)",
         }}
       >
         <div>
@@ -1543,37 +1543,37 @@ export default function App() {
             style={{
               fontSize: 18,
               fontWeight: 800,
-              letterSpacing: '-0.5px',
-              display: 'flex',
-              alignItems: 'center',
+              letterSpacing: "-0.5px",
+              display: "flex",
+              alignItems: "center",
               gap: 8,
             }}
           >
             <span style={{ fontSize: 22 }}>☄️</span>
             <span
               style={{
-                background: 'linear-gradient(90deg, #a78bfa, #67e8f9)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                background: "linear-gradient(90deg, #a78bfa, #67e8f9)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               Starship Command
             </span>
           </div>
-          <div style={{ fontSize: 10, color: '#475569', marginTop: 1 }}>
+          <div style={{ fontSize: 10, color: "#475569", marginTop: 1 }}>
             Enhanced Theme Editor
           </div>
         </div>
         <div style={{ flex: 1 }} />
 
         {/* Undo/Redo */}
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div style={{ display: "flex", gap: 6 }}>
           <button
             onClick={undo}
             disabled={!canUndo}
             title="Undo (Ctrl+Z)"
             style={{
-              ...btnStyle('#94a3b8'),
+              ...btnStyle("#94a3b8"),
               opacity: canUndo ? 1 : 0.3,
             }}
           >
@@ -1584,18 +1584,18 @@ export default function App() {
             disabled={!canRedo}
             title="Redo (Ctrl+Y)"
             style={{
-              ...btnStyle('#94a3b8'),
+              ...btnStyle("#94a3b8"),
               opacity: canRedo ? 1 : 0.3,
             }}
           >
             ↪ Redo
           </button>
-          <button onClick={randomTheme} style={btnStyle('#f59e0b')}>
+          <button onClick={randomTheme} style={btnStyle("#f59e0b")}>
             🎲 Random
           </button>
           <button
             onClick={() => setSaveDialogOpen(true)}
-            style={btnStyle('#22c55e')}
+            style={btnStyle("#22c55e")}
           >
             💾 Save
           </button>
@@ -1606,19 +1606,19 @@ export default function App() {
       {saveDialogOpen && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             zIndex: 999,
           }}
         >
           <div
             style={{
-              background: '#1e1e2e',
-              border: '1px solid rgba(139,92,246,0.4)',
+              background: "#1e1e2e",
+              border: "1px solid rgba(139,92,246,0.4)",
               borderRadius: 12,
               padding: 24,
               minWidth: 320,
@@ -1631,28 +1631,28 @@ export default function App() {
               value={saveName}
               onChange={(e) => setSaveName(e.target.value)}
               placeholder="Theme name..."
-              onKeyDown={(e) => e.key === 'Enter' && saveTheme()}
+              onKeyDown={(e) => e.key === "Enter" && saveTheme()}
               autoFocus
               style={{
-                width: '100%',
-                background: 'rgba(255,255,255,0.07)',
-                border: '1px solid rgba(255,255,255,0.15)',
+                width: "100%",
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.15)",
                 borderRadius: 7,
-                padding: '8px 12px',
-                color: '#e2e8f0',
+                padding: "8px 12px",
+                color: "#e2e8f0",
                 fontSize: 13,
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 marginBottom: 12,
-                boxSizing: 'border-box',
+                boxSizing: "border-box",
               }}
             />
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={saveTheme} style={btnStyle('#22c55e')}>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={saveTheme} style={btnStyle("#22c55e")}>
                 Save
               </button>
               <button
                 onClick={() => setSaveDialogOpen(false)}
-                style={btnStyle('#ef4444')}
+                style={btnStyle("#ef4444")}
               >
                 Cancel
               </button>
@@ -1663,11 +1663,11 @@ export default function App() {
 
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 380px',
+          display: "grid",
+          gridTemplateColumns: "1fr 380px",
           gap: 0,
           maxWidth: 1400,
-          margin: '0 auto',
+          margin: "0 auto",
           padding: 20,
         }}
       >
@@ -1676,10 +1676,10 @@ export default function App() {
           {/* Tabs */}
           <div
             style={{
-              display: 'flex',
+              display: "flex",
               gap: 2,
               marginBottom: 16,
-              background: 'rgba(255,255,255,0.03)',
+              background: "rgba(255,255,255,0.03)",
               borderRadius: 10,
               padding: 4,
             }}
@@ -1691,16 +1691,16 @@ export default function App() {
                 style={{
                   flex: 1,
                   background:
-                    tab === t.id ? 'rgba(139,92,246,0.25)' : 'transparent',
-                  border: `1px solid ${tab === t.id ? 'rgba(139,92,246,0.5)' : 'transparent'}`,
+                    tab === t.id ? "rgba(139,92,246,0.25)" : "transparent",
+                  border: `1px solid ${tab === t.id ? "rgba(139,92,246,0.5)" : "transparent"}`,
                   borderRadius: 7,
-                  padding: '7px 4px',
-                  cursor: 'pointer',
-                  color: tab === t.id ? '#c4b5fd' : '#64748b',
+                  padding: "7px 4px",
+                  cursor: "pointer",
+                  color: tab === t.id ? "#c4b5fd" : "#64748b",
                   fontSize: 11,
-                  fontFamily: 'monospace',
+                  fontFamily: "monospace",
                   fontWeight: 600,
-                  transition: 'all 0.15s',
+                  transition: "all 0.15s",
                 }}
               >
                 <div style={{ fontSize: 15, marginBottom: 2 }}>{t.icon}</div>
@@ -1710,52 +1710,52 @@ export default function App() {
           </div>
 
           {/* Tab Content */}
-          {tab === 'modules' && (
+          {tab === "modules" && (
             <>
               <SectionCard title="Prompt Layout" icon="⚙" defaultOpen>
                 <div
                   style={{
-                    display: 'flex',
+                    display: "flex",
                     gap: 12,
-                    flexWrap: 'wrap',
+                    flexWrap: "wrap",
                     marginBottom: 12,
                   }}
                 >
                   <div>
                     <label
                       style={{
-                        color: '#94a3b8',
+                        color: "#94a3b8",
                         fontSize: 10,
-                        fontFamily: 'monospace',
-                        display: 'block',
+                        fontFamily: "monospace",
+                        display: "block",
                         marginBottom: 4,
                       }}
                     >
                       PROMPT STYLE
                     </label>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      {['singleline', 'multiline'].map((s) => (
+                    <div style={{ display: "flex", gap: 6 }}>
+                      {["singleline", "multiline"].map((s) => (
                         <button
                           key={s}
                           onClick={() => update({ promptStyle: s })}
                           style={{
                             background:
                               config.promptStyle === s
-                                ? 'rgba(139,92,246,0.3)'
-                                : 'rgba(255,255,255,0.05)',
-                            border: `1px solid ${config.promptStyle === s ? '#8b5cf6' : 'rgba(255,255,255,0.1)'}`,
+                                ? "rgba(139,92,246,0.3)"
+                                : "rgba(255,255,255,0.05)",
+                            border: `1px solid ${config.promptStyle === s ? "#8b5cf6" : "rgba(255,255,255,0.1)"}`,
                             borderRadius: 7,
-                            padding: '5px 12px',
-                            cursor: 'pointer',
+                            padding: "5px 12px",
+                            cursor: "pointer",
                             color:
-                              config.promptStyle === s ? '#c4b5fd' : '#64748b',
+                              config.promptStyle === s ? "#c4b5fd" : "#64748b",
                             fontSize: 11,
-                            fontFamily: 'monospace',
+                            fontFamily: "monospace",
                           }}
                         >
-                          {s === 'singleline'
-                            ? '── Single Line'
-                            : '┐ Multi Line'}
+                          {s === "singleline"
+                            ? "── Single Line"
+                            : "┐ Multi Line"}
                         </button>
                       ))}
                     </div>
@@ -1763,10 +1763,10 @@ export default function App() {
                   <div>
                     <label
                       style={{
-                        color: '#94a3b8',
+                        color: "#94a3b8",
                         fontSize: 10,
-                        fontFamily: 'monospace',
-                        display: 'block',
+                        fontFamily: "monospace",
+                        display: "block",
                         marginBottom: 4,
                       }}
                     >
@@ -1780,20 +1780,20 @@ export default function App() {
                       }
                       style={{
                         background: config.rightPromptEnabled
-                          ? 'rgba(34,211,238,0.2)'
-                          : 'rgba(255,255,255,0.05)',
-                        border: `1px solid ${config.rightPromptEnabled ? '#22d3ee' : 'rgba(255,255,255,0.1)'}`,
+                          ? "rgba(34,211,238,0.2)"
+                          : "rgba(255,255,255,0.05)",
+                        border: `1px solid ${config.rightPromptEnabled ? "#22d3ee" : "rgba(255,255,255,0.1)"}`,
                         borderRadius: 7,
-                        padding: '5px 12px',
-                        cursor: 'pointer',
+                        padding: "5px 12px",
+                        cursor: "pointer",
                         color: config.rightPromptEnabled
-                          ? '#67e8f9'
-                          : '#64748b',
+                          ? "#67e8f9"
+                          : "#64748b",
                         fontSize: 11,
-                        fontFamily: 'monospace',
+                        fontFamily: "monospace",
                       }}
                     >
-                      {config.rightPromptEnabled ? '✓ Enabled' : '✗ Disabled'}
+                      {config.rightPromptEnabled ? "✓ Enabled" : "✗ Disabled"}
                     </button>
                   </div>
                 </div>
@@ -1811,13 +1811,13 @@ export default function App() {
             </>
           )}
 
-          {tab === 'style' && (
+          {tab === "style" && (
             <SectionCard title="Colors & Theme" icon="🎨" defaultOpen>
               <ColorSection colors={config.colors} setColors={setColors} />
             </SectionCard>
           )}
 
-          {tab === 'nerd' && (
+          {tab === "nerd" && (
             <SectionCard title="Nerd Fonts & Icons" icon="" defaultOpen>
               <NerdFontPicker
                 promptChar={config.promptChar}
@@ -1827,7 +1827,7 @@ export default function App() {
             </SectionCard>
           )}
 
-          {tab === 'separators' && (
+          {tab === "separators" && (
             <SectionCard title="Shapes, Lines & Separators" icon="" defaultOpen>
               <SeparatorPicker
                 value={config.separator}
@@ -1837,35 +1837,35 @@ export default function App() {
             </SectionCard>
           )}
 
-          {tab === 'gallery' && (
+          {tab === "gallery" && (
             <SectionCard title="Theme Gallery" icon="✦" defaultOpen>
               <ThemeGallery onApply={applyGalleryTheme} />
               {savedThemes.length > 0 && (
                 <div style={{ marginTop: 20 }}>
                   <div
                     style={{
-                      color: '#94a3b8',
+                      color: "#94a3b8",
                       fontSize: 11,
-                      fontFamily: 'monospace',
+                      fontFamily: "monospace",
                       marginBottom: 8,
                     }}
                   >
                     YOUR SAVED THEMES
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {savedThemes.map((t) => (
                       <button
                         key={t.id}
                         onClick={() => push(t.config)}
                         style={{
-                          background: 'rgba(255,255,255,0.05)',
-                          border: '1px solid rgba(255,255,255,0.1)',
+                          background: "rgba(255,255,255,0.05)",
+                          border: "1px solid rgba(255,255,255,0.1)",
                           borderRadius: 7,
-                          padding: '6px 12px',
-                          cursor: 'pointer',
-                          color: '#94a3b8',
+                          padding: "6px 12px",
+                          cursor: "pointer",
+                          color: "#94a3b8",
                           fontSize: 11,
-                          fontFamily: 'monospace',
+                          fontFamily: "monospace",
                         }}
                       >
                         📁 {t.name}
@@ -1877,21 +1877,21 @@ export default function App() {
             </SectionCard>
           )}
 
-          {tab === 'export' && (
+          {tab === "export" && (
             <SectionCard title="Export & Share" icon="⬇" defaultOpen>
               <TOMLPanel config={config} />
               <div
                 style={{
                   marginTop: 16,
-                  color: '#64748b',
+                  color: "#64748b",
                   fontSize: 11,
-                  fontFamily: 'monospace',
+                  fontFamily: "monospace",
                 }}
               >
-                💡 Place the downloaded file at{' '}
-                <span style={{ color: '#94a3b8' }}>
+                💡 Place the downloaded file at{" "}
+                <span style={{ color: "#94a3b8" }}>
                   ~/.config/starship.toml
-                </span>{' '}
+                </span>{" "}
                 to apply it.
               </div>
             </SectionCard>
@@ -1899,7 +1899,7 @@ export default function App() {
         </div>
 
         {/* RIGHT: Preview + Info */}
-        <div style={{ position: 'sticky', top: 80, alignSelf: 'start' }}>
+        <div style={{ position: "sticky", top: 80, alignSelf: "start" }}>
           <SectionCard title="Live Preview" icon="⬛" defaultOpen>
             <TerminalPreview config={config} />
           </SectionCard>
@@ -1908,44 +1908,44 @@ export default function App() {
             <div
               style={{
                 fontSize: 11,
-                fontFamily: 'monospace',
-                color: '#64748b',
+                fontFamily: "monospace",
+                color: "#64748b",
                 lineHeight: 1.8,
               }}
             >
               <div>
-                Style:{' '}
-                <span style={{ color: '#a78bfa' }}>{config.promptStyle}</span>
+                Style:{" "}
+                <span style={{ color: "#a78bfa" }}>{config.promptStyle}</span>
               </div>
               <div>
-                Separator:{' '}
-                <span style={{ color: '#a78bfa' }}>{config.separator}</span>
+                Separator:{" "}
+                <span style={{ color: "#a78bfa" }}>{config.separator}</span>
               </div>
               <div>
-                Right Prompt:{' '}
+                Right Prompt:{" "}
                 <span
                   style={{
-                    color: config.rightPromptEnabled ? '#22d3ee' : '#ef4444',
+                    color: config.rightPromptEnabled ? "#22d3ee" : "#ef4444",
                   }}
                 >
-                  {config.rightPromptEnabled ? 'enabled' : 'disabled'}
+                  {config.rightPromptEnabled ? "enabled" : "disabled"}
                 </span>
               </div>
               <div>
-                Prompt char:{' '}
-                <span style={{ color: '#a78bfa', fontSize: 16 }}>
+                Prompt char:{" "}
+                <span style={{ color: "#a78bfa", fontSize: 16 }}>
                   {config.promptChar}
                 </span>
               </div>
               <div>
-                Left modules:{' '}
-                <span style={{ color: '#a78bfa' }}>
+                Left modules:{" "}
+                <span style={{ color: "#a78bfa" }}>
                   {config.leftModules.length}
                 </span>
               </div>
               <div>
-                Right modules:{' '}
-                <span style={{ color: '#22d3ee' }}>
+                Right modules:{" "}
+                <span style={{ color: "#22d3ee" }}>
                   {config.rightModules.length}
                 </span>
               </div>
@@ -1956,26 +1956,26 @@ export default function App() {
             <div
               style={{
                 fontSize: 11,
-                fontFamily: 'monospace',
-                color: '#64748b',
+                fontFamily: "monospace",
+                color: "#64748b",
                 lineHeight: 2,
               }}
             >
               <div>
-                <span style={{ color: '#a78bfa' }}>Ctrl+Z</span> → Undo
+                <span style={{ color: "#a78bfa" }}>Ctrl+Z</span> → Undo
               </div>
               <div>
-                <span style={{ color: '#a78bfa' }}>Ctrl+Y</span> → Redo
+                <span style={{ color: "#a78bfa" }}>Ctrl+Y</span> → Redo
               </div>
               <div>
-                <span style={{ color: '#a78bfa' }}>Click module</span> → Add to
+                <span style={{ color: "#a78bfa" }}>Click module</span> → Add to
                 prompt
               </div>
               <div>
-                <span style={{ color: '#a78bfa' }}>Drag chip</span> → Reorder
+                <span style={{ color: "#a78bfa" }}>Drag chip</span> → Reorder
               </div>
               <div>
-                <span style={{ color: '#a78bfa' }}>× on chip</span> → Remove
+                <span style={{ color: "#a78bfa" }}>× on chip</span> → Remove
               </div>
             </div>
           </SectionCard>

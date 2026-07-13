@@ -3,7 +3,7 @@ import {
   PersistStorage,
   StateStorage,
   StorageValue,
-} from 'zustand/middleware';
+} from "zustand/middleware";
 
 interface DebouncedStorageOptions {
   debounceTime?: number;

@@ -1,13 +1,13 @@
-import { Clock, Play, Trash2 } from 'lucide-react';
-import { useStore } from 'zustand';
+import { Clock, Play, Trash2 } from "lucide-react";
+import { useStore } from "zustand";
 
-import { useConfirmation } from '../contexts/ConfirmationContext';
-import { useToast } from '../contexts/ToastContext';
-import { logger } from '../lib/logger';
-import { PRESET_THEMES } from '../lib/presets';
-import { cn } from '../lib/utils';
-import { useThemeStore } from '../stores/theme-store';
-import { Theme } from '../types/starship.types';
+import { useConfirmation } from "../contexts/ConfirmationContext";
+import { useToast } from "../contexts/ToastContext";
+import { logger } from "../lib/logger";
+import { PRESET_THEMES } from "../lib/presets";
+import { cn } from "../lib/utils";
+import { useThemeStore } from "../stores/theme-store";
+import { Theme } from "../types/starship.types";
 
 interface ThemeGalleryProps {
   className?: string;
@@ -28,6 +28,7 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
     const { currentTheme, savedThemes } = useThemeStore.getState();
 
     // Check if unsaved
+    // Fix unnecessary search over savedThemes by using O(1) lookup
     const saved = savedThemes.find(
       (t) => t.metadata.id === currentTheme.metadata.id,
     );
@@ -52,10 +53,10 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
 
     if (hasUnsavedChanges && hasHistory) {
       const confirmed = await confirm({
-        title: 'Unsaved Changes',
+        title: "Unsaved Changes",
         message:
-          'You have unsaved changes that will be lost. Are you sure you want to load a new theme?',
-        confirmText: 'Load Anyway',
+          "You have unsaved changes that will be lost. Are you sure you want to load a new theme?",
+        confirmText: "Load Anyway",
       });
       if (!confirmed) return;
     }
@@ -63,27 +64,27 @@ export function ThemeGallery({ className, onSelect }: ThemeGalleryProps) {
     try {
       loadTheme(theme);
       if (onSelect) onSelect();
-      addToast('Theme loaded successfully!', 'success');
+      addToast("Theme loaded successfully!", "success");
     } catch (error) {
-      logger.error('Failed to load theme:', error);
-      addToast('Failed to load theme.', 'error');
+      logger.error("Failed to load theme:", error);
+      addToast("Failed to load theme.", "error");
     }
   };
 
   const handleDelete = async (theme: Theme) => {
     const confirmed = await confirm({
-      title: 'Delete Theme',
+      title: "Delete Theme",
       message: `Are you sure you want to permanently delete "${theme.metadata.name}"? This action cannot be undone.`,
-      confirmText: 'Delete',
+      confirmText: "Delete",
     });
     if (confirmed) {
       deleteTheme(theme.metadata.id);
-      addToast(`Theme "${theme.metadata.name}" deleted.`, 'info');
+      addToast(`Theme "${theme.metadata.name}" deleted.`, "info");
     }
   };
 
   return (
-    <div className={cn('grid h-full gap-8 overflow-y-auto p-6', className)}>
+    <div className={cn("grid h-full gap-8 overflow-y-auto p-6", className)}>
       {/* Presets Section */}
       <section>
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
